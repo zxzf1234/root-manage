@@ -70,87 +70,22 @@
       </el-form-item>
     </el-form>
   </ContentWrap>
-
-  <!-- 列表 -->
-  <ContentWrap>
-    <el-table v-loading="loading" :data="list">
-      <el-table-column
-        label="模板编码"
-        align="center"
-        prop="code"
-        width="120"
-        :show-overflow-tooltip="true"
-      />
-      <el-table-column
-        label="模板名称"
-        align="center"
-        prop="name"
-        width="120"
-        :show-overflow-tooltip="true"
-      />
-      <el-table-column label="类型" align="center" prop="type">
-        <template #default="scope">
-          <dict-tag :type="DICT_TYPE.SYSTEM_NOTIFY_TEMPLATE_TYPE" :value="scope.row.type" />
-        </template>
-      </el-table-column>
-      <el-table-column label="发送人名称" align="center" prop="nickname" />
-      <el-table-column
-        label="模板内容"
-        align="center"
-        prop="content"
-        width="200"
-        :show-overflow-tooltip="true"
-      />
-      <el-table-column label="开启状态" align="center" prop="status" width="80">
-        <template #default="scope">
-          <dict-tag :type="DICT_TYPE.COMMON_STATUS" :value="scope.row.status" />
-        </template>
-      </el-table-column>
-      <el-table-column label="备注" align="center" prop="remark" />
-      <el-table-column
-        label="创建时间"
-        align="center"
-        prop="createTime"
-        width="180"
-        :formatter="dateFormatter"
-      />
-      <el-table-column label="操作" align="center" width="210" fixed="right">
-        <template #default="scope">
-          <el-button
-            link
-            type="primary"
-            @click="openForm('update', scope.row.id)"
-            v-hasPermi="['system:notify-template:update']"
-          >
-            修改
-          </el-button>
-          <el-button
-            link
-            type="primary"
-            @click="openSendForm(scope.row)"
-            v-hasPermi="['system:notify-template:send-notify']"
-          >
-            测试
-          </el-button>
-          <el-button
-            link
-            type="danger"
-            @click="handleDelete(scope.row.id)"
-            v-hasPermi="['system:notify-template:delete']"
-          >
-            删除
-          </el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <!-- 分页 -->
-    <Pagination
-      :total="total"
-      v-model:page="queryParams.pageNo"
-      v-model:limit="queryParams.pageSize"
-      @pagination="getList"
-    />
-  </ContentWrap>
+  <Table
+    :columns="columns"
+    :page-param="queryParams"
+    :page-data="nofityTemplate"
+    @page-change="getList"
+    save-key="interface"
+  >
+    <template #menu="{ row }">
+      <context-menu-item label="修改" @click="openForm('update', row.id)" />
+    </template>
+    <template #isStatus="{ row, props }">
+      <el-tag :size="props.size" :style="tagStyle(row.status)">
+        {{ row.status === 0 ? '开启' : '关闭' }}
+      </el-tag>
+    </template>
+  </Table>
 
   <!-- 表单弹窗：添加/修改 -->
   <NotifyTemplateForm ref="formRef" @success="getList" />
@@ -160,15 +95,17 @@
 </template>
 <script setup lang="ts" name="NotifySmsTemplate">
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
-import { dateFormatter } from '@/utils/formatTime'
+// import { dateFormatter } from '@/utils/formatTime'
 import * as NotifyTemplateApi from '@/api/system/notify/template'
 import NotifyTemplateForm from './NotifyTemplateForm.vue'
 import NotifyTemplateSendForm from './NotifyTemplateSendForm.vue'
-const message = useMessage() // 消息弹窗
+import { formatDate } from '@/utils/formatTime'
+import { usePublicHooks } from './../../../system/dept/hooks'
+const { tagStyle } = usePublicHooks()
+// const message = useMessage() // 消息弹窗
 
 const loading = ref(false) // 列表的加载中
-const total = ref(0) // 列表的总页数
-const list = ref([]) // 列表的数据
+
 const queryParams = reactive({
   pageNo: 1,
   pageSize: 10,
@@ -177,15 +114,52 @@ const queryParams = reactive({
   code: undefined,
   createTime: []
 })
+const columns: TableColumnList = [
+  {
+    label: '模板编码',
+    prop: 'code'
+  },
+  {
+    label: '模板名称',
+    prop: 'name'
+  },
+  {
+    label: '类型',
+    prop: 'type'
+  },
+  {
+    label: '发送人名称',
+    prop: 'nickname'
+  },
+  {
+    label: '模板内容',
+    prop: 'content'
+  },
+
+  {
+    label: '开启状态',
+    prop: 'status',
+    slot: 'isStatus'
+  },
+  {
+    label: '备注',
+    prop: 'remark'
+  },
+  {
+    label: '创建时间',
+    prop: 'createTime',
+    formatter: ({ createTime }) => formatDate(createTime)
+  }
+]
 const queryFormRef = ref() // 搜索的表单
 
 /** 查询列表 */
+
+const nofityTemplate = ref()
 const getList = async () => {
   loading.value = true
   try {
-    const data = await NotifyTemplateApi.getNotifyTemplatePage(queryParams)
-    list.value = data.list
-    total.value = data.total
+    nofityTemplate.value = await NotifyTemplateApi.getNotifyTemplatePage(queryParams)
   } finally {
     loading.value = false
   }
@@ -209,24 +183,24 @@ const openForm = (type: string, id?: number) => {
   formRef.value.open(type, id)
 }
 
-/** 删除按钮操作 */
-const handleDelete = async (id: number) => {
-  try {
-    // 删除的二次确认
-    await message.delConfirm()
-    // 发起删除
-    await NotifyTemplateApi.deleteNotifyTemplateApi(id)
-    message.success('删除成功')
-    // 刷新列表
-    await getList()
-  } catch {}
-}
+// /** 删除按钮操作 */
+// const handleDelete = async (id: number) => {
+//   try {
+//     // 删除的二次确认
+//     await message.delConfirm()
+//     // 发起删除
+//     await NotifyTemplateApi.deleteNotifyTemplateApi(id)
+//     message.success('删除成功')
+//     // 刷新列表
+//     await getList()
+//   } catch {}
+// }
 
-/** 测试按钮*/
-const sendFormRef = ref() // 表单 Ref
-const openSendForm = (row: NotifyTemplateApi.NotifyTemplateVO) => {
-  sendFormRef.value.open(row.id)
-}
+// /** 测试按钮*/
+// const sendFormRef = ref() // 表单 Ref
+// const openSendForm = (row: NotifyTemplateApi.NotifyTemplateVO) => {
+//   sendFormRef.value.open(row.id)
+// }
 
 /** 初始化 **/
 onMounted(() => {

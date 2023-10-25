@@ -57,72 +57,41 @@
       </el-form-item>
     </el-form>
   </ContentWrap>
-
-  <!-- 列表 -->
-  <ContentWrap>
-    <el-table v-loading="loading" :data="list">
-      <el-table-column label="岗位编号" align="center" prop="id" />
-      <el-table-column label="岗位名称" align="center" prop="name" />
-      <el-table-column label="岗位编码" align="center" prop="code" />
-      <el-table-column label="岗位顺序" align="center" prop="sort" />
-      <el-table-column label="岗位备注" align="center" prop="remark" />
-      <el-table-column label="状态" align="center" prop="status">
-        <template #default="scope">
-          <dict-tag :type="DICT_TYPE.COMMON_STATUS" :value="scope.row.status" />
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="创建时间"
-        align="center"
-        prop="createTime"
-        width="180"
-        :formatter="dateFormatter"
-      />
-      <el-table-column label="操作" align="center">
-        <template #default="scope">
-          <el-button
-            link
-            type="primary"
-            @click="openForm('update', scope.row.id)"
-            v-hasPermi="['system:post:update']"
-          >
-            编辑
-          </el-button>
-          <el-button
-            link
-            type="danger"
-            @click="handleDelete(scope.row.id)"
-            v-hasPermi="['system:post:delete']"
-          >
-            删除
-          </el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <!-- 分页 -->
-    <Pagination
-      :total="total"
-      v-model:page="queryParams.pageNo"
-      v-model:limit="queryParams.pageSize"
-      @pagination="getList"
-    />
-  </ContentWrap>
+  <Table
+    :columns="columns"
+    :page-param="queryParams"
+    :page-data="postData"
+    @page-change="getList"
+    save-key="interface"
+  >
+    <template #menu="{ row }">
+      <context-menu-item label="修改" @click="openForm('update', row.id)" />
+    </template>
+    <template #isStatus="{ row, props }">
+      <el-tag :size="props.size" :style="tagStyle(row.status)">
+        {{ row.status === 0 ? '开启' : '关闭' }}
+      </el-tag>
+    </template>
+  </Table>
 
   <!-- 表单弹窗：添加/修改 -->
   <PostForm ref="formRef" @success="getList" />
 </template>
 <script setup lang="tsx" name="SystemPost">
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
-import { dateFormatter } from '@/utils/formatTime'
+// import { dateFormatter } from '@/utils/formatTime'
 import download from '@/utils/download'
 import * as PostApi from '@/api/system/post'
 import PostForm from './PostForm.vue'
+import { formatDate } from '@/utils/formatTime'
+import { usePublicHooks } from './../../system/dept/hooks'
+const { tagStyle } = usePublicHooks()
 const message = useMessage() // 消息弹窗
-const { t } = useI18n() // 国际化
+// const { t } = useI18n() // 国际化
 
 const loading = ref(true) // 列表的加载中
-const total = ref(0) // 列表的总页数
-const list = ref([]) // 列表的数据
+// const total = ref(0) // 列表的总页数
+// const list = ref([]) // 列表的数据
 const queryParams = reactive({
   pageNo: 1,
   pageSize: 10,
@@ -130,16 +99,48 @@ const queryParams = reactive({
   name: '',
   status: undefined
 })
+const columns: TableColumnList = [
+  {
+    label: '岗位编号',
+    prop: 'id'
+  },
+  {
+    label: '岗位名称',
+    prop: 'name'
+  },
+  {
+    label: '岗位编码',
+    prop: 'code'
+  },
+  {
+    label: '岗位顺序',
+    prop: 'sort'
+  },
+
+  {
+    label: '岗位备注',
+    prop: 'remark'
+  },
+  {
+    label: '状态',
+    prop: 'status',
+    slot: 'isStatus'
+  },
+  {
+    label: '创建时间',
+    prop: 'createTime',
+    formatter: ({ createTime }) => formatDate(createTime)
+  }
+]
 const queryFormRef = ref() // 搜索的表单
 const exportLoading = ref(false) // 导出的加载中
 
+const postData = ref()
 /** 查询岗位列表 */
 const getList = async () => {
   loading.value = true
   try {
-    const data = await PostApi.getPostPage(queryParams)
-    list.value = data.list
-    total.value = data.total
+    postData.value = await PostApi.getPostPage(queryParams)
   } finally {
     loading.value = false
   }
@@ -163,18 +164,18 @@ const openForm = (type: string, id?: number) => {
   formRef.value.open(type, id)
 }
 
-/** 删除按钮操作 */
-const handleDelete = async (id: number) => {
-  try {
-    // 删除的二次确认
-    await message.delConfirm()
-    // 发起删除
-    await PostApi.deletePost(id)
-    message.success(t('common.delSuccess'))
-    // 刷新列表
-    await getList()
-  } catch {}
-}
+// /** 删除按钮操作 */
+// const handleDelete = async (id: number) => {
+//   try {
+//     // 删除的二次确认
+//     await message.delConfirm()
+//     // 发起删除
+//     await PostApi.deletePost(id)
+//     message.success(t('common.delSuccess'))
+//     // 刷新列表
+//     await getList()
+//   } catch {}
+// }
 
 /** 导出按钮操作 */
 const handleExport = async () => {

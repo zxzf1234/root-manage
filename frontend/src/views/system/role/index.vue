@@ -1,33 +1,17 @@
 <script lang="ts" name="SystemRole" setup>
-import { PureTable } from '@pureadmin/table'
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
-// const exportLoading = ref(false) // 导出的加载中
-// import EditColun from './EditColun.vue'
-import { useRenderIcon } from '@/components/ReIcon/src/hooks'
-import AddFill from '@iconify-icons/ri/add-circle-line'
 import RoleForm from './RoleForm.vue'
 import RoleAssignMenuForm from './RoleAssignMenuForm.vue'
 import RoleDataPermissionForm from './RoleDataPermissionForm.vue'
-import { ref } from 'vue'
-import { PureTableBar } from '@/components/RePureTableBar'
-import { useColumns } from './roleColuns'
-const {
-  columns,
-  handleExport,
-  list,
-  showMouseMenu,
-  getList,
-  queryParams,
-  handleQuery,
-  pagination,
-  tableSize,
-  exportLoading,
-  onCurrentChange,
-  loading,
-  loadingConfig
-} = useColumns()
+import download from '@/utils/download'
+import * as RoleApi from '@/api/system/role'
+import { formatDate } from '@/utils/formatTime'
+const exportLoading = ref(false) // 导出的加载中
+const loading = ref(true) // 列表的加载中
 /** 重置按钮操作 */
 const queryFormRef = ref() // 搜索的表单
+import { usePublicHooks } from './../../system/dept/hooks'
+const { tagStyle } = usePublicHooks()
 const resetQuery = () => {
   queryFormRef.value.resetFields()
   handleQuery()
@@ -37,6 +21,88 @@ const formRef = ref()
 const openForm = (type: string, id?: number) => {
   formRef.value.open(type, id)
 }
+
+const Roledata = ref()
+/** 查询角色列表 */
+const getList = async () => {
+  loading.value = true
+  try {
+    Roledata.value = await RoleApi.getRolePage(queryParams)
+  } finally {
+    loading.value = false
+  }
+}
+
+onMounted(() => {
+  getList()
+})
+
+/** 搜索按钮操作 */
+const handleQuery = () => {
+  // queryParams.pageNo = 1
+  getList()
+}
+const message2 = useMessage() // 消息弹窗
+/** 导出按钮操作 */
+const handleExport = async () => {
+  try {
+    // 导出的二次确认
+    await message2.exportConfirm()
+    // 发起导出
+    exportLoading.value = true
+    const data = await RoleApi.exportRole(queryParams)
+    download.excel(data, '角色列表.xls')
+  } catch {
+  } finally {
+    exportLoading.value = false
+  }
+}
+
+const queryParams = reactive({
+  pageNo: 1,
+  pageSize: 10,
+  code: '',
+  name: '',
+  status: undefined,
+  createTime: []
+})
+
+const columns: TableColumnList = [
+  {
+    label: '用户编号',
+    prop: 'id'
+  },
+  {
+    label: '用户昵称',
+    prop: 'name'
+  },
+  {
+    label: '角色类型',
+    prop: 'type'
+  },
+  {
+    label: '角色标识',
+    prop: 'code'
+  },
+  {
+    label: '显示顺序',
+    prop: 'sort'
+  },
+  {
+    label: '备注',
+    prop: 'remark'
+  },
+  {
+    label: '状态',
+    prop: 'status',
+    slot: 'isStatus'
+  },
+  {
+    label: '创建时间',
+    prop: 'createTime',
+    formatter: ({ createTime }) => formatDate(createTime)
+  }
+]
 </script>
 
 <template>
@@ -119,36 +185,22 @@ const openForm = (type: string, id?: number) => {
         </el-form-item>
       </el-form>
     </ContentWrap>
-    <PureTableBar :columns="columns" @refresh="getList">
-      <template #buttons>
-        <el-button type="primary" :icon="useRenderIcon(AddFill)" @click="openForm('create')">
-          新增角色
-        </el-button>
+    <Table
+      :columns="columns"
+      :page-param="queryParams"
+      :page-data="Roledata"
+      @page-change="getList"
+      save-key="interface"
+    >
+      <template #menu="{ row }">
+        <context-menu-item label="修改" @click="openForm('update', row.id)" />
       </template>
-      <template #default="{ dynamicColumns }">
-        <pure-table
-          border
-          row-key="id"
-          ref="tableRef"
-          alignWhole="center"
-          showOverflowTooltip
-          :size="tableSize as any"
-          :loading="loading"
-          :loading-config="loadingConfig"
-          :height="tableSize === 'small' ? 352 : 440"
-          :data="
-            list.slice(
-              (pagination.currentPage - 1) * pagination.pageSize,
-              pagination.currentPage * pagination.pageSize
-            )
-          "
-          :pagination="pagination"
-          @page-current-change="onCurrentChange"
-          :columns="dynamicColumns"
-          @row-contextmenu="showMouseMenu"
-        />
+      <template #isStatus="{ row, props }">
+        <el-tag :size="props.size" :style="tagStyle(row.status)">
+          {{ row.status === 0 ? '开启' : '关闭' }}
+        </el-tag>
       </template>
-    </PureTableBar>
+    </Table>
     <!-- 表单弹窗：添加/修改 -->
     <RoleForm ref="formRef" @success="getList" />
     <!-- <EditColun ref="edit" /> -->

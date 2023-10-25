@@ -5,7 +5,7 @@
 
   <el-row :gutter="20">
     <!-- 左侧部门树 -->
-    <el-col :span="4" :xs="24">
+    <el-col :span="3" :xs="24">
       <ContentWrap class="h-1/1">
         <DeptTree @node-click="handleDeptNodeClick" />
       </ContentWrap>
@@ -94,100 +94,79 @@
           </el-form-item>
         </el-form>
       </ContentWrap>
-      <ContentWrap>
-        <el-table v-loading="loading" :data="list">
-          <el-table-column label="用户编号" align="center" key="id" prop="id" />
-          <el-table-column
-            label="用户名称"
-            align="center"
-            prop="username"
-            :show-overflow-tooltip="true"
-          />
-          <el-table-column
-            label="用户昵称"
-            align="center"
-            prop="nickname"
-            :show-overflow-tooltip="true"
-          />
-          <el-table-column
-            label="部门"
-            align="center"
-            key="deptName"
-            prop="dept.name"
-            :show-overflow-tooltip="true"
-          />
-          <el-table-column label="手机号码" align="center" prop="mobile" width="120" />
-          <el-table-column label="状态" key="status">
-            <template #default="scope">
-              <el-switch
-                v-model="scope.row.status"
-                :active-value="0"
-                :inactive-value="1"
-                @change="handleStatusChange(scope.row)"
-              />
-            </template>
-          </el-table-column>
-          <el-table-column
-            label="创建时间"
-            align="center"
-            prop="createTime"
-            :formatter="dateFormatter"
-            width="180"
-          />
-          <el-table-column label="操作" align="center" width="160">
-            <template #default="scope">
-              <div class="flex justify-center items-center">
-                <el-button
-                  type="primary"
-                  link
-                  @click="openForm('update', scope.row.id)"
-                  v-hasPermi="['system:user:update']"
-                >
-                  <Icon icon="ep:edit" />修改
-                </el-button>
-                <el-dropdown
-                  @command="(command) => handleCommand(command, scope.row)"
-                  v-hasPermi="[
-                    'system:user:delete',
-                    'system:user:update-password',
-                    'system:permission:assign-user-role'
-                  ]"
-                >
-                  <el-button type="primary" link><Icon icon="ep:d-arrow-right" /> 更多</el-button>
-                  <template #dropdown>
-                    <el-dropdown-menu>
-                      <el-dropdown-item
-                        command="handleDelete"
-                        v-if="checkPermi(['system:user:delete'])"
-                      >
-                        <Icon icon="ep:delete" />删除
-                      </el-dropdown-item>
-                      <el-dropdown-item
-                        command="handleResetPwd"
-                        v-if="checkPermi(['system:user:update-password'])"
-                      >
-                        <Icon icon="ep:key" />重置密码
-                      </el-dropdown-item>
-                      <el-dropdown-item
-                        command="handleRole"
-                        v-if="checkPermi(['system:permission:assign-user-role'])"
-                      >
-                        <Icon icon="ep:circle-check" />分配角色
-                      </el-dropdown-item>
-                    </el-dropdown-menu>
-                  </template>
-                </el-dropdown>
-              </div>
-            </template>
-          </el-table-column>
-        </el-table>
-        <Pagination
+      <!-- <ContentWrap> -->
+      <Table
+        :columns="columns"
+        :page-param="queryParams"
+        :page-data="userData"
+        @page-change="getList"
+        adaptive
+        save-key="interface"
+      >
+        <template #menu="{ row }">
+          <context-menu-item label="修改" @click="openForm('update', row.id)" />
+        </template>
+        <template #isTransaction="{ row, props }">
+          <el-tag :size="props.size" :style="tagStyle(row.isTransaction)">
+            {{ row.isTransaction === 1 ? '是' : '否' }}
+          </el-tag>
+        </template>
+      </Table>
+
+      <!-- <el-table-column label="操作" align="center" width="160">
+          <template #default="scope">
+            <div class="flex justify-center items-center">
+              <el-button
+                type="primary"
+                link
+                @click="openForm('update', scope.row.id)"
+                v-hasPermi="['system:user:update']"
+              >
+                <Icon icon="ep:edit" />修改
+              </el-button>
+              <el-dropdown
+                @command="(command) => handleCommand(command, scope.row)"
+                v-hasPermi="[
+                  'system:user:delete',
+                  'system:user:update-password',
+                  'system:permission:assign-user-role'
+                ]"
+              >
+                <el-button type="primary" link><Icon icon="ep:d-arrow-right" /> 更多</el-button>
+                <template #dropdown>
+                  <el-dropdown-menu>
+                    <el-dropdown-item
+                      command="handleDelete"
+                      v-if="checkPermi(['system:user:delete'])"
+                    >
+                      <Icon icon="ep:delete" />删除
+                    </el-dropdown-item>
+                    <el-dropdown-item
+                      command="handleResetPwd"
+                      v-if="checkPermi(['system:user:update-password'])"
+                    >
+                      <Icon icon="ep:key" />重置密码
+                    </el-dropdown-item>
+                    <el-dropdown-item
+                      command="handleRole"
+                      v-if="checkPermi(['system:permission:assign-user-role'])"
+                    >
+                      <Icon icon="ep:circle-check" />分配角色
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </template>
+              </el-dropdown>
+            </div>
+          </template>
+        </el-table-column> -->
+
+      <!-- <Pagination
           :total="total"
           v-model:page="queryParams.pageNo"
           v-model:limit="queryParams.pageSize"
           @pagination="getList"
-        />
-      </ContentWrap>
+        /> -->
+      <!-- </ContentWrap> -->
     </el-col>
   </el-row>
 
@@ -200,21 +179,24 @@
 </template>
 <script setup lang="ts" name="SystemUser">
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
-import { checkPermi } from '@/utils/permission'
-import { dateFormatter } from '@/utils/formatTime'
+// import { checkPermi } from '@/utils/permission'
+import { formatDate } from '@/utils/formatTime'
 import download from '@/utils/download'
-import { CommonStatusEnum } from '@/utils/constants'
+// import { CommonStatusEnum } from '@/utils/constants'
 import * as UserApi from '@/api/system/user'
 import UserForm from './UserForm.vue'
 import UserImportForm from './UserImportForm.vue'
 import UserAssignRoleForm from './UserAssignRoleForm.vue'
 import DeptTree from './DeptTree.vue'
 const message = useMessage() // 消息弹窗
-const { t } = useI18n() // 国际化
-
+// const { t } = useI18n() // 国际化
+// import { useColumns } from './userColun'
+// const { columns } = useColumns()
+import { usePublicHooks } from './../../system/dept/hooks'
+const { tagStyle } = usePublicHooks()
 const loading = ref(true) // 列表的加载中
-const total = ref(0) // 列表的总页数
-const list = ref([]) // 列表的数
+// const total = ref(0) // 列表的总页数
+// const list = ref([]) // 列表的数
 const queryParams = reactive({
   pageNo: 1,
   pageSize: 10,
@@ -225,14 +207,51 @@ const queryParams = reactive({
   createTime: []
 })
 const queryFormRef = ref() // 搜索的表单
+const columns: TableColumnList = [
+  {
+    label: '用户编号',
+    prop: 'id'
+  },
+  {
+    label: '用户名称',
+    prop: 'username'
+  },
+  {
+    label: '用户昵称',
+    prop: 'nickname'
+  },
 
+  {
+    label: '部门',
+    prop: 'dept.name'
+  },
+  {
+    label: '手机号码',
+    prop: 'mobile'
+  },
+  // {
+  //   label: '备注',
+  //   prop: 'remark'
+  // },
+  {
+    label: '状态',
+    prop: 'status',
+    slot: 'isStatus'
+  },
+  {
+    label: '创建时间',
+    prop: 'createTime',
+    formatter: ({ createTime }) => formatDate(createTime)
+  }
+]
+
+const userData = ref()
 /** 查询列表 */
 const getList = async () => {
   loading.value = true
   try {
-    const data = await UserApi.getUserPage(queryParams)
-    list.value = data.list
-    total.value = data.total
+    userData.value = await UserApi.getUserPage(queryParams)
+    console.log(userData)
   } finally {
     loading.value = false
   }
@@ -268,22 +287,22 @@ const handleImport = () => {
   importFormRef.value.open()
 }
 
-/** 修改用户状态 */
-const handleStatusChange = async (row: UserApi.UserVO) => {
-  try {
-    // 修改状态的二次确认
-    const text = row.status === CommonStatusEnum.ENABLE ? '启用' : '停用'
-    await message.confirm('确认要"' + text + '""' + row.username + '"用户吗?')
-    // 发起修改状态
-    await UserApi.updateUserStatus(row.id, row.status)
-    // 刷新列表
-    await getList()
-  } catch {
-    // 取消后，进行恢复按钮
-    row.status =
-      row.status === CommonStatusEnum.ENABLE ? CommonStatusEnum.DISABLE : CommonStatusEnum.ENABLE
-  }
-}
+// /** 修改用户状态 */
+// const handleStatusChange = async (row: UserApi.UserVO) => {
+//   try {
+//     // 修改状态的二次确认
+//     const text = row.status === CommonStatusEnum.ENABLE ? '启用' : '停用'
+//     await message.confirm('确认要"' + text + '""' + row.username + '"用户吗?')
+//     // 发起修改状态
+//     await UserApi.updateUserStatus(row.id, row.status)
+//     // 刷新列表
+//     await getList()
+//   } catch {
+//     // 取消后，进行恢复按钮
+//     row.status =
+//       row.status === CommonStatusEnum.ENABLE ? CommonStatusEnum.DISABLE : CommonStatusEnum.ENABLE
+//   }
+// }
 
 /** 导出按钮操作 */
 const exportLoading = ref(false)
@@ -301,56 +320,56 @@ const handleExport = async () => {
   }
 }
 
-/** 操作分发 */
-const handleCommand = (command: string, row: UserApi.UserVO) => {
-  switch (command) {
-    case 'handleDelete':
-      handleDelete(row.id)
-      break
-    case 'handleResetPwd':
-      handleResetPwd(row)
-      break
-    case 'handleRole':
-      handleRole(row)
-      break
-    default:
-      break
-  }
-}
+// /** 操作分发 */
+// const handleCommand = (command: string, row: UserApi.UserVO) => {
+//   switch (command) {
+//     case 'handleDelete':
+//       handleDelete(row.id)
+//       break
+//     case 'handleResetPwd':
+//       handleResetPwd(row)
+//       break
+//     case 'handleRole':
+//       handleRole(row)
+//       break
+//     default:
+//       break
+//   }
+// }
 
-/** 删除按钮操作 */
-const handleDelete = async (id: number) => {
-  try {
-    // 删除的二次确认
-    await message.delConfirm()
-    // 发起删除
-    await UserApi.deleteUser(id)
-    message.success(t('common.delSuccess'))
-    // 刷新列表
-    await getList()
-  } catch {}
-}
+// /** 删除按钮操作 */
+// const handleDelete = async (id: number) => {
+//   try {
+//     // 删除的二次确认
+//     await message.delConfirm()
+//     // 发起删除
+//     await UserApi.deleteUser(id)
+//     message.success(t('common.delSuccess'))
+//     // 刷新列表
+//     await getList()
+//   } catch {}
+// }
 
-/** 重置密码 */
-const handleResetPwd = async (row: UserApi.UserVO) => {
-  try {
-    // 重置的二次确认
-    const result = await message.prompt(
-      '请输入"' + row.username + '"的新密码',
-      t('common.reminder')
-    )
-    const password = result.value
-    // 发起重置
-    await UserApi.resetUserPwd(row.id, password)
-    message.success('修改成功，新密码是：' + password)
-  } catch {}
-}
+// /** 重置密码 */
+// const handleResetPwd = async (row: UserApi.UserVO) => {
+//   try {
+//     // 重置的二次确认
+//     const result = await message.prompt(
+//       '请输入"' + row.username + '"的新密码',
+//       t('common.reminder')
+//     )
+//     const password = result.value
+//     // 发起重置
+//     await UserApi.resetUserPwd(row.id, password)
+//     message.success('修改成功，新密码是：' + password)
+//   } catch {}
+// }
 
-/** 分配角色 */
-const assignRoleFormRef = ref()
-const handleRole = (row: UserApi.UserVO) => {
-  assignRoleFormRef.value.open(row)
-}
+// /** 分配角色 */
+// const assignRoleFormRef = ref()
+// const handleRole = (row: UserApi.UserVO) => {
+//   assignRoleFormRef.value.open(row)
+// }
 
 /** 初始化 */
 onMounted(() => {

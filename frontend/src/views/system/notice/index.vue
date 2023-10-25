@@ -46,73 +46,39 @@
       </el-form-item>
     </el-form>
   </ContentWrap>
-
+  <Table
+    :columns="columns"
+    :page-param="queryParams"
+    :page-data="noticeData"
+    @page-change="getList"
+    save-key="interface"
+  >
+    <template #menu="{ row }">
+      <context-menu-item label="修改" @click="openForm('update', row.id)" />
+    </template>
+    <template #isStatus="{ row, props }">
+      <el-tag :size="props.size" :style="tagStyle(row.status)">
+        {{ row.status === 0 ? '开启' : '关闭' }}
+      </el-tag>
+    </template>
+  </Table>
   <!-- 列表 -->
-  <ContentWrap>
-    <el-table v-loading="loading" :data="list">
-      <el-table-column label="公告编号" align="center" prop="id" />
-      <el-table-column label="公告标题" align="center" prop="title" />
-      <el-table-column label="公告类型" align="center" prop="type">
-        <template #default="scope">
-          <dict-tag :type="DICT_TYPE.SYSTEM_NOTICE_TYPE" :value="scope.row.type" />
-        </template>
-      </el-table-column>
-      <el-table-column label="状态" align="center" prop="status">
-        <template #default="scope">
-          <dict-tag :type="DICT_TYPE.COMMON_STATUS" :value="scope.row.status" />
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="创建时间"
-        align="center"
-        prop="createTime"
-        width="180"
-        :formatter="dateFormatter"
-      />
-      <el-table-column label="操作" align="center">
-        <template #default="scope">
-          <el-button
-            link
-            type="primary"
-            @click="openForm('update', scope.row.id)"
-            v-hasPermi="['system:notice:update']"
-          >
-            编辑
-          </el-button>
-          <el-button
-            link
-            type="danger"
-            @click="handleDelete(scope.row.id)"
-            v-hasPermi="['system:notice:delete']"
-          >
-            删除
-          </el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <!-- 分页 -->
-    <Pagination
-      :total="total"
-      v-model:page="queryParams.pageNo"
-      v-model:limit="queryParams.pageSize"
-      @pagination="getList"
-    />
-  </ContentWrap>
 
   <!-- 表单弹窗：添加/修改 -->
   <NoticeForm ref="formRef" @success="getList" />
 </template>
 <script setup lang="tsx" name="SystemNotice">
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
-import { dateFormatter } from '@/utils/formatTime'
+// import { dateFormatter } from '@/utils/formatTime'
 import * as NoticeApi from '@/api/system/notice'
 import NoticeForm from './NoticeForm.vue'
-const message = useMessage() // 消息弹窗
-const { t } = useI18n() // 国际化
-
+import { formatDate } from '@/utils/formatTime'
+// const message = useMessage() // 消息弹窗
+// const { t } = useI18n() // 国际化
+import { usePublicHooks } from './../../system/dept/hooks'
+const { tagStyle } = usePublicHooks()
 const loading = ref(true) // 列表的加载中
-const total = ref(0) // 列表的总页数
-const list = ref([]) // 列表的数据
+
 const queryParams = reactive({
   pageNo: 1,
   pageSize: 10,
@@ -120,15 +86,43 @@ const queryParams = reactive({
   type: undefined,
   status: undefined
 })
-const queryFormRef = ref() // 搜索的表单
 
+const columns: TableColumnList = [
+  {
+    label: '公告编号',
+    prop: 'id'
+  },
+  {
+    label: '公告标题',
+    prop: 'title'
+  },
+  {
+    label: '公告类型',
+    prop: 'type'
+  },
+  {
+    label: '角色标识',
+    prop: 'code'
+  },
+
+  {
+    label: '状态',
+    prop: 'status',
+    slot: 'isStatus'
+  },
+  {
+    label: '创建时间',
+    prop: 'createTime',
+    formatter: ({ createTime }) => formatDate(createTime)
+  }
+]
+const queryFormRef = ref() // 搜索的表单
+const noticeData = ref()
 /** 查询公告列表 */
 const getList = async () => {
   loading.value = true
   try {
-    const data = await NoticeApi.getNoticePage(queryParams)
-    list.value = data.list
-    total.value = data.total
+    noticeData.value = await NoticeApi.getNoticePage(queryParams)
   } finally {
     loading.value = false
   }
@@ -152,18 +146,18 @@ const openForm = (type: string, id?: number) => {
   formRef.value.open(type, id)
 }
 
-/** 删除按钮操作 */
-const handleDelete = async (id: number) => {
-  try {
-    // 删除的二次确认
-    await message.delConfirm()
-    // 发起删除
-    await NoticeApi.deleteNotice(id)
-    message.success(t('common.delSuccess'))
-    // 刷新列表
-    await getList()
-  } catch {}
-}
+// /** 删除按钮操作 */
+// const handleDelete = async (id: number) => {
+//   try {
+//     // 删除的二次确认
+//     await message.delConfirm()
+//     // 发起删除
+//     await NoticeApi.deleteNotice(id)
+//     message.success(t('common.delSuccess'))
+//     // 刷新列表
+//     await getList()
+//   } catch {}
+// }
 
 /** 初始化 **/
 onMounted(() => {

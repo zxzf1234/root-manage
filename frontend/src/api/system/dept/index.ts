@@ -18,7 +18,7 @@ export const getSimpleDeptList = async (): Promise<DeptVO[]> => {
 }
 
 // 查询部门列表
-export const getDeptPage = async (params: PageParam) => {
+export const getDeptList = async (params) => {
   return await request.get({ url: '/system/dept/list', params })
 }
 
