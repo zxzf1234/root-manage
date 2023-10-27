@@ -101,7 +101,7 @@
         :page-data="userData"
         @page-change="getList"
         adaptive
-        save-key="interface"
+        save-key="user"
       >
         <template #menu="{ row }">
           <context-menu-item
@@ -125,7 +125,7 @@
             v-hasPermi="['system:permission:assign-user-role']"
           />
         </template>
-        <template #isStatus="{ row }">
+        <template #status="{ row }">
           <el-switch
             v-model="row.status"
             :active-value="0"
@@ -170,16 +170,19 @@ const queryFormRef = ref() // 搜索的表单
 const columns: TableColumnList = [
   {
     label: '用户名称',
-    prop: 'username'
+    prop: 'username',
+    showOverflowTooltip: true
   },
   {
     label: '用户昵称',
-    prop: 'nickname'
+    prop: 'nickname',
+    showOverflowTooltip: true
   },
 
   {
     label: '部门',
-    prop: 'dept.name'
+    prop: 'dept.name',
+    showOverflowTooltip: true
   },
   {
     label: '手机号码',
@@ -192,7 +195,7 @@ const columns: TableColumnList = [
   {
     label: '状态',
     prop: 'status',
-    slot: 'isStatus'
+    slot: 'status'
   },
   {
     label: '创建时间',

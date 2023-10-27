@@ -6,8 +6,8 @@ export interface NotifyTemplateVO {
   nickname: string
   code: string
   content: string
-  type: number
-  params: string
+  type: string
+  params: Array<string>
   status: number
   remark: string
 }

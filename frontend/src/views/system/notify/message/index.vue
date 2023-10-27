@@ -10,7 +10,7 @@
       :inline="true"
       label-width="68px"
     >
-      <el-form-item label="用户编号2" prop="userId">
+      <el-form-item label="用户编号" prop="userId">
         <el-input
           v-model="queryParams.userId"
           placeholder="请输入用户编号"
@@ -80,15 +80,26 @@
     :page-param="queryParams"
     :page-data="notifyData"
     @page-change="getList"
-    save-key="interface"
+    save-key="notify-message"
   >
     <template #menu="{ row }">
-      <context-menu-item label="修改" @click="openForm('update', row.id)" />
+      <context-menu-item
+        label="详情"
+        @click="openDetail(row)"
+        v-hasPermi="['system:notify-message:query']"
+      />
     </template>
-    <template #isStatus="{ row, props }">
-      <el-tag :size="props.size" :style="tagStyle(row.status)">
-        {{ row.status === 0 ? '开启' : '关闭' }}
-      </el-tag>
+    <template #userType="{ row }">
+      <dict-tag :type="DICT_TYPE.USER_TYPE" :value="row.userType" />
+    </template>
+    <template #templateType="{ row }">
+      <dict-tag :type="DICT_TYPE.SYSTEM_NOTIFY_TEMPLATE_TYPE" :value="row.templateType" />
+    </template>
+    <template #readStatus="{ row }">
+      <dict-tag :type="DICT_TYPE.INFRA_BOOLEAN_STRING" :value="row.readStatus" />
+    </template>
+    <template #templateParams="{ row }">
+      {{ row.templateParams }}
     </template>
   </Table>
 
@@ -97,17 +108,9 @@
 </template>
 <script setup lang="ts" name="SystemNotifyMessage">
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
-// import { dateFormatter } from '@/utils/formatTime'
 import * as NotifyMessageApi from '@/api/system/notify/message'
 import NotifyMessageDetail from './NotifyMessageDetail.vue'
 import { formatDate } from '@/utils/formatTime'
-import { usePublicHooks } from './../../../system/dept/hooks'
-const { tagStyle } = usePublicHooks()
-/** 添加/修改操作 */
-const formRef = ref()
-const openForm = (type: string, id?: number) => {
-  formRef.value.open(type, id)
-}
 const loading = ref(true) // 列表的加载中
 
 const queryParams = reactive({
@@ -126,7 +129,8 @@ const columns: TableColumnList = [
   },
   {
     label: '用户类型',
-    prop: 'userType'
+    prop: 'userType',
+    slot: 'userType'
   },
   {
     label: '用户编号',
@@ -142,23 +146,29 @@ const columns: TableColumnList = [
   },
   {
     label: '模版内容',
-    prop: 'templateContent'
+    prop: 'templateContent',
+    showOverflowTooltip: true
   },
   {
     label: '模版参数',
-    prop: 'templateParams'
+    prop: 'templateParams',
+    slot: 'templateParams',
+    showOverflowTooltip: true
   },
   {
     label: '模版类型',
-    prop: 'templateType'
+    prop: 'templateType',
+    slot: 'templateType'
   },
   {
     label: '是否已读',
-    prop: 'readStatus'
+    prop: 'readStatus',
+    slot: 'readStatus'
   },
   {
     label: '阅读时间',
-    prop: 'readTime'
+    prop: 'readTime',
+    formatter: ({ readTime }) => formatDate(readTime)
   },
   {
     label: '创建时间',
@@ -191,11 +201,11 @@ const resetQuery = () => {
   handleQuery()
 }
 
-// /** 详情操作 */
-// const detailRef = ref()
-// const openDetail = (data: NotifyMessageApi.NotifyMessageVO) => {
-//   detailRef.value.open(data)
-// }
+/** 详情操作 */
+const detailRef = ref()
+const openDetail = (data: NotifyMessageApi.NotifyMessageVO) => {
+  detailRef.value.open(data)
+}
 
 /** 初始化 **/
 onMounted(() => {

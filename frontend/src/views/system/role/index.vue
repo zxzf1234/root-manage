@@ -1,110 +1,3 @@
-<script lang="ts" name="SystemRole" setup>
-import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
-import RoleForm from './RoleForm.vue'
-import RoleAssignMenuForm from './RoleAssignMenuForm.vue'
-import RoleDataPermissionForm from './RoleDataPermissionForm.vue'
-import download from '@/utils/download'
-import * as RoleApi from '@/api/system/role'
-import { formatDate } from '@/utils/formatTime'
-const exportLoading = ref(false) // 导出的加载中
-const loading = ref(true) // 列表的加载中
-/** 重置按钮操作 */
-const queryFormRef = ref() // 搜索的表单
-import { usePublicHooks } from './../../system/dept/hooks'
-const { tagStyle } = usePublicHooks()
-const resetQuery = () => {
-  queryFormRef.value.resetFields()
-  handleQuery()
-}
-/** 添加/修改操作 */
-const formRef = ref()
-const openForm = (type: string, id?: number) => {
-  formRef.value.open(type, id)
-}
-
-const Roledata = ref()
-/** 查询角色列表 */
-const getList = async () => {
-  loading.value = true
-  try {
-    Roledata.value = await RoleApi.getRolePage(queryParams)
-  } finally {
-    loading.value = false
-  }
-}
-
-onMounted(() => {
-  getList()
-})
-
-/** 搜索按钮操作 */
-const handleQuery = () => {
-  // queryParams.pageNo = 1
-  getList()
-}
-const message2 = useMessage() // 消息弹窗
-/** 导出按钮操作 */
-const handleExport = async () => {
-  try {
-    // 导出的二次确认
-    await message2.exportConfirm()
-    // 发起导出
-    exportLoading.value = true
-    const data = await RoleApi.exportRole(queryParams)
-    download.excel(data, '角色列表.xls')
-  } catch {
-  } finally {
-    exportLoading.value = false
-  }
-}
-
-const queryParams = reactive({
-  pageNo: 1,
-  pageSize: 10,
-  code: '',
-  name: '',
-  status: undefined,
-  createTime: []
-})
-
-const columns: TableColumnList = [
-  {
-    label: '用户编号',
-    prop: 'id'
-  },
-  {
-    label: '用户昵称',
-    prop: 'name'
-  },
-  {
-    label: '角色类型',
-    prop: 'type'
-  },
-  {
-    label: '角色标识',
-    prop: 'code'
-  },
-  {
-    label: '显示顺序',
-    prop: 'sort'
-  },
-  {
-    label: '备注',
-    prop: 'remark'
-  },
-  {
-    label: '状态',
-    prop: 'status',
-    slot: 'isStatus'
-  },
-  {
-    label: '创建时间',
-    prop: 'createTime',
-    formatter: ({ createTime }) => formatDate(createTime)
-  }
-]
-</script>
-
 <template>
   <div>
     <doc-alert title="功能权限" url="https://doc.iocoder.cn/resource-permission" />
@@ -190,15 +83,27 @@ const columns: TableColumnList = [
       :page-param="queryParams"
       :page-data="Roledata"
       @page-change="getList"
-      save-key="interface"
+      save-key="role"
     >
       <template #menu="{ row }">
-        <context-menu-item label="修改" @click="openForm('update', row.id)" />
+        <context-menu-item
+          label="编辑"
+          @click="openForm('update', row.id)"
+          v-hasPermi="['system:role:update']"
+        />
+        <context-menu-item
+          label="菜单权限"
+          @click="openAssignMenuForm(row)"
+          v-hasPermi="['system:permission:assign-role-menu']"
+        />
+        <context-menu-item
+          label="删除"
+          @click="handleDelete(row.id)"
+          v-hasPermi="['system:role:delete']"
+        />
       </template>
-      <template #isStatus="{ row, props }">
-        <el-tag :size="props.size" :style="tagStyle(row.status)">
-          {{ row.status === 0 ? '开启' : '关闭' }}
-        </el-tag>
+      <template #status="{ row }">
+        <dict-tag :type="DICT_TYPE.COMMON_STATUS" :value="row.status" />
       </template>
     </Table>
     <!-- 表单弹窗：添加/修改 -->
@@ -210,6 +115,131 @@ const columns: TableColumnList = [
     <RoleDataPermissionForm ref="dataPermissionFormRef" @success="getList" />
   </div>
 </template>
+<script lang="ts" name="SystemRole" setup>
+import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
+import RoleForm from './RoleForm.vue'
+import RoleAssignMenuForm from './RoleAssignMenuForm.vue'
+import RoleDataPermissionForm from './RoleDataPermissionForm.vue'
+import download from '@/utils/download'
+import * as RoleApi from '@/api/system/role'
+import { formatDate } from '@/utils/formatTime'
+const message = useMessage() // 消息弹窗
+const { t } = useI18n() // 国际化
+const exportLoading = ref(false) // 导出的加载中
+const loading = ref(true) // 列表的加载中
+/** 重置按钮操作 */
+const queryFormRef = ref() // 搜索的表单
+const resetQuery = () => {
+  queryFormRef.value.resetFields()
+  handleQuery()
+}
+/** 添加/修改操作 */
+const formRef = ref()
+const openForm = (type: string, id?: number) => {
+  formRef.value.open(type, id)
+}
+
+const Roledata = ref()
+/** 查询角色列表 */
+const getList = async () => {
+  loading.value = true
+  try {
+    Roledata.value = await RoleApi.getRolePage(queryParams)
+  } finally {
+    loading.value = false
+  }
+}
+
+onMounted(() => {
+  getList()
+})
+
+/** 搜索按钮操作 */
+const handleQuery = () => {
+  // queryParams.pageNo = 1
+  getList()
+}
+const message2 = useMessage() // 消息弹窗
+/** 导出按钮操作 */
+const handleExport = async () => {
+  try {
+    // 导出的二次确认
+    await message2.exportConfirm()
+    // 发起导出
+    exportLoading.value = true
+    const data = await RoleApi.exportRole(queryParams)
+    download.excel(data, '角色列表.xls')
+  } catch {
+  } finally {
+    exportLoading.value = false
+  }
+}
+
+/** 菜单权限操作 */
+const assignMenuFormRef = ref()
+const openAssignMenuForm = async (row: RoleApi.RoleVO) => {
+  assignMenuFormRef.value.open(row)
+}
+
+/** 删除按钮操作 */
+const handleDelete = async (id: number) => {
+  try {
+    // 删除的二次确认
+    await message.delConfirm()
+    // 发起删除
+    await RoleApi.deleteRole(id)
+    message.success(t('common.delSuccess'))
+    // 刷新列表
+    await getList()
+  } catch {}
+}
+
+const queryParams = reactive({
+  pageNo: 1,
+  pageSize: 10,
+  code: '',
+  name: '',
+  status: undefined,
+  createTime: []
+})
+
+const columns: TableColumnList = [
+  {
+    label: '用户编号',
+    prop: 'id'
+  },
+  {
+    label: '用户昵称',
+    prop: 'name'
+  },
+  {
+    label: '角色类型',
+    prop: 'type'
+  },
+  {
+    label: '角色标识',
+    prop: 'code'
+  },
+  {
+    label: '显示顺序',
+    prop: 'sort'
+  },
+  {
+    label: '备注',
+    prop: 'remark'
+  },
+  {
+    label: '状态',
+    prop: 'status',
+    slot: 'isStatus'
+  },
+  {
+    label: '创建时间',
+    prop: 'createTime',
+    formatter: ({ createTime }) => formatDate(createTime)
+  }
+]
+</script>
 <style>
 .el-checkbox-group {
   display: flex;

@@ -57,12 +57,22 @@
     v-if="refreshTable"
   >
     <template #menu="{ row }">
-      <context-menu-item label="修改" @click="openForm('update', row.id)" />
+      <context-menu-item
+        label="修改"
+        @click="openForm('update', row.id)"
+        v-hasPermi="['system:dept:update']"
+      />
+      <context-menu-item
+        label="删除"
+        @click="handleDelete(row.id)"
+        v-hasPermi="['system:dept:delete']"
+      />
     </template>
-    <template #isStatus="{ row, props }">
-      <el-tag :size="props.size" :style="tagStyle(row.status)">
-        {{ row.status === 0 ? '开启' : '关闭' }}
-      </el-tag>
+    <template #leader="{ row }">
+      {{ userList.find((user) => user.id === row.leaderUserId)?.nickname }}
+    </template>
+    <template #status="{ row }">
+      <dict-tag :type="DICT_TYPE.COMMON_STATUS" :value="row.status" />
     </template>
   </Table>
 
@@ -77,8 +87,8 @@ import * as DeptApi from '@/api/system/dept'
 import DeptForm from './DeptForm.vue'
 import * as UserApi from '@/api/system/user'
 import { formatDate } from '@/utils/formatTime'
-import { usePublicHooks } from './../../system/dept/hooks'
-const { tagStyle } = usePublicHooks()
+const message = useMessage() // 消息弹窗
+const { t } = useI18n() // 国际化
 
 const loading = ref(true) // 列表的加载中
 const queryParams = reactive({
@@ -95,7 +105,8 @@ const columns: TableColumnList = [
   },
   {
     label: '负责人',
-    prop: 'leader'
+    prop: 'leader',
+    slot: 'leader'
   },
   {
     label: '排序',
@@ -105,7 +116,7 @@ const columns: TableColumnList = [
   {
     label: '状态',
     prop: 'status',
-    slot: 'isStatus'
+    slot: 'status'
   },
   {
     label: '创建时间',
@@ -157,18 +168,18 @@ const openForm = (type: string, id?: number) => {
   formRef.value.open(type, id)
 }
 
-// /** 删除按钮操作 */
-// const handleDelete = async (id: number) => {
-//   try {
-//     // 删除的二次确认
-//     await message.delConfirm()
-//     // 发起删除
-//     await DeptApi.deleteDept(id)
-//     message.success(t('common.delSuccess'))
-//     // 刷新列表
-//     await getList()
-//   } catch {}
-// }
+/** 删除按钮操作 */
+const handleDelete = async (id: number) => {
+  try {
+    // 删除的二次确认
+    await message.delConfirm()
+    // 发起删除
+    await DeptApi.deleteDept(id)
+    message.success(t('common.delSuccess'))
+    // 刷新列表
+    await getList()
+  } catch {}
+}
 
 /** 初始化 **/
 onMounted(async () => {

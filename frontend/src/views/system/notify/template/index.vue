@@ -75,15 +75,30 @@
     :page-param="queryParams"
     :page-data="nofityTemplate"
     @page-change="getList"
-    save-key="interface"
+    save-key="notify-template"
   >
     <template #menu="{ row }">
-      <context-menu-item label="修改" @click="openForm('update', row.id)" />
+      <context-menu-item
+        label="修改"
+        @click="openForm('update', row.id)"
+        v-hasPermi="['system:notify-template:update']"
+      />
+      <context-menu-item
+        label="测试"
+        @click="openSendForm(row)"
+        v-hasPermi="['system:notify-template:send-notify']"
+      />
+      <context-menu-item
+        label="删除"
+        @click="handleDelete(row.id)"
+        v-hasPermi="['system:notify-template:delete']"
+      />
     </template>
-    <template #isStatus="{ row, props }">
-      <el-tag :size="props.size" :style="tagStyle(row.status)">
-        {{ row.status === 0 ? '开启' : '关闭' }}
-      </el-tag>
+    <template #type="{ row }">
+      <dict-tag :type="DICT_TYPE.SYSTEM_NOTIFY_TEMPLATE_TYPE" :value="row.type" />
+    </template>
+    <template #status="{ row }">
+      <dict-tag :type="DICT_TYPE.COMMON_STATUS" :value="row.status" />
     </template>
   </Table>
 
@@ -100,9 +115,7 @@ import * as NotifyTemplateApi from '@/api/system/notify/template'
 import NotifyTemplateForm from './NotifyTemplateForm.vue'
 import NotifyTemplateSendForm from './NotifyTemplateSendForm.vue'
 import { formatDate } from '@/utils/formatTime'
-import { usePublicHooks } from './../../../system/dept/hooks'
-const { tagStyle } = usePublicHooks()
-// const message = useMessage() // 消息弹窗
+const message = useMessage() // 消息弹窗
 
 const loading = ref(false) // 列表的加载中
 
@@ -125,7 +138,8 @@ const columns: TableColumnList = [
   },
   {
     label: '类型',
-    prop: 'type'
+    prop: 'type',
+    slot: 'type'
   },
   {
     label: '发送人名称',
@@ -133,13 +147,14 @@ const columns: TableColumnList = [
   },
   {
     label: '模板内容',
-    prop: 'content'
+    prop: 'content',
+    showOverflowTooltip: true
   },
 
   {
     label: '开启状态',
     prop: 'status',
-    slot: 'isStatus'
+    slot: 'status'
   },
   {
     label: '备注',
@@ -167,7 +182,6 @@ const getList = async () => {
 
 /** 搜索按钮操作 */
 const handleQuery = () => {
-  queryParams.pageNo = 1
   getList()
 }
 
@@ -183,24 +197,24 @@ const openForm = (type: string, id?: number) => {
   formRef.value.open(type, id)
 }
 
-// /** 删除按钮操作 */
-// const handleDelete = async (id: number) => {
-//   try {
-//     // 删除的二次确认
-//     await message.delConfirm()
-//     // 发起删除
-//     await NotifyTemplateApi.deleteNotifyTemplateApi(id)
-//     message.success('删除成功')
-//     // 刷新列表
-//     await getList()
-//   } catch {}
-// }
+/** 删除按钮操作 */
+const handleDelete = async (id: number) => {
+  try {
+    // 删除的二次确认
+    await message.delConfirm()
+    // 发起删除
+    await NotifyTemplateApi.deleteNotifyTemplateApi(id)
+    message.success('删除成功')
+    // 刷新列表
+    await getList()
+  } catch {}
+}
 
-// /** 测试按钮*/
-// const sendFormRef = ref() // 表单 Ref
-// const openSendForm = (row: NotifyTemplateApi.NotifyTemplateVO) => {
-//   sendFormRef.value.open(row.id)
-// }
+/** 测试按钮*/
+const sendFormRef = ref() // 表单 Ref
+const openSendForm = (row: NotifyTemplateApi.NotifyTemplateVO) => {
+  sendFormRef.value.open(row.id)
+}
 
 /** 初始化 **/
 onMounted(() => {

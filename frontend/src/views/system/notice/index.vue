@@ -51,15 +51,25 @@
     :page-param="queryParams"
     :page-data="noticeData"
     @page-change="getList"
-    save-key="interface"
+    save-key="notice"
   >
     <template #menu="{ row }">
-      <context-menu-item label="修改" @click="openForm('update', row.id)" />
+      <context-menu-item
+        label="编辑"
+        @click="openForm('update', row.id)"
+        v-hasPermi="['system:notice:update']"
+      />
+      <context-menu-item
+        label="删除"
+        @click="handleDelete(row.id)"
+        v-hasPermi="['system:notice:delete']"
+      />
     </template>
-    <template #isStatus="{ row, props }">
-      <el-tag :size="props.size" :style="tagStyle(row.status)">
-        {{ row.status === 0 ? '开启' : '关闭' }}
-      </el-tag>
+    <template #type="{ row }">
+      <dict-tag :type="DICT_TYPE.SYSTEM_NOTICE_TYPE" :value="row.type" />
+    </template>
+    <template #status="{ row }">
+      <dict-tag :type="DICT_TYPE.COMMON_STATUS" :value="row.status" />
     </template>
   </Table>
   <!-- 列表 -->
@@ -73,10 +83,8 @@ import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
 import * as NoticeApi from '@/api/system/notice'
 import NoticeForm from './NoticeForm.vue'
 import { formatDate } from '@/utils/formatTime'
-// const message = useMessage() // 消息弹窗
-// const { t } = useI18n() // 国际化
-import { usePublicHooks } from './../../system/dept/hooks'
-const { tagStyle } = usePublicHooks()
+const message = useMessage() // 消息弹窗
+const { t } = useI18n() // 国际化
 const loading = ref(true) // 列表的加载中
 
 const queryParams = reactive({
@@ -98,7 +106,8 @@ const columns: TableColumnList = [
   },
   {
     label: '公告类型',
-    prop: 'type'
+    prop: 'type',
+    slot: 'type'
   },
   {
     label: '角色标识',
@@ -108,7 +117,7 @@ const columns: TableColumnList = [
   {
     label: '状态',
     prop: 'status',
-    slot: 'isStatus'
+    slot: 'status'
   },
   {
     label: '创建时间',
@@ -146,18 +155,18 @@ const openForm = (type: string, id?: number) => {
   formRef.value.open(type, id)
 }
 
-// /** 删除按钮操作 */
-// const handleDelete = async (id: number) => {
-//   try {
-//     // 删除的二次确认
-//     await message.delConfirm()
-//     // 发起删除
-//     await NoticeApi.deleteNotice(id)
-//     message.success(t('common.delSuccess'))
-//     // 刷新列表
-//     await getList()
-//   } catch {}
-// }
+/** 删除按钮操作 */
+const handleDelete = async (id: number) => {
+  try {
+    // 删除的二次确认
+    await message.delConfirm()
+    // 发起删除
+    await NoticeApi.deleteNotice(id)
+    message.success(t('common.delSuccess'))
+    // 刷新列表
+    await getList()
+  } catch {}
+}
 
 /** 初始化 **/
 onMounted(() => {

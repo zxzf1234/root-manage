@@ -56,7 +56,6 @@
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
 import * as NotifyTemplateApi from '@/api/system/notify/template'
 import { CommonStatusEnum } from '@/utils/constants'
-import { number } from 'vue-types'
 const message = useMessage() // 消息弹窗
 
 const dialogVisible = ref(false) // 弹窗的是否展示
@@ -69,8 +68,8 @@ let formData = ref<NotifyTemplateApi.NotifyTemplateVO>({
   nickname: '',
   code: '',
   content: '',
-  type: number,
-  params: '',
+  type: '',
+  params: [],
   status: CommonStatusEnum.ENABLE,
   remark: ''
 })
@@ -137,8 +136,8 @@ const resetForm = () => {
     nickname: '',
     code: '',
     content: '',
-    type: number,
-    params: '',
+    type: '',
+    params: [],
     status: CommonStatusEnum.ENABLE,
     remark: ''
   }
