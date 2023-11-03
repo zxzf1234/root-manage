@@ -1,5 +1,6 @@
 package cn.iocoder.yudao.service.service.infra.codegen;
 
+import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.service.vo.infra.codegen.database.*;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 
@@ -8,7 +9,7 @@ import java.util.UUID;
 
 public interface DatabaseTableService {
 
-    List<DatabaseTableResp> getDatabaseTableList(DatabaseTableListReqVO listReqVO);
+    PageResult<DatabaseTableResp> getDatabaseTableList(DatabaseTableListReqVO listReqVO);
 
     /**
      * 获得表列表，基于表名称 + 表描述进行模糊匹配

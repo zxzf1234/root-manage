@@ -1,6 +1,7 @@
 package cn.iocoder.yudao.service.controller.admin.infra.codegen;
 
 import cn.iocoder.yudao.framework.common.pojo.CommonResult;
+import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.service.service.infra.codegen.DatabaseTableService;
 import cn.iocoder.yudao.service.vo.infra.codegen.database.*;
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,7 +27,7 @@ public class DatabaseTableController {
 
     @GetMapping("/list")
     @Operation(summary = "查询数据库表")
-    public CommonResult<List<DatabaseTableResp>> getDatabaseTableList(
+    public CommonResult<PageResult<DatabaseTableResp>> getDatabaseTableList(
             @Validated DatabaseTableListReqVO list) {
         return success(databaseTableService.getDatabaseTableList(list));
     }

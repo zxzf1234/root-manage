@@ -3,6 +3,7 @@ package cn.iocoder.yudao.service.repository.infra.codegen;
 import cn.iocoder.yudao.service.model.infra.codegen.*;
 import cn.iocoder.yudao.service.vo.infra.codegen.database.DatabaseTableListReqVO;
 import org.babyfish.jimmer.spring.repository.JRepository;
+import org.springframework.data.domain.Page;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
@@ -12,21 +13,23 @@ import java.util.UUID;
 public interface InfraDatabaseTableRepository extends JRepository<InfraDatabaseTable, Long> {
     InfraDatabaseTableTable infraDatabaseTableTable = InfraDatabaseTableTable.$;
 
-    default List<InfraDatabaseTable> selectList(DatabaseTableListReqVO listReqVO){
-        return sql().createQuery(infraDatabaseTableTable)
-                .whereIf(StringUtils.hasText(listReqVO.getTableComment()), infraDatabaseTableTable.comment().like(listReqVO.getTableComment()))
-                .whereIf(StringUtils.hasText(listReqVO.getTableName()), infraDatabaseTableTable.name().like(listReqVO.getTableName()))
+    default Page<InfraDatabaseTable> selectList(DatabaseTableListReqVO listReqVO){
+        return pager(listReqVO.getPageNo() - 1, listReqVO.getPageSize()).execute(sql().createQuery(infraDatabaseTableTable)
+                .whereIf(StringUtils.hasText(listReqVO.getComment()), infraDatabaseTableTable.comment().like(listReqVO.getComment()))
+                .whereIf(StringUtils.hasText(listReqVO.getName()), infraDatabaseTableTable.name().like(listReqVO.getName()))
+                .whereIf(StringUtils.hasText(listReqVO.getBusinessName()), infraDatabaseTableTable.businessName().like(listReqVO.getBusinessName()))
                 .orderBy(infraDatabaseTableTable.businessName())
                 .orderBy(infraDatabaseTableTable.name())
                 .select(infraDatabaseTableTable)
-                .execute();
+        );
 
     }
 
     default List<InfraDatabaseTable> selectColumnList(DatabaseTableListReqVO listReqVO){
         return sql().createQuery(infraDatabaseTableTable)
-                .whereIf(StringUtils.hasText(listReqVO.getTableComment()), infraDatabaseTableTable.comment().like(listReqVO.getTableComment()))
-                .whereIf(StringUtils.hasText(listReqVO.getTableName()), infraDatabaseTableTable.name().like(listReqVO.getTableName()))
+                .whereIf(StringUtils.hasText(listReqVO.getComment()), infraDatabaseTableTable.comment().like(listReqVO.getComment()))
+                .whereIf(StringUtils.hasText(listReqVO.getName()), infraDatabaseTableTable.name().like(listReqVO.getName()))
+                .whereIf(StringUtils.hasText(listReqVO.getBusinessName()), infraDatabaseTableTable.businessName().like(listReqVO.getBusinessName()))
                 .select(infraDatabaseTableTable.fetch(InfraDatabaseTableFetcher.$.allScalarFields()
                         .columns(InfraDatabaseColumnFetcher.$.allTableFields())))
                 .execute();

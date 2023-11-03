@@ -1,5 +1,5 @@
 <template>
-  <ContentWrap class="h-[600px]">
+  <ContentWrap class="h-[55%]">
     <!-- 搜索栏 -->
     <el-form ref="queryFormRef" :inline="true" :model="queryParams" label-width="68px">
       <el-form-item label="表名称" prop="name">
@@ -20,6 +20,15 @@
           @keyup.enter="getList"
         />
       </el-form-item>
+      <el-form-item label="模块名" prop="businessName">
+        <el-input
+          v-model="queryParams.businessName"
+          class="!w-240px"
+          clearable
+          placeholder="请输入模块名"
+          @keyup.enter="getList"
+        />
+      </el-form-item>
       <el-form-item>
         <el-button @click="getList">
           <Icon class="mr-5px" icon="ep:search" />
@@ -37,26 +46,22 @@
     </el-form>
     <!-- 列表 -->
     <el-row>
-      <el-table
-        ref="tableRef"
-        v-loading="dbTableLoading"
-        :data="dbTableList"
-        highlight-current-row
+      <Table
+        :columns="databaseTableColumns"
+        :page-param="queryParams"
+        :page-data="databaseTableData"
         @row-click="handleRowClick"
+        @page-change="getList"
+        adaptive
+        save-key="databaseTable"
       >
-        <el-table-column :show-overflow-tooltip="true" label="表名称" prop="name" />
-        <el-table-column :show-overflow-tooltip="true" label="表描述" prop="comment" />
-        <el-table-column :show-overflow-tooltip="true" label="备注" prop="remark" />
-        <el-table-column :show-overflow-tooltip="true" label="模块名" prop="businessName" />
-        <el-table-column align="center" fixed="right" label="操作" width="300px">
-          <template #default="scope">
-            <el-button link type="primary" @click="handleUpdate(scope.row)"> 修改 </el-button>
-          </template>
-        </el-table-column>
-      </el-table>
+        <template #menu="{ row }">
+          <context-menu-item label="修改" @click="handleUpdate(row)" />
+        </template>
+      </Table>
     </el-row>
   </ContentWrap>
-  <ContentWrap>
+  <ContentWrap class="h-[35%]">
     <el-tabs v-model="activeName" type="card">
       <el-tab-pane label="表字段" name="column">
         <el-table
@@ -123,10 +128,11 @@ import { ElTable } from 'element-plus'
 import * as DictDataApi from '@/api/system/dict/dict.type'
 
 const dbTableLoading = ref(true) // 数据源的加载中
-const dbTableList = ref<CodegenApi.DatabaseTableVO[]>([]) // 表的列表
+const databaseTableData = ref<CodegenApi.DatabaseTableVO[]>([]) // 表的列表
 const queryParams = reactive({
   name: undefined,
-  comment: undefined
+  comment: undefined,
+  businessName: undefined
 })
 const queryFormRef = ref() // 搜索的表单
 const activeName = ref('column')
@@ -134,12 +140,30 @@ const editRef = ref()
 const dbColumnList = ref<CodegenApi.DatabaseColumnVO[]>([]) // 字段的列表
 const dbIndexList = ref<CodegenApi.DatabaseIndexVO[]>([]) // 索引的列表
 const dbMappingList = ref<CodegenApi.DatabaseMappingVO[]>([]) // 索引的列表
+const databaseTableColumns: TableColumnList = [
+  {
+    label: '表名称',
+    prop: 'name'
+  },
+  {
+    label: '表描述',
+    prop: 'comment'
+  },
+  {
+    label: '模块名',
+    prop: 'businessName'
+  },
+  {
+    label: '备注',
+    prop: 'remark'
+  }
+]
 
 /** 查询表数据 */
 const getList = async () => {
   dbTableLoading.value = true
   try {
-    dbTableList.value = await CodegenApi.getDatabaseTableList(queryParams)
+    databaseTableData.value = await CodegenApi.getDatabaseTableList(queryParams)
     dbColumnList.value = []
     dbIndexList.value = []
     dbMappingList.value = []
@@ -157,8 +181,6 @@ const resetQuery = async () => {
   dbMappingList.value = []
   await getList()
 }
-
-const tableRef = ref<typeof ElTable>() // 表格的 Ref
 
 /** 处理某一行的点击 */
 const handleRowClick = async (row: CodegenApi.DatabaseTableVO) => {

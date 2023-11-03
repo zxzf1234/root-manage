@@ -52,10 +52,8 @@
         <template #menu="{ row }">
           <context-menu-item label="修改" @click="openForm('update', row.id)" />
         </template>
-        <template #isTransaction="{ row, props }">
-          <el-tag :size="props.size" :style="tagStyle(row.isTransaction)">
-            {{ row.isTransaction === 1 ? '是' : '否' }}
-          </el-tag>
+        <template #isTransaction="{ row }">
+          <dict-tag :type="DICT_TYPE.COMMON_STATUS" :value="row.isTransaction == 'true' ? 1 : 0" />
         </template>
       </Table>
     </el-row>
@@ -160,14 +158,11 @@
 </template>
 <script lang="ts" name="Interface" setup>
 import * as CodegenApi from '@/api/infra/codegen'
+import { DICT_TYPE } from '@/utils/dict'
 import InterfaceEdit from './InterfaceEdit.vue'
 import { defaultProps, handleTree } from '@/utils/tree'
 import { ElInput } from 'element-plus'
 import { formatDate } from '@/utils/formatTime'
-import { usePublicHooks } from './../../system/dept/hooks'
-
-const { tagStyle } = usePublicHooks()
-
 const initFormData = {
   id: '',
   name: '',

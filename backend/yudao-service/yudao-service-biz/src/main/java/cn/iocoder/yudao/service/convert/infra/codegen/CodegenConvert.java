@@ -23,7 +23,7 @@ public interface CodegenConvert {
 
     CodegenConvert INSTANCE = Mappers.getMapper(CodegenConvert.class);
 
-    List<DatabaseTableResp> convertList05(List<InfraDatabaseTable> list);
+    List<DatabaseTableResp> convertList05(Page<InfraDatabaseTable> list);
 
     InfraDatabaseTable convert(DatabaseUpdateReq bean);
 

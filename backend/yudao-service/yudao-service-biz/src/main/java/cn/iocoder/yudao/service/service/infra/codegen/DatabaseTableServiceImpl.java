@@ -3,6 +3,7 @@ package cn.iocoder.yudao.service.service.infra.codegen;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.StrUtil;
+import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.common.util.entity.EntityUtils;
 import cn.iocoder.yudao.service.convert.infra.codegen.CodegenConvert;
 import cn.iocoder.yudao.service.model.infra.codegen.*;
@@ -11,12 +12,14 @@ import cn.iocoder.yudao.service.repository.infra.codegen.*;
 import cn.iocoder.yudao.service.service.infra.codegen.inner.CodegenEngine;
 import cn.iocoder.yudao.service.service.infra.db.DataSourceConfigService;
 import cn.iocoder.yudao.service.vo.infra.codegen.database.*;
+import cn.iocoder.yudao.service.vo.infra.codegen.interfaceModule.InterfaceResp;
 import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
 import com.baomidou.mybatisplus.generator.config.GlobalConfig;
 import com.baomidou.mybatisplus.generator.config.StrategyConfig;
 import com.baomidou.mybatisplus.generator.config.builder.ConfigBuilder;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
+import org.springframework.data.domain.Page;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,9 +59,10 @@ public class DatabaseTableServiceImpl implements DatabaseTableService {
     private CodegenEngine codegenEngine;
 
     @Override
-    public List<DatabaseTableResp> getDatabaseTableList(DatabaseTableListReqVO list) {
-        List<InfraDatabaseTable> tables = infraDatabaseTableRepository.selectList(list);
-        return CodegenConvert.INSTANCE.convertList05(tables);
+    public PageResult<DatabaseTableResp> getDatabaseTableList(DatabaseTableListReqVO list) {
+        Page<InfraDatabaseTable> tables = infraDatabaseTableRepository.selectList(list);
+        List<DatabaseTableResp> databaseTableReps = CodegenConvert.INSTANCE.convertList05(tables);
+        return new PageResult<>(databaseTableReps, tables.getTotalElements());
     }
 
     @Override
