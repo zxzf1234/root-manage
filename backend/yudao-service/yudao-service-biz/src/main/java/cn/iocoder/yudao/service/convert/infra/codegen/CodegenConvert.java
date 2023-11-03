@@ -25,6 +25,8 @@ public interface CodegenConvert {
 
     List<DatabaseTableResp> convertList05(Page<InfraDatabaseTable> list);
 
+    List<DatabaseTableResp> convertList05(List<InfraDatabaseTable> list);
+
     InfraDatabaseTable convert(DatabaseUpdateReq bean);
 
     InfraDatabaseColumn convert(DatabaseColumnBase bean);

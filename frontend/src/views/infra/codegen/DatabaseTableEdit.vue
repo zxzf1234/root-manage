@@ -198,7 +198,14 @@
           </el-table-column>
           <el-table-column label="关联表" min-width="12%">
             <template #default="scope">
-              <el-select v-model="scope.row.relatedTable" clearable filterable placeholder="请选择">
+              <el-select
+                v-model="scope.row.relatedTable"
+                filterable
+                remote
+                placeholder="输入表名搜索"
+                remote-show-suffix
+                :remote-method="getTableOptions"
+              >
                 <el-option
                   v-for="dict in tableOptions"
                   :key="dict.id"
@@ -335,7 +342,14 @@
           </el-table-column>
           <el-table-column label="映射表" min-width="20%">
             <template #default="scope">
-              <el-select v-model="scope.row.mappingTable" clearable filterable placeholder="请选择">
+              <el-select
+                v-model="scope.row.mappingTable"
+                filterable
+                remote
+                placeholder="输入表名搜索"
+                remote-show-suffix
+                :remote-method="getTableOptions"
+              >
                 <el-option
                   v-for="dict in tableOptions"
                   :key="dict.id"
@@ -396,6 +410,10 @@ var columnSort = 1
 var tableId = ''
 
 const formType = ref('') // 表单的类型：create - 新增；update - 修改
+
+const tableOptions = ref<CodegenApi.DatabaseTableVO[]>([])
+
+const dictOptions = ref<DictDataApi.DictTypeVO[]>()
 
 /** 打开弹窗 */
 const open = async (type: string, id?: string) => {
@@ -526,7 +544,7 @@ const open = async (type: string, id?: string) => {
     }
   }
   await getDictOptions()
-  await getTableOptions()
+  await getTableOptions('')
 }
 defineExpose({ open }) // 提供 open 方法，用于打开弹窗
 
@@ -566,14 +584,12 @@ const close = async () => {
 }
 
 /** 查询字典下拉列表 */
-const dictOptions = ref<DictDataApi.DictTypeVO[]>()
 const getDictOptions = async () => {
   dictOptions.value = await DictDataApi.getSimpleDictTypeList()
 }
 
-const tableOptions = ref<CodegenApi.DatabaseTableVO[]>()
-const getTableOptions = async () => {
-  tableOptions.value = await CodegenApi.getDatabaseTableList('')
+const getTableOptions = async (name: string) => {
+  tableOptions.value = await CodegenApi.getDatabaseTableName(name)
 }
 
 /** 添加字段列 */

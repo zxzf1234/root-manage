@@ -32,6 +32,13 @@ public class DatabaseTableController {
         return success(databaseTableService.getDatabaseTableList(list));
     }
 
+    @GetMapping("/name")
+    @Operation(summary = "查询数据库表名")
+    public CommonResult<List<DatabaseTableResp>> getDatabaseTableList(
+            @RequestParam("name") String name) {
+        return success(databaseTableService.getDatabaseTableName(name));
+    }
+
     @GetMapping("/column_list")
     @Operation(summary = "查询数据库表字段")
     public CommonResult<List<DatabaseTableColumnResp>> getColumnList(

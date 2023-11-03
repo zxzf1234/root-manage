@@ -36,6 +36,13 @@ public interface InfraDatabaseTableRepository extends JRepository<InfraDatabaseT
 
     }
 
+    default List<InfraDatabaseTable> selectName(String name){
+        return sql().createQuery(infraDatabaseTableTable)
+                .where(infraDatabaseTableTable.name().like(name))
+                .select(infraDatabaseTableTable)
+                .execute();
+    }
+
     default Optional<InfraDatabaseTable> findDetailById(UUID tableId){
         return sql().createQuery(infraDatabaseTableTable)
                 .where(infraDatabaseTableTable.id().eq(tableId))

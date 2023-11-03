@@ -11,6 +11,8 @@ public interface DatabaseTableService {
 
     PageResult<DatabaseTableResp> getDatabaseTableList(DatabaseTableListReqVO listReqVO);
 
+    List<DatabaseTableResp> getDatabaseTableName(String name);
+
     /**
      * 获得表列表，基于表名称 + 表描述进行模糊匹配
      *

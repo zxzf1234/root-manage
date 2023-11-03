@@ -72,6 +72,14 @@ public class DatabaseTableServiceImpl implements DatabaseTableService {
     }
 
     @Override
+    public List<DatabaseTableResp> getDatabaseTableName(String name) {
+        if(name.isEmpty())
+            return null;
+        else
+            return CodegenConvert.INSTANCE.convertList05(infraDatabaseTableRepository.selectName(name));
+    }
+
+    @Override
     @Transactional(rollbackFor = Exception.class)
     public UUID createTable(DatabaseUpdateReq reqVo) {
         Optional<InfraDatabaseTable> opExistsTable = infraDatabaseTableRepository.findByName(reqVo.getName());

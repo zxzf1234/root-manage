@@ -132,6 +132,11 @@ export const getDatabaseTableList = (params) => {
   return request.get({ url: '/infra/codegen/database-table/list', params })
 }
 
+// 查询数据库表名
+export const getDatabaseTableName = (params) => {
+  return request.get({ url: '/infra/codegen/database-table/name?name=' + params })
+}
+
 // 查询数据库表字段
 export const getDatabaseTableColumnList = (params) => {
   return request.get({ url: '/infra/codegen/database-table/column_list', params })
