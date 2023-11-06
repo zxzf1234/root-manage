@@ -44,7 +44,7 @@ declare global {
   }
 
   interface Tree {
-    id: number
+    id: string
     name: string
     children?: Tree[] | any[]
   }

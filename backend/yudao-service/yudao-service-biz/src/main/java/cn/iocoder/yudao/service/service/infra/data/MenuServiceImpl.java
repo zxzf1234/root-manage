@@ -163,7 +163,7 @@ public class MenuServiceImpl implements MenuService {
      */
     @VisibleForTesting
     void validateParentMenu(String parentId, UUID childId) {
-        if (parentId == null || Objects.equals(parentId, "")) {
+        if (parentId == null || parentId.equals("")) {
             return;
         }
         UUID uParentId = UUID.fromString(parentId);

@@ -188,6 +188,7 @@ const submitForm = async () => {
       formData.value.type === SystemMenuTypeEnum.DIR ||
       formData.value.type === SystemMenuTypeEnum.MENU
     ) {
+      console.log(formData.value.parentId)
       if (!isExternal(formData.value.path)) {
         if (formData.value.parentId === '' && formData.value.path.charAt(0) !== '/') {
           message.error('路径必须以 / 开头')
@@ -221,7 +222,7 @@ const menuTree = ref<Tree[]>([]) // 树形结构
 const getTree = async () => {
   menuTree.value = []
   const res = await MenuApi.getSimpleMenusList()
-  let menu: Tree = { id: 0, name: '主类目', children: [] }
+  let menu: Tree = { id: '', name: '主类目', children: [] }
   menu.children = handleTree(res)
   menuTree.value.push(menu)
 }
