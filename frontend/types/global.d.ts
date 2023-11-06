@@ -51,6 +51,7 @@ declare global {
   /**
    *  继承 `@pureadmin/table` 的 `TableColumns` ，方便全局直接调用
    */
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
   interface TableColumnList extends Array<TableColumns> {}
 }
 /**
