@@ -1,5 +1,5 @@
 <template>
-  <Dialog v-model="dialogVisible" title="新建数据库表" width="1200px" class="h-[1000px]">
+  <Dialog v-model="dialogVisible" title="新建数据库表" width="1600px" class="h-[1000px]">
     <!-- 操作 -->
     <el-form>
       <el-form-item>
@@ -550,6 +550,28 @@ defineExpose({ open }) // 提供 open 方法，用于打开弹窗
 
 const dataTypeBlur = (scope) => {
   scope.row.dataType = scope.row.dataType.toUpperCase().trim()
+  if (scope.row.dataType.includes('CHAR') || scope.row.dataType.includes('TEXT')) {
+    scope.row.javaType = 'String'
+    scope.row.defaultValue = ''
+  }
+  if (scope.row.dataType.includes('INT')) {
+    scope.row.javaType = 'Integer'
+    scope.row.defaultValue = 0
+  }
+  if (scope.row.dataType.includes('FLOAT')) {
+    scope.row.javaType = 'Long'
+    scope.row.defaultValue = 0
+  }
+  if (scope.row.dataType.includes('DOUBLE')) {
+    scope.row.javaType = 'Double'
+    scope.row.defaultValue = 0
+  }
+  if (scope.row.dataType.includes('DECIMAL')) {
+    scope.row.javaType = 'BigDecimal'
+    scope.row.defaultValue = 0
+  }
+  if (scope.row.dataType.includes('DATE') || scope.row.dataType.includes('TIME'))
+    scope.row.javaType = 'LocalDateTime'
 }
 
 const rowStyle = ({ row }) => {

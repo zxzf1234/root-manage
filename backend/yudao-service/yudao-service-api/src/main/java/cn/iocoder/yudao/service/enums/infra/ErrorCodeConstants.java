@@ -43,6 +43,7 @@ public interface ErrorCodeConstants {
     ErrorCode CODEGEN_INTERFACE_PARAM_NOT_EXITS = new ErrorCode(1001004017, "接口参数不存在");
     ErrorCode CODEGEN_INTERFACE_SUBCLASS_NOT_EXITS = new ErrorCode(1001004018, "接口子类不存在");
     ErrorCode CODEGEN_DATABASE_MAPPING_NOT_EXITS = new ErrorCode(1001004019, "数据库表映射不存在");
+    ErrorCode CODEGEN_DATABASE_TABLE_COLUMN_DISTINCT = new ErrorCode(1001004020, "数据库表字段重复");
 
     // ========== 字典类型（测试）1001005000 ==========
     ErrorCode TEST_DEMO_NOT_EXISTS = new ErrorCode(1001005000, "测试示例不存在");

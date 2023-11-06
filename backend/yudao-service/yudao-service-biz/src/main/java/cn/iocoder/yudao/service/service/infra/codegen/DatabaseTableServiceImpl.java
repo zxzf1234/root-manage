@@ -1,6 +1,7 @@
 package cn.iocoder.yudao.service.service.infra.codegen;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.StrUtil;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
@@ -11,6 +12,7 @@ import cn.iocoder.yudao.service.model.infra.db.InfraDataSourceConfig;
 import cn.iocoder.yudao.service.repository.infra.codegen.*;
 import cn.iocoder.yudao.service.service.infra.codegen.inner.CodegenEngine;
 import cn.iocoder.yudao.service.service.infra.db.DataSourceConfigService;
+import cn.iocoder.yudao.service.vo.infra.codegen.baseVO.DatabaseColumnBase;
 import cn.iocoder.yudao.service.vo.infra.codegen.database.*;
 import cn.iocoder.yudao.service.vo.infra.codegen.interfaceModule.InterfaceResp;
 import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
@@ -85,6 +87,13 @@ public class DatabaseTableServiceImpl implements DatabaseTableService {
         Optional<InfraDatabaseTable> opExistsTable = infraDatabaseTableRepository.findByName(reqVo.getName());
         if (opExistsTable.isPresent())
             throw exception(CODEGEN_DATABASE_TABLE_EXISTS);
+        // 判断表字段是否重复
+        List<String> columnNameList = reqVo.getColumns().stream().map(DatabaseColumnBase::getColumnName).collect(Collectors.toList());
+        List<String> distinctColumnNameList = CollectionUtil.distinct(columnNameList);
+        if(distinctColumnNameList.size() != columnNameList.size())
+            throw exception(CODEGEN_DATABASE_TABLE_COLUMN_DISTINCT);
+
+        // 保存数据库表字段校验
         for(DatabaseUpdateReq.Column column : reqVo.getColumns()){
             if(!column.getValidations().isEmpty()){
                 List<InfraInterfaceValidation> validations = CodegenConvert.INSTANCE.convertList17(column.getValidations());
@@ -94,7 +103,10 @@ public class DatabaseTableServiceImpl implements DatabaseTableService {
         }
         InfraDatabaseTable newDatabaseTable = CodegenConvert.INSTANCE.convert(reqVo);
 
+        // 保存数据库表
         newDatabaseTable = infraDatabaseTableRepository.insert(newDatabaseTable);
+
+        // 保存数据库表对应的接口参数类
         InfraDatabaseTable finalNewDatabaseTable = newDatabaseTable;
         InfraInterfaceVoClass newParamClass = InfraInterfaceVoClassDraft.$.produce(draft -> {
             String moduleName = reqVo.getName().substring(0, reqVo.getName().indexOf("_"));
