@@ -209,9 +209,9 @@ public class CodegenEngine {
     }
 
     private String srcExtendClass(UUID id){
-       Optional<InfraInterfaceVoClass> opVoClass = infraInterfaceVoClassRepository.findById(id);
-       if(!opVoClass.isPresent())
-           return "";
+        Optional<InfraInterfaceVoClass> opVoClass = infraInterfaceVoClassRepository.findById(id);
+        if(!opVoClass.isPresent())
+            return "";
         if(opVoClass.get().parentId().isEmpty())
             return "";
         if(opVoClass.get().type() == 1) {
@@ -298,7 +298,7 @@ public class CodegenEngine {
             if(!inputSubclass.getInheritClass().isEmpty()){
                 String inputSubExtendClassImport = getExtendClassImport(inputSubclass.getInheritClass(), bindingMap);
                 if(!inputSubExtendClassImport.isEmpty())
-                 inputImportList.add(inputSubExtendClassImport);
+                    inputImportList.add(inputSubExtendClassImport);
             }
         }
         bindingMap.put("inputSubclasses", inputSubclasses);
@@ -319,21 +319,25 @@ public class CodegenEngine {
         String inputExtendClassImport = "";
         if(!infraInterface.inputExtendClass().isEmpty()) {
             InfraInterfaceVoClass voClass = infraInterfaceVoClassRepository.findByName(infraInterface.inputExtendClass()).get();
+            if (Objects.equals(voClass.name(), "PageParam")){
+                inputExtendClassImport = "import "+ PageParam.class.getName() +";";
+            }else {
+                inputSrcExtendClass = srcExtendClass(voClass.id());
 
-            inputSrcExtendClass = srcExtendClass(voClass.id());
+                InfraDatabaseTable table = infraDatabaseTableRepository.findByName(inputSrcExtendClass).get();
+                inputSrcExtendTableImport = "import " +
+                        getStr(bindingMap, "basePackage").replaceAll("\\.", ".") +
+                        ".service.model." +
+                        table.name().substring(0, table.name().indexOf("_")) +
+                        "." +
+                        table.businessName() +
+                        "." +
+                        upperFirst(toCamelCase(inputSrcExtendClass))
+                        + ";";
+                inputSrcExtendClass = upperFirst(toCamelCase(inputSrcExtendClass));
 
-            InfraDatabaseTable table = infraDatabaseTableRepository.findByName(inputSrcExtendClass).get();
-            inputSrcExtendTableImport = "import " +
-                    getStr(bindingMap, "basePackage").replaceAll("\\.", ".") +
-                    ".service.model." +
-                    table.name().substring(0, table.name().indexOf("_")) +
-                    "." +
-                    table.businessName() +
-                    "." +
-                    upperFirst(toCamelCase(inputSrcExtendClass))
-                    + ";";
-            inputSrcExtendClass = upperFirst(toCamelCase(inputSrcExtendClass));
-            inputExtendClassImport = getExtendClassImport(infraInterface.inputExtendClass(), bindingMap);
+                inputExtendClassImport = getExtendClassImport(infraInterface.inputExtendClass(), bindingMap);
+            }
             convertImportList.add(inputSrcExtendTableImport);
             inputImportList.add(inputExtendClassImport);
         }
@@ -345,24 +349,20 @@ public class CodegenEngine {
         String outputExtendClassImport = "";
         if(!infraInterface.outputExtendClass().isEmpty()) {
             InfraInterfaceVoClass voClass = infraInterfaceVoClassRepository.findByName(infraInterface.outputExtendClass()).get();
-            if (Objects.equals(voClass.name(), "PageParam")){
-                outputExtendClassImport = "import "+ PageParam.class.getName() +";";
-            }else {
-                outputSrcExtendClass = srcExtendClass(voClass.id());
+            outputSrcExtendClass = srcExtendClass(voClass.id());
 
-                InfraDatabaseTable table = infraDatabaseTableRepository.findByName(outputSrcExtendClass).get();
-                outputSrcExtendTableImport = "import " +
-                        getStr(bindingMap, "basePackage").replaceAll("\\.", ".") +
-                        ".service.model." +
-                        table.name().substring(0, table.name().indexOf("_")) +
-                        "." +
-                        table.businessName() +
-                        "." +
-                        upperFirst(toCamelCase(outputSrcExtendClass)) +
-                        ";";
-                outputSrcExtendClass = upperFirst(toCamelCase(outputSrcExtendClass));
-                outputExtendClassImport = getExtendClassImport(infraInterface.outputExtendClass(), bindingMap);
-            }
+            InfraDatabaseTable table = infraDatabaseTableRepository.findByName(outputSrcExtendClass).get();
+            outputSrcExtendTableImport = "import " +
+                    getStr(bindingMap, "basePackage").replaceAll("\\.", ".") +
+                    ".service.model." +
+                    table.name().substring(0, table.name().indexOf("_")) +
+                    "."+
+                    table.businessName()+
+                    "."+
+                    upperFirst(toCamelCase(outputSrcExtendClass)) +
+                    ";";
+            outputSrcExtendClass = upperFirst(toCamelCase(outputSrcExtendClass));
+            outputExtendClassImport = getExtendClassImport(infraInterface.outputExtendClass(), bindingMap);
             convertImportList.add(outputSrcExtendTableImport);
             outputImportList.add(outputExtendClassImport);
         }
@@ -675,8 +675,8 @@ public class CodegenEngine {
     }
 
     public void moduleInsertExecute(InfraInterfaceModule module){
-       Map<String, Object> bindingMap = getModuleBindingMap(module);
-       generateModule(bindingMap);
+        Map<String, Object> bindingMap = getModuleBindingMap(module);
+        generateModule(bindingMap);
     }
 
     private String moduleUpdateContent(String content, InfraInterfaceModule oldModule, InfraInterfaceModule newModule){
@@ -883,7 +883,7 @@ public class CodegenEngine {
         }else{
             newFile = FileUtil.file(filePath);
         }
-         FileUtil.appendUtf8String(updateSql, newFile);
+        FileUtil.appendUtf8String(updateSql, newFile);
 
     }
 
