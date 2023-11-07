@@ -12,7 +12,7 @@ import javax.validation.constraints.*;
  * 如果子 VO 存在差异的字段，请不要添加到这里，影响 Swagger 文档生成
  */
 @Data
-public class NotifyTemplateBase {
+public class SystemNotifyTemplateBase {
 
     @Schema(description = "模板名称", requiredMode = Schema.RequiredMode.REQUIRED, example = "测试模版")
     @NotEmpty(message = "模版名称不能为空")

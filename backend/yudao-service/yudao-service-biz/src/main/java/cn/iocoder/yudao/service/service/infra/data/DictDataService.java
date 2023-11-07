@@ -1,7 +1,6 @@
 package cn.iocoder.yudao.service.service.infra.data;
 
 import cn.iocoder.yudao.service.api.system.dict.dto.DictDataRespDTO;
-import cn.iocoder.yudao.service.model.infra.data.InfraDictData;
 import cn.iocoder.yudao.service.vo.infra.data.dictData.DictDataCreateInput;
 import cn.iocoder.yudao.service.vo.infra.data.dictData.DictDataUpdateInput;
 import cn.iocoder.yudao.service.vo.infra.data.dictData.DictDataGetOutput;
@@ -12,7 +11,6 @@ import cn.iocoder.yudao.framework.common.pojo.PageResult;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;

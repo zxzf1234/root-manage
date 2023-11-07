@@ -10,7 +10,7 @@ import javax.validation.constraints.*;
  * 如果子 VO 存在差异的字段，请不要添加到这里，影响 Swagger 文档生成
  */
 @Data
-public class InterfaceParamBase {
+public class InfraInterfaceParamBase {
 
     @Schema(description = "参数名", example = "name")
     private String name;

@@ -995,7 +995,7 @@ public class CodegenEngine {
     }
 
     private static String javaBaseVOFilePath(String path) {
-        return javaFilePath("vo/${moduleName}/${table.businessName}/${sceneEnum.prefixClass}baseVO/${sceneEnum.prefixClass}${simpleClassNameHump}" + path) + ".java";
+        return javaFilePath("vo/${moduleName}/${table.businessName}/${sceneEnum.prefixClass}baseVO/${classNameHump}" + path) + ".java";
     }
 
     private static String javaControllerFilePath() {

@@ -13,7 +13,7 @@ import java.util.UUID;
 
 @Schema(description = "管理后台 - 数据库表详情")
 @Data
-public class DatabaseTableDetailResp extends DatabaseTableBase {
+public class DatabaseTableDetailResp extends InfraDatabaseTableBase {
     @Schema(description = "编号", required = true, example = "1")
     private UUID id;
 
@@ -31,7 +31,7 @@ public class DatabaseTableDetailResp extends DatabaseTableBase {
     @Data
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
-    public static class Column extends DatabaseColumnBase {
+    public static class Column extends InfraDatabaseColumnBase {
 
         @Schema(description = "编号", required = true, example = "1")
         private UUID id;
@@ -44,7 +44,7 @@ public class DatabaseTableDetailResp extends DatabaseTableBase {
     @Data
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
-    public static class Index extends DatabaseIndexBase {
+    public static class Index extends InfraDatabaseIndexBase {
 
         @Schema(description = "编号", required = true, example = "1")
         private UUID id;
@@ -55,7 +55,7 @@ public class DatabaseTableDetailResp extends DatabaseTableBase {
     @Data
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
-    public static class Validation extends InterfaceValidationBase {
+    public static class Validation extends InfraInterfaceValidationBase {
         @Schema(description = "编号", required = true, example = "1")
         private UUID id;
 
@@ -65,7 +65,7 @@ public class DatabaseTableDetailResp extends DatabaseTableBase {
     @Data
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
-    public static class mapping extends DatabaseMappingBase {
+    public static class mapping extends InfraDatabaseMappingBase {
 
         @Schema(description = "编号", required = true, example = "1")
         private UUID id;

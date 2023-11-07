@@ -1,12 +1,7 @@
 package cn.iocoder.yudao.service.controller.admin.infra.data;
 
-import cn.iocoder.yudao.service.vo.infra.data.dictType.DictTypeExportInput;
+import cn.iocoder.yudao.service.vo.infra.data.dictType.*;
 import cn.iocoder.yudao.service.vo.infra.data.dictType.DictTypeListAllSimpleOutput;
-import cn.iocoder.yudao.service.vo.infra.data.dictType.DictTypeGetOutput;
-import cn.iocoder.yudao.service.vo.infra.data.dictType.DictTypePageOutput;
-import cn.iocoder.yudao.service.vo.infra.data.dictType.DictTypePageInput;
-import cn.iocoder.yudao.service.vo.infra.data.dictType.DictTypeUpdateInput;
-import cn.iocoder.yudao.service.vo.infra.data.dictType.DictTypeCreateInput;
 import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
@@ -15,23 +10,15 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Operation;
 
-import javax.validation.constraints.*;
 import javax.validation.*;
 import javax.servlet.http.*;
 import java.util.*;
-import java.io.IOException;
 
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.common.pojo.CommonResult;
 import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
 
-import cn.iocoder.yudao.framework.excel.core.util.ExcelUtils;
-
-import cn.iocoder.yudao.framework.operatelog.core.annotations.OperateLog;
-import static cn.iocoder.yudao.framework.operatelog.core.enums.OperateTypeEnum.*;
-
 import cn.iocoder.yudao.service.service.infra.data.DictTypeService;
-import cn.iocoder.yudao.service.vo.infra.data.dictType.*;
 
 @Tag(name = "字典类型")
 @RestController

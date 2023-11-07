@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Data
-public class DatabaseUpdateReq extends DatabaseTableBase {
+public class DatabaseUpdateReq extends InfraDatabaseTableBase {
     @Schema(description = "编号", required = true, example = "1")
     private UUID id;
 
@@ -30,7 +30,7 @@ public class DatabaseUpdateReq extends DatabaseTableBase {
     @Data
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
-    public static class Column extends DatabaseColumnBase {
+    public static class Column extends InfraDatabaseColumnBase {
         @Schema(description = "编号", required = true, example = "1")
         private UUID id;
 
@@ -45,7 +45,7 @@ public class DatabaseUpdateReq extends DatabaseTableBase {
     @Data
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
-    public static class Index extends DatabaseIndexBase {
+    public static class Index extends InfraDatabaseIndexBase {
         @Schema(description = "编号", required = true, example = "1")
         private UUID id;
 
@@ -58,7 +58,7 @@ public class DatabaseUpdateReq extends DatabaseTableBase {
     @Data
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
-    public static class Validation extends InterfaceValidationBase {
+    public static class Validation extends InfraInterfaceValidationBase {
         @Schema(description = "编号", required = true, example = "1")
         private UUID id;
 
@@ -73,7 +73,7 @@ public class DatabaseUpdateReq extends DatabaseTableBase {
     @Data
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
-    public static class mapping extends DatabaseMappingBase {
+    public static class mapping extends InfraDatabaseMappingBase {
         @Schema(description = "编号", required = true, example = "1")
         private UUID id;
 

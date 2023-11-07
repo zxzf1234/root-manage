@@ -1,6 +1,6 @@
 package cn.iocoder.yudao.service.vo.system.user.profile;
 
-import cn.iocoder.yudao.service.vo.system.user.baseVO.UserBase;
+import cn.iocoder.yudao.service.vo.system.user.baseVO.SystemUserBase;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Schema(description = "管理后台 - 用户个人中心信息 Response VO")
-public class UserProfileResp extends UserBase {
+public class UserProfileResp extends SystemUserBase {
 
     @Schema(description = "用户编号", required = true, example = "1")
     private Long id;

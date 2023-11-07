@@ -12,9 +12,8 @@ import cn.iocoder.yudao.service.model.infra.db.InfraDataSourceConfig;
 import cn.iocoder.yudao.service.repository.infra.codegen.*;
 import cn.iocoder.yudao.service.service.infra.codegen.inner.CodegenEngine;
 import cn.iocoder.yudao.service.service.infra.db.DataSourceConfigService;
-import cn.iocoder.yudao.service.vo.infra.codegen.baseVO.DatabaseColumnBase;
+import cn.iocoder.yudao.service.vo.infra.codegen.baseVO.InfraDatabaseColumnBase;
 import cn.iocoder.yudao.service.vo.infra.codegen.database.*;
-import cn.iocoder.yudao.service.vo.infra.codegen.interfaceModule.InterfaceResp;
 import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
 import com.baomidou.mybatisplus.generator.config.GlobalConfig;
 import com.baomidou.mybatisplus.generator.config.StrategyConfig;
@@ -22,7 +21,6 @@ import com.baomidou.mybatisplus.generator.config.builder.ConfigBuilder;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import org.springframework.data.domain.Page;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,8 +28,7 @@ import javax.annotation.Resource;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static cn.hutool.core.text.CharSequenceUtil.removePrefix;
-import static cn.hutool.core.text.CharSequenceUtil.upperFirst;
+import static cn.hutool.core.text.CharSequenceUtil.*;
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
 import static cn.iocoder.yudao.service.enums.infra.ErrorCodeConstants.*;
 @Service
@@ -88,7 +85,7 @@ public class DatabaseTableServiceImpl implements DatabaseTableService {
         if (opExistsTable.isPresent())
             throw exception(CODEGEN_DATABASE_TABLE_EXISTS);
         // 判断表字段是否重复
-        List<String> columnNameList = reqVo.getColumns().stream().map(DatabaseColumnBase::getColumnName).collect(Collectors.toList());
+        List<String> columnNameList = reqVo.getColumns().stream().map(InfraDatabaseColumnBase::getColumnName).collect(Collectors.toList());
         List<String> distinctColumnNameList = CollectionUtil.distinct(columnNameList);
         if(distinctColumnNameList.size() != columnNameList.size())
             throw exception(CODEGEN_DATABASE_TABLE_COLUMN_DISTINCT);
@@ -109,8 +106,7 @@ public class DatabaseTableServiceImpl implements DatabaseTableService {
         // 保存数据库表对应的接口参数类
         InfraDatabaseTable finalNewDatabaseTable = newDatabaseTable;
         InfraInterfaceVoClass newParamClass = InfraInterfaceVoClassDraft.$.produce(draft -> {
-            String moduleName = reqVo.getName().substring(0, reqVo.getName().indexOf("_"));
-            String simpleClassName = removePrefix(reqVo.getName(), moduleName+ "_");
+            String simpleClassName = upperFirst(toCamelCase((reqVo.getName())));
             draft.setName(upperFirst(StrUtil.toCamelCase(simpleClassName)) + "Base")
                     .setParentId(finalNewDatabaseTable.id().toString())
                     .setComment(reqVo.getComment());

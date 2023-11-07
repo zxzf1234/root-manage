@@ -5,10 +5,10 @@ import cn.iocoder.yudao.service.service.infra.codegen.inner.CodegenDatabaseColum
 import cn.iocoder.yudao.service.service.infra.codegen.inner.CodegenDatabaseMapping;
 import cn.iocoder.yudao.service.service.infra.codegen.inner.CodegenInterfaceParam;
 import cn.iocoder.yudao.service.service.infra.codegen.inner.CodegenInterfaceSubclass;
-import cn.iocoder.yudao.service.vo.infra.codegen.baseVO.InterfaceValidationBase;
+import cn.iocoder.yudao.service.vo.infra.codegen.baseVO.InfraInterfaceValidationBase;
 import cn.iocoder.yudao.service.vo.infra.codegen.database.*;
-import cn.iocoder.yudao.service.vo.infra.codegen.baseVO.DatabaseColumnBase;
-import cn.iocoder.yudao.service.vo.infra.codegen.baseVO.DatabaseIndexBase;
+import cn.iocoder.yudao.service.vo.infra.codegen.baseVO.InfraDatabaseColumnBase;
+import cn.iocoder.yudao.service.vo.infra.codegen.baseVO.InfraDatabaseIndexBase;
 import cn.iocoder.yudao.service.vo.infra.codegen.interfaceModule.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -29,15 +29,15 @@ public interface CodegenConvert {
 
     InfraDatabaseTable convert(DatabaseUpdateReq bean);
 
-    InfraDatabaseColumn convert(DatabaseColumnBase bean);
+    InfraDatabaseColumn convert(InfraDatabaseColumnBase bean);
 
     InfraDatabaseColumn convert(DatabaseUpdateReq.Column bean);
 
     InfraInterfaceValidation convert(DatabaseUpdateReq.Validation bean);
 
-    List<InfraInterfaceValidation> convertList06(List<InterfaceValidationBase> validations);
+    List<InfraInterfaceValidation> convertList06(List<InfraInterfaceValidationBase> validations);
 
-    InfraDatabaseIndex convert(DatabaseIndexBase bean);
+    InfraDatabaseIndex convert(InfraDatabaseIndexBase bean);
 
     InfraDatabaseIndex convert(DatabaseUpdateReq.Index bean);
 

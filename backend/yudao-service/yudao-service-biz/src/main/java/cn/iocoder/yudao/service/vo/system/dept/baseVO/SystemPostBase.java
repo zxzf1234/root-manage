@@ -10,7 +10,7 @@ import javax.validation.constraints.*;
  * 如果子 VO 存在差异的字段，请不要添加到这里，影响 Swagger 文档生成
  */
 @Data
-public class PostBase {
+public class SystemPostBase {
 
     @Schema(description = "岗位编码", requiredMode = Schema.RequiredMode.REQUIRED, example = "yudao")
     @Size(max = 64, message = "岗位编码长度不能超过64个字符")

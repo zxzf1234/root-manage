@@ -1,6 +1,6 @@
 package cn.iocoder.yudao.service.vo.infra.codegen.interfaceModule;
 
-import cn.iocoder.yudao.service.vo.infra.codegen.baseVO.InterfaceBase;
+import cn.iocoder.yudao.service.vo.infra.codegen.baseVO.InfraInterfaceBase;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @Schema(description = "管理后台 - 接口查询 response VO")
 @Data
-public class InterfaceResp extends InterfaceBase {
+public class InterfaceResp extends InfraInterfaceBase {
     @Schema(description ="接口id", required = true, example = "1024")
     private UUID id;
 

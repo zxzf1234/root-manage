@@ -1,6 +1,6 @@
 package cn.iocoder.yudao.service.vo.system.notify.message;
 
-import cn.iocoder.yudao.service.vo.system.notify.baseVO.NotifyMessageBase;
+import cn.iocoder.yudao.service.vo.system.notify.baseVO.SystemNotifyMessageBase;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import java.util.*;
@@ -9,7 +9,7 @@ import java.util.*;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class NotifyMessageResp extends NotifyMessageBase {
+public class NotifyMessageResp extends SystemNotifyMessageBase {
 
     @Schema(description = "ID", required = true, example = "1024")
     private Long id;

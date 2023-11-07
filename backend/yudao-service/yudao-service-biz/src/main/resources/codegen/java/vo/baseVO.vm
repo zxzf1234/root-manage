@@ -32,7 +32,7 @@ import java.time.LocalDateTime;
  * 如果子 VO 存在差异的字段，请不要添加到这里，影响 Swagger 文档生成
  */
 @Data
-public class ${simpleClassNameHump}Base {
+public class ${classNameHump}Base {
 
 #foreach ($column in $columns)
 #if (${column.humpName} != "id" && ${column.humpName} != "createTime" && ${column.humpName} != "updateTime" && ${column.humpName} != "creatorId" && ${column.humpName} != "updaterId" && ${column.humpName} != "deleted")

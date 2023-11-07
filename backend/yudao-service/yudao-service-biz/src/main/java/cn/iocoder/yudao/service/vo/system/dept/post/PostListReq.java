@@ -1,6 +1,6 @@
 package cn.iocoder.yudao.service.vo.system.dept.post;
 
-import cn.iocoder.yudao.service.vo.system.dept.baseVO.PostBase;
+import cn.iocoder.yudao.service.vo.system.dept.baseVO.SystemPostBase;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -8,7 +8,7 @@ import lombok.EqualsAndHashCode;
 @Schema(description = "管理后台 - 岗位列表 Request VO")
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class PostListReq extends PostBase {
+public class PostListReq extends SystemPostBase {
 
     @Schema(description = "岗位名称,模糊匹配", example = "芋道")
     private String name;

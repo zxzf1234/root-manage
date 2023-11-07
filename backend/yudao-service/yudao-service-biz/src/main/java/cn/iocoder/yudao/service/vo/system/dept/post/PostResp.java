@@ -1,6 +1,6 @@
 package cn.iocoder.yudao.service.vo.system.dept.post;
 
-import cn.iocoder.yudao.service.vo.system.dept.baseVO.PostBase;
+import cn.iocoder.yudao.service.vo.system.dept.baseVO.SystemPostBase;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Schema(description = "管理后台 - 岗位信息 Response VO")
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class PostResp extends PostBase {
+public class PostResp extends SystemPostBase {
 
     @Schema(description = "岗位序号", required = true, example = "1024")
     private Long id;

@@ -1,6 +1,6 @@
 package cn.iocoder.yudao.service.vo.system.user.user;
 
-import cn.iocoder.yudao.service.vo.system.user.baseVO.UserBase;
+import cn.iocoder.yudao.service.vo.system.user.baseVO.SystemUserBase;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class UserResp extends UserBase {
+public class UserResp extends SystemUserBase {
 
     @Schema(description = "用户编号", required = true, example = "1")
     private Long id;

@@ -1,7 +1,7 @@
 package cn.iocoder.yudao.service.vo.infra.codegen.database;
 
-import cn.iocoder.yudao.service.vo.infra.codegen.baseVO.DatabaseColumnBase;
-import cn.iocoder.yudao.service.vo.infra.codegen.baseVO.DatabaseTableBase;
+import cn.iocoder.yudao.service.vo.infra.codegen.baseVO.InfraDatabaseColumnBase;
+import cn.iocoder.yudao.service.vo.infra.codegen.baseVO.InfraDatabaseTableBase;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -14,7 +14,7 @@ import java.util.UUID;
 
 @Schema(description = "管理后台 - 数据库表详情 Response VO")
 @Data
-public class DatabaseTableColumnResp extends DatabaseTableBase {
+public class DatabaseTableColumnResp extends InfraDatabaseTableBase {
     @Schema(description = "编号", required = true, example = "1")
     private UUID id;
 
@@ -26,7 +26,7 @@ public class DatabaseTableColumnResp extends DatabaseTableBase {
     @Data
     @EqualsAndHashCode(callSuper = true)
     @ToString(callSuper = true)
-    public static class Column extends DatabaseColumnBase {
+    public static class Column extends InfraDatabaseColumnBase {
 
         @Schema(description = "编号", required = true, example = "1")
         private UUID id;

@@ -10,7 +10,7 @@ import javax.validation.constraints.*;
  * 如果子 VO 存在差异的字段，请不要添加到这里，影响 Swagger 文档生成
  */
 @Data
-public class NoticeBase {
+public class SystemNoticeBase {
 
     @Schema(description = "公告标题", requiredMode = Schema.RequiredMode.REQUIRED, example = "小博主")
     @NotBlank(message = "公告标题不能为空")

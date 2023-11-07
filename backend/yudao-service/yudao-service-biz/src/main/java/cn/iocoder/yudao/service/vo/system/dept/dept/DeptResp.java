@@ -1,6 +1,6 @@
 package cn.iocoder.yudao.service.vo.system.dept.dept;
 
-import cn.iocoder.yudao.service.vo.system.dept.baseVO.DeptBase;
+import cn.iocoder.yudao.service.vo.system.dept.baseVO.SystemDeptBase;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Schema(description = "管理后台 - 部门信息 Response VO")
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class DeptResp extends DeptBase {
+public class DeptResp extends SystemDeptBase {
 
     @Schema(description = "部门编号", required = true, example = "1024")
     private Long id;

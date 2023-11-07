@@ -13,7 +13,7 @@ import static cn.iocoder.yudao.framework.common.util.date.DateUtils.FORMAT_YEAR_
  * 如果子 VO 存在差异的字段，请不要添加到这里，影响 Swagger 文档生成
  */
 @Data
-public class NotifyMessageBase {
+public class SystemNotifyMessageBase {
 
     @Schema(description = "用户id", requiredMode = Schema.RequiredMode.REQUIRED, example = "25025")
     @NotNull(message = "用户编号不能为空")

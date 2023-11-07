@@ -1,6 +1,6 @@
 package cn.iocoder.yudao.service.vo.infra.codegen.interfaceModule;
 
-import cn.iocoder.yudao.service.vo.infra.codegen.baseVO.InterfaceModuleBase;
+import cn.iocoder.yudao.service.vo.infra.codegen.baseVO.InfraInterfaceModuleBase;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -10,5 +10,5 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class InterfaceModuleCreateReq extends InterfaceModuleBase {
+public class InterfaceModuleCreateReq extends InfraInterfaceModuleBase {
 }

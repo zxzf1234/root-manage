@@ -10,7 +10,7 @@ import javax.validation.constraints.*;
  * 如果子 VO 存在差异的字段，请不要添加到这里，影响 Swagger 文档生成
  */
 @Data
-public class InterfaceModuleBase {
+public class InfraInterfaceModuleBase {
 
     @Schema(description = "模块名称", example = "user")
     @NotEmpty(message = "模块名称不能为空")

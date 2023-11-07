@@ -1,6 +1,6 @@
 package cn.iocoder.yudao.service.vo.system.notify.template;
 
-import cn.iocoder.yudao.service.vo.system.notify.baseVO.NotifyTemplateBase;
+import cn.iocoder.yudao.service.vo.system.notify.baseVO.SystemNotifyTemplateBase;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import javax.validation.constraints.*;
@@ -9,7 +9,7 @@ import javax.validation.constraints.*;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class NotifyTemplateUpdateReq extends NotifyTemplateBase {
+public class NotifyTemplateUpdateReq extends SystemNotifyTemplateBase {
 
     @Schema(description = "ID", required = true, example = "1024")
     @NotNull(message = "ID 不能为空")

@@ -10,7 +10,7 @@ import javax.validation.constraints.*;
  * 如果子 VO 存在差异的字段，请不要添加到这里，影响 Swagger 文档生成
  */
 @Data
-public class DatabaseColumnBase {
+public class InfraDatabaseColumnBase {
 
     @Schema(description = "表编号", requiredMode = Schema.RequiredMode.REQUIRED, example = "2342533242")
     private UUID tableId;

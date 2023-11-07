@@ -1,16 +1,14 @@
 package cn.iocoder.yudao.service.vo.system.dept.dept;
 
-import cn.iocoder.yudao.service.vo.system.dept.baseVO.DeptBase;
+import cn.iocoder.yudao.service.vo.system.dept.baseVO.SystemDeptBase;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.*;
-import javax.validation.constraints.*;
 
 @Schema(description = "获取部门列表")
 @Data
-public class DeptListOutput extends DeptBase {
+public class DeptListOutput extends SystemDeptBase {
     @Schema(description = "部门编号", requiredMode = Schema.RequiredMode.REQUIRED, example = "1024")
     private Long id;
 

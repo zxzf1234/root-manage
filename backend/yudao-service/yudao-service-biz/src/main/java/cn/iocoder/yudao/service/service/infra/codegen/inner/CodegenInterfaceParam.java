@@ -1,6 +1,6 @@
 package cn.iocoder.yudao.service.service.infra.codegen.inner;
 
-import cn.iocoder.yudao.service.vo.infra.codegen.baseVO.InterfaceValidationBase;
+import cn.iocoder.yudao.service.vo.infra.codegen.baseVO.InfraInterfaceValidationBase;
 import lombok.Data;
 
 import java.util.List;
@@ -36,7 +36,7 @@ public class CodegenInterfaceParam {
     private List<Validation> validations;
 
     @Data
-    public static class Validation extends InterfaceValidationBase {
+    public static class Validation extends InfraInterfaceValidationBase {
         private UUID id;
     }
 }

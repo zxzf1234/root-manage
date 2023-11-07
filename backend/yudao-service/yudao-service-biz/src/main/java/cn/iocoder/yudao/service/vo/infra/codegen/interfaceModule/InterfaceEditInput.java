@@ -1,9 +1,9 @@
 package cn.iocoder.yudao.service.vo.infra.codegen.interfaceModule;
 
-import cn.iocoder.yudao.service.vo.infra.codegen.baseVO.InterfaceBase;
-import cn.iocoder.yudao.service.vo.infra.codegen.baseVO.InterfaceParamBase;
-import cn.iocoder.yudao.service.vo.infra.codegen.baseVO.InterfaceSubclassBase;
-import cn.iocoder.yudao.service.vo.infra.codegen.baseVO.InterfaceValidationBase;
+import cn.iocoder.yudao.service.vo.infra.codegen.baseVO.InfraInterfaceBase;
+import cn.iocoder.yudao.service.vo.infra.codegen.baseVO.InfraInterfaceParamBase;
+import cn.iocoder.yudao.service.vo.infra.codegen.baseVO.InfraInterfaceSubclassBase;
+import cn.iocoder.yudao.service.vo.infra.codegen.baseVO.InfraInterfaceValidationBase;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @Schema(description = "管理后台 - 接口创建 response VO")
 @Data
-public class InterfaceEditInput extends InterfaceBase {
+public class InterfaceEditInput extends InfraInterfaceBase {
     @Schema(description = "编号", required = true, example = "1")
     private UUID id;
 
@@ -26,7 +26,7 @@ public class InterfaceEditInput extends InterfaceBase {
 
     @Schema(description = "入参子类")
     @Data
-    public static class inputSubclass extends InterfaceSubclassBase {
+    public static class inputSubclass extends InfraInterfaceSubclassBase {
         @Schema(description = "编号", required = true, example = "1")
         private UUID id;
 
@@ -41,7 +41,7 @@ public class InterfaceEditInput extends InterfaceBase {
 
     @Schema(description = "出参子类")
     @Data
-    public static class outputSubclass extends InterfaceSubclassBase {
+    public static class outputSubclass extends InfraInterfaceSubclassBase {
         @Schema(description = "编号", required = true, example = "1")
         private UUID id;
 
@@ -56,7 +56,7 @@ public class InterfaceEditInput extends InterfaceBase {
 
     @Schema(description = "入参")
     @Data
-    public static class inputParam extends InterfaceParamBase {
+    public static class inputParam extends InfraInterfaceParamBase {
 
         @Schema(description = "编号", required = true, example = "1")
         private UUID id;
@@ -77,7 +77,7 @@ public class InterfaceEditInput extends InterfaceBase {
 
     @Schema(description = "出参")
     @Data
-    public static class outputParam extends InterfaceParamBase {
+    public static class outputParam extends InfraInterfaceParamBase {
 
         @Schema(description = "编号", required = true, example = "1")
         private UUID id;
@@ -98,7 +98,7 @@ public class InterfaceEditInput extends InterfaceBase {
 
     @Schema(description = "子类参数")
     @Data
-    public static class subclassParam extends InterfaceParamBase {
+    public static class subclassParam extends InfraInterfaceParamBase {
 
         @Schema(description = "编号", required = true, example = "1")
         private UUID id;
@@ -116,7 +116,7 @@ public class InterfaceEditInput extends InterfaceBase {
 
     @Schema(description = "校验")
     @Data
-    public static class validation extends InterfaceValidationBase {
+    public static class validation extends InfraInterfaceValidationBase {
 
         @Schema(description = "编号", required = true, example = "1")
         private UUID id;
