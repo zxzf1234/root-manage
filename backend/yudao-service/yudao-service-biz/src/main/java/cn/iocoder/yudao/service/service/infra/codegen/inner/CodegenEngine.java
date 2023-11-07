@@ -236,7 +236,7 @@ public class CodegenEngine {
                     "." +
                     table.businessName() +
                     ".baseVO." +
-                    upperFirst(toCamelCase(removePrefix(table.name(), moduleName + "_"))) +
+                    upperFirst(toCamelCase((table.name()))) +
                     "Base"+
                     ";");
         }else{
