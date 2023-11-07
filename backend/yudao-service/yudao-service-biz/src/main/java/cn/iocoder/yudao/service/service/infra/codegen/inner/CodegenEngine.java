@@ -634,27 +634,31 @@ public class CodegenEngine {
     }
 
     private void fileUpdateImport(StringBuilder fileContent, List<String> oldImportList, List<String> newImportList) {
-        int importIndex = 0;
-        int lastImportIndex = fileContent.indexOf(";", fileContent.lastIndexOf("import "));
+        int insertImportIndex = 0;
+        // 剔除import之后的代码坐标
+        int codeIndex = fileContent.indexOf(";", fileContent.lastIndexOf("import "));
         for(String strImport : oldImportList) {
             if(strImport.isEmpty())
                 continue;
             if(fileContent.indexOf(strImport) >= 0) {
-                if (importIndex == 0){
-                    importIndex = fileContent.indexOf(strImport);
+
+                int deleteImportIndex = fileContent.indexOf(strImport);
+                // 计算新的import要插入的位置 尽量插入删除import的位置 如果没有删除的import就插入到import的末尾
+                if (insertImportIndex == 0 || insertImportIndex > deleteImportIndex){
+                    insertImportIndex = deleteImportIndex;
                 }
-                int deleteIndex = strImport.lastIndexOf(".");
-                String deleteClass = strImport.substring(deleteIndex + 1, strImport.lastIndexOf(";"));
-                if(fileContent.indexOf(deleteClass, lastImportIndex) < 0)
-                    fileContent.delete(importIndex, importIndex + strImport.length() + 2);
+                // 找出要删除的class 如果代码没有使用才删除
+                String deleteClass = strImport.substring(strImport.lastIndexOf(".") + 1, strImport.lastIndexOf(";"));
+                if(fileContent.indexOf(deleteClass, codeIndex) < 0)
+                    fileContent.delete(deleteImportIndex, deleteImportIndex + strImport.length() + 2);
             }
         }
-        if (importIndex == 0)
-            importIndex = fileContent.indexOf("import");
+        if (insertImportIndex == 0)
+            insertImportIndex = fileContent.indexOf("import");
 
         for(String strImport : newImportList) {
             if(fileContent.indexOf(strImport) < 0)
-                fileContent.insert(importIndex, strImport + "\r\n");
+                fileContent.insert(insertImportIndex, strImport + "\r\n");
         }
     }
 
