@@ -319,25 +319,21 @@ public class CodegenEngine {
         String inputExtendClassImport = "";
         if(!infraInterface.inputExtendClass().isEmpty()) {
             InfraInterfaceVoClass voClass = infraInterfaceVoClassRepository.findByName(infraInterface.inputExtendClass()).get();
-            if (Objects.equals(voClass.name(), "PageParam")){
-                inputExtendClassImport = "import "+ PageParam.class.getName() +";";
-            }else {
-                inputSrcExtendClass = srcExtendClass(voClass.id());
 
-                InfraDatabaseTable table = infraDatabaseTableRepository.findByName(inputSrcExtendClass).get();
-                inputSrcExtendTableImport = "import " +
-                        getStr(bindingMap, "basePackage").replaceAll("\\.", ".") +
-                        ".service.model." +
-                        table.name().substring(0, table.name().indexOf("_")) +
-                        "." +
-                        table.businessName() +
-                        "." +
-                        upperFirst(toCamelCase(inputSrcExtendClass))
-                        + ";";
-                inputSrcExtendClass = upperFirst(toCamelCase(inputSrcExtendClass));
+            inputSrcExtendClass = srcExtendClass(voClass.id());
 
-                inputExtendClassImport = getExtendClassImport(infraInterface.inputExtendClass(), bindingMap);
-            }
+            InfraDatabaseTable table = infraDatabaseTableRepository.findByName(inputSrcExtendClass).get();
+            inputSrcExtendTableImport = "import " +
+                    getStr(bindingMap, "basePackage").replaceAll("\\.", ".") +
+                    ".service.model." +
+                    table.name().substring(0, table.name().indexOf("_")) +
+                    "." +
+                    table.businessName() +
+                    "." +
+                    upperFirst(toCamelCase(inputSrcExtendClass))
+                    + ";";
+            inputSrcExtendClass = upperFirst(toCamelCase(inputSrcExtendClass));
+            inputExtendClassImport = getExtendClassImport(infraInterface.inputExtendClass(), bindingMap);
             convertImportList.add(inputSrcExtendTableImport);
             inputImportList.add(inputExtendClassImport);
         }
@@ -349,20 +345,24 @@ public class CodegenEngine {
         String outputExtendClassImport = "";
         if(!infraInterface.outputExtendClass().isEmpty()) {
             InfraInterfaceVoClass voClass = infraInterfaceVoClassRepository.findByName(infraInterface.outputExtendClass()).get();
-            outputSrcExtendClass = srcExtendClass(voClass.id());
+            if (Objects.equals(voClass.name(), "PageParam")){
+                outputExtendClassImport = "import "+ PageParam.class.getName() +";";
+            }else {
+                outputSrcExtendClass = srcExtendClass(voClass.id());
 
-            InfraDatabaseTable table = infraDatabaseTableRepository.findByName(outputSrcExtendClass).get();
-            outputSrcExtendTableImport = "import " +
-                    getStr(bindingMap, "basePackage").replaceAll("\\.", ".") +
-                    ".service.model." +
-                    table.name().substring(0, table.name().indexOf("_")) +
-                    "."+
-                    table.businessName()+
-                    "."+
-                    upperFirst(toCamelCase(outputSrcExtendClass)) +
-                    ";";
-            outputSrcExtendClass = upperFirst(toCamelCase(outputSrcExtendClass));
-            outputExtendClassImport = getExtendClassImport(infraInterface.outputExtendClass(), bindingMap);
+                InfraDatabaseTable table = infraDatabaseTableRepository.findByName(outputSrcExtendClass).get();
+                outputSrcExtendTableImport = "import " +
+                        getStr(bindingMap, "basePackage").replaceAll("\\.", ".") +
+                        ".service.model." +
+                        table.name().substring(0, table.name().indexOf("_")) +
+                        "." +
+                        table.businessName() +
+                        "." +
+                        upperFirst(toCamelCase(outputSrcExtendClass)) +
+                        ";";
+                outputSrcExtendClass = upperFirst(toCamelCase(outputSrcExtendClass));
+                outputExtendClassImport = getExtendClassImport(infraInterface.outputExtendClass(), bindingMap);
+            }
             convertImportList.add(outputSrcExtendTableImport);
             outputImportList.add(outputExtendClassImport);
         }
