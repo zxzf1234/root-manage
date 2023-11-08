@@ -1,5 +1,13 @@
 <template>
   <Dialog v-model="dialogVisible" :title="dialogTitle">
+    <el-form>
+      <el-form-item>
+        <el-button type="primary" @click="submitForm"> 保存 </el-button>
+        <el-button @click="dialogVisible = false">关闭</el-button>
+        <el-button @click="handleAddData">添加字典数据</el-button>
+        <el-button @click="handleDeleteData">删除字典数据</el-button>
+      </el-form-item>
+    </el-form>
     <el-form
       ref="formRef"
       v-loading="formLoading"
@@ -7,16 +15,23 @@
       :rules="formRules"
       label-width="80px"
     >
-      <el-form-item label="字典名称" prop="name">
-        <el-input v-model="formData.name" placeholder="请输入字典名称" />
-      </el-form-item>
-      <el-form-item label="字典类型" prop="type">
-        <el-input
-          v-model="formData.type"
-          :disabled="typeof formData.id !== 'undefined'"
-          placeholder="请输入参数名称"
-        />
-      </el-form-item>
+      <el-row>
+        <el-col :span="12">
+          <el-form-item label="字典名称" prop="name">
+            <el-input v-model="formData.name" placeholder="请输入字典名称" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="字典类型" prop="type">
+            <el-input
+              v-model="formData.type"
+              :disabled="typeof formData.id !== 'undefined'"
+              placeholder="请输入参数名称"
+            />
+          </el-form-item>
+        </el-col>
+      </el-row>
+
       <el-form-item label="状态" prop="status">
         <el-radio-group v-model="formData.status">
           <el-radio
@@ -32,31 +47,121 @@
         <el-input v-model="formData.remark" placeholder="请输入内容" type="textarea" />
       </el-form-item>
     </el-form>
-    <template #footer>
-      <el-button :disabled="formLoading" type="primary" @click="submitForm">确 定</el-button>
-      <el-button @click="dialogVisible = false">取 消</el-button>
-    </template>
+    <Table
+      :columns="dataColumns"
+      :data="formData.datas"
+      @current-change="handleCurrentDataChange"
+      :row-style="rowStyle"
+    >
+      <template #label="{ row }">
+        <el-input v-model="row.label" />
+      </template>
+      <template #value="{ row }">
+        <el-input v-model="row.value" />
+      </template>
+      <template #sort="{ row }">
+        <el-input-number v-model="row.sort" :min="0" />
+      </template>
+      <template #colorType="{ row }">
+        <el-select v-model="row.colorType">
+          <el-option
+            v-for="item in colorTypeOptions"
+            :key="item.value"
+            :label="item.label + '(' + item.value + ')'"
+            :value="item.value"
+          />
+        </el-select>
+      </template>
+      <template #cssClass="{ row }">
+        <el-input v-model="row.cssClass" type="textarea" />
+      </template>
+      <template #remark="{ row }">
+        <el-input v-model="row.remark" type="textarea" />
+      </template>
+    </Table>
   </Dialog>
 </template>
 <script lang="ts" name="SystemDictTypeForm" setup>
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
-import * as DictTypeApi from '@/api/system/dict/dict.type'
+import * as DictTypeApi from '@/api/infra/dict/dict'
 import { CommonStatusEnum } from '@/utils/constants'
 
 const { t } = useI18n() // 国际化
 const message = useMessage() // 消息弹窗
-
+const dataCurrentRow = ref()
+// 数据标签回显样式
+const colorTypeOptions = readonly([
+  {
+    value: 'default',
+    label: '默认'
+  },
+  {
+    value: 'primary',
+    label: '主要'
+  },
+  {
+    value: 'success',
+    label: '成功'
+  },
+  {
+    value: 'info',
+    label: '信息'
+  },
+  {
+    value: 'warning',
+    label: '警告'
+  },
+  {
+    value: 'danger',
+    label: '危险'
+  }
+])
 const dialogVisible = ref(false) // 弹窗的是否展示
 const dialogTitle = ref('') // 弹窗的标题
 const formLoading = ref(false) // 表单的加载中：1）修改时的数据加载；2）提交的按钮禁用
 const formType = ref('') // 表单的类型：create - 新增；update - 修改
-const formData = ref({
+const formData = ref<DictTypeApi.DictTypeVO>({
   id: undefined,
   name: '',
   type: '',
   status: CommonStatusEnum.ENABLE,
-  remark: ''
+  remark: '',
+  datas: []
 })
+
+const dataColumns: TableColumnList = [
+  {
+    label: '数据标签',
+    prop: 'label',
+    slot: 'label'
+  },
+  {
+    label: '数据键值',
+    prop: 'value',
+    slot: 'value'
+  },
+  {
+    label: '排序',
+    prop: 'sort',
+    slot: 'sort'
+  },
+
+  {
+    label: '颜色类型',
+    prop: 'colorType',
+    slot: 'colorType'
+  },
+  {
+    label: 'CSS Class',
+    prop: 'cssClass',
+    slot: 'cssClass'
+  },
+  {
+    label: '备注',
+    prop: 'remark',
+    slot: 'remark'
+  }
+]
 const formRules = reactive({
   name: [{ required: true, message: '字典名称不能为空', trigger: 'blur' }],
   type: [{ required: true, message: '字典类型不能为空', trigger: 'blur' }],
@@ -82,6 +187,45 @@ const open = async (type: string, id?: string) => {
 }
 defineExpose({ open }) // 提供 open 方法，用于打开弹窗
 
+const rowStyle = ({ row }) => {
+  if (row?.operateType == 'delete') {
+    return { display: 'none' }
+  } else return {}
+}
+
+const handleAddData = () => {
+  const data = {
+    id: crypto.randomUUID(),
+    sort: 0,
+    label: '',
+    value: '',
+    status: 0,
+    colorType: '',
+    cssClass: '',
+    remark: '',
+    operateType: 'new'
+  }
+
+  formData.value.datas.push(data)
+}
+
+const handleCurrentDataChange = (row: DictTypeApi.DictDataVO | undefined) => {
+  dataCurrentRow.value = row
+}
+
+const handleDeleteData = () => {
+  if (dataCurrentRow.value === undefined) {
+    message.alertError('请选择要删除的字典数据')
+    return
+  }
+  if (formType.value === 'create') {
+    const index = formData.value.datas.indexOf(dataCurrentRow.value)
+    formData.value.datas.splice(index, 1)
+  } else {
+    dataCurrentRow.value.operateType = 'delete'
+  }
+}
+
 /** 提交表单 */
 const emit = defineEmits(['success']) // 定义 success 事件，用于操作成功后的回调
 const submitForm = async () => {
@@ -92,7 +236,7 @@ const submitForm = async () => {
   // 提交请求
   formLoading.value = true
   try {
-    const data = formData.value as DictTypeApi.DictTypeVO
+    const data = formData.value as unknown as DictTypeApi.DictTypeVO
     if (formType.value === 'create') {
       await DictTypeApi.createDictType(data)
       message.success(t('common.createSuccess'))
@@ -115,7 +259,8 @@ const resetForm = () => {
     type: '',
     name: '',
     status: CommonStatusEnum.ENABLE,
-    remark: ''
+    remark: '',
+    datas: []
   }
   formRef.value?.resetFields()
 }

@@ -1,0 +1,14 @@
+UPDATE infra_interface SET input_extend_class='InfraDictDataBase' WHERE id = '54166b46-e467-47b6-bc89-fedbd50fa55e';
+UPDATE infra_interface SET input_extend_class='InfraDictDataBase' WHERE id = '5ea12bb8-b40f-40ca-8f36-4b6f7885a28c';
+UPDATE infra_interface SET input_extend_class='InfraDictTypeBase' WHERE id = '6788bbe5-85ff-4536-b16b-7ae243b0e59e';
+UPDATE infra_interface SET input_extend_class='SystemDeptBase' WHERE id = '8a581520-2d75-491b-9008-36d901721574';
+UPDATE infra_interface SET input_extend_class='InfraDictTypeBase' WHERE id = 'bcf640e5-f694-4846-b544-0103b0acab6b';
+UPDATE infra_interface SET input_extend_class='SystemDeptBase' WHERE id = 'dea9ac66-367e-4734-af66-509926cc8a61';
+UPDATE infra_interface SET output_extend_class='SystemDeptBase' WHERE id = '51f7b230-149c-4689-b527-f37a9649befd';
+UPDATE infra_interface SET output_extend_class='SystemDeptBase' WHERE id = '80affdbd-854e-4669-8219-ce1e013118be';
+UPDATE infra_interface SET output_extend_class='InfraDictDataBase' WHERE id = '381ef119-7a67-4787-b6b3-be578609729d';
+UPDATE infra_interface SET output_extend_class='InfraDictDataBase' WHERE id = '3b52c661-4df5-415a-a00f-56142feb6369';
+UPDATE infra_interface SET output_extend_class='InfraDictDataBase' WHERE id = '7dfa7b1f-9760-4789-a3bf-edef86482b68';
+UPDATE infra_interface SET output_extend_class='InfraDictTypeBase' WHERE id = '241eff10-4fc6-4b3c-aae4-0a55af704951';
+UPDATE infra_interface SET output_extend_class='InfraDictTypeBase' WHERE id = 'd1404186-21aa-4435-9a5a-ce1f5a23c07a';
+UPDATE infra_interface SET output_extend_class='InfraDictTypeBase' WHERE id = 'd97f8b54-8ddb-4012-bf56-bdccf5349447';

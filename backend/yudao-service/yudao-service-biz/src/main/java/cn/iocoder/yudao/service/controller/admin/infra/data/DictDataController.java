@@ -3,8 +3,7 @@ package cn.iocoder.yudao.service.controller.admin.infra.data;
 import cn.iocoder.yudao.service.vo.infra.data.dictData.DictDataCreateInput;
 import cn.iocoder.yudao.service.vo.infra.data.dictData.DictDataUpdateInput;
 import cn.iocoder.yudao.service.vo.infra.data.dictData.DictDataGetOutput;
-import cn.iocoder.yudao.service.vo.infra.data.dictData.DictDataPageOutput;
-import cn.iocoder.yudao.service.vo.infra.data.dictData.DictDataPageInput;
+import cn.iocoder.yudao.service.vo.infra.data.dictData.DictDataListOutput;
 import cn.iocoder.yudao.service.vo.infra.data.dictData.*;
 
 import org.springframework.web.bind.annotation.*;
@@ -78,11 +77,12 @@ public class DictDataController {
         dictDataService.export(response, inputVO);
     }
 
-    @GetMapping("/page")
-    @Operation(summary = "获得字典类型的分页列表")
+    @GetMapping("/list")
+    @Operation(summary = "获得字典类型列表")
     @PreAuthorize("@ss.hasPermission('infra:dict:query')")
-    public CommonResult<PageResult<DictDataPageOutput>> page(@Valid DictDataPageInput inputVO) {
-        return success(dictDataService.page(inputVO));
+    @Parameter(name = "typeId", description = "字典类型id", example = "sys_common_sex")
+    public CommonResult<List<DictDataListOutput>> list(@RequestParam("typeId") UUID typeId) {
+        return success(dictDataService.list(typeId));
     }
 
 }

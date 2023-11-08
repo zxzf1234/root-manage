@@ -3,6 +3,7 @@ package cn.iocoder.yudao.service.convert.infra.data;
 import cn.iocoder.yudao.service.vo.infra.data.dictData.*;
 import cn.iocoder.yudao.service.api.system.dict.dto.DictDataRespDTO;
 import cn.iocoder.yudao.service.vo.infra.data.dictData.DictDataListAllSimpleOutput;
+import cn.iocoder.yudao.service.vo.infra.data.dictData.DictDataListOutput;
 import cn.iocoder.yudao.service.model.infra.data.InfraDictData;
 import java.util.*;
 
@@ -34,6 +35,6 @@ public interface DictDataConvert {
 
     DictDataRespDTO convert02(InfraDictData bean);
 
-    List<DictDataPageOutput> pagePageOutputConvert(Page<InfraDictData> output);
+    List<DictDataListOutput> listListOutputConvert(List<InfraDictData> output);
 
 }

@@ -2,9 +2,7 @@ package cn.iocoder.yudao.service.repository.infra.data;
 
 import cn.iocoder.yudao.service.model.infra.data.*;
 import cn.iocoder.yudao.service.vo.infra.data.dictData.DictDataExportInput;
-import cn.iocoder.yudao.service.vo.infra.data.dictData.DictDataPageInput;
 import org.babyfish.jimmer.spring.repository.JRepository;
-import org.springframework.data.domain.Page;
 import org.springframework.util.StringUtils;
 
 import java.util.Collection;
@@ -18,6 +16,8 @@ public interface InfraDictDataRepository extends JRepository<InfraDictData, Long
     Optional<InfraDictData> findByTypeIdAndValue(UUID typeId, String value);
 
     Optional<InfraDictData> findById(UUID id);
+
+    List<InfraDictData> findByTypeId(UUID typeId);
 
     void deleteById(UUID id);
 
@@ -36,17 +36,6 @@ public interface InfraDictDataRepository extends JRepository<InfraDictData, Long
                 .orderBy(infraDictDataTable.type().name())
                 .orderBy(infraDictDataTable.sort())
                 .select(infraDictDataTable).execute();
-    }
-
-    default Page<InfraDictData> selectPage(DictDataPageInput reqVO){
-        return pager(reqVO.getPageNo() - 1, reqVO.getPageSize()).execute(
-                sql()
-                        .createQuery(infraDictDataTable)
-                        .whereIf(StringUtils.hasText(reqVO.getLabel()),infraDictDataTable.label().eq(reqVO.getLabel()))
-                        .whereIf(StringUtils.hasText(reqVO.getDictType()),infraDictDataTable.type().type().like(reqVO.getDictType()))
-                        .whereIf(reqVO.getStatus()!= null, infraDictDataTable.status().eq(reqVO.getStatus()))
-                        .select(infraDictDataTable)
-        );
     }
 
     void deleteByTypeId(UUID typeId);

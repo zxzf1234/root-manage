@@ -5,8 +5,8 @@ import cn.iocoder.yudao.service.model.infra.data.*;
 import cn.iocoder.yudao.service.vo.infra.data.dictData.DictDataCreateInput;
 import cn.iocoder.yudao.service.vo.infra.data.dictData.DictDataUpdateInput;
 import cn.iocoder.yudao.service.vo.infra.data.dictData.DictDataGetOutput;
+import cn.iocoder.yudao.service.vo.infra.data.dictData.DictDataListOutput;
 import cn.iocoder.yudao.service.vo.infra.data.dictData.DictDataPageOutput;
-import cn.iocoder.yudao.service.vo.infra.data.dictData.DictDataPageInput;
 import cn.iocoder.yudao.framework.excel.core.util.ExcelUtils;
 import cn.iocoder.yudao.service.vo.infra.data.dictData.*;
 import cn.iocoder.yudao.service.repository.infra.data.InfraDictDataRepository;
@@ -209,10 +209,9 @@ public class DictDataServiceImpl implements DictDataService {
     }
 
     @Override
-    public PageResult<DictDataPageOutput> page(DictDataPageInput inputVO) {
-        Page<InfraDictData> postPage = infraDictDataRepository.selectPage(inputVO);
-        List<DictDataPageOutput> postList =  DictDataConvert.INSTANCE.pagePageOutputConvert(postPage);
-        return new PageResult<>(postList, postPage.getTotalElements());
+    public List<DictDataListOutput> list(UUID typeId) {
+        List<InfraDictData> dataList = infraDictDataRepository.findByTypeId(typeId);
+        return   DictDataConvert.INSTANCE.listListOutputConvert(dataList);
     }
 
 }

@@ -87,73 +87,132 @@
 
   <!-- 列表 -->
   <ContentWrap>
-    <el-table v-loading="loading" :data="list">
-      <el-table-column align="center" label="字典编号" prop="id" />
-      <el-table-column align="center" label="字典名称" prop="name" show-overflow-tooltip />
-      <el-table-column align="center" label="字典类型" prop="type" width="300" />
-      <el-table-column align="center" label="状态" prop="status">
-        <template #default="scope">
-          <dict-tag :type="DICT_TYPE.COMMON_STATUS" :value="scope.row.status" />
-        </template>
-      </el-table-column>
-      <el-table-column align="center" label="备注" prop="remark" />
-      <el-table-column
-        :formatter="dateFormatter"
-        align="center"
-        label="创建时间"
-        prop="createTime"
-        width="180"
-      />
-      <el-table-column align="center" label="操作">
-        <template #default="scope">
-          <el-button
-            v-hasPermi="['infra:dict:update']"
-            link
-            type="primary"
-            @click="openForm('update', scope.row.id)"
-          >
-            修改
-          </el-button>
-          <router-link :to="'/dict/type/data/' + scope.row.type">
-            <el-button link type="primary">数据</el-button>
-          </router-link>
-          <el-button
-            v-hasPermi="['infra:dict:delete']"
-            link
-            type="danger"
-            @click="handleDelete(scope.row.id)"
-          >
-            删除
-          </el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <!-- 分页 -->
-    <Pagination
-      v-model:limit="queryParams.pageSize"
-      v-model:page="queryParams.pageNo"
-      :total="total"
-      @pagination="getList"
-    />
+    <Table
+      save-key="dictType"
+      :columns="typeColumns"
+      :page-param="queryParams"
+      :page-data="typeData"
+      @row-click="handleRowClick"
+      @row-dblclick="(row) => openForm('update', row.id)"
+    >
+      <template #menu="{ row }">
+        <context-menu-item
+          label="修改"
+          v-hasPermi="['infra:dict:update']"
+          @click="openForm('update', row.id)"
+        />
+        <context-menu-item
+          label="删除"
+          v-hasPermi="['infra:dict:delete']"
+          @click="handleDelete(row.id)"
+        />
+      </template>
+      <template #status="{ row }">
+        <dict-tag :type="DICT_TYPE.COMMON_STATUS" :value="row.status" />
+      </template>
+    </Table>
   </ContentWrap>
-
+  <ContentWrap class="h-[35%]">
+    <el-tabs v-model="tabActiveName" type="card" height="700">
+      <el-tab-pane label="数据" name="dictData">
+        <Table :columns="dataColumns" :data="rowDetail">
+          <template #status="{ row }">
+            <dict-tag :type="DICT_TYPE.COMMON_STATUS" :value="row.status" />
+          </template>
+        </Table>
+      </el-tab-pane>
+    </el-tabs>
+  </ContentWrap>
   <!-- 表单弹窗：添加/修改 -->
   <DictTypeForm ref="formRef" @success="getList" />
 </template>
 
 <script lang="ts" name="SystemDictType" setup>
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
-import { dateFormatter } from '@/utils/formatTime'
-import * as DictTypeApi from '@/api/system/dict/dict.type'
+
+import * as DictTypeApi from '@/api/infra/dict/dict'
 import DictTypeForm from './DictTypeForm.vue'
 import download from '@/utils/download'
+import { formatDate } from '@/utils/formatTime'
 
 const message = useMessage() // 消息弹窗
 const { t } = useI18n() // 国际化
 
 const loading = ref(true) // 列表的加载中
-const total = ref(0) // 列表的总页数
-const list = ref([]) // 字典表格数据
+const typeData = ref()
+const tabActiveName = ref('dictData')
+const typeColumns: TableColumnList = [
+  {
+    label: '字典编号',
+    prop: 'id'
+  },
+  {
+    label: '字典名称',
+    prop: 'name',
+    showOverflowTooltip: true
+  },
+  {
+    label: '字典类型',
+    prop: 'type'
+  },
+  {
+    label: '状态',
+    prop: 'status',
+    slot: 'status'
+  },
+  {
+    label: '备注',
+    prop: 'remark'
+  },
+
+  {
+    label: '创建时间',
+    prop: 'createTime',
+    formatter: ({ createTime }) => formatDate(createTime)
+  }
+]
+const dataColumns: TableColumnList = [
+  {
+    label: '数据编码',
+    prop: 'id'
+  },
+  {
+    label: '数据标签',
+    prop: 'label'
+  },
+  {
+    label: '数据键值',
+    prop: 'value'
+  },
+  {
+    label: '排序',
+    prop: 'sort'
+  },
+  {
+    label: '状态',
+    prop: 'status',
+    slot: 'status'
+  },
+  {
+    label: '颜色类型',
+    prop: 'colorType'
+  },
+  {
+    label: 'CSS Class',
+    prop: 'cssClass'
+  },
+  {
+    label: '备注',
+    prop: 'remark'
+  },
+
+  {
+    label: '创建时间',
+    prop: 'createTime',
+    formatter: ({ createTime }) => formatDate(createTime)
+  }
+]
+const rowDetail = ref<DictTypeApi.DictDataVO>()
 const queryParams = reactive({
   pageNo: 1,
   pageSize: 10,
@@ -169,9 +228,7 @@ const exportLoading = ref(false) // 导出的加载中
 const getList = async () => {
   loading.value = true
   try {
-    const data = await DictTypeApi.getDictTypePage(queryParams)
-    list.value = data.list
-    total.value = data.total
+    typeData.value = await DictTypeApi.getDictTypePage(queryParams)
   } finally {
     loading.value = false
   }
@@ -221,6 +278,10 @@ const handleExport = async () => {
   } finally {
     exportLoading.value = false
   }
+}
+/** 处理某一行的点击 */
+const handleRowClick = async (row) => {
+  rowDetail.value = await DictTypeApi.getDictDataByTypeId(row.id)
 }
 
 /** 初始化 **/

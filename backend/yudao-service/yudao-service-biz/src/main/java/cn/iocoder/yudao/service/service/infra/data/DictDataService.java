@@ -4,8 +4,7 @@ import cn.iocoder.yudao.service.api.system.dict.dto.DictDataRespDTO;
 import cn.iocoder.yudao.service.vo.infra.data.dictData.DictDataCreateInput;
 import cn.iocoder.yudao.service.vo.infra.data.dictData.DictDataUpdateInput;
 import cn.iocoder.yudao.service.vo.infra.data.dictData.DictDataGetOutput;
-import cn.iocoder.yudao.service.vo.infra.data.dictData.DictDataPageOutput;
-import cn.iocoder.yudao.service.vo.infra.data.dictData.DictDataPageInput;
+import cn.iocoder.yudao.service.vo.infra.data.dictData.DictDataListOutput;
 import cn.iocoder.yudao.service.vo.infra.data.dictData.*;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 
@@ -62,7 +61,7 @@ public interface DictDataService {
 
     void export(HttpServletResponse response, @Valid DictDataExportInput inputVO);
 
-    PageResult<DictDataPageOutput> page(DictDataPageInput inputVO);
+    List<DictDataListOutput> list(UUID typeId);
 
 
 }
