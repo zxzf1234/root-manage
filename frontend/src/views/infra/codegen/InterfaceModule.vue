@@ -37,6 +37,7 @@
       row-key="id"
       :default-expand-all="isExpandAll"
       v-if="refreshTable"
+      @row-dblclick="(row) => openForm('update', row.id)"
     >
       <el-table-column prop="name" label="名称" width="260" />
       <el-table-column prop="type" label="类型" width="120" />

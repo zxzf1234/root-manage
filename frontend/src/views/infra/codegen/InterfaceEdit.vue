@@ -100,6 +100,7 @@
                 <div style="display: flex">
                   <el-input v-model="formData.inputExtendClass" disabled />
                   <el-button @click="handleAddExtendClass()"> 添加 </el-button>
+                  <el-button @click="formData.inputExtendClass = ''"> 置空 </el-button>
                 </div>
               </el-form-item>
             </el-col>
@@ -241,6 +242,7 @@
                 <div style="display: flex">
                   <el-input v-model="formData.outputExtendClass" disabled />
                   <el-button @click="handleAddExtendClass()"> 添加 </el-button>
+                  <el-button @click="formData.outputExtendClass = ''"> 置空 </el-button>
                 </div>
               </el-form-item>
             </el-col>

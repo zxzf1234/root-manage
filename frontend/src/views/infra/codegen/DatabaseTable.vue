@@ -54,6 +54,7 @@
         @page-change="getList"
         adaptive
         save-key="databaseTable"
+        @row-dblclick="(row) => handleUpdate(row)"
       >
         <template #menu="{ row }">
           <context-menu-item label="修改" @click="handleUpdate(row)" />

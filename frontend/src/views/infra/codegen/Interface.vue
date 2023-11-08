@@ -2,7 +2,7 @@
   <!-- 搜索栏 -->
   <ContentWrap class="h-[55%]">
     <el-form ref="queryFormRef" :inline="true" :model="queryParams" label-width="68px">
-      <el-form-item label="模块" prop="module">
+      <el-form-item label="模块" prop="moduleName">
         <el-tree-select
           v-model="queryParams.moduleName"
           :data="moduleTree"
@@ -47,6 +47,7 @@
         @row-click="handleRowClick"
         @page-change="getList"
         adaptive
+        @row-dblclick="(row) => openForm('update', row.id)"
         save-key="interface"
       >
         <template #menu="{ row }">
@@ -311,6 +312,7 @@ const getList = async () => {
 /** 重置操作 */
 const resetQuery = async () => {
   queryFormRef.value.resetFields()
+  // queryParams.moduleName = undefined
   await getList()
 }
 
