@@ -89,9 +89,9 @@ export const getDictLabel = (dictType: string, value: any) => {
 }
 
 export enum DICT_TYPE {
+  // ========== COMMON 模块 ==========
   USER_TYPE = 'user_type',
   COMMON_STATUS = 'common_status',
-  SYSTEM_TENANT_PACKAGE_ID = 'system_tenant_package_id',
 
   // ========== SYSTEM 模块 ==========
   SYSTEM_USER_SEX = 'system_user_sex',
@@ -117,8 +117,5 @@ export enum DICT_TYPE {
   INFRA_JOB_LOG_STATUS = 'infra_job_log_status',
   INFRA_API_ERROR_LOG_PROCESS_STATUS = 'infra_api_error_log_process_status',
   INFRA_CONFIG_TYPE = 'infra_config_type',
-  INFRA_CODEGEN_TEMPLATE_TYPE = 'infra_codegen_template_type',
-  INFRA_CODEGEN_FRONT_TYPE = 'infra_codegen_front_type',
-  INFRA_CODEGEN_SCENE = 'infra_codegen_scene',
   INFRA_FILE_STORAGE = 'infra_file_storage'
 }

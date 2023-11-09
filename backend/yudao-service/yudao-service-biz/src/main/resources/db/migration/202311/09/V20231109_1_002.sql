@@ -1,0 +1,6 @@
+update INFRA_DATABASE_COLUMN tb_1_ set COLUMN_COMMENT = '主键ID', COLUMN_NAME = 'id', DATA_TYPE = 'VARCHAR(50)', DEFAULT_VALUE = '', DICT_TYPE = '', EXAMPLE = '', JAVA_TYPE = 'UUID', NULLABLE = 0, RELATED_TABLE = '', REQUIRED = 0 where tb_1_.ID = 'd49b58e1-a4a3-4c1c-82e0-036e9b8ee61a';
+ALTER TABLE infra_dict_type
+CHANGE `id` `id` VARCHAR(50) NOT NULL  COMMENT '主键ID';
+update INFRA_DATABASE_COLUMN tb_1_ set COLUMN_COMMENT = '数据枚举', COLUMN_NAME = 'data_enum', DATA_TYPE = 'VARCHAR(100)', DEFAULT_VALUE = '''''', DICT_TYPE = '', EXAMPLE = '', JAVA_TYPE = 'String', NULLABLE = 0, RELATED_TABLE = '', REQUIRED = 0 where tb_1_.ID = '8283b48b-518e-4edc-a043-86067addde80';
+ALTER TABLE infra_dict_data
+CHANGE `enum` `data_enum` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '数据枚举';

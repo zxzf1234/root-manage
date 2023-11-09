@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import java.util.*;
 import javax.validation.constraints.*;
+import org.hibernate.validator.constraints.Length;
 
 /**
  * 字典数据表 Base VO，提供给添加、修改、详细的子 VO 使用
@@ -12,13 +13,15 @@ import javax.validation.constraints.*;
 @Data
 public class InfraDictDataBase {
 
-    @Schema(description = "字典排序", example = "1")
+    @Schema(description = "排序", example = "1")
     private Integer sort;
 
-    @Schema(description = "字典标签", example = "管理后台")
+    @Schema(description = "数据标签", example = "管理后台")
+    @NotEmpty(message = "数据标签不能为空")
     private String label;
 
-    @Schema(description = "字典键值", example = "1")
+    @Schema(description = "数据键值", example = "1")
+    @NotEmpty(message = "数据键值不能为空")
     private String value;
 
     @Schema(description = "字典类型", example = "c0fcc1e7-02a0-635b-0702-2c96f6482dae")
@@ -35,5 +38,8 @@ public class InfraDictDataBase {
 
     @Schema(description = "备注")
     private String remark;
+
+    @Schema(description = "数据枚举")
+    private String dataEnum;
 
 }

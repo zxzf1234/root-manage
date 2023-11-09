@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import java.util.*;
 import javax.validation.constraints.*;
+import org.hibernate.validator.constraints.Length;
 
 /**
  * 字典类型表 Base VO，提供给添加、修改、详细的子 VO 使用
@@ -23,5 +24,11 @@ public class InfraDictTypeBase {
 
     @Schema(description = "备注", example = "''")
     private String remark;
+
+    @Schema(description = "一级菜单")
+    private String firstModule;
+
+    @Schema(description = "一级菜单")
+    private String secondModule;
 
 }

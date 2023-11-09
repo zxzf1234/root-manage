@@ -36,4 +36,6 @@ public interface InfraDictData extends BaseEntity {
 
     String remark();
 
+    String dataEnum();
+
 }

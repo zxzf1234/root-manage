@@ -3,7 +3,7 @@ package cn.iocoder.yudao.service.vo.infra.sms.log;
 import cn.iocoder.yudao.framework.excel.core.annotations.DictFormat;
 import cn.iocoder.yudao.framework.excel.core.convert.DictConvert;
 import cn.iocoder.yudao.framework.excel.core.convert.JsonConvert;
-import cn.iocoder.yudao.service.enums.system.DictTypeConstants;
+import cn.iocoder.yudao.service.enums.DictTypeConstants;
 import com.alibaba.excel.annotation.ExcelProperty;
 import lombok.Data;
 
@@ -34,7 +34,7 @@ public class SmsLogExcelVO {
     private String templateCode;
 
     @ExcelProperty(value = "短信类型", converter = DictConvert.class)
-    @DictFormat(DictTypeConstants.SMS_TEMPLATE_TYPE)
+    @DictFormat(DictTypeConstants.SYSTEM_SMS_TEMPLATE_TYPE)
     private Integer templateType;
 
     @ExcelProperty("短信内容")
@@ -57,7 +57,7 @@ public class SmsLogExcelVO {
     private Integer userType;
 
     @ExcelProperty(value = "发送状态", converter = DictConvert.class)
-    @DictFormat(DictTypeConstants.SMS_SEND_STATUS)
+    @DictFormat(DictTypeConstants.SYSTEM_SMS_SEND_STATUS)
     private Integer sendStatus;
 
     @ExcelProperty("发送时间")
@@ -82,7 +82,7 @@ public class SmsLogExcelVO {
     private String apiSerialNo;
 
     @ExcelProperty(value = "接收状态", converter = DictConvert.class)
-    @DictFormat(DictTypeConstants.SMS_RECEIVE_STATUS)
+    @DictFormat(DictTypeConstants.SYSTEM_SMS_RECEIVE_STATUS)
     private Integer receiveStatus;
 
     @ExcelProperty("接收时间")

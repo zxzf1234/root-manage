@@ -2,7 +2,7 @@ package cn.iocoder.yudao.service.vo.infra.sms.template;
 
 import cn.iocoder.yudao.framework.excel.core.annotations.DictFormat;
 import cn.iocoder.yudao.framework.excel.core.convert.DictConvert;
-import cn.iocoder.yudao.service.enums.system.DictTypeConstants;
+import cn.iocoder.yudao.service.enums.DictTypeConstants;
 import com.alibaba.excel.annotation.ExcelProperty;
 import lombok.Data;
 
@@ -20,7 +20,7 @@ public class SmsTemplateExcelVO {
     private Long id;
 
     @ExcelProperty(value = "短信签名", converter = DictConvert.class)
-    @DictFormat(DictTypeConstants.SMS_TEMPLATE_TYPE)
+    @DictFormat(DictTypeConstants.SYSTEM_SMS_TEMPLATE_TYPE)
     private Integer type;
 
     @ExcelProperty(value = "开启状态", converter = DictConvert.class)
@@ -46,7 +46,7 @@ public class SmsTemplateExcelVO {
     private Long channelId;
 
     @ExcelProperty(value = "短信渠道编码", converter = DictConvert.class)
-    @DictFormat(DictTypeConstants.SMS_CHANNEL_CODE)
+    @DictFormat(DictTypeConstants.SYSTEM_SMS_CHANNEL_CODE)
     private String channelCode;
 
     @ExcelProperty("创建时间")

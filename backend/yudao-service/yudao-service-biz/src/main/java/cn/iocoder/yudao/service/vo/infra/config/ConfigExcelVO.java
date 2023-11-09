@@ -2,7 +2,7 @@ package cn.iocoder.yudao.service.vo.infra.config;
 
 import cn.iocoder.yudao.framework.excel.core.annotations.DictFormat;
 import cn.iocoder.yudao.framework.excel.core.convert.DictConvert;
-import cn.iocoder.yudao.service.enums.infra.DictTypeConstants;
+import cn.iocoder.yudao.service.enums.DictTypeConstants;
 import com.alibaba.excel.annotation.ExcelProperty;
 import lombok.Data;
 
@@ -30,11 +30,11 @@ public class ConfigExcelVO {
     private String value;
 
     @ExcelProperty(value = "参数类型", converter = DictConvert.class)
-    @DictFormat(DictTypeConstants.CONFIG_TYPE)
+    @DictFormat(DictTypeConstants.INFRA_CONFIG_TYPE)
     private Integer type;
 
     @ExcelProperty(value = "是否可见", converter = DictConvert.class)
-    @DictFormat(DictTypeConstants.BOOLEAN_STRING)
+    @DictFormat(DictTypeConstants.INFRA_BOOLEAN_STRING)
     private Boolean visible;
 
     @ExcelProperty("备注")

@@ -2,7 +2,7 @@ package cn.iocoder.yudao.service.vo.infra.logger.apierrorlog;
 
 import cn.iocoder.yudao.framework.excel.core.annotations.DictFormat;
 import cn.iocoder.yudao.framework.excel.core.convert.DictConvert;
-import cn.iocoder.yudao.service.enums.infra.DictTypeConstants;
+import cn.iocoder.yudao.service.enums.DictTypeConstants;
 import com.alibaba.excel.annotation.ExcelProperty;
 import lombok.Data;
 
@@ -26,7 +26,7 @@ public class ApiErrorLogExcelVO {
     private Integer userId;
 
     @ExcelProperty(value = "用户类型", converter = DictConvert.class)
-    @DictFormat(cn.iocoder.yudao.service.enums.system.DictTypeConstants.USER_TYPE)
+    @DictFormat(DictTypeConstants.USER_TYPE)
     private Integer userType;
 
     @ExcelProperty("应用名")
@@ -78,7 +78,7 @@ public class ApiErrorLogExcelVO {
     private LocalDateTime createTime;
 
     @ExcelProperty(value = "处理状态", converter = DictConvert.class)
-    @DictFormat(DictTypeConstants.API_ERROR_LOG_PROCESS_STATUS)
+    @DictFormat(DictTypeConstants.INFRA_API_ERROR_LOG_PROCESS_STATUS)
     private Integer processStatus;
 
     @ExcelProperty("处理时间")

@@ -5,6 +5,7 @@ import lombok.*;
 import java.util.*;
 import javax.validation.constraints.*;
 import org.hibernate.validator.constraints.Length;
+import javax.validation.Valid;
 ## 处理 Date 字段的引入
 #foreach ($param in $outputParams)
     #if (${param.variableType} == "LocalDateTime" || ${param.variableType} == "LocalDateTime[]")## 时间类型

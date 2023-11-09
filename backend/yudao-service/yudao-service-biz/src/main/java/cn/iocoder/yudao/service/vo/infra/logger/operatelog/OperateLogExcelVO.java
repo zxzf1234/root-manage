@@ -2,7 +2,7 @@ package cn.iocoder.yudao.service.vo.infra.logger.operatelog;
 
 import cn.iocoder.yudao.framework.excel.core.annotations.DictFormat;
 import cn.iocoder.yudao.framework.excel.core.convert.DictConvert;
-import cn.iocoder.yudao.service.enums.system.DictTypeConstants;
+import cn.iocoder.yudao.service.enums.DictTypeConstants;
 import com.alibaba.excel.annotation.ExcelProperty;
 import lombok.Data;
 
@@ -24,7 +24,7 @@ public class OperateLogExcelVO {
     private String name;
 
     @ExcelProperty(value = "操作类型", converter = DictConvert.class)
-    @DictFormat(DictTypeConstants.OPERATE_TYPE)
+    @DictFormat(DictTypeConstants.SYSTEM_OPERATE_TYPE)
     private String type;
 
     @ExcelProperty("操作人")

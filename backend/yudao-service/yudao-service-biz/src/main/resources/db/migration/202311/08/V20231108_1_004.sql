@@ -1,0 +1,1 @@
+insert ignore into INFRA_DATABASE_MAPPING(CREATOR_ID, UPDATER_ID, ID, TABLE_ID, NAME, IS_LIST, ANNOTATE, MAPPING_TABLE) values('1', '1', '9e102026-d891-4117-aaa3-a562c736b0a5', '8e93110a-90fe-4e9c-9fb5-f7fa480dc892', 'datas', 1, '@OneToMany(mappedBy = "table")', 'infra_dict_data');

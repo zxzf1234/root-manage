@@ -1,0 +1,1 @@
+update INFRA_DATABASE_MAPPING set UPDATER_ID = '1', TABLE_ID = '8e93110a-90fe-4e9c-9fb5-f7fa480dc892', NAME = 'datas', IS_LIST = 1, ANNOTATE = '@OneToMany(mappedBy = "type")', MAPPING_TABLE = 'infra_dict_data' where ID = '9e102026-d891-4117-aaa3-a562c736b0a5';

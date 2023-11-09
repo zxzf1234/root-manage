@@ -156,6 +156,14 @@ const typeColumns: TableColumnList = [
     prop: 'type'
   },
   {
+    label: '一级模块',
+    prop: 'firstModule'
+  },
+  {
+    label: '二级模块',
+    prop: 'secondModule'
+  },
+  {
     label: '状态',
     prop: 'status',
     slot: 'status'
@@ -183,6 +191,10 @@ const dataColumns: TableColumnList = [
   {
     label: '数据键值',
     prop: 'value'
+  },
+  {
+    label: '数据枚举',
+    prop: 'enum'
   },
   {
     label: '排序',
