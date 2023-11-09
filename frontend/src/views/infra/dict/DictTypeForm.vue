@@ -23,26 +23,36 @@
         </el-col>
         <el-col :span="12">
           <el-form-item label="字典类型" prop="type">
-            <el-input
-              v-model="formData.type"
-              :disabled="typeof formData.id !== 'undefined'"
-              placeholder="请输入参数名称"
-            />
+            <el-input v-model="formData.type" placeholder="请输入参数名称" />
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="8">
+          <el-form-item label="状态" prop="status">
+            <el-radio-group v-model="formData.status">
+              <el-radio
+                v-for="dict in getIntDictOptions(DICT_TYPE.COMMON_STATUS)"
+                :key="dict.value"
+                :label="dict.value"
+              >
+                {{ dict.label }}
+              </el-radio>
+            </el-radio-group>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="一级模块" prop="firstModule">
+            <el-input v-model="formData.firstModule" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="二级模块" prop="secondModule">
+            <el-input v-model="formData.secondModule" />
           </el-form-item>
         </el-col>
       </el-row>
 
-      <el-form-item label="状态" prop="status">
-        <el-radio-group v-model="formData.status">
-          <el-radio
-            v-for="dict in getIntDictOptions(DICT_TYPE.COMMON_STATUS)"
-            :key="dict.value"
-            :label="dict.value"
-          >
-            {{ dict.label }}
-          </el-radio>
-        </el-radio-group>
-      </el-form-item>
       <el-form-item label="备注" prop="remark">
         <el-input v-model="formData.remark" placeholder="请输入内容" type="textarea" />
       </el-form-item>
@@ -58,6 +68,9 @@
       </template>
       <template #value="{ row }">
         <el-input v-model="row.value" />
+      </template>
+      <template #dataEnum="{ row }">
+        <el-input v-model="row.dataEnum" />
       </template>
       <template #sort="{ row }">
         <el-input-number v-model="row.sort" :min="0" />
@@ -126,6 +139,8 @@ const formData = ref<DictTypeApi.DictTypeVO>({
   type: '',
   status: CommonStatusEnum.ENABLE,
   remark: '',
+  firstModule: '',
+  secondModule: '',
   datas: []
 })
 
@@ -139,6 +154,11 @@ const dataColumns: TableColumnList = [
     label: '数据键值',
     prop: 'value',
     slot: 'value'
+  },
+  {
+    label: '数据枚举',
+    prop: 'dataEnum',
+    slot: 'dataEnum'
   },
   {
     label: '排序',
@@ -165,6 +185,7 @@ const dataColumns: TableColumnList = [
 const formRules = reactive({
   name: [{ required: true, message: '字典名称不能为空', trigger: 'blur' }],
   type: [{ required: true, message: '字典类型不能为空', trigger: 'blur' }],
+  firstModule: [{ required: true, message: '一级模块不能为空', trigger: 'blur' }],
   status: [{ required: true, message: '状态不能为空', trigger: 'change' }]
 })
 const formRef = ref() // 表单 Ref
@@ -203,6 +224,7 @@ const handleAddData = () => {
     colorType: '',
     cssClass: '',
     remark: '',
+    dataEnum: '',
     operateType: 'new'
   }
 
@@ -258,6 +280,8 @@ const resetForm = () => {
     id: undefined,
     type: '',
     name: '',
+    firstModule: '',
+    secondModule: '',
     status: CommonStatusEnum.ENABLE,
     remark: '',
     datas: []

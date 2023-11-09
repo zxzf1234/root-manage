@@ -8,6 +8,7 @@ export type DictDataVO = {
   status: number
   colorType: string
   cssClass: string
+  dataEnum: string
   remark: string
 }
 
@@ -17,6 +18,8 @@ export type DictTypeVO = {
   type: string
   status: number
   remark: string
+  firstModule: string
+  secondModule: string
   datas: DictDataVO[]
 }
 
