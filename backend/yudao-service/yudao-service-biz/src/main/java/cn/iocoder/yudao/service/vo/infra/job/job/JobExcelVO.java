@@ -24,7 +24,7 @@ public class JobExcelVO {
     private String name;
 
     @ExcelProperty(value = "任务状态", converter = DictConvert.class)
-    @DictFormat(DictTypeConstants.JOB_STATUS)
+    @DictFormat(DictTypeConstants.INFRA_JOB_STATUS)
     private Integer status;
 
     @ExcelProperty("处理器的名字")

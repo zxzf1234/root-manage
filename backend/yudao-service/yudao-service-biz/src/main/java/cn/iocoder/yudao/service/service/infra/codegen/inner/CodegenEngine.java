@@ -29,6 +29,7 @@ import cn.iocoder.yudao.service.enums.codegen.CodegenSceneEnum;
 import cn.iocoder.yudao.service.framework.codegen.config.CodegenProperties;
 import cn.iocoder.yudao.service.framework.codegen.config.SchemaHistory;
 import cn.iocoder.yudao.service.model.infra.codegen.*;
+import cn.iocoder.yudao.service.model.infra.data.InfraDictType;
 import cn.iocoder.yudao.service.repository.infra.codegen.*;
 import cn.iocoder.yudao.service.vo.infra.codegen.database.DatabaseUpdateReq;
 import org.springframework.stereotype.Component;
@@ -82,6 +83,15 @@ public class CodegenEngine {
             .put(javaTemplatePath("service/serviceImpl"), javaModuleFilePath("service", "${nameHumpUp}ServiceImpl"))
             .put(javaTemplatePath("service/service"), javaModuleFilePath("service", "${nameHumpUp}Service"))
             .build();
+
+    private static final Map<String, String> DICT_TEMPLATES = MapUtil.<String, String>builder(new LinkedHashMap<>()) // 有序
+
+            .put(javaTemplatePath("dict/javaDictType"), javaApiFilePath("enums/${modulePath}/${nameHumpUp}Enum).java"))
+            .put(javaTemplatePath("dict/javaDictEnum"), javaApiFilePath("enums/DictTypeConstants.java"))
+            .put(javaTemplatePath("dict/vueDictType"), vueFilePath("utils/dict.ts"))
+            .put(javaTemplatePath("dict/vueDictEnum"), vueFilePath("utils/constants.ts"))
+            .build();
+
     private static final Map<String, String> INTERFACE_TEMPLATES = MapUtil.<String, String>builder(new LinkedHashMap<>()) // 有序
 
             .put(javaTemplatePath("controller/controllerInterface"), javaFilePath("controller/${sceneEnum.basePackage}/${modulePath}/${moduleNameHump}Controller")+ ".java")
@@ -962,6 +972,51 @@ public class CodegenEngine {
         return filePath;
     }
 
+    public void dictInsertExecute(InfraDictType type){
+        // 创建 bindingMap
+        Map<String, Object> bindingMap = getDictBindingMap(type);
+
+        generateInsertDict(bindingMap);
+
+        generateNewTable(bindingMap);
+    }
+
+    public void generateInsertDict(Map<String, Object> bindingMap)
+    {
+        Map<String, String> templates = new LinkedHashMap<>(DICT_TEMPLATES);
+        templates.forEach((vmPath, filePath) -> {
+            filePath = formatTableFilePath(filePath, bindingMap);
+            String content = templateEngine.getTemplate(vmPath).render(bindingMap);
+            // 去除字段后面多余的 , 逗号
+            content = content.replaceAll(",\n}", "\n}").replaceAll(",\n  }", "\n  }");
+            File newFile;
+            if(!FileUtil.exist(filePath)) {
+                newFile = FileUtil.touch(filePath);
+                RuntimeUtil.execForStr("git add " + filePath);
+            }else{
+                newFile = FileUtil.file(filePath);
+            }
+            FileUtil.writeUtf8String(content, newFile);
+        });
+    }
+
+    private Map<String, Object> getDictBindingMap(InfraDictType type){
+        Map<String, Object> bindingMap = new HashMap<>(globalBindingMap);
+
+        bindingMap.put("dictType", type);
+        bindingMap.put("datas", type.datas());
+        bindingMap.put("sceneEnum", CodegenSceneEnum.valueOf("ADMIN"));
+        // 模块名称 例子system
+        String moduleName = type.firstModule() + (type.secondModule().isEmpty()? "" : "/" + type.secondModule());
+        bindingMap.put("moduleName", moduleName);
+        // 字典类型 下划线大写 例子SYSTEM_DATA_SCOPE
+        bindingMap.put("nameHump", type.name().toUpperCase());
+        // 字典类型 驼峰命名 例子SystemDataScope
+        bindingMap.put("simpleClassNameHump", upperFirst(toCamelCase(type.name())));
+
+        return bindingMap;
+    }
+
    /* private String formatFilePath(String filePath, Map<String, Object> bindingMap) {
         filePath = StrUtil.replace(filePath, "${basePackage}",
                 getStr(bindingMap, "basePackage").replaceAll("\\.", "/"));
@@ -1026,15 +1081,19 @@ public class CodegenEngine {
         return FileUtil.getParent(FileUtil.getAbsolutePath(""), 3) + "/yudao-service/yudao-service-biz/src/main/java/${basePackage}/service/" + path;
     }
 
+    private static String javaApiFilePath(String path) {
+        return FileUtil.getParent(FileUtil.getAbsolutePath(""), 3) + "/yudao-service/yudao-service-api/src/main/java/${basePackage}/service/" + path;
+    }
+
 /*    private static String vueTemplatePath(String path) {
         return "codegen/vue/" + path + ".vm";
-    }
+    }*/
 
     private static String vueFilePath(String path) {
         return "yudao-ui-${sceneEnum.basePackage}/" + // 顶级目录
                 "src/" + path;
     }
-
+/*
     private static String vue3TemplatePath(String path) {
         return "codegen/vue3/" + path + ".vm";
     }

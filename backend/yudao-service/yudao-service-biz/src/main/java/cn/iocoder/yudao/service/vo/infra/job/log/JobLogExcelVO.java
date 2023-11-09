@@ -41,7 +41,7 @@ public class JobLogExcelVO {
     private Integer duration;
 
     @ExcelProperty(value = "任务状态", converter = DictConvert.class)
-    @DictFormat(DictTypeConstants.JOB_STATUS)
+    @DictFormat(DictTypeConstants.INFRA_JOB_STATUS)
     private Integer status;
 
     @ExcelProperty("结果数据")
