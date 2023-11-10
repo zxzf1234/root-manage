@@ -86,8 +86,8 @@ public class CodegenEngine {
 
     private static final Map<String, String> DICT_TEMPLATES = MapUtil.<String, String>builder(new LinkedHashMap<>()) // 有序
 
-            .put(javaTemplatePath("dict/javaDictType"), javaApiFilePath("enums/${modulePath}/${nameHumpUp}Enum).java"))
-            .put(javaTemplatePath("dict/javaDictEnum"), javaApiFilePath("enums/DictTypeConstants.java"))
+            .put(javaTemplatePath("dict/javaDictEnum"), javaApiFilePath("enums/${modulePath}/${typeUpHump}Enum.java"))
+            .put(javaTemplatePath("dict/javaDictType"), javaApiFilePath("enums/DictTypeConstants.java"))
             .put(javaTemplatePath("dict/vueDictType"), vueFilePath("utils/dict.ts"))
             .put(javaTemplatePath("dict/vueDictEnum"), vueFilePath("utils/constants.ts"))
             .build();
@@ -972,34 +972,149 @@ public class CodegenEngine {
         return filePath;
     }
 
+    public void dictUpdateExecute(InfraDictType oldType, InfraDictType newType){
+        Map<String, Object> oldBindingMap = getDictBindingMap(oldType);
+        Map<String, Object> newBindingMap = getDictBindingMap(newType);
+        Map<String, String> templates = new LinkedHashMap<>(DICT_TEMPLATES);
+        templates.forEach((vmPath, filePath) -> {
+            String oldFilePath = formatDictFilePath(filePath, oldBindingMap);
+            String newFilePath = formatDictFilePath(filePath, newBindingMap);
+            if(!FileUtil.exist(oldFilePath))
+                return;
+            String oldContent = templateEngine.getTemplate(vmPath).render(oldBindingMap);
+            String newContent = templateEngine.getTemplate(vmPath).render(newBindingMap);
+            if(oldContent.equals(newContent) && oldType.firstModule().equals(newType.firstModule()) && oldType.secondModule().equals(newType.secondModule()))
+                return;
+            if(filePath.contains("Enum.java")){
+                if(oldFilePath.equals(newFilePath)){
+                    File newFile = FileUtil.file(newFilePath);
+                    FileUtil.writeUtf8String(newContent, newFile);
+                }else{
+                    RuntimeUtil.execForStr("git mv " + oldFilePath + " " + newFilePath);
+                    File newFile = FileUtil.file(newFilePath);
+                    FileUtil.writeUtf8String(newContent, newFile);
+                }
+
+            }else{
+                // 删除旧dict
+                int deleteIndex = 0, deleteLength = 0;
+                File oldFile = FileUtil.file(oldFilePath);
+                StringBuilder oldFileContent = new StringBuilder(FileUtil.readUtf8String(oldFilePath));
+                if(filePath.contains("dict.ts")){
+                    oldContent = oldContent + "\r\n";
+                    if(oldFileContent.indexOf(oldContent) > 0){
+                        deleteIndex = oldFileContent.indexOf(oldContent);
+                        deleteLength = oldContent.length();
+                    }else {
+                        // 去掉回车和,
+                        oldContent = oldContent.substring(0, oldContent.length() - 2);
+                        oldContent = oldContent.replaceAll(",","");
+                        int contentIndex = oldFileContent.indexOf(oldContent);
+                        if(contentIndex > 0) {
+                            deleteIndex = oldFileContent.lastIndexOf(",", contentIndex);
+                            deleteLength = contentIndex - deleteIndex + oldContent.length();
+                        }
+                    }
+                }else{
+                    oldContent = oldContent + "\r\n";
+                    deleteIndex = oldFileContent.indexOf(oldContent);
+                    deleteLength = oldContent.length();
+                }
+                if (deleteIndex > 0){
+                    oldFileContent.delete(deleteIndex, deleteIndex + deleteLength);
+                    FileUtil.writeUtf8String(oldFileContent.toString(), oldFile);
+                }
+
+                // 插入新dict
+                insertNewDict(newType, newFilePath, newContent);
+            }
+        });
+
+    }
+
+    private void insertNewDict(InfraDictType type, String filePath, String content){
+        File file = FileUtil.file(filePath);
+        String firstModuleMatch = "// ========== " + type.firstModule().toUpperCase() + " 模块 ==========\r\n";
+        if(FileUtil.exist(filePath)) {
+            StringBuilder fileContent = new StringBuilder(FileUtil.readUtf8String(filePath));
+            if(fileContent.indexOf(firstModuleMatch) > 0){
+                fileContent.insert(fileContent.indexOf(firstModuleMatch) +  firstModuleMatch.length(), content + "\r\n");
+            }else{
+                // 追加空格
+                if(filePath.contains("dict.ts"))
+                    firstModuleMatch = "  " + firstModuleMatch;
+                if(filePath.contains("DictTypeConstants.java"))
+                    firstModuleMatch = "    " + firstModuleMatch;
+                // 查找插入位置 不同的文件 插入位置不同
+                int insertIndex = 0;
+                if (filePath.contains("DictTypeConstants.java")){
+                    insertIndex = fileContent.lastIndexOf("}");
+                    content = content + "\r\n";
+                }
+                else if(filePath.contains("dict.ts")){
+                    String dictType = fileContent.substring(0, fileContent.indexOf("}",fileContent.indexOf("export enum DICT_TYPE {")));
+                    insertIndex = dictType.lastIndexOf("'") + 1;
+                    firstModuleMatch = "\r\n\r\n" + firstModuleMatch;
+                    firstModuleMatch = "," + firstModuleMatch;
+                    // 最后一行去掉,符号
+                    content = content.replaceAll(",","");
+                }
+                else{
+                    insertIndex = fileContent.length();
+                    firstModuleMatch = "\r\n" + firstModuleMatch;
+                    content = content + "\r\n";
+                }
+                fileContent.insert(insertIndex, firstModuleMatch + content);
+            }
+            FileUtil.writeUtf8String(fileContent.toString(), file);
+        }
+    }
+
     public void dictInsertExecute(InfraDictType type){
         // 创建 bindingMap
         Map<String, Object> bindingMap = getDictBindingMap(type);
 
-        generateInsertDict(bindingMap);
-
-        generateNewTable(bindingMap);
+        generateInsertDict(bindingMap, type);
     }
 
-    public void generateInsertDict(Map<String, Object> bindingMap)
+    public void generateInsertDict(Map<String, Object> bindingMap, InfraDictType type)
     {
         Map<String, String> templates = new LinkedHashMap<>(DICT_TEMPLATES);
         templates.forEach((vmPath, filePath) -> {
-            filePath = formatTableFilePath(filePath, bindingMap);
+            filePath = formatDictFilePath(filePath, bindingMap);
             String content = templateEngine.getTemplate(vmPath).render(bindingMap);
             // 去除字段后面多余的 , 逗号
             content = content.replaceAll(",\n}", "\n}").replaceAll(",\n  }", "\n  }");
-            System.out.println(filePath);
-            System.out.println(content);
-//            File newFile;
-//            if(!FileUtil.exist(filePath)) {
-//                newFile = FileUtil.touch(filePath);
-//                RuntimeUtil.execForStr("git add " + filePath);
-//            }else{
-//                newFile = FileUtil.file(filePath);
-//            }
-//            FileUtil.writeUtf8String(content, newFile);
+            // constants文件只插入 enum文件新建
+            if(!filePath.contains("Enum.java")){
+                insertNewDict(type, filePath, content);
+            }
+            else{
+                File newFile;
+                if(!FileUtil.exist(filePath)) {
+                    newFile = FileUtil.touch(filePath);
+                    RuntimeUtil.execForStr("git add " + filePath);
+                }else{
+                    newFile = FileUtil.file(filePath);
+                }
+                FileUtil.writeUtf8String(content, newFile);
+            }
+
         });
+    }
+
+    private String formatDictFilePath(String filePath, Map<String, Object> bindingMap) {
+        filePath = StrUtil.replace(filePath, "${basePackage}",
+                getStr(bindingMap, "basePackage").replaceAll("\\.", "/"));
+        filePath = StrUtil.replace(filePath, "${modulePath}",
+                getStr(bindingMap, "modulePath"));
+        filePath = StrUtil.replace(filePath, "${typeUpHump}",
+                getStr(bindingMap, "typeUpHump"));
+        // sceneEnum 包含的字段
+        CodegenSceneEnum sceneEnum = (CodegenSceneEnum) bindingMap.get("sceneEnum");
+        filePath = StrUtil.replace(filePath, "${sceneEnum.prefixClass}", sceneEnum.getPrefixClass());
+        filePath = StrUtil.replace(filePath, "${sceneEnum.basePackage}", sceneEnum.getBasePackage());
+        return filePath;
     }
 
     private Map<String, Object> getDictBindingMap(InfraDictType type){
@@ -1008,15 +1123,18 @@ public class CodegenEngine {
         bindingMap.put("dictType", type);
         bindingMap.put("datas", type.datas());
         bindingMap.put("sceneEnum", CodegenSceneEnum.valueOf("ADMIN"));
-        // 模块名称 例子system
-        String moduleName = type.firstModule() + (type.secondModule().isEmpty()? "" : "/" + type.secondModule());
+        // 模块路径 例子system/dept
+        String modulePath = type.firstModule() + (type.secondModule().isEmpty()? "" : "/" + type.secondModule());
+        bindingMap.put("modulePath", modulePath);
+        // 模块名称 例子system.dept
+        String moduleName = type.firstModule() + (type.secondModule().isEmpty()? "" : "." + type.secondModule());
         bindingMap.put("moduleName", moduleName);
         // 字典类型 下划线大写 例子SYSTEM_DATA_SCOPE
-        bindingMap.put("typeNameUp", type.name().toUpperCase());
+        bindingMap.put("typeUp", type.type().toUpperCase());
         // 字典类型 驼峰命名 例子SystemDataScope
-        bindingMap.put("typeNameUpHump", upperFirst(toCamelCase(type.name())));
+        bindingMap.put("typeUpHump", upperFirst(toCamelCase(type.type())));
         // 后缀名
-        bindingMap.put("suffixName",type.name().substring(type.name().lastIndexOf("_")));
+        bindingMap.put("suffixName",type.type().substring(type.type().lastIndexOf("_") + 1));
 
         return bindingMap;
     }
@@ -1094,8 +1212,7 @@ public class CodegenEngine {
     }*/
 
     private static String vueFilePath(String path) {
-        return "yudao-ui-${sceneEnum.basePackage}/" + // 顶级目录
-                "src/" + path;
+        return FileUtil.getParent(FileUtil.getAbsolutePath(""), 4) + "/frontend/src/"  + path;
     }
 /*
     private static String vue3TemplatePath(String path) {

@@ -1,5 +1,6 @@
 package cn.iocoder.yudao.service.service.infra.data;
 
+import cn.iocoder.yudao.service.vo.infra.data.dictType.DictTypeUpdateInput;
 import cn.iocoder.yudao.service.service.infra.codegen.inner.CodegenEngine;
 import cn.iocoder.yudao.service.vo.infra.data.dictType.DictTypeGetOutput;
 import cn.iocoder.yudao.service.vo.infra.data.dictType.DictTypeCreateInput;
@@ -14,6 +15,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import cn.iocoder.yudao.framework.excel.core.util.ExcelUtils;
 
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.data.domain.Page;
 
@@ -43,6 +45,7 @@ public class DictTypeServiceImpl implements DictTypeService {
 
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public UUID create(DictTypeCreateInput inputVO) {
         // 校验正确性
         validateDictTypeForCreateOrUpdate(null, inputVO.getName(), inputVO.getType());
@@ -72,7 +75,7 @@ public class DictTypeServiceImpl implements DictTypeService {
         if (id == null) {
             throw exception(DICT_TYPE_NAME_DUPLICATE);
         }
-        if (opDictType.get().id() != id) {
+        if (!opDictType.get().id().equals(id)) {
             throw exception(DICT_TYPE_NAME_DUPLICATE);
         }
     }
@@ -89,7 +92,7 @@ public class DictTypeServiceImpl implements DictTypeService {
         if (id == null) {
             throw exception(DICT_TYPE_TYPE_DUPLICATE);
         }
-        if (opDictType.get().id() != id) {
+        if (!opDictType.get().id().equals(id)) {
             throw exception(DICT_TYPE_TYPE_DUPLICATE);
         }
     }
@@ -105,13 +108,16 @@ public class DictTypeServiceImpl implements DictTypeService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Boolean update(DictTypeUpdateInput inputVO) {
         // 校验正确性
         validateDictTypeForCreateOrUpdate(inputVO.getId(), inputVO.getName(), null);
-
+        InfraDictType oldType = infraDictTypeRepository.findById(inputVO.getId()).get();
         // 更新字典类型
-        InfraDictType updateObj = DictTypeConvert.INSTANCE.updateInputConvert(inputVO);
-        infraDictTypeRepository.update(updateObj);
+        InfraDictType updateType = DictTypeConvert.INSTANCE.updateInputConvert(inputVO);
+        infraDictTypeRepository.update(updateType);
+        updateType = infraDictTypeRepository.findById(inputVO.getId()).get();
+        codegenEngine.dictUpdateExecute(oldType, updateType);
         return true;
     }
 

@@ -1,1 +1,1 @@
-${typeNameUp} = '${dictType.name}',
+  ${typeUp} = '${dictType.type}', // ${dictType.name}

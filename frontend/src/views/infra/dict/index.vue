@@ -87,6 +87,7 @@
       save-key="dictType"
       :columns="typeColumns"
       :page-param="queryParams"
+      @page-change="getList"
       :page-data="typeData"
       adaptive
       @row-click="handleRowClick"

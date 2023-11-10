@@ -23,7 +23,7 @@
         </el-col>
         <el-col :span="12">
           <el-form-item label="字典类型" prop="type">
-            <el-input v-model="formData.type" placeholder="请输入参数名称" />
+            <el-input v-model="formData.type" placeholder="请输入字典类型" />
           </el-form-item>
         </el-col>
       </el-row>

@@ -1,5 +1,6 @@
 package cn.iocoder.yudao.service.service.infra.data;
 
+import cn.iocoder.yudao.service.vo.infra.data.dictType.DictTypeUpdateInput;
 import cn.iocoder.yudao.service.vo.infra.data.dictType.DictTypeCreateInput;
 import cn.iocoder.yudao.service.vo.infra.data.dictType.*;
 import cn.iocoder.yudao.service.vo.infra.data.dictType.DictTypeGetOutput;

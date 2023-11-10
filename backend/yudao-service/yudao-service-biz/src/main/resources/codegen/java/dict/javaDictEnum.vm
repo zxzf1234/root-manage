@@ -1,23 +1,23 @@
-package ${basePackage}.service.enums.system.dept;
+package ${basePackage}.service.enums.${moduleName};
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
-* ${dictType.remark}
+* ${dictType.name}
 */
 @Getter
 @AllArgsConstructor
-public enum ${typeNameUpHump}Enum {
+public enum ${typeUpHump}Enum {
 
 #set($n = 0)
-#set($dataLenght = $datas.length())
+#set($dataLenght = $datas.size())
 #foreach ($data in $datas)
     #set($n = $n+1)
     /**
     * ${data.label}
     */
-    ${data.enum}(${data.value})#if($n == $dataLenght);#else,#end
+    ${data.dataEnum}(${data.value})#if($n == $dataLenght);#else,#end
 #end
 
     private final Integer ${suffixName};

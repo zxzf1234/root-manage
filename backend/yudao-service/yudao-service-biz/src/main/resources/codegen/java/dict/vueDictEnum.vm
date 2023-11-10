@@ -1,15 +1,16 @@
+
 /**
- * ${dictType.remark}
+ * ${dictType.name}
 #foreach ($data in $datas)
- * @param ${data.enum} ${data.label}
+ * @param ${data.dataEnum} ${data.label}
 #end
-*/
-export const ${typeNameUpHump}Enum = {
+ */
+export const ${typeUpHump}Enum = {
 #set($n = 0)
-#set($dataLenght = $datas.length())
+#set($dataLenght = $datas.size())
 #foreach ($data in $datas)
     #set($n = $n+1)
   //${data.label}
-  ${data.enum}: ${data.value}#if($n != $dataLenght),#end
+  ${data.dataEnum}: ${data.value}#if($n != $dataLenght),#end
 #end
 }

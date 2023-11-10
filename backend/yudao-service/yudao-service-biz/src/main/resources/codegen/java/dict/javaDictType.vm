@@ -1,1 +1,1 @@
-String ${typeNameUp} = "${dictType.name}"; // ${dictType.remark}
+    String ${typeUp} = "${dictType.type}"; // ${dictType.name}
