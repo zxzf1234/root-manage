@@ -1,5 +1,6 @@
 package cn.iocoder.yudao.service.service.infra.data;
 
+import cn.iocoder.yudao.service.service.infra.codegen.inner.CodegenEngine;
 import cn.iocoder.yudao.service.vo.infra.data.dictType.DictTypeGetOutput;
 import cn.iocoder.yudao.service.vo.infra.data.dictType.DictTypeCreateInput;
 import cn.iocoder.yudao.service.vo.infra.data.dictType.*;
@@ -37,6 +38,9 @@ public class DictTypeServiceImpl implements DictTypeService {
     @Resource
     InfraDictDataRepository infraDictDataRepository;
 
+    @Resource
+    private CodegenEngine codegenEngine;
+
 
     @Override
     public UUID create(DictTypeCreateInput inputVO) {
@@ -46,6 +50,7 @@ public class DictTypeServiceImpl implements DictTypeService {
         // 插入字典类型
         InfraDictType dictType = DictTypeConvert.INSTANCE.createInputConvert(inputVO);
         dictType = infraDictTypeRepository.insert(dictType);
+        codegenEngine.dictInsertExecute(dictType);
         return dictType.id();
     }
 

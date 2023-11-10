@@ -3,6 +3,9 @@ package cn.iocoder.yudao.service.enums.system.permission;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+/**
+ 角色类型
+ */
 @Getter
 @AllArgsConstructor
 public enum RoleTypeEnum {

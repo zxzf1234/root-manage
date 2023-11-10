@@ -70,7 +70,11 @@
         <el-input v-model="row.value" />
       </template>
       <template #dataEnum="{ row }">
-        <el-input v-model="row.dataEnum" />
+        <el-input
+          v-model="row.dataEnum"
+          @blur="row.dataEnum = row.dataEnum.toUpperCase()"
+          @keyup="row.dataEnum = row.dataEnum.replace(/[^a-zA-Z]/g, '')"
+        />
       </template>
       <template #sort="{ row }">
         <el-input-number v-model="row.sort" :min="0" />
@@ -163,7 +167,8 @@ const dataColumns: TableColumnList = [
   {
     label: '排序',
     prop: 'sort',
-    slot: 'sort'
+    slot: 'sort',
+    minWidth: '110%'
   },
 
   {

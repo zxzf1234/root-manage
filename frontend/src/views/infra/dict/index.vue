@@ -1,7 +1,7 @@
 <!-- 字典管理页面 -->
 <template>
   <!-- 搜索工作栏 -->
-  <ContentWrap>
+  <ContentWrap class="h-[55%]">
     <el-form
       ref="queryFormRef"
       :inline="true"
@@ -83,15 +83,12 @@
         </el-button>
       </el-form-item>
     </el-form>
-  </ContentWrap>
-
-  <!-- 列表 -->
-  <ContentWrap>
     <Table
       save-key="dictType"
       :columns="typeColumns"
       :page-param="queryParams"
       :page-data="typeData"
+      adaptive
       @row-click="handleRowClick"
       @row-dblclick="(row) => openForm('update', row.id)"
     >

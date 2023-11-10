@@ -989,14 +989,16 @@ public class CodegenEngine {
             String content = templateEngine.getTemplate(vmPath).render(bindingMap);
             // 去除字段后面多余的 , 逗号
             content = content.replaceAll(",\n}", "\n}").replaceAll(",\n  }", "\n  }");
-            File newFile;
-            if(!FileUtil.exist(filePath)) {
-                newFile = FileUtil.touch(filePath);
-                RuntimeUtil.execForStr("git add " + filePath);
-            }else{
-                newFile = FileUtil.file(filePath);
-            }
-            FileUtil.writeUtf8String(content, newFile);
+            System.out.println(filePath);
+            System.out.println(content);
+//            File newFile;
+//            if(!FileUtil.exist(filePath)) {
+//                newFile = FileUtil.touch(filePath);
+//                RuntimeUtil.execForStr("git add " + filePath);
+//            }else{
+//                newFile = FileUtil.file(filePath);
+//            }
+//            FileUtil.writeUtf8String(content, newFile);
         });
     }
 
@@ -1010,9 +1012,11 @@ public class CodegenEngine {
         String moduleName = type.firstModule() + (type.secondModule().isEmpty()? "" : "/" + type.secondModule());
         bindingMap.put("moduleName", moduleName);
         // 字典类型 下划线大写 例子SYSTEM_DATA_SCOPE
-        bindingMap.put("nameHump", type.name().toUpperCase());
+        bindingMap.put("typeNameUp", type.name().toUpperCase());
         // 字典类型 驼峰命名 例子SystemDataScope
-        bindingMap.put("simpleClassNameHump", upperFirst(toCamelCase(type.name())));
+        bindingMap.put("typeNameUpHump", upperFirst(toCamelCase(type.name())));
+        // 后缀名
+        bindingMap.put("suffixName",type.name().substring(type.name().lastIndexOf("_")));
 
         return bindingMap;
     }

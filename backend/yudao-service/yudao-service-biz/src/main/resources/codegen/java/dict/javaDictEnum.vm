@@ -1,0 +1,25 @@
+package ${basePackage}.service.enums.system.dept;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+/**
+* ${dictType.remark}
+*/
+@Getter
+@AllArgsConstructor
+public enum ${typeNameUpHump}Enum {
+
+#set($n = 0)
+#set($dataLenght = $datas.length())
+#foreach ($data in $datas)
+    #set($n = $n+1)
+    /**
+    * ${data.label}
+    */
+    ${data.enum}(${data.value})#if($n == $dataLenght);#else,#end
+#end
+
+    private final Integer ${suffixName};
+
+}

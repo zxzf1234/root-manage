@@ -1,0 +1,15 @@
+/**
+ * ${dictType.remark}
+#foreach ($data in $datas)
+ * @param ${data.enum} ${data.label}
+#end
+*/
+export const ${typeNameUpHump}Enum = {
+#set($n = 0)
+#set($dataLenght = $datas.length())
+#foreach ($data in $datas)
+    #set($n = $n+1)
+  //${data.label}
+  ${data.enum}: ${data.value}#if($n != $dataLenght),#end
+#end
+}

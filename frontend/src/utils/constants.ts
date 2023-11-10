@@ -4,10 +4,16 @@
  * 枚举类
  */
 
-// 全局通用状态枚举
+/**
+ * 全局通用状态枚举
+ * @param ENABLE 开启
+ * @param DISABLE 禁用
+ */
 export const CommonStatusEnum = {
-  ENABLE: 0, // 开启
-  DISABLE: 1 // 禁用
+  /** 开启 */
+  ENABLE: 0,
+  /** 禁用 */
+  DISABLE: 1
 }
 
 /**
