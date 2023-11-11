@@ -1,0 +1,3 @@
+update INFRA_DICT_TYPE set UPDATER_ID = '1', NAME = '角色类型', TYPE = 'system_role_type', STATUS = '0', REMARK = '角色类型', FIRST_MODULE = 'system', SECOND_MODULE = 'permission' where ID = '3450f5e3-2b00-51e8-1f67-0fff9bf1f435';
+update INFRA_DICT_DATA set UPDATER_ID = '1', SORT = '1', LABEL = '内置', STATUS = '0', COLOR_TYPE = 'danger', CSS_CLASS = '', REMARK = '内置角色', DATA_ENUM = 'SYSTEM' where ID = '46176d83-5794-11ee-873c-e073e73d10a7';
+update INFRA_DICT_DATA set UPDATER_ID = '1', SORT = '2', LABEL = '自定义', STATUS = '0', COLOR_TYPE = 'primary', CSS_CLASS = '', REMARK = '自定义角色', DATA_ENUM = 'CUSTOM' where ID = '46176dcf-5794-11ee-873c-e073e73d10a7';

@@ -8,11 +8,13 @@ package cn.iocoder.yudao.service.enums;
 public interface DictTypeConstants {
 
     // ========== COMMON 模块 ==========
-    String USER_TYPE = "user_type"; // 用户类型
+    String COMMON_SEX = "common_sex"; // 用户性别
     String COMMON_STATUS = "common_status"; // 系统状态
+    String USER_TYPE = "user_type"; // 用户类型
 
     // ========== SYSTEM 模块 ==========
-    String SYSTEM_USER_SEX = "system_user_sex"; // 用户性别
+    String SYSTEM_ROLE_CODE = "system_role_code"; // 角色标识
+    String SYSTEM_ROLE_TYPE = "system_role_type"; // 角色类型
     String SYSTEM_OPERATE_TYPE = "system_operate_type"; // 操作类型
     String SYSTEM_LOGIN_TYPE = "system_login_type"; // 登录日志的类型
     String SYSTEM_LOGIN_RESULT = "system_login_result"; // 登录结果
@@ -23,6 +25,7 @@ public interface DictTypeConstants {
     String SYSTEM_SMS_RECEIVE_STATUS = "system_sms_receive_status"; // 短信接收状态
 
     // ========== INFRA 模块 ==========
+    String INFRA_FILE_STORAGE = "infra_file_storage"; // 文件存储器
     String INFRA_REDIS_TIMEOUT_TYPE = "infra_redis_timeout_type"; // Redis 超时类型
     String INFRA_JOB_STATUS = "infra_job_status"; // 定时任务状态的枚举
     String INFRA_JOB_LOG_STATUS = "infra_job_log_status"; // 定时任务日志状态的枚举

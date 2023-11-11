@@ -979,18 +979,26 @@ public class CodegenEngine {
         templates.forEach((vmPath, filePath) -> {
             String oldFilePath = formatDictFilePath(filePath, oldBindingMap);
             String newFilePath = formatDictFilePath(filePath, newBindingMap);
-            if(!FileUtil.exist(oldFilePath))
-                return;
+//            if(!FileUtil.exist(oldFilePath))
+//                return;
             String oldContent = templateEngine.getTemplate(vmPath).render(oldBindingMap);
             String newContent = templateEngine.getTemplate(vmPath).render(newBindingMap);
             if(oldContent.equals(newContent) && oldType.firstModule().equals(newType.firstModule()) && oldType.secondModule().equals(newType.secondModule()))
                 return;
             if(filePath.contains("Enum.java")){
                 if(oldFilePath.equals(newFilePath)){
+                    if(!FileUtil.exist(newFilePath)) {
+                        FileUtil.touch(newFilePath);
+                        RuntimeUtil.execForStr("git add " + newFilePath);
+                    }
                     File newFile = FileUtil.file(newFilePath);
                     FileUtil.writeUtf8String(newContent, newFile);
                 }else{
-                    RuntimeUtil.execForStr("git mv " + oldFilePath + " " + newFilePath);
+                    if(!FileUtil.exist(oldFilePath)) {
+                        FileUtil.touch(newFilePath);
+                        RuntimeUtil.execForStr("git add " + newFilePath);
+                    }else
+                        RuntimeUtil.execForStr("git mv " + oldFilePath + " " + newFilePath);
                     File newFile = FileUtil.file(newFilePath);
                     FileUtil.writeUtf8String(newContent, newFile);
                 }
@@ -1135,6 +1143,9 @@ public class CodegenEngine {
         bindingMap.put("typeUpHump", upperFirst(toCamelCase(type.type())));
         // 后缀名
         bindingMap.put("suffixName",type.type().substring(type.type().lastIndexOf("_") + 1));
+
+        // 后缀名首字母大写
+        bindingMap.put("suffixNameUp",upperFirst(type.type().substring(type.type().lastIndexOf("_") + 1)));
 
         return bindingMap;
     }

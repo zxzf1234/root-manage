@@ -5,14 +5,16 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.iocoder.yudao.framework.common.enums.CommonStatusEnum;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
+import cn.iocoder.yudao.framework.common.util.object.ObjectUtils;
+import cn.iocoder.yudao.service.enums.system.permission.SystemRoleCodeEnum;
 import cn.iocoder.yudao.service.vo.infra.permission.role.RoleCreateReqVO;
 import cn.iocoder.yudao.service.vo.infra.permission.role.RoleExportReqVO;
 import cn.iocoder.yudao.service.vo.infra.permission.role.RolePageReqVO;
 import cn.iocoder.yudao.service.vo.infra.permission.role.RoleUpdateReqVO;
 import cn.iocoder.yudao.service.convert.system.permission.RoleConvert;
 import cn.iocoder.yudao.service.enums.system.permission.DataScopeEnum;
-import cn.iocoder.yudao.service.enums.system.permission.RoleCodeEnum;
-import cn.iocoder.yudao.service.enums.system.permission.RoleTypeEnum;
+import cn.iocoder.yudao.service.enums.system.permission.SystemRoleTypeEnum;
+import cn.iocoder.yudao.service.enums.system.permission.SystemRoleTypeEnum;
 import cn.iocoder.yudao.service.model.system.permission.SystemRole;
 import cn.iocoder.yudao.service.model.system.permission.SystemRoleDraft;
 import cn.iocoder.yudao.service.repository.system.permission.SystemRoleRepository;
@@ -59,7 +61,7 @@ public class RoleServiceImpl implements RoleService {
         SystemRole role = RoleConvert.INSTANCE.convert(reqVO);
         role = SystemRoleDraft.$.produce(role, SystemRole->{
             SystemRole
-                    .setType(ObjectUtil.defaultIfNull(type, RoleTypeEnum.CUSTOM.getType()))
+                    .setType(ObjectUtil.defaultIfNull(type, SystemRoleTypeEnum.CUSTOM.getValue()))
                     .setStatus(CommonStatusEnum.ENABLE.getStatus())
                     .setDataScope(DataScopeEnum.ALL.getScope()); // 默认可查看所有数据。原因是，可能一些项目不需要项目权限
         });
@@ -144,7 +146,7 @@ public class RoleServiceImpl implements RoleService {
         if (CollectionUtil.isEmpty(roleList)) {
             return false;
         }
-        return roleList.stream().anyMatch(role -> RoleCodeEnum.isSuperAdmin(role.code()));
+        return roleList.stream().anyMatch(role -> ObjectUtils.equalsAny(role.code(), SystemRoleCodeEnum.SUPER_ADMIN.getValue()));
     }
 
     @Override
@@ -176,7 +178,7 @@ public class RoleServiceImpl implements RoleService {
     @VisibleForTesting
     void validateRoleDuplicate(String name, String code, Long id) {
         // 0. 超级管理员，不允许创建
-        if (RoleCodeEnum.isSuperAdmin(code)) {
+        if (ObjectUtils.equalsAny(code, SystemRoleCodeEnum.SUPER_ADMIN.getValue())) {
             throw exception(ROLE_ADMIN_CODE_ERROR, code);
         }
         // 1. 该 name 名字被其它角色所使用
@@ -207,7 +209,7 @@ public class RoleServiceImpl implements RoleService {
             throw exception(ROLE_NOT_EXISTS);
         }
         // 内置角色，不允许删除
-        if (RoleTypeEnum.SYSTEM.getType().equals(opSystemRole.get().type())) {
+        if (SystemRoleTypeEnum.SYSTEM.getValue().equals(opSystemRole.get().type())) {
             throw exception(ROLE_CAN_NOT_UPDATE_SYSTEM_TYPE_ROLE);
         }
     }

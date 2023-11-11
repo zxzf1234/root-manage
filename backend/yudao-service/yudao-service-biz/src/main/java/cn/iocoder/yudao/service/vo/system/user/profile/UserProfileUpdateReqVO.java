@@ -23,7 +23,7 @@ public class UserProfileUpdateReqVO {
     @Schema(description = "手机号码", example = "15601691300")
     private String mobile;
 
-    @Schema(description = "用户性别-参见 SexEnum 枚举类", example = "1")
+    @Schema(description = "用户性别-参见 CommonSexEnum 枚举类", example = "1")
     private Integer sex;
 
 }

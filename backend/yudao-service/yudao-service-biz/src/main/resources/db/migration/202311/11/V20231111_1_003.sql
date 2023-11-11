@@ -1,0 +1,6 @@
+update INFRA_DICT_TYPE set UPDATER_ID = '1', NAME = '系统状态', TYPE = 'common_status', STATUS = '0', REMARK = '', FIRST_MODULE = 'common', SECOND_MODULE = '' where ID = '07ad08f7-f97e-1ad6-196c-08fc54b27796';
+update INFRA_DICT_DATA set UPDATER_ID = '1', SORT = '1', LABEL = '开启', STATUS = '0', COLOR_TYPE = 'primary', CSS_CLASS = '', REMARK = '开启状态', DATA_ENUM = '' where ID = '46176b93-5794-11ee-873c-e073e73d10a7';
+update INFRA_DICT_DATA set UPDATER_ID = '1', SORT = '2', LABEL = '关闭', STATUS = '0', COLOR_TYPE = 'info', CSS_CLASS = '', REMARK = '关闭状态', DATA_ENUM = '' where ID = '46176bd8-5794-11ee-873c-e073e73d10a7';
+update INFRA_DICT_TYPE set UPDATER_ID = '1', NAME = '系统状态', TYPE = 'common_status', STATUS = '0', REMARK = '', FIRST_MODULE = 'common', SECOND_MODULE = '' where ID = '07ad08f7-f97e-1ad6-196c-08fc54b27796';
+update INFRA_DICT_DATA set UPDATER_ID = '1', SORT = '1', LABEL = '开启', STATUS = '0', COLOR_TYPE = 'primary', CSS_CLASS = '', REMARK = '开启状态', DATA_ENUM = 'ENABLE' where ID = '46176b93-5794-11ee-873c-e073e73d10a7';
+update INFRA_DICT_DATA set UPDATER_ID = '1', SORT = '2', LABEL = '关闭', STATUS = '0', COLOR_TYPE = 'info', CSS_CLASS = '', REMARK = '关闭状态', DATA_ENUM = 'DISABLED' where ID = '46176bd8-5794-11ee-873c-e073e73d10a7';

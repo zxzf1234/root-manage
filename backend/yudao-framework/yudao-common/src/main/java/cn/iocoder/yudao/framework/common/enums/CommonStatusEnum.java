@@ -18,8 +18,6 @@ public enum CommonStatusEnum implements IntArrayValuable {
     ENABLE(0, "开启"),
     DISABLE(1, "关闭");
 
-    public static final int[] ARRAYS = Arrays.stream(values()).mapToInt(CommonStatusEnum::getStatus).toArray();
-
     /**
      * 状态值
      */
@@ -28,6 +26,8 @@ public enum CommonStatusEnum implements IntArrayValuable {
      * 状态名
      */
     private final String name;
+
+    public static final int[] ARRAYS = Arrays.stream(values()).mapToInt(CommonStatusEnum::getStatus).toArray();
 
     @Override
     public int[] array() {

@@ -60,7 +60,7 @@
           <el-form-item label="用户性别">
             <el-select v-model="formData.sex" placeholder="请选择">
               <el-option
-                v-for="dict in getIntDictOptions(DICT_TYPE.SYSTEM_USER_SEX)"
+                v-for="dict in getIntDictOptions(DICT_TYPE.COMMON_SEX)"
                 :key="dict.value"
                 :label="dict.label"
                 :value="dict.value"

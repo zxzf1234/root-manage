@@ -5,32 +5,12 @@
  */
 
 /**
- * 全局通用状态枚举
- * @param ENABLE 开启
- * @param DISABLE 禁用
- */
-export const CommonStatusEnum = {
-  /** 开启 */
-  ENABLE: 0,
-  /** 禁用 */
-  DISABLE: 1
-}
-
-/**
  * 菜单的类型枚举
  */
 export const SystemMenuTypeEnum = {
   DIR: 1, // 目录
   MENU: 2, // 菜单
   BUTTON: 3 // 按钮
-}
-
-/**
- * 角色的类型枚举
- */
-export const SystemRoleTypeEnum = {
-  SYSTEM: 1, // 内置角色
-  CUSTOM: 2 // 自定义角色
 }
 
 /**
@@ -78,4 +58,79 @@ export const SystemUserSocialTypeEnum = {
     source: 'wechat_enterprise',
     img: 'https://s1.ax1x.com/2022/05/22/OzMrzn.png'
   }
+}
+
+// ========== COMMON 模块 ==========
+
+/**
+ * 用户性别
+ * @param MALE 男
+ * @param FEMALE 女
+ */
+export const CommonSexEnum = {
+  //男
+  MALE: 1,
+  //女
+  FEMALE: 2
+}
+
+/**
+ * 系统状态
+ * @param ENABLE 开启
+ * @param DISABLED 关闭
+ */
+export const CommonStatusEnum = {
+  //开启
+  ENABLE: 0,
+  //关闭
+  DISABLED: 1
+}
+
+// ========== SYSTEM 模块 ==========
+
+/**
+ * 角色标识
+ * @param SUPERADMIN 超级管理员
+ * @param TETENTADMIN 租户管理员
+ */
+export const SystemRoleCodeEnum = {
+  //超级管理员
+  SUPERADMIN: 'super_admin',
+  //租户管理员
+  TETENTADMIN: 'tetent_admin'
+}
+
+/**
+ * 角色类型
+ * @param SYSTEM 内置
+ * @param CUSTOM 自定义
+ */
+export const SystemRoleTypeEnum = {
+  //内置
+  SYSTEM: 1,
+  //自定义
+  CUSTOM: 2
+}
+
+// ========== INFRA 模块 ==========
+
+/**
+ * 文件存储器
+ * @param DATABASE 数据库
+ * @param LOCAL 本地磁盘
+ * @param FTP FTP 服务器
+ * @param SFTP SFTP 服务器
+ * @param OBJECT S3 对象存储
+ */
+export const InfraFileStorageEnum = {
+  //数据库
+  DATABASE: 1,
+  //本地磁盘
+  LOCAL: 10,
+  //FTP 服务器
+  FTP: 11,
+  //SFTP 服务器
+  SFTP: 12,
+  //S3 对象存储
+  OBJECT: 20
 }

@@ -1,5 +1,7 @@
 package cn.iocoder.yudao.service.vo.system.user.baseVO;
 
+import cn.iocoder.yudao.framework.common.validation.InEnum;
+import cn.iocoder.yudao.service.enums.common.CommonSexEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import java.util.*;
@@ -41,6 +43,7 @@ public class SystemUserBase {
     private String mobile;
 
     @Schema(description = "用户性别", example = "1")
+    @InEnum(value = CommonSexEnum.class, message = "用户性别必须是 {value}")
     private Integer sex;
 
     @Schema(description = "用户头像", example = "https://www.iocoder.cn/xxx.png")

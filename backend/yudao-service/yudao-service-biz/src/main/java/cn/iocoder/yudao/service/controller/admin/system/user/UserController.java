@@ -4,7 +4,7 @@ import cn.iocoder.yudao.service.model.system.user.SystemUser;
 import cn.iocoder.yudao.service.vo.system.user.user.*;
 import cn.iocoder.yudao.service.convert.system.user.UserConvert;
 import cn.iocoder.yudao.service.service.system.user.UserService;
-import cn.iocoder.yudao.service.enums.common.SexEnum;
+import cn.iocoder.yudao.service.enums.common.CommonSexEnum;
 import cn.iocoder.yudao.framework.common.enums.CommonStatusEnum;
 import cn.iocoder.yudao.framework.common.pojo.CommonResult;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
@@ -123,9 +123,9 @@ public class UserController {
         // 手动创建导出 demo
         List<UserImportExcelVO> list = Arrays.asList(
                 UserImportExcelVO.builder().username("yunai").deptId(1L).email("yunai@iocoder.cn").mobile("15601691300")
-                        .nickname("芋道").status(CommonStatusEnum.ENABLE.getStatus()).sex(SexEnum.MALE.getSex()).build(),
+                        .nickname("芋道").status(CommonStatusEnum.ENABLE.getStatus()).sex(CommonSexEnum.MALE.getValue()).build(),
                 UserImportExcelVO.builder().username("yuanma").deptId(2L).email("yuanma@iocoder.cn").mobile("15601701300")
-                        .nickname("源码").status(CommonStatusEnum.DISABLE.getStatus()).sex(SexEnum.FEMALE.getSex()).build()
+                        .nickname("源码").status(CommonStatusEnum.DISABLE.getStatus()).sex(CommonSexEnum.FEMALE.getValue()).build()
         );
 
         // 输出

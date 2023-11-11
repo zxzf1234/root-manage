@@ -90,13 +90,14 @@ export const getDictLabel = (dictType: string, value: any) => {
 
 export enum DICT_TYPE {
   // ========== COMMON 模块 ==========
+  COMMON_SEX = 'common_sex', // 用户性别
+  COMMON_STATUS = 'common_status', // 系统状态
   USER_TYPE = 'user_type',
-  COMMON_STATUS = 'common_status',
 
   // ========== SYSTEM 模块 ==========
-  SYSTEM_USER_SEX = 'system_user_sex',
+  SYSTEM_ROLE_CODE = 'system_role_code', // 角色标识
+  SYSTEM_ROLE_TYPE = 'system_role_type', // 角色类型
   SYSTEM_MENU_TYPE = 'system_menu_type',
-  SYSTEM_ROLE_TYPE = 'system_role_type',
   SYSTEM_DATA_SCOPE = 'system_data_scope',
   SYSTEM_NOTICE_TYPE = 'system_notice_type',
   SYSTEM_OPERATE_TYPE = 'system_operate_type',
@@ -112,10 +113,10 @@ export enum DICT_TYPE {
   SYSTEM_NOTIFY_TEMPLATE_TYPE = 'system_notify_template_type',
 
   // ========== INFRA 模块 ==========
+  INFRA_FILE_STORAGE = 'infra_file_storage', // 文件存储器
   INFRA_BOOLEAN_STRING = 'infra_boolean_string',
   INFRA_JOB_STATUS = 'infra_job_status',
   INFRA_JOB_LOG_STATUS = 'infra_job_log_status',
   INFRA_API_ERROR_LOG_PROCESS_STATUS = 'infra_api_error_log_process_status',
-  INFRA_CONFIG_TYPE = 'infra_config_type',
-  INFRA_FILE_STORAGE = 'infra_file_storage'
+  INFRA_CONFIG_TYPE = 'infra_config_type'
 }

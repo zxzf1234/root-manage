@@ -1,0 +1,3 @@
+update INFRA_DICT_TYPE set UPDATER_ID = '1', NAME = '用户性别', TYPE = 'common_sex', STATUS = '0', REMARK = '测试', FIRST_MODULE = 'common', SECOND_MODULE = '' where ID = 'dbffed9d-db1b-1f14-80e9-0feba9cc54c6';
+update INFRA_DICT_DATA set UPDATER_ID = '1', SORT = '1', LABEL = '男', STATUS = '0', COLOR_TYPE = 'default', CSS_CLASS = 'A', REMARK = '性别男', DATA_ENUM = 'MALE' where ID = '46171f5b-5794-11ee-873c-e073e73d10a7';
+update INFRA_DICT_DATA set UPDATER_ID = '1', SORT = '2', LABEL = '女', STATUS = '1', COLOR_TYPE = 'success', CSS_CLASS = '', REMARK = '性别女', DATA_ENUM = 'FEMALE' where ID = '46176a7e-5794-11ee-873c-e073e73d10a7';

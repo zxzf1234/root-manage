@@ -2,13 +2,15 @@ package ${basePackage}.service.enums.${moduleName};
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import java.util.Arrays;
+import ${basePackage}.framework.common.core.IntArrayValuable;
 
 /**
 * ${dictType.name}
 */
 @Getter
 @AllArgsConstructor
-public enum ${typeUpHump}Enum {
+public enum ${typeUpHump}Enum implements IntArrayValuable {
 
 #set($n = 0)
 #set($dataLenght = $datas.size())
@@ -20,6 +22,10 @@ public enum ${typeUpHump}Enum {
     ${data.dataEnum}(${data.value})#if($n == $dataLenght);#else,#end
 #end
 
-    private final Integer ${suffixName};
+    private final Integer value;
 
+    public static final int[] ARRAYS = Arrays.stream(values()).mapToInt(${typeUpHump}Enum::getValue).toArray();
+
+    @Override
+    public int[] array() { return ARRAYS;}
 }

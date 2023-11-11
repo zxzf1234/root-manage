@@ -30,7 +30,7 @@ public class UserExcelVO {
     private String mobile;
 
     @ExcelProperty(value = "用户性别", converter = DictConvert.class)
-    @DictFormat(DictTypeConstants.SYSTEM_USER_SEX)
+    @DictFormat(DictTypeConstants.COMMON_SEX)
     private Integer sex;
 
     @ExcelProperty(value = "帐号状态", converter = DictConvert.class)
