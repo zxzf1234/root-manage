@@ -5,7 +5,7 @@ import cn.iocoder.yudao.service.api.infra.logger.dto.ApiErrorLogCreateReqDTO;
 import cn.iocoder.yudao.service.vo.infra.logger.apierrorlog.ApiErrorLogExportReqVO;
 import cn.iocoder.yudao.service.vo.infra.logger.apierrorlog.ApiErrorLogPageReqVO;
 import cn.iocoder.yudao.service.convert.infra.logger.ApiErrorLogConvert;
-import cn.iocoder.yudao.service.enums.logger.ApiErrorLogProcessStatusEnum;
+import cn.iocoder.yudao.service.enums.infra.api.InfraApiErrorLogProcessStatusEnum;
 import cn.iocoder.yudao.service.model.infra.data.InfraApiErrorLog;
 import cn.iocoder.yudao.service.model.infra.data.InfraApiErrorLogDraft;
 import cn.iocoder.yudao.service.repository.infra.data.InfraApiErrorLogRepository;
@@ -38,7 +38,7 @@ public class ApiErrorLogServiceImpl implements ApiErrorLogService {
     public void createApiErrorLog(ApiErrorLogCreateReqDTO createDTO) {
         InfraApiErrorLog apiErrorLog = ApiErrorLogConvert.INSTANCE.convert(createDTO);
         apiErrorLog = InfraApiErrorLogDraft.$.produce(apiErrorLog, draft -> {
-            draft.setProcessStatus(ApiErrorLogProcessStatusEnum.INIT.getStatus());
+            draft.setProcessStatus(InfraApiErrorLogProcessStatusEnum.INIT.getValue());
         });
         infraApiErrorLogRepository.insert(apiErrorLog);
     }
@@ -60,7 +60,7 @@ public class ApiErrorLogServiceImpl implements ApiErrorLogService {
         if (!opErrorLog.isPresent()) {
             throw exception(API_ERROR_LOG_NOT_FOUND);
         }
-        if (!ApiErrorLogProcessStatusEnum.INIT.getStatus().equals(opErrorLog.get().processStatus())) {
+        if (!InfraApiErrorLogProcessStatusEnum.INIT.getValue().equals(opErrorLog.get().processStatus())) {
             throw exception(API_ERROR_LOG_PROCESSED);
         }
         // 标记处理

@@ -1,4 +1,4 @@
-package cn.iocoder.yudao.service.enums.codegen;
+package cn.iocoder.yudao.service.enums.infra.codegen;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

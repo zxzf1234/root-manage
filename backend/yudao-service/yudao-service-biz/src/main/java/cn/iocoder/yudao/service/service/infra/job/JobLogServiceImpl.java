@@ -1,10 +1,10 @@
 package cn.iocoder.yudao.service.service.infra.job;
 
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
+import cn.iocoder.yudao.service.enums.infra.job.InfraJobLogStatusEnum;
 import cn.iocoder.yudao.service.vo.infra.job.log.JobLogExportReqVO;
 import cn.iocoder.yudao.service.vo.infra.job.log.JobLogPageReqVO;
 
-import cn.iocoder.yudao.service.enums.job.JobLogStatusEnum;
 import cn.iocoder.yudao.service.model.infra.job.InfraJobLog;
 import cn.iocoder.yudao.service.model.infra.job.InfraJobLogDraft;
 import cn.iocoder.yudao.service.repository.infra.job.InfraJobLogRepository;
@@ -40,7 +40,7 @@ public class JobLogServiceImpl implements JobLogService {
                     .setHandlerParam(jobHandlerParam)
                     .setExecuteIndex(executeIndex)
                     .setBeginTime(beginTime)
-                    .setStatus(JobLogStatusEnum.RUNNING.getStatus());
+                    .setStatus(InfraJobLogStatusEnum.RUNNING.getValue());
         });
         log = infraJobLogRepository.insert(log);
         return log.id();
@@ -54,7 +54,7 @@ public class JobLogServiceImpl implements JobLogService {
                 draft.setId(logId)
                         .setEndTime(endTime)
                         .setDuration(duration)
-                        .setStatus(success ? JobLogStatusEnum.SUCCESS.getStatus() : JobLogStatusEnum.FAILURE.getStatus())
+                        .setStatus(success ? InfraJobLogStatusEnum.SUCCESS.getValue() : InfraJobLogStatusEnum.FAILURE.getValue())
                         .setResult(result);
             });
             infraJobLogRepository.update(updateObj);

@@ -2,13 +2,11 @@ package cn.iocoder.yudao.service.framework.db.jimmer;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
-import cn.hutool.core.io.resource.ResourceUtil;
 import cn.hutool.core.util.BooleanUtil;
 import cn.hutool.core.util.RuntimeUtil;
+import cn.iocoder.yudao.service.enums.infra.codegen.InfraCodegenTableEnum;
 import cn.iocoder.yudao.service.framework.codegen.config.SchemaHistory;
-import cn.iocoder.yudao.service.enums.upgrade.UpgradeDataEnum;
 import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.commons.lang.StringUtils;
 import org.babyfish.jimmer.sql.runtime.*;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Bean;
@@ -66,8 +64,8 @@ public class JimmerExecutor {
 
     void upgradeData(String sql, List<Object> variables) {
         boolean isContain = false;
-        for(UpgradeDataEnum table : UpgradeDataEnum.values()){
-            if(sql.contains(table.getTable() + "(") || sql.contains(table.getTable() + " ")) {
+        for(InfraCodegenTableEnum table : InfraCodegenTableEnum.values()){
+            if(sql.contains(table.getValue() + "(") || sql.contains(table.getValue() + " ")) {
                 isContain = true;
                 break;
             }

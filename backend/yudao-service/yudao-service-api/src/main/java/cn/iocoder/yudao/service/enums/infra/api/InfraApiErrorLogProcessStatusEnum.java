@@ -15,11 +15,11 @@ public enum InfraApiErrorLogProcessStatusEnum implements IntArrayValuable {
     /**
     * 未处理
     */
-    UNPROCESSED(0),
+    INIT(0),
     /**
     * 已处理
     */
-    PROCESSED(1),
+    DONE(1),
     /**
     * 已忽略
     */

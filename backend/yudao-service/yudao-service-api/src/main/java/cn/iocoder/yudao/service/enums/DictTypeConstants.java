@@ -30,6 +30,7 @@ public interface DictTypeConstants {
     String ERROR_CODE_TYPE = "system_error_code_type"; // 错误码的类型枚举
 
     // ========== INFRA 模块 ==========
+    String INFRA_CODEGEN_TABLE = "infra_codegen_table"; // 升级时需要代码生成的数据库表
     String INFRA_ERROR_CODE_TYPE = "infra_error_code_type"; // 错误码的类型
     String INFRA_JOB_STATUS = "infra_job_status"; // 定时任务状态
     String INFRA_JOB_LOG_STATUS = "infra_job_log_status"; // 定时任务日志状态
@@ -39,5 +40,4 @@ public interface DictTypeConstants {
     String INFRA_CONFIG_TYPE = "infra_config_type"; // 参数类型
     String INFRA_BOOLEAN_STRING = "infra_boolean_string"; // Boolean 是否类型
     String INFRA_FILE_STORAGE = "infra_file_storage"; // 文件存储器
-    String INFRA_JOB_STATUS = "infra_job_status"; // 定时任务状态的枚举
 }

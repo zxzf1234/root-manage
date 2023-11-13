@@ -1,6 +1,5 @@
 package cn.iocoder.yudao.service.framework.codegen.config;
 
-import cn.iocoder.yudao.service.enums.codegen.CodegenFrontTypeEnum;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
@@ -29,7 +28,6 @@ public class CodegenProperties {
     /**
      * 代码生成的前端类型（默认）
      *
-     * 枚举 {@link CodegenFrontTypeEnum#getType()}
      */
     @NotNull(message = "代码生成的前端类型不能为空")
     private Integer frontType;
