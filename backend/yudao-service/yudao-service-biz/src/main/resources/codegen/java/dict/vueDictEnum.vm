@@ -11,6 +11,6 @@ export const ${typeUpHump}Enum = {
 #foreach ($data in $datas)
     #set($n = $n+1)
   //${data.label}
-  ${data.dataEnum}: ${data.value}#if($n != $dataLenght),#end
+  ${data.dataEnum}: #if($isNumber != 1)'#end${data.value}#if($isNumber != 1)'#end#if($n != $dataLenght),#end
 #end
 }

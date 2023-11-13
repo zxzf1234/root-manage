@@ -1,5 +1,7 @@
 package cn.iocoder.yudao.service.service.infra.data;
 
+import cn.iocoder.yudao.service.convert.infra.data.DictDataConvert;
+import cn.iocoder.yudao.service.model.infra.data.*;
 import cn.iocoder.yudao.service.vo.infra.data.dictType.DictTypeUpdateInput;
 import cn.iocoder.yudao.service.service.infra.codegen.inner.CodegenEngine;
 import cn.iocoder.yudao.service.vo.infra.data.dictType.DictTypeGetOutput;
@@ -8,8 +10,10 @@ import cn.iocoder.yudao.service.vo.infra.data.dictType.*;
 import cn.hutool.core.util.StrUtil;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.service.repository.infra.data.InfraDictDataRepository;
-import cn.iocoder.yudao.service.model.infra.data.InfraDictType;
 import cn.iocoder.yudao.service.repository.infra.data.InfraDictTypeRepository;
+import org.babyfish.jimmer.meta.ImmutableProp;
+import org.babyfish.jimmer.sql.DissociateAction;
+import org.babyfish.jimmer.sql.ast.mutation.SaveMode;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
@@ -113,9 +117,20 @@ public class DictTypeServiceImpl implements DictTypeService {
         // 校验正确性
         validateDictTypeForCreateOrUpdate(inputVO.getId(), inputVO.getName(), null);
         InfraDictType oldType = infraDictTypeRepository.findById(inputVO.getId()).get();
+        for(DictTypeUpdateInput.data data : inputVO.getDatas()){
+            if(Objects.equals(data.getOperateType(), "delete")){
+                infraDictDataRepository.deleteById(data.getId());
+            }else if(Objects.equals(data.getOperateType(), "create")){
+                infraDictDataRepository.insert(DictDataConvert.INSTANCE.updateInputConvert(data));
+            }else {
+                infraDictDataRepository.update(DictDataConvert.INSTANCE.updateInputConvert(data));
+            }
+        }
+        inputVO.setDatas(Collections.emptyList());
         // 更新字典类型
         InfraDictType updateType = DictTypeConvert.INSTANCE.updateInputConvert(inputVO);
-        infraDictTypeRepository.update(updateType);
+
+        infraDictTypeRepository.saveCommand(updateType).setDissociateAction(InfraDictDataProps.TYPE, DissociateAction.DELETE);
         updateType = infraDictTypeRepository.findById(inputVO.getId()).get();
         codegenEngine.dictUpdateExecute(oldType, updateType);
         return true;

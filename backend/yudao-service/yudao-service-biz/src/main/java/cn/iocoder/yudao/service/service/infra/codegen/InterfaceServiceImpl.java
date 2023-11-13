@@ -303,7 +303,7 @@ public class InterfaceServiceImpl implements InterfaceService{
                 Optional<InfraInterfaceParam> opOldParam = infraInterfaceParamRepository.findById(subclassParam.getId());
                 if (!opOldParam.isPresent())
                     throw exception(CODEGEN_INTERFACE_PARAM_NOT_EXITS);
-                if (!EntityUtils.isEquals(opOldParam, updateParam))
+                if (!EntityUtils.isEquals(opOldParam.get(), updateParam))
                     infraInterfaceParamRepository.update(updateParam);
             }
         }

@@ -29,5 +29,8 @@ public class DictTypeGetOutput extends InfraDictTypeBase {
     @Schema(description = "字典数据")
     @Data
     public static class data extends InfraDictDataBase {
+
+        @Schema(description = "dataID")
+        private UUID id;
     }
 }

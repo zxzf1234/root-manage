@@ -1,0 +1,1 @@
+alter table system_operate_log modify result_msg TEXT NOT NULL COMMENT '结果提示';

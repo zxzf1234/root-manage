@@ -1,5 +1,5 @@
 <template>
-  <Dialog v-model="dialogVisible" :title="dialogTitle">
+  <Dialog v-model="dialogVisible" :title="dialogTitle" width="1000px">
     <el-form>
       <el-form-item>
         <el-button type="primary" @click="submitForm"> 保存 </el-button>
@@ -73,7 +73,7 @@
         <el-input
           v-model="row.dataEnum"
           @blur="row.dataEnum = row.dataEnum.toUpperCase()"
-          @keyup="row.dataEnum = row.dataEnum.replace(/[^a-zA-Z]/g, '')"
+          @keyup="row.dataEnum = row.dataEnum.replace(/[^a-zA-Z_]/g, '')"
         />
       </template>
       <template #sort="{ row }">

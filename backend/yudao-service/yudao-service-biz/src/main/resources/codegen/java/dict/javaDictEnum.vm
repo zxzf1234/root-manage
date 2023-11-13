@@ -2,15 +2,17 @@ package ${basePackage}.service.enums.${moduleName};
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+#if($isNumber == 1)
 import java.util.Arrays;
 import ${basePackage}.framework.common.core.IntArrayValuable;
+#end
 
 /**
 * ${dictType.name}
 */
 @Getter
 @AllArgsConstructor
-public enum ${typeUpHump}Enum implements IntArrayValuable {
+public enum ${typeUpHump}Enum #if($isNumber == 1)implements IntArrayValuable #end{
 
 #set($n = 0)
 #set($dataLenght = $datas.size())
@@ -19,13 +21,16 @@ public enum ${typeUpHump}Enum implements IntArrayValuable {
     /**
     * ${data.label}
     */
-    ${data.dataEnum}(${data.value})#if($n == $dataLenght);#else,#end
+    ${data.dataEnum}(#if($isNumber != 1)"#end${data.value}#if($isNumber != 1)"#end)#if($n == $dataLenght);#else,#end
 #end
 
-    private final Integer value;
+    private final#if($isNumber == 1) Integer#else String#end value;
+#if($isNumber == 1)
 
     public static final int[] ARRAYS = Arrays.stream(values()).mapToInt(${typeUpHump}Enum::getValue).toArray();
 
     @Override
     public int[] array() { return ARRAYS;}
+#end
+
 }

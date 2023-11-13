@@ -1,0 +1,1 @@
+insert ignore into INFRA_INTERFACE_PARAM(CREATOR_ID, UPDATER_ID, ID, NAME, COMMENT, IS_LIST, VARIABLE_TYPE, RELATED_ID, RELATED_TYPE, EXAMPLE, REQUIRED, PARENT_ID, PARENT_TYPE, INOUT_TYPE) values('1', '1', 'a21e5e98-3c2c-4dcb-a79f-b7b7fef11341', 'operateType', '操作类型', 0, 'String', '', '0', '', 0, 'f22a34ce-8358-4362-8a36-f7aee57ca723', '1', '0');

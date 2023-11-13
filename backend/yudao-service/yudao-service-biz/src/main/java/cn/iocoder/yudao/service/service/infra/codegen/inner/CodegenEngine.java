@@ -1,9 +1,11 @@
 package cn.iocoder.yudao.service.service.infra.codegen.inner;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.map.MapUtil;
+import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.RuntimeUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.template.TemplateConfig;
@@ -32,6 +34,7 @@ import cn.iocoder.yudao.service.model.infra.codegen.*;
 import cn.iocoder.yudao.service.model.infra.data.InfraDictType;
 import cn.iocoder.yudao.service.repository.infra.codegen.*;
 import cn.iocoder.yudao.service.vo.infra.codegen.database.DatabaseUpdateReq;
+import org.jsoup.internal.StringUtil;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -1141,12 +1144,8 @@ public class CodegenEngine {
         bindingMap.put("typeUp", type.type().toUpperCase());
         // 字典类型 驼峰命名 例子SystemDataScope
         bindingMap.put("typeUpHump", upperFirst(toCamelCase(type.type())));
-        // 后缀名
-        bindingMap.put("suffixName",type.type().substring(type.type().lastIndexOf("_") + 1));
-
-        // 后缀名首字母大写
-        bindingMap.put("suffixNameUp",upperFirst(type.type().substring(type.type().lastIndexOf("_") + 1)));
-
+        long numberCount = type.datas().stream().filter(data-> StringUtil.isNumeric(data.label())).count();
+        bindingMap.put("isNumber", numberCount == type.datas().size() ? 1 : 0);
         return bindingMap;
     }
 

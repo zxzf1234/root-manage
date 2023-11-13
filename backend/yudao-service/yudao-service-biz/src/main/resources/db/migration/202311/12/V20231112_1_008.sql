@@ -1,0 +1,2 @@
+update INFRA_DICT_DATA set UPDATER_ID = '1', SORT = '0', LABEL = '超级管理员', VALUE = 'super_admin', TYPE_ID = '230c2944-c4d1-458f-8ece-137d0d6bc8f7', STATUS = '0', COLOR_TYPE = '', CSS_CLASS = '', REMARK = '', DATA_ENUM = 'SUPER_ADMIN' where ID = '73464e25-4ebc-4019-ab6a-7d7021f15084';
+update INFRA_DICT_DATA set UPDATER_ID = '1', SORT = '1', LABEL = '租户管理员', VALUE = 'tenant_admin', TYPE_ID = '230c2944-c4d1-458f-8ece-137d0d6bc8f7', STATUS = '0', COLOR_TYPE = '', CSS_CLASS = '', REMARK = '', DATA_ENUM = 'TENANT_ADMIN' where ID = 'fd49961f-bbe0-4260-9443-611b146f5713';

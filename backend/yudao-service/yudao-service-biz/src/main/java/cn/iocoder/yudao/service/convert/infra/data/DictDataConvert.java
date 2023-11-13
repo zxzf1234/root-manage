@@ -7,6 +7,7 @@ import cn.iocoder.yudao.service.vo.infra.data.dictData.DictDataListOutput;
 import cn.iocoder.yudao.service.model.infra.data.InfraDictData;
 import java.util.*;
 
+import cn.iocoder.yudao.service.vo.infra.data.dictType.DictTypeUpdateInput;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -36,5 +37,7 @@ public interface DictDataConvert {
     DictDataRespDTO convert02(InfraDictData bean);
 
     List<DictDataListOutput> listListOutputConvert(List<InfraDictData> output);
+
+    InfraDictData updateInputConvert(DictTypeUpdateInput.data input);
 
 }

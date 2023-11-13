@@ -90,14 +90,14 @@ export const CommonStatusEnum = {
 
 /**
  * 角色标识
- * @param SUPERADMIN 超级管理员
- * @param TETENTADMIN 租户管理员
+ * @param SUPER_ADMIN 超级管理员
+ * @param TENANT_ADMIN 租户管理员
  */
 export const SystemRoleCodeEnum = {
   //超级管理员
-  SUPERADMIN: 'super_admin',
+  SUPER_ADMIN: 'super_admin',
   //租户管理员
-  TETENTADMIN: 'tetent_admin'
+  TENANT_ADMIN: 'tenant_admin'
 }
 
 /**

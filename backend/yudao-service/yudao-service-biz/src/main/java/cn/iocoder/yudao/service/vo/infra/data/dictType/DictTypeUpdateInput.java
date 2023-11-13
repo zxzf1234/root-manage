@@ -24,6 +24,12 @@ public class DictTypeUpdateInput extends InfraDictTypeBase {
     @Data
     @Valid
     public static class data extends InfraDictDataBase {
+
+        @Schema(description = "id", requiredMode = Schema.RequiredMode.REQUIRED)
+        private UUID id;
+
+        @Schema(description = "操作类型")
+        private String operateType;
     }
 
 }
