@@ -1,0 +1,36 @@
+package cn.iocoder.yudao.service.enums.infra.oauth2;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+/**
+* OAuth 2.0 授权类型
+*/
+@Getter
+@AllArgsConstructor
+public enum InfraOauth2GrantTypeEnum {
+
+    /**
+    * password
+    */
+    PASSWORD("password"),
+    /**
+    * authorization_code
+    */
+    AUTHORIZATION_CODE("authorization_code"),
+    /**
+    * implicit
+    */
+    IMPLICIT("implicit"),
+    /**
+    * client_credentials
+    */
+    CLIENT_CREDENTIALS("client_credentials"),
+    /**
+    * refresh_token
+    */
+    REFRESH_TOKEN("refresh_token");
+
+    private final String value;
+
+}

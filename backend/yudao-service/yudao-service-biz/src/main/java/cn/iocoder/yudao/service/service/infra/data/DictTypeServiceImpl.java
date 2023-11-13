@@ -117,20 +117,17 @@ public class DictTypeServiceImpl implements DictTypeService {
         // 校验正确性
         validateDictTypeForCreateOrUpdate(inputVO.getId(), inputVO.getName(), null);
         InfraDictType oldType = infraDictTypeRepository.findById(inputVO.getId()).get();
+        List<DictTypeUpdateInput.data> newDatas = new ArrayList<>();
         for(DictTypeUpdateInput.data data : inputVO.getDatas()){
-            if(Objects.equals(data.getOperateType(), "delete")){
-                infraDictDataRepository.deleteById(data.getId());
-            }else if(Objects.equals(data.getOperateType(), "create")){
-                infraDictDataRepository.insert(DictDataConvert.INSTANCE.updateInputConvert(data));
-            }else {
-                infraDictDataRepository.update(DictDataConvert.INSTANCE.updateInputConvert(data));
+            if(!Objects.equals(data.getOperateType(), "delete")){
+                newDatas.add(data);
             }
         }
-        inputVO.setDatas(Collections.emptyList());
+        inputVO.setDatas(newDatas);
         // 更新字典类型
         InfraDictType updateType = DictTypeConvert.INSTANCE.updateInputConvert(inputVO);
 
-        infraDictTypeRepository.saveCommand(updateType).setDissociateAction(InfraDictDataProps.TYPE, DissociateAction.DELETE);
+        infraDictTypeRepository.update(updateType);
         updateType = infraDictTypeRepository.findById(inputVO.getId()).get();
         codegenEngine.dictUpdateExecute(oldType, updateType);
         return true;

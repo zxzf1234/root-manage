@@ -7,7 +7,7 @@ import cn.iocoder.yudao.framework.common.util.collection.SetUtils;
 import cn.iocoder.yudao.framework.operatelog.core.annotations.OperateLog;
 import cn.iocoder.yudao.framework.security.config.SecurityProperties;
 import cn.iocoder.yudao.service.convert.infra.auth.AuthConvert;
-import cn.iocoder.yudao.service.enums.infra.logger.LoginLogTypeEnum;
+import cn.iocoder.yudao.service.enums.system.login.SystemLoginTypeEnum;
 import cn.iocoder.yudao.service.enums.system.permission.MenuTypeEnum;
 import cn.iocoder.yudao.service.model.infra.data.SystemMenu;
 import cn.iocoder.yudao.service.model.system.permission.SystemRole;
@@ -32,7 +32,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
 import static cn.iocoder.yudao.framework.security.core.util.SecurityFrameworkUtils.getLoginUserId;
@@ -74,7 +73,7 @@ public class AuthController {
     public CommonResult<Boolean> logout(HttpServletRequest request) {
         String token = obtainAuthorization(request, securityProperties.getTokenHeader());
         if (StrUtil.isNotBlank(token)) {
-            authService.logout(token, LoginLogTypeEnum.LOGOUT_SELF.getType());
+            authService.logout(token, SystemLoginTypeEnum.LOGOUT_SELF.getValue());
         }
         return success(true);
     }

@@ -1144,8 +1144,8 @@ public class CodegenEngine {
         bindingMap.put("typeUp", type.type().toUpperCase());
         // 字典类型 驼峰命名 例子SystemDataScope
         bindingMap.put("typeUpHump", upperFirst(toCamelCase(type.type())));
-        long numberCount = type.datas().stream().filter(data-> StringUtil.isNumeric(data.label())).count();
-        bindingMap.put("isNumber", numberCount == type.datas().size() ? 1 : 0);
+        long numberCount = type.datas().stream().filter(data-> StringUtil.isNumeric(data.value())).count();
+        bindingMap.put("isNumber", (numberCount == type.datas().size() ? 1 : 0));
         return bindingMap;
     }
 

@@ -48,7 +48,7 @@
           style="width: 500px"
         >
           <el-option
-            v-for="dict in getIntDictOptions(DICT_TYPE.SYSTEM_OAUTH2_GRANT_TYPE)"
+            v-for="dict in getIntDictOptions(DICT_TYPE.INFRA_OAUTH2_GRANT_TYPE)"
             :key="dict.value"
             :label="dict.label"
             :value="dict.value"

@@ -21,8 +21,8 @@ import cn.iocoder.yudao.service.api.infra.oauth2.dto.OAuth2AccessTokenRespDTO;
 import cn.iocoder.yudao.service.api.system.sms.SmsCodeApi;
 import cn.iocoder.yudao.service.api.system.social.SocialUserApi;
 import cn.iocoder.yudao.service.api.system.social.dto.SocialUserBindReqDTO;
-import cn.iocoder.yudao.service.enums.infra.logger.LoginLogTypeEnum;
-import cn.iocoder.yudao.service.enums.infra.logger.LoginResultEnum;
+import cn.iocoder.yudao.service.enums.system.login.SystemLoginTypeEnum;
+import cn.iocoder.yudao.service.enums.system.login.SystemLoginResultEnum;
 import cn.iocoder.yudao.service.enums.infra.oauth2.OAuth2ClientConstants;
 import cn.iocoder.yudao.service.enums.system.sms.SmsSceneEnum;
 import cn.iocoder.yudao.service.enums.system.social.SocialTypeEnum;
@@ -79,7 +79,7 @@ public class MemberAuthServiceImpl implements MemberAuthService {
         }
 
         // 创建 Token 令牌，记录登录日志
-        return createTokenAfterLoginSuccess(user, reqVO.getMobile(), LoginLogTypeEnum.LOGIN_MOBILE);
+        return createTokenAfterLoginSuccess(user, reqVO.getMobile(), SystemLoginTypeEnum.LOGIN_MOBILE);
     }
 
     @Override
@@ -100,7 +100,7 @@ public class MemberAuthServiceImpl implements MemberAuthService {
         }
 
         // 创建 Token 令牌，记录登录日志
-        return createTokenAfterLoginSuccess(user, reqVO.getMobile(), LoginLogTypeEnum.LOGIN_SMS);
+        return createTokenAfterLoginSuccess(user, reqVO.getMobile(), SystemLoginTypeEnum.LOGIN_SMS);
     }
 
     @Override
@@ -119,7 +119,7 @@ public class MemberAuthServiceImpl implements MemberAuthService {
         }
 
         // 创建 Token 令牌，记录登录日志
-        return createTokenAfterLoginSuccess(user, user.getMobile(), LoginLogTypeEnum.LOGIN_SOCIAL);
+        return createTokenAfterLoginSuccess(user, user.getMobile(), SystemLoginTypeEnum.LOGIN_SOCIAL);
     }
 
     @Override
@@ -140,12 +140,12 @@ public class MemberAuthServiceImpl implements MemberAuthService {
                 SocialTypeEnum.WECHAT_MINI_APP.getType(), reqVO.getLoginCode(), ""));
 
         // 创建 Token 令牌，记录登录日志
-        return createTokenAfterLoginSuccess(user, user.getMobile(), LoginLogTypeEnum.LOGIN_SOCIAL);
+        return createTokenAfterLoginSuccess(user, user.getMobile(), SystemLoginTypeEnum.LOGIN_SOCIAL);
     }
 
-    private AppAuthLoginRespVO createTokenAfterLoginSuccess(MemberUserDO user, String mobile, LoginLogTypeEnum logType) {
+    private AppAuthLoginRespVO createTokenAfterLoginSuccess(MemberUserDO user, String mobile, SystemLoginTypeEnum logType) {
         // 插入登陆日志
-        createLoginLog(user.getId(), mobile, logType, LoginResultEnum.SUCCESS);
+        createLoginLog(user.getId(), mobile, logType, SystemLoginResultEnum.SUCCESS);
         // 创建 Token 令牌
         OAuth2AccessTokenRespDTO accessTokenRespDTO = oauth2TokenApi.createAccessToken(new OAuth2AccessTokenCreateReqDTO()
                 .setUserId(user.getId()).setUserType(getUserType().getValue())
@@ -160,39 +160,39 @@ public class MemberAuthServiceImpl implements MemberAuthService {
     }
 
     private MemberUserDO login0(String mobile, String password) {
-        final LoginLogTypeEnum logTypeEnum = LoginLogTypeEnum.LOGIN_MOBILE;
+        final SystemLoginTypeEnum logTypeEnum = SystemLoginTypeEnum.LOGIN_MOBILE;
         // 校验账号是否存在
         MemberUserDO user = userService.getUserByMobile(mobile);
         if (user == null) {
-            createLoginLog(null, mobile, logTypeEnum, LoginResultEnum.BAD_CREDENTIALS);
+            createLoginLog(null, mobile, logTypeEnum, SystemLoginResultEnum.BAD_CREDENTIALS);
             throw exception(AUTH_LOGIN_BAD_CREDENTIALS);
         }
         if (!userService.isPasswordMatch(password, user.getPassword())) {
-            createLoginLog(user.getId(), mobile, logTypeEnum, LoginResultEnum.BAD_CREDENTIALS);
+            createLoginLog(user.getId(), mobile, logTypeEnum, SystemLoginResultEnum.BAD_CREDENTIALS);
             throw exception(AUTH_LOGIN_BAD_CREDENTIALS);
         }
         // 校验是否禁用
         if (ObjectUtil.notEqual(user.getStatus(), CommonStatusEnum.ENABLE.getStatus())) {
-            createLoginLog(user.getId(), mobile, logTypeEnum, LoginResultEnum.USER_DISABLED);
+            createLoginLog(user.getId(), mobile, logTypeEnum, SystemLoginResultEnum.USER_DISABLED);
             throw exception(AUTH_LOGIN_USER_DISABLED);
         }
         return user;
     }
 
-    private void createLoginLog(Long userId, String mobile, LoginLogTypeEnum logType, LoginResultEnum loginResult) {
+    private void createLoginLog(Long userId, String mobile, SystemLoginTypeEnum logType, SystemLoginResultEnum loginResult) {
         // 插入登录日志
         LoginLogCreateReqDTO reqDTO = new LoginLogCreateReqDTO();
-        reqDTO.setLogType(logType.getType());
+        reqDTO.setLogType(logType.getValue());
         reqDTO.setTraceId(TracerUtils.getTraceId());
         reqDTO.setUserId(userId);
         reqDTO.setUserType(getUserType().getValue());
         reqDTO.setUsername(mobile);
         reqDTO.setUserAgent(ServletUtils.getUserAgent());
         reqDTO.setUserIp(getClientIP());
-        reqDTO.setResult(loginResult.getResult());
+        reqDTO.setResult(loginResult.getValue());
         loginLogApi.createLoginLog(reqDTO);
         // 更新最后登录时间
-        if (userId != null && Objects.equals(LoginResultEnum.SUCCESS.getResult(), loginResult.getResult())) {
+        if (userId != null && Objects.equals(SystemLoginResultEnum.SUCCESS.getValue(), loginResult.getValue())) {
             userService.updateUserLogin(userId, getClientIP());
         }
     }
@@ -275,14 +275,14 @@ public class MemberAuthServiceImpl implements MemberAuthService {
 
     private void createLogoutLog(Long userId) {
         LoginLogCreateReqDTO reqDTO = new LoginLogCreateReqDTO();
-        reqDTO.setLogType(LoginLogTypeEnum.LOGOUT_SELF.getType());
+        reqDTO.setLogType(SystemLoginTypeEnum.LOGOUT_SELF.getValue());
         reqDTO.setTraceId(TracerUtils.getTraceId());
         reqDTO.setUserId(userId);
         reqDTO.setUserType(getUserType().getValue());
         reqDTO.setUsername(getMobile(userId));
         reqDTO.setUserAgent(ServletUtils.getUserAgent());
         reqDTO.setUserIp(getClientIP());
-        reqDTO.setResult(LoginResultEnum.SUCCESS.getResult());
+        reqDTO.setResult(SystemLoginResultEnum.SUCCESS.getValue());
         loginLogApi.createLoginLog(reqDTO);
     }
 

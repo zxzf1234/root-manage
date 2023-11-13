@@ -13,7 +13,7 @@ import cn.iocoder.yudao.framework.test.core.ut.BaseMockitoUnitTest;
 import cn.iocoder.yudao.service.vo.infra.oauth2.open.OAuth2OpenAccessTokenRespVO;
 import cn.iocoder.yudao.service.vo.infra.oauth2.open.OAuth2OpenAuthorizeInfoRespVO;
 import cn.iocoder.yudao.service.vo.infra.oauth2.open.OAuth2OpenCheckTokenRespVO;
-import cn.iocoder.yudao.service.enums.infra.oauth2.OAuth2GrantTypeEnum;
+import cn.iocoder.yudao.service.enums.infra.oauth2.InfraOauth2GrantTypeEnum;
 import cn.iocoder.yudao.service.model.infra.oauth2.*;
 import cn.iocoder.yudao.service.service.infra.oauth2.OAuth2ApproveService;
 import cn.iocoder.yudao.service.service.infra.oauth2.OAuth2ClientService;
@@ -65,7 +65,7 @@ public class OAuth2OpenControllerTest extends BaseMockitoUnitTest {
     @Test
     public void testPostAccessToken_authorizationCode() {
         // 准备参数
-        String granType = OAuth2GrantTypeEnum.AUTHORIZATION_CODE.getGrantType();
+        String granType = InfraOauth2GrantTypeEnum.AUTHORIZATION_CODE.getValue();
         String code = randomString();
         String redirectUri = randomString();
         String state = randomString();
@@ -96,7 +96,7 @@ public class OAuth2OpenControllerTest extends BaseMockitoUnitTest {
     @Test
     public void testPostAccessToken_password() {
         // 准备参数
-        String granType = OAuth2GrantTypeEnum.PASSWORD.getGrantType();
+        String granType = InfraOauth2GrantTypeEnum.PASSWORD.getValue();
         String username = randomString();
         String password = randomString();
         String scope = "write read";
@@ -128,7 +128,7 @@ public class OAuth2OpenControllerTest extends BaseMockitoUnitTest {
     @Test
     public void testPostAccessToken_refreshToken() {
         // 准备参数
-        String granType = OAuth2GrantTypeEnum.REFRESH_TOKEN.getGrantType();
+        String granType = InfraOauth2GrantTypeEnum.REFRESH_TOKEN.getValue();
         String refreshToken = randomString();
         String password = randomString();
         HttpServletRequest request = mockRequest("test_client_id", "test_client_secret");
@@ -159,7 +159,7 @@ public class OAuth2OpenControllerTest extends BaseMockitoUnitTest {
     public void testPostAccessToken_implicit() {
         // 调用，并断言
         assertServiceException(() -> oauth2OpenController.postAccessToken(null,
-                        OAuth2GrantTypeEnum.IMPLICIT.getGrantType(), null, null, null,
+                        InfraOauth2GrantTypeEnum.IMPLICIT.getValue(), null, null, null,
                         null, null, null, null),
                 new ErrorCode(400, "Token 接口不支持 implicit 授权模式"));
     }

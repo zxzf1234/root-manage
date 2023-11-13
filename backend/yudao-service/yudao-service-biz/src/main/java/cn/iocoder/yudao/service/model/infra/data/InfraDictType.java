@@ -23,7 +23,7 @@ public interface InfraDictType extends BaseEntity {
 
     String secondModule();
 
-    @OneToMany(mappedBy = "type")
+    @OneToMany(mappedBy = "type", orderedProps =@OrderedProp("sort"))
     List<InfraDictData> datas();
 
 }

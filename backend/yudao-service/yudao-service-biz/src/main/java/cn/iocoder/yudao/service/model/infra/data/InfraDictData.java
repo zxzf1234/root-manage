@@ -26,6 +26,7 @@ public interface InfraDictData extends BaseEntity {
     @Key
     @ManyToOne
     @Nullable
+    @OnDissociate(DissociateAction.DELETE)
     InfraDictType type();
 
     Integer status();

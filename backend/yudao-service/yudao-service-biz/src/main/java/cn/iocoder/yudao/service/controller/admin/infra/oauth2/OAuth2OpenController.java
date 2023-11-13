@@ -13,7 +13,7 @@ import cn.iocoder.yudao.service.vo.infra.oauth2.open.OAuth2OpenAccessTokenRespVO
 import cn.iocoder.yudao.service.vo.infra.oauth2.open.OAuth2OpenAuthorizeInfoRespVO;
 import cn.iocoder.yudao.service.vo.infra.oauth2.open.OAuth2OpenCheckTokenRespVO;
 import cn.iocoder.yudao.service.convert.infra.oauth2.OAuth2OpenConvert;
-import cn.iocoder.yudao.service.enums.infra.oauth2.OAuth2GrantTypeEnum;
+import cn.iocoder.yudao.service.enums.infra.oauth2.InfraOauth2GrantTypeEnum;
 import cn.iocoder.yudao.service.model.infra.oauth2.SystemOauth2AccessToken;
 import cn.iocoder.yudao.service.model.infra.oauth2.SystemOauth2Approve;
 import cn.iocoder.yudao.service.model.infra.oauth2.SystemOauth2Client;
@@ -107,11 +107,11 @@ public class OAuth2OpenController {
                                                                       @RequestParam(value = "refresh_token", required = false) String refreshToken) { // 刷新模式
         List<String> scopes = OAuth2Utils.buildScopes(scope);
         // 1.1 校验授权类型
-        OAuth2GrantTypeEnum grantTypeEnum = ArrayUtil.firstMatch(o -> o.getGrantType().equals(grantType), OAuth2GrantTypeEnum.values());
+        InfraOauth2GrantTypeEnum grantTypeEnum = ArrayUtil.firstMatch(o -> o.getValue().equals(grantType), InfraOauth2GrantTypeEnum.values());
         if (grantTypeEnum == null) {
             throw exception0(BAD_REQUEST.getCode(), StrUtil.format("未知授权类型({})", grantType));
         }
-        if (grantTypeEnum == OAuth2GrantTypeEnum.IMPLICIT) {
+        if (grantTypeEnum == InfraOauth2GrantTypeEnum.IMPLICIT) {
             throw exception0(BAD_REQUEST.getCode(), "Token 接口不支持 implicit 授权模式");
         }
 
@@ -229,10 +229,10 @@ public class OAuth2OpenController {
         // 0. 校验用户已经登录。通过 Spring Security 实现
 
         // 1.1 校验 responseType 是否满足 code 或者 token 值
-        OAuth2GrantTypeEnum grantTypeEnum = getGrantTypeEnum(responseType);
+        InfraOauth2GrantTypeEnum grantTypeEnum = getGrantTypeEnum(responseType);
         // 1.2 校验 redirectUri 重定向域名是否合法 + 校验 scope 是否在 Client 授权范围内
         SystemOauth2Client client = oauth2ClientService.validOAuthClientFromCache(clientId, null,
-                grantTypeEnum.getGrantType(), scopes.keySet(), redirectUri);
+                grantTypeEnum.getValue(), scopes.keySet(), redirectUri);
 
         // 2.1 假设 approved 为 null，说明是场景一
         if (Boolean.TRUE.equals(autoApprove)) {
@@ -250,19 +250,19 @@ public class OAuth2OpenController {
 
         // 3.1 如果是 code 授权码模式，则发放 code 授权码，并重定向
         List<String> approveScopes = convertList(scopes.entrySet(), Map.Entry::getKey, Map.Entry::getValue);
-        if (grantTypeEnum == OAuth2GrantTypeEnum.AUTHORIZATION_CODE) {
+        if (grantTypeEnum == InfraOauth2GrantTypeEnum.AUTHORIZATION_CODE) {
             return success(getAuthorizationCodeRedirect(getLoginUserId(), client, approveScopes, redirectUri, state));
         }
         // 3.2 如果是 token 则是 implicit 简化模式，则发送 accessToken 访问令牌，并重定向
         return success(getImplicitGrantRedirect(getLoginUserId(), client, approveScopes, redirectUri, state));
     }
 
-    private static OAuth2GrantTypeEnum getGrantTypeEnum(String responseType) {
+    private static InfraOauth2GrantTypeEnum getGrantTypeEnum(String responseType) {
         if (StrUtil.equals(responseType, "code")) {
-            return OAuth2GrantTypeEnum.AUTHORIZATION_CODE;
+            return InfraOauth2GrantTypeEnum.AUTHORIZATION_CODE;
         }
         if (StrUtil.equalsAny(responseType, "token")) {
-            return OAuth2GrantTypeEnum.IMPLICIT;
+            return InfraOauth2GrantTypeEnum.IMPLICIT;
         }
         throw exception0(BAD_REQUEST.getCode(), "response_type 参数值只允许 code 和 token");
     }

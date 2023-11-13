@@ -19,8 +19,8 @@ import static cn.iocoder.yudao.framework.common.util.date.LocalDateTimeUtils.bui
 import static cn.iocoder.yudao.framework.common.util.object.ObjectUtils.cloneIgnoreId;
 import static cn.iocoder.yudao.framework.test.core.util.AssertUtils.assertPojoEquals;
 import static cn.iocoder.yudao.framework.test.core.util.RandomUtils.randomPojo;
-import static cn.iocoder.yudao.service.enums.infra.logger.LoginResultEnum.CAPTCHA_CODE_ERROR;
-import static cn.iocoder.yudao.service.enums.infra.logger.LoginResultEnum.SUCCESS;
+import static cn.iocoder.yudao.service.enums.system.logger.LoginResultEnum.CAPTCHA_CODE_ERROR;
+import static cn.iocoder.yudao.service.enums.system.logger.LoginResultEnum.SUCCESS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Import(LoginLogServiceImpl.class)

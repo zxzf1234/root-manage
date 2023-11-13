@@ -136,6 +136,14 @@
             <groupId>org.babyfish.jimmer</groupId>
             <artifactId>jimmer-spring-boot-starter</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-quartz</artifactId>
+        </dependency>
 
     </dependencies>
 

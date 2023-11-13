@@ -13,7 +13,7 @@
       <el-form-item label="错误码类型" prop="type">
         <el-select v-model="queryParams.type" placeholder="请选择错误码类型" clearable>
           <el-option
-            v-for="dict in getIntDictOptions(DICT_TYPE.SYSTEM_ERROR_CODE_TYPE)"
+            v-for="dict in getIntDictOptions(DICT_TYPE.INFRA_ERROR_CODE_TYPE)"
             :key="dict.value"
             :label="dict.label"
             :value="dict.value"
@@ -89,7 +89,7 @@
       <el-table-column label="编号" align="center" prop="id" />
       <el-table-column label="类型" align="center" prop="type" width="80">
         <template #default="scope">
-          <dict-tag :type="DICT_TYPE.SYSTEM_ERROR_CODE_TYPE" :value="scope.row.type" />
+          <dict-tag :type="DICT_TYPE.INFRA_ERROR_CODE_TYPE" :value="scope.row.type" />
         </template>
       </el-table-column>
       <el-table-column label="应用名" align="center" prop="applicationName" width="200" />

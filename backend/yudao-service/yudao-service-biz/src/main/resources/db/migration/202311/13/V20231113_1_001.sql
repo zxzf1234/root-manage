@@ -1,0 +1,5 @@
+update INFRA_DICT_DATA set UPDATER_ID = '1', SORT = '0', LABEL = '初始化', VALUE = '0', TYPE_ID = '7e5eb37b-d5f0-df78-5edd-a5ed73879029', STATUS = '0', COLOR_TYPE = 'primary', CSS_CLASS = '', REMARK = '邮件发送状态 - 初始化
+', DATA_ENUM = 'INIT' where ID = '461750f7-5794-11ee-873c-e073e73d10a7';
+update INFRA_DICT_DATA set UPDATER_ID = '1', SORT = '10', LABEL = '发送成功', VALUE = '10', TYPE_ID = '7e5eb37b-d5f0-df78-5edd-a5ed73879029', STATUS = '0', COLOR_TYPE = 'success', CSS_CLASS = '', REMARK = '邮件发送状态 - 发送成功', DATA_ENUM = 'SUCCESS' where ID = '4617513a-5794-11ee-873c-e073e73d10a7';
+update INFRA_DICT_DATA set UPDATER_ID = '1', SORT = '20', LABEL = '发送失败', VALUE = '20', TYPE_ID = '7e5eb37b-d5f0-df78-5edd-a5ed73879029', STATUS = '0', COLOR_TYPE = 'danger', CSS_CLASS = '', REMARK = '邮件发送状态 - 发送失败', DATA_ENUM = 'FAILURE' where ID = '4617517f-5794-11ee-873c-e073e73d10a7';
+update INFRA_DICT_DATA set UPDATER_ID = '1', SORT = '30', LABEL = '不发送', VALUE = '30', TYPE_ID = '7e5eb37b-d5f0-df78-5edd-a5ed73879029', STATUS = '0', COLOR_TYPE = 'info', CSS_CLASS = '', REMARK = '邮件发送状态 - 不发送', DATA_ENUM = 'IGNORE' where ID = '461751c1-5794-11ee-873c-e073e73d10a7';

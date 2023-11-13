@@ -10,8 +10,8 @@ import cn.iocoder.yudao.service.api.infra.logger.dto.LoginLogCreateReqDTO;
 import cn.iocoder.yudao.service.api.system.sms.SmsCodeApi;
 import cn.iocoder.yudao.service.api.system.social.dto.SocialUserBindReqDTO;
 import cn.iocoder.yudao.service.convert.infra.auth.AuthConvert;
-import cn.iocoder.yudao.service.enums.infra.logger.LoginLogTypeEnum;
-import cn.iocoder.yudao.service.enums.infra.logger.LoginResultEnum;
+import cn.iocoder.yudao.service.enums.system.login.SystemLoginTypeEnum;
+import cn.iocoder.yudao.service.enums.system.login.SystemLoginResultEnum;
 import cn.iocoder.yudao.service.enums.infra.oauth2.OAuth2ClientConstants;
 import cn.iocoder.yudao.service.enums.system.sms.SmsSceneEnum;
 import cn.iocoder.yudao.service.model.infra.oauth2.SystemOauth2AccessToken;
@@ -73,20 +73,20 @@ public class AdminAuthServiceImpl implements AdminAuthService {
 
     @Override
     public SystemUser authenticate(String username, String password) {
-        final LoginLogTypeEnum logTypeEnum = LoginLogTypeEnum.LOGIN_USERNAME;
+        final SystemLoginTypeEnum logTypeEnum = SystemLoginTypeEnum.LOGIN_USERNAME;
         // 校验账号是否存在
         Optional<SystemUser> opUser = userService.getUserByUsername(username);
         if (!opUser.isPresent()) {
-            createLoginLog(null, username, logTypeEnum, LoginResultEnum.BAD_CREDENTIALS);
+            createLoginLog(null, username, logTypeEnum, SystemLoginResultEnum.BAD_CREDENTIALS);
             throw exception(AUTH_LOGIN_BAD_CREDENTIALS);
         }
         if (!userService.isPasswordMatch(password, opUser.get().password())) {
-            createLoginLog(opUser.get().id(), username, logTypeEnum, LoginResultEnum.BAD_CREDENTIALS);
+            createLoginLog(opUser.get().id(), username, logTypeEnum, SystemLoginResultEnum.BAD_CREDENTIALS);
             throw exception(AUTH_LOGIN_BAD_CREDENTIALS);
         }
         // 校验是否禁用
         if (ObjectUtil.notEqual(opUser.get().status(), CommonStatusEnum.ENABLE.getStatus())) {
-            createLoginLog(opUser.get().id(), username, logTypeEnum, LoginResultEnum.USER_DISABLED);
+            createLoginLog(opUser.get().id(), username, logTypeEnum, SystemLoginResultEnum.USER_DISABLED);
             throw exception(AUTH_LOGIN_USER_DISABLED);
         }
         return opUser.get();
@@ -106,7 +106,7 @@ public class AdminAuthServiceImpl implements AdminAuthService {
                     reqVO.getSocialType(), reqVO.getSocialCode(), reqVO.getSocialState()));
         }
         // 创建 Token 令牌，记录登录日志
-        return createTokenAfterLoginSuccess(user.id(), reqVO.getUsername(), LoginLogTypeEnum.LOGIN_USERNAME);
+        return createTokenAfterLoginSuccess(user.id(), reqVO.getUsername(), SystemLoginTypeEnum.LOGIN_USERNAME);
     }
 
     @Override
@@ -131,24 +131,24 @@ public class AdminAuthServiceImpl implements AdminAuthService {
         }
 
         // 创建 Token 令牌，记录登录日志
-        return createTokenAfterLoginSuccess(opUser.get().id(), reqVO.getMobile(), LoginLogTypeEnum.LOGIN_MOBILE);
+        return createTokenAfterLoginSuccess(opUser.get().id(), reqVO.getMobile(), SystemLoginTypeEnum.LOGIN_MOBILE);
     }
 
     private void createLoginLog(Long userId, String username,
-                                LoginLogTypeEnum logTypeEnum, LoginResultEnum loginResult) {
+                                SystemLoginTypeEnum logTypeEnum, SystemLoginResultEnum loginResult) {
         // 插入登录日志
         LoginLogCreateReqDTO reqDTO = new LoginLogCreateReqDTO();
-        reqDTO.setLogType(logTypeEnum.getType());
+        reqDTO.setLogType(logTypeEnum.getValue());
         reqDTO.setTraceId(TracerUtils.getTraceId());
         reqDTO.setUserId(userId);
         reqDTO.setUserType(getUserType().getValue());
         reqDTO.setUsername(username);
         reqDTO.setUserAgent(ServletUtils.getUserAgent());
         reqDTO.setUserIp(ServletUtils.getClientIP());
-        reqDTO.setResult(loginResult.getResult());
+        reqDTO.setResult(loginResult.getValue());
         loginLogService.createLoginLog(reqDTO);
         // 更新最后登录时间
-        if (userId != null && Objects.equals(LoginResultEnum.SUCCESS.getResult(), loginResult.getResult())) {
+        if (userId != null && Objects.equals(SystemLoginResultEnum.SUCCESS.getValue(), loginResult.getValue())) {
             userService.updateUserLogin(userId, ServletUtils.getClientIP());
         }
     }
@@ -169,7 +169,7 @@ public class AdminAuthServiceImpl implements AdminAuthService {
         }
 
         // 创建 Token 令牌，记录登录日志
-        return createTokenAfterLoginSuccess(user.get().id(), user.get().username(), LoginLogTypeEnum.LOGIN_SOCIAL);
+        return createTokenAfterLoginSuccess(user.get().id(), user.get().username(), SystemLoginTypeEnum.LOGIN_SOCIAL);
     }
 
     @VisibleForTesting
@@ -186,14 +186,14 @@ public class AdminAuthServiceImpl implements AdminAuthService {
         // 验证不通过
         if (!response.isSuccess()) {
             // 创建登录失败日志（验证码不正确)
-            createLoginLog(null, reqVO.getUsername(), LoginLogTypeEnum.LOGIN_USERNAME, LoginResultEnum.CAPTCHA_CODE_ERROR);
+            createLoginLog(null, reqVO.getUsername(), SystemLoginTypeEnum.LOGIN_USERNAME, SystemLoginResultEnum.CAPTCHA_CODE_ERROR);
             throw exception(AUTH_LOGIN_CAPTCHA_CODE_ERROR, response.getRepMsg());
         }
     }
 
-    private AuthLoginRespVO createTokenAfterLoginSuccess(Long userId, String username, LoginLogTypeEnum logType) {
+    private AuthLoginRespVO createTokenAfterLoginSuccess(Long userId, String username, SystemLoginTypeEnum logType) {
         // 插入登陆日志
-        createLoginLog(userId, username, logType, LoginResultEnum.SUCCESS);
+        createLoginLog(userId, username, logType, SystemLoginResultEnum.SUCCESS);
         // 创建访问令牌
         SystemOauth2AccessToken accessTokenDO = oauth2TokenService.createAccessToken(userId, getUserType().getValue(),
                 OAuth2ClientConstants.CLIENT_ID_DEFAULT, null);
@@ -231,7 +231,7 @@ public class AdminAuthServiceImpl implements AdminAuthService {
         }
         reqDTO.setUserAgent(ServletUtils.getUserAgent());
         reqDTO.setUserIp(ServletUtils.getClientIP());
-        reqDTO.setResult(LoginResultEnum.SUCCESS.getResult());
+        reqDTO.setResult(SystemLoginResultEnum.SUCCESS.getValue());
         loginLogService.createLoginLog(reqDTO);
     }
 

@@ -8,7 +8,7 @@ import cn.iocoder.yudao.service.vo.infra.job.job.JobCreateReqVO;
 import cn.iocoder.yudao.service.vo.infra.job.job.JobExportReqVO;
 import cn.iocoder.yudao.service.vo.infra.job.job.JobPageReqVO;
 import cn.iocoder.yudao.service.vo.infra.job.job.JobUpdateReqVO;
-import cn.iocoder.yudao.service.enums.job.JobStatusEnum;
+import cn.iocoder.yudao.service.enums.infra.job.InfraJobStatusEnum;
 import cn.iocoder.yudao.service.model.infra.job.InfraJob;
 import cn.iocoder.yudao.service.convert.infra.job.JobConvert;
 import cn.iocoder.yudao.service.model.infra.job.InfraJobDraft;
@@ -25,8 +25,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
 import static cn.iocoder.yudao.service.enums.infra.ErrorCodeConstants.*;
@@ -58,7 +56,7 @@ public class JobServiceImpl implements JobService {
         // 插入
         InfraJob job = JobConvert.INSTANCE.convert(createReqVO);
         job = InfraJobDraft.$.produce(job, draft -> {
-            draft.setStatus(JobStatusEnum.INIT.getStatus()).setId(UUID.randomUUID());
+            draft.setStatus(InfraJobStatusEnum.INIT.getValue()).setId(UUID.randomUUID());
         });
         fillJobMonitorTimeoutEmpty(job);
         job = infraJobRepository.insert(job);
@@ -69,7 +67,7 @@ public class JobServiceImpl implements JobService {
         // 更新
         InfraJob finalJob = job;
         InfraJob updateObj = InfraJobDraft.$.produce(draft -> {
-            draft.setId(finalJob.id()).setStatus(JobStatusEnum.NORMAL.getStatus());
+            draft.setId(finalJob.id()).setStatus(InfraJobStatusEnum.NORMAL.getValue());
         });
         infraJobRepository.update(updateObj);
 
@@ -84,7 +82,7 @@ public class JobServiceImpl implements JobService {
         // 校验存在
         InfraJob job = validateJobExists(updateReqVO.getId());
         // 只有开启状态，才可以修改.原因是，如果出暂停状态，修改 Quartz Job 时，会导致任务又开始执行
-        if (job.status()!=JobStatusEnum.NORMAL.getStatus()) {
+        if (job.status()!= InfraJobStatusEnum.NORMAL.getValue()) {
             throw exception(JOB_UPDATE_ONLY_NORMAL_STATUS);
         }
         // 更新
@@ -101,7 +99,7 @@ public class JobServiceImpl implements JobService {
     @Transactional(rollbackFor = Exception.class)
     public void updateJobStatus(UUID id, Integer status) throws SchedulerException {
         // 校验 status
-        if (!containsAny(status, JobStatusEnum.NORMAL.getStatus(), JobStatusEnum.STOP.getStatus())) {
+        if (!containsAny(status, InfraJobStatusEnum.NORMAL.getValue(), InfraJobStatusEnum.STOP.getValue())) {
             throw exception(JOB_CHANGE_STATUS_INVALID);
         }
         // 校验存在
@@ -118,7 +116,7 @@ public class JobServiceImpl implements JobService {
         infraJobRepository.update(updateObj);
 
         // 更新状态 Job 到 Quartz 中
-        if (JobStatusEnum.NORMAL.getStatus().equals(status)) { // 开启
+        if (InfraJobStatusEnum.NORMAL.getValue().equals(status)) { // 开启
             schedulerManager.resumeJob(job.handlerName());
         } else { // 暂停
             schedulerManager.pauseJob(job.handlerName());

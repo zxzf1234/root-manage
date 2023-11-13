@@ -6,14 +6,12 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.iocoder.yudao.framework.common.enums.CommonStatusEnum;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.common.util.object.ObjectUtils;
-import cn.iocoder.yudao.service.enums.system.permission.SystemRoleCodeEnum;
+import cn.iocoder.yudao.service.enums.system.permission.*;
 import cn.iocoder.yudao.service.vo.infra.permission.role.RoleCreateReqVO;
 import cn.iocoder.yudao.service.vo.infra.permission.role.RoleExportReqVO;
 import cn.iocoder.yudao.service.vo.infra.permission.role.RolePageReqVO;
 import cn.iocoder.yudao.service.vo.infra.permission.role.RoleUpdateReqVO;
 import cn.iocoder.yudao.service.convert.system.permission.RoleConvert;
-import cn.iocoder.yudao.service.enums.system.permission.DataScopeEnum;
-import cn.iocoder.yudao.service.enums.system.permission.SystemRoleTypeEnum;
 import cn.iocoder.yudao.service.enums.system.permission.SystemRoleTypeEnum;
 import cn.iocoder.yudao.service.model.system.permission.SystemRole;
 import cn.iocoder.yudao.service.model.system.permission.SystemRoleDraft;
@@ -63,7 +61,7 @@ public class RoleServiceImpl implements RoleService {
             SystemRole
                     .setType(ObjectUtil.defaultIfNull(type, SystemRoleTypeEnum.CUSTOM.getValue()))
                     .setStatus(CommonStatusEnum.ENABLE.getStatus())
-                    .setDataScope(DataScopeEnum.ALL.getScope()); // 默认可查看所有数据。原因是，可能一些项目不需要项目权限
+                    .setDataScope(SystemDataScopeEnum.ALL.getValue()); // 默认可查看所有数据。原因是，可能一些项目不需要项目权限
         });
         role = systemRoleRepository.insert(role);
         // 返回

@@ -2,13 +2,12 @@ package cn.iocoder.yudao.service.service.infra.config;
 
 import cn.hutool.core.util.StrUtil;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
+import cn.iocoder.yudao.service.enums.infra.config.InfraConfigTypeEnum;
 import cn.iocoder.yudao.service.vo.infra.config.ConfigCreateReqVO;
 import cn.iocoder.yudao.service.vo.infra.config.ConfigExportReqVO;
 import cn.iocoder.yudao.service.vo.infra.config.ConfigPageReqVO;
 import cn.iocoder.yudao.service.vo.infra.config.ConfigUpdateReqVO;
 import cn.iocoder.yudao.service.convert.infra.config.ConfigConvert;
-
-import cn.iocoder.yudao.service.enums.config.ConfigTypeEnum;
 import cn.iocoder.yudao.service.model.infra.config.InfraConfig;
 import cn.iocoder.yudao.service.model.infra.config.InfraConfigDraft;
 import cn.iocoder.yudao.service.repository.infra.config.InfraConfigRepository;
@@ -43,7 +42,7 @@ public class ConfigServiceImpl implements ConfigService {
         // 插入参数配置
         InfraConfig config = ConfigConvert.INSTANCE.convert(reqVO);
         config = InfraConfigDraft.$.produce(config, draft -> {
-            draft.setType(ConfigTypeEnum.CUSTOM.getType());
+            draft.setType(InfraConfigTypeEnum.CUSTOM.getValue());
         });
         config = infraConfigRepository.insert(config);
         return config.id();
@@ -63,7 +62,7 @@ public class ConfigServiceImpl implements ConfigService {
         // 校验配置存在
         InfraConfig config = validateConfigExists(id);
         // 内置配置，不允许删除
-        if (ConfigTypeEnum.SYSTEM.getType().equals(config.type())) {
+        if (InfraConfigTypeEnum.SYSTEM.getValue().equals(config.type())) {
             throw exception(CONFIG_CAN_NOT_DELETE_SYSTEM_TYPE);
         }
         // 删除

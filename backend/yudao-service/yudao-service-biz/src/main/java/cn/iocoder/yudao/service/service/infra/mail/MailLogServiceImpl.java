@@ -1,10 +1,10 @@
 package cn.iocoder.yudao.service.service.infra.mail;
 
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
+import cn.iocoder.yudao.service.enums.system.mail.SystemMailSendStatusEnum;
 import cn.iocoder.yudao.service.vo.infra.mail.log.MailLogPageReqVO;
 import cn.iocoder.yudao.service.vo.infra.mail.log.MailLogRespVO;
 import cn.iocoder.yudao.service.convert.infra.mail.MailLogConvert;
-import cn.iocoder.yudao.service.enums.system.mail.MailSendStatusEnum;
 import cn.iocoder.yudao.service.model.infra.mail.SystemMailAccount;
 import cn.iocoder.yudao.service.model.infra.mail.SystemMailLog;
 import cn.iocoder.yudao.service.model.infra.mail.SystemMailLogDraft;
@@ -54,8 +54,8 @@ public class MailLogServiceImpl implements MailLogService {
                               String templateContent, Map<String, Object> templateParams, Boolean isSend) {
         // 插入数据库
         SystemMailLog newMailLog = SystemMailLogDraft.$.produce(SystemMailLog->{
-            SystemMailLog.setSendStatus(Objects.equals(isSend, true) ? MailSendStatusEnum.INIT.getStatus()
-                    : MailSendStatusEnum.IGNORE.getStatus())
+            SystemMailLog.setSendStatus(Objects.equals(isSend, true) ? SystemMailSendStatusEnum.INIT.getValue()
+                    : SystemMailSendStatusEnum.IGNORE.getValue())
                     .setUserId(userId)
                     .setUserType(userType)
                     .setToMail(toMail)
@@ -80,7 +80,7 @@ public class MailLogServiceImpl implements MailLogService {
                 SystemMailLog
                         .setId(logId)
                         .setSendTime(LocalDateTime.now())
-                        .setSendStatus(MailSendStatusEnum.SUCCESS.getStatus())
+                        .setSendStatus(SystemMailSendStatusEnum.SUCCESS.getValue())
                         .setSendMessageId(messageId);
             }));
             return;
@@ -90,7 +90,7 @@ public class MailLogServiceImpl implements MailLogService {
             SystemMailLog
                     .setId(logId)
                     .setSendTime(LocalDateTime.now())
-                    .setSendStatus(MailSendStatusEnum.SUCCESS.getStatus())
+                    .setSendStatus(SystemMailSendStatusEnum.SUCCESS.getValue())
                     .setSendException(getRootCauseMessage(exception));
         }));
 
