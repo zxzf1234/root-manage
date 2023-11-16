@@ -1,15 +1,13 @@
 package cn.iocoder.yudao.service.vo.system.user.baseVO;
 
-import cn.iocoder.yudao.framework.common.validation.InEnum;
-import cn.iocoder.yudao.service.enums.common.CommonSexEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import java.util.*;
-import java.time.LocalDateTime;
 import javax.validation.constraints.*;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
-
 import static cn.iocoder.yudao.framework.common.util.date.DateUtils.FORMAT_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND;
+import java.time.LocalDateTime;
 
 /**
  * 用户信息表 Base VO，提供给添加、修改、详细的子 VO 使用
@@ -43,7 +41,6 @@ public class SystemUserBase {
     private String mobile;
 
     @Schema(description = "用户性别", example = "1")
-    @InEnum(value = CommonSexEnum.class, message = "用户性别必须是 {value}")
     private Integer sex;
 
     @Schema(description = "用户头像", example = "https://www.iocoder.cn/xxx.png")

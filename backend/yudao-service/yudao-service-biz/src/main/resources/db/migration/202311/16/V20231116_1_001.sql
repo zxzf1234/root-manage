@@ -1,0 +1,3 @@
+update INFRA_DATABASE_COLUMN tb_1_ set COLUMN_COMMENT = '部门ID', COLUMN_NAME = 'dept_id', DATA_TYPE = 'BIGINT', DEFAULT_VALUE = '0', DICT_TYPE = '', EXAMPLE = '1', JAVA_TYPE = 'Long', NULLABLE = 1, RELATED_TABLE = 'system_dept', REQUIRED = 0 where tb_1_.ID = '79a37110-8da1-4b74-9b0a-48d502881124';
+ALTER TABLE system_user
+CHANGE `dept_id` `dept_id` BIGINT  DEFAULT 0 COMMENT '部门ID';

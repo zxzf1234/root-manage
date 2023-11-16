@@ -69,7 +69,7 @@ public interface ${classNameHump} extends BaseEntity {
     #end
     #end
     #if (${column.humpName} != "id" && ${column.humpName} != "createTime" && ${column.humpName} != "updateTime" && ${column.humpName} != "creatorId" && ${column.humpName} != "updaterId" && ${column.humpName} != "deleted")
-    #if (${column.nullable} == true)
+    #if (${column.nullable} == true && ${column.relatedTable} =="")
     @Nullable
     #end
     #if (${column.relatedTable} !="")
