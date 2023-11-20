@@ -63,7 +63,7 @@ public class UserProfileController {
         List<SystemRole> userRoles = roleService.getRoleListFrom(permissionService.getUserRoleIdListByUserId(user.id()));
         resp.setRoles(UserConvert.INSTANCE.convertList(userRoles));
         // 获得部门信息
-        if (user.deptId() != 0) {
+        if (user.deptId() != null && user.deptId() != 0) {
             SystemDept dept = deptService.getDept(user.deptId());
             resp.setDept(UserConvert.INSTANCE.convert02(dept));
         }

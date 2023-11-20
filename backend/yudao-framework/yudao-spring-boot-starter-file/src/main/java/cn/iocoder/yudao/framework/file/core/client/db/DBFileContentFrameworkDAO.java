@@ -1,5 +1,7 @@
 package cn.iocoder.yudao.framework.file.core.client.db;
 
+import org.springframework.boot.autoconfigure.AutoConfiguration;
+
 /**
  * 文件内容 Framework DAO 接口
  *

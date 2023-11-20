@@ -93,7 +93,7 @@ public class FileConfigServiceImpl implements FileConfigService {
                     .setMaster(false);
         });
                  // 默认非 master
-        infraFileConfigRepository.insert(fileConfig);
+        fileConfig = infraFileConfigRepository.insert(fileConfig);
         // 发送刷新配置的消息
         fileConfigProducer.sendFileConfigRefreshMessage();
         // 返回

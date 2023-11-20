@@ -258,7 +258,7 @@ const handleStatusChange = async (row: UserApi.UserVO) => {
   } catch {
     // 取消后，进行恢复按钮
     row.status =
-      row.status === CommonStatusEnum.ENABLE ? CommonStatusEnum.DISABLE : CommonStatusEnum.ENABLE
+      row.status === CommonStatusEnum.ENABLE ? CommonStatusEnum.DISABLED : CommonStatusEnum.ENABLE
   }
 }
 

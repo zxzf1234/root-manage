@@ -3,6 +3,8 @@ package cn.iocoder.yudao.framework.file.core.client.db;
 import cn.hutool.extra.spring.SpringUtil;
 import cn.iocoder.yudao.framework.file.core.client.AbstractFileClient;
 
+import javax.annotation.Resource;
+
 /**
  * 基于 DB 存储的文件客户端的配置类
  *
