@@ -35,21 +35,21 @@ public class DictDataController {
 
     @PostMapping("/create")
     @Operation(summary = "新增字典数据")
-    @PreAuthorize("@ss.hasPermission('infra:dict:create')")
+    @PreAuthorize("@ss.hasPermission('infra:data:dict:create')")
     public CommonResult<String> create(@Valid @RequestBody DictDataCreateInput inputVO) {
         return success(dictDataService.create(inputVO));
     }
 
     @PutMapping("/update")
     @Operation(summary = "修改字典数据")
-    @PreAuthorize("@ss.hasPermission('infra:dict:update')")
+    @PreAuthorize("@ss.hasPermission('infra:data:dict:update')")
     public CommonResult<Boolean> update(@Valid @RequestBody DictDataUpdateInput inputVO) {
         return success(dictDataService.update(inputVO));
     }
 
     @DeleteMapping("/delete")
     @Operation(summary = "删除字典数据")
-    @PreAuthorize("@ss.hasPermission('infra:dict:delete')")
+    @PreAuthorize("@ss.hasPermission('infra:data:dict:delete')")
     @Parameter(name = "id", description = "编号", example = "123423")
     public CommonResult<Boolean> delete(@RequestParam("id") UUID id) {
         return success(dictDataService.delete(id));
@@ -63,7 +63,7 @@ public class DictDataController {
 
     @GetMapping("/get")
     @Operation(summary = "查询字典数据详细")
-    @PreAuthorize("@ss.hasPermission('infra:dict:query')")
+    @PreAuthorize("@ss.hasPermission('infra:data:dict:query')")
     @Parameter(name = "id", description = "编号", required = true, example = "10243343")
     public CommonResult<DictDataGetOutput> get(@RequestParam("id") UUID id) {
         return success(dictDataService.get(id));
@@ -71,7 +71,7 @@ public class DictDataController {
 
     @GetMapping("/export")
     @Operation(summary = "导出字典数据")
-    @PreAuthorize("@ss.hasPermission('infra:dict:export')")
+    @PreAuthorize("@ss.hasPermission('infra:data:dict:export')")
     @Parameter(name = "DictDataExportInput", description = "字典类型导出 Request", example = "")
     public void export(HttpServletResponse response, @Valid DictDataExportInput inputVO) {
         dictDataService.export(response, inputVO);
@@ -79,7 +79,7 @@ public class DictDataController {
 
     @GetMapping("/list")
     @Operation(summary = "获得字典类型列表")
-    @PreAuthorize("@ss.hasPermission('infra:dict:query')")
+    @PreAuthorize("@ss.hasPermission('infra:data:dict:query')")
     @Parameter(name = "typeId", description = "字典类型id", example = "sys_common_sex")
     public CommonResult<List<DictDataListOutput>> list(@RequestParam("typeId") UUID typeId) {
         return success(dictDataService.list(typeId));

@@ -49,7 +49,7 @@
 <script lang="ts" name="SystemRoleAssignMenuForm" setup>
 import { defaultProps, handleTree } from '@/utils/tree'
 import * as RoleApi from '@/api/system/role'
-import * as MenuApi from '@/api/system/menu'
+import * as MenuApi from '@/api/infra/data/menu'
 import * as PermissionApi from '@/api/system/permission'
 
 const { t } = useI18n() // 国际化

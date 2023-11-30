@@ -23,7 +23,7 @@ import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
 
 @Tag(name = "管理后台 - 菜单")
 @RestController
-@RequestMapping("/infra/menu")
+@RequestMapping("/infra/data/menu")
 @Validated
 public class MenuController {
 
@@ -32,7 +32,7 @@ public class MenuController {
 
     @PostMapping("/create")
     @Operation(summary = "创建菜单")
-    @PreAuthorize("@ss.hasPermission('infra:menu:create')")
+    @PreAuthorize("@ss.hasPermission('infra:data:menu:create')")
     public CommonResult<UUID> createMenu(@Valid @RequestBody MenuCreateReqVO reqVO) {
         UUID menuId = menuService.createMenu(reqVO);
         return success(menuId);
@@ -40,7 +40,7 @@ public class MenuController {
 
     @PutMapping("/update")
     @Operation(summary = "修改菜单")
-    @PreAuthorize("@ss.hasPermission('infra:menu:update')")
+    @PreAuthorize("@ss.hasPermission('infra:data:menu:update')")
     public CommonResult<Boolean> updateMenu(@Valid @RequestBody MenuUpdateReqVO reqVO) {
         menuService.updateMenu(reqVO);
         return success(true);
@@ -49,7 +49,7 @@ public class MenuController {
     @DeleteMapping("/delete")
     @Operation(summary = "删除菜单")
     @Parameter(name = "id", description = "角色编号", required= true, example = "1024")
-    @PreAuthorize("@ss.hasPermission('infra:menu:delete')")
+    @PreAuthorize("@ss.hasPermission('infra:data:menu:delete')")
     public CommonResult<Boolean> deleteMenu(@RequestParam("id") UUID id) {
         menuService.deleteMenu(id);
         return success(true);
@@ -57,7 +57,7 @@ public class MenuController {
 
     @GetMapping("/list")
     @Operation(summary = "获取菜单列表", description = "用于【菜单管理】界面")
-    @PreAuthorize("@ss.hasPermission('infra:menu:query')")
+    @PreAuthorize("@ss.hasPermission('infra:data:menu:query')")
     public CommonResult<List<MenuRespVO>> getMenuList(MenuListReqVO reqVO) {
         List<SystemMenu> list = menuService.getMenuList(reqVO);
         list.sort(Comparator.comparing(SystemMenu::sort));
@@ -79,7 +79,7 @@ public class MenuController {
 
     @GetMapping("/get")
     @Operation(summary = "获取菜单信息")
-    @PreAuthorize("@ss.hasPermission('infra:menu:query')")
+    @PreAuthorize("@ss.hasPermission('infra:data:menu:query')")
     public CommonResult<MenuRespVO> getMenu(String id) {
         SystemMenu menu = menuService.getMenu(UUID.fromString(id));
         return success(MenuConvert.INSTANCE.convert(menu));

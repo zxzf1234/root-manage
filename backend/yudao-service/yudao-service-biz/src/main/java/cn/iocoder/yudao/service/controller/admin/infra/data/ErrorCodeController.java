@@ -26,7 +26,7 @@ import static cn.iocoder.yudao.framework.operatelog.core.enums.OperateTypeEnum.E
 
 @Tag(name = "管理后台 - 错误码")
 @RestController
-@RequestMapping("/infra/error-code")
+@RequestMapping("/infra/data/error-code")
 @Validated
 public class ErrorCodeController {
 
@@ -35,14 +35,14 @@ public class ErrorCodeController {
 
     @PostMapping("/create")
     @Operation(summary = "创建错误码")
-    @PreAuthorize("@ss.hasPermission('system:error-code:create')")
+    @PreAuthorize("@ss.hasPermission('infra:data:error-code:create')")
     public CommonResult<Long> createErrorCode(@Valid @RequestBody ErrorCodeCreateReqVO createReqVO) {
         return success(errorCodeService.createErrorCode(createReqVO));
     }
 
     @PutMapping("/update")
     @Operation(summary = "更新错误码")
-    @PreAuthorize("@ss.hasPermission('system:error-code:update')")
+    @PreAuthorize("@ss.hasPermission('infra:data:error-code:update')")
     public CommonResult<Boolean> updateErrorCode(@Valid @RequestBody ErrorCodeUpdateReqVO updateReqVO) {
         errorCodeService.updateErrorCode(updateReqVO);
         return success(true);
@@ -51,7 +51,7 @@ public class ErrorCodeController {
     @DeleteMapping("/delete")
     @Operation(summary = "删除错误码")
     @Parameter(name = "id", description = "编号", required = true)
-    @PreAuthorize("@ss.hasPermission('system:error-code:delete')")
+    @PreAuthorize("@ss.hasPermission('infra:data:error-code:delete')")
     public CommonResult<Boolean> deleteErrorCode(@RequestParam("id") Long id) {
         errorCodeService.deleteErrorCode(id);
         return success(true);
@@ -60,7 +60,7 @@ public class ErrorCodeController {
     @GetMapping("/get")
     @Operation(summary = "获得错误码")
     @Parameter(name = "id", description = "编号", required = true, example = "1024")
-    @PreAuthorize("@ss.hasPermission('system:error-code:query')")
+    @PreAuthorize("@ss.hasPermission('infra:data:error-code:query')")
     public CommonResult<ErrorCodeRespVO> getErrorCode(@RequestParam("id") Long id) {
         SystemErrorCode errorCode = errorCodeService.getErrorCode(id);
         return success(ErrorCodeConvert.INSTANCE.convert(errorCode));
@@ -68,7 +68,7 @@ public class ErrorCodeController {
 
     @GetMapping("/page")
     @Operation(summary = "获得错误码分页")
-    @PreAuthorize("@ss.hasPermission('system:error-code:query')")
+    @PreAuthorize("@ss.hasPermission('infra:data:error-code:query')")
     public CommonResult<PageResult<ErrorCodeRespVO>> getErrorCodePage(@Valid ErrorCodePageReqVO pageVO) {
         PageResult<ErrorCodeRespVO> pageResult = errorCodeService.getErrorCodePage(pageVO);
         return success(pageResult);
@@ -76,7 +76,7 @@ public class ErrorCodeController {
 
     @GetMapping("/export-excel")
     @Operation(summary = "导出错误码 Excel")
-    @PreAuthorize("@ss.hasPermission('system:error-code:export')")
+    @PreAuthorize("@ss.hasPermission('infra:data:error-code:export')")
     @OperateLog(type = EXPORT)
     public void exportErrorCodeExcel(@Valid ErrorCodeExportReqVO exportReqVO,
               HttpServletResponse response) throws IOException {

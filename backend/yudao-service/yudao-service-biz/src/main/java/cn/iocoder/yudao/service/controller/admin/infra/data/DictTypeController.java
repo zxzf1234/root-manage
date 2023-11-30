@@ -34,21 +34,21 @@ public class DictTypeController {
 
     @PostMapping("/create")
     @Operation(summary = "创建字典类型")
-    @PreAuthorize("@ss.hasPermission('infra:dict:create')")
+    @PreAuthorize("@ss.hasPermission('infra:data:dict:create')")
     public CommonResult<UUID> create(@Valid @RequestBody DictTypeCreateInput inputVO) {
         return success(dictTypeService.create(inputVO));
     }
 
     @PutMapping("/update")
     @Operation(summary = "修改字典类型")
-    @PreAuthorize("@ss.hasPermission('infra:dict:update')")
+    @PreAuthorize("@ss.hasPermission('infra:data:dict:update')")
     public CommonResult<Boolean> update(@Valid @RequestBody DictTypeUpdateInput inputVO) {
         return success(dictTypeService.update(inputVO));
     }
 
     @DeleteMapping("/delete")
     @Operation(summary = "删除字典类型")
-    @PreAuthorize("@ss.hasPermission('infra:dict:delete')")
+    @PreAuthorize("@ss.hasPermission('infra:data:dict:delete')")
     @Parameter(name = "id", description = "编号", required = true, example = "1024")
     public CommonResult<Boolean> delete(@RequestParam("id") UUID id) {
         return success(dictTypeService.delete(id));
@@ -56,14 +56,14 @@ public class DictTypeController {
 
     @GetMapping("/page")
     @Operation(summary = "获得字典类型的分页列表")
-    @PreAuthorize("@ss.hasPermission('infra:dict:query')")
+    @PreAuthorize("@ss.hasPermission('infra:data:dict:query')")
     public CommonResult<PageResult<DictTypePageOutput>> page(@Valid DictTypePageInput inputVO) {
         return success(dictTypeService.page(inputVO));
     }
 
     @GetMapping("/get")
     @Operation(summary = "查询字典类型详细")
-    @PreAuthorize("@ss.hasPermission('infra:dict:query')")
+    @PreAuthorize("@ss.hasPermission('infra:data:dict:query')")
     @Parameter(name = "id", description = "编号", required = true, example = "434543")
     public CommonResult<DictTypeGetOutput> get(@RequestParam("id") UUID id) {
         return success(dictTypeService.get(id));
@@ -77,7 +77,7 @@ public class DictTypeController {
 
     @GetMapping("/export")
     @Operation(summary = "导出数据类型")
-    @PreAuthorize("@ss.hasPermission('system:dict:query')")
+    @PreAuthorize("@ss.hasPermission('system:data:dict:query')")
     public void export(HttpServletResponse response, @Valid DictTypeExportInput inputVO) {
         dictTypeService.export(response, inputVO);
     }
