@@ -1,0 +1,1 @@
+update infra_interface_vo_class set name = 'InfraDictNoBase' where name = 'InfraNoBase';

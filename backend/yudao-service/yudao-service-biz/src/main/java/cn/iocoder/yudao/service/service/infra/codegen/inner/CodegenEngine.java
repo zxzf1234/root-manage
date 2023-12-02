@@ -232,8 +232,10 @@ public class CodegenEngine {
     private Map<String, Object> getInterfaceBindingMap(InfraInterface infraInterface){
         Map<String, Object> bindingMap = new HashMap<>(globalBindingMap);
         InfraInterfaceModule infraInterfaceModule =  infraInterfaceModuleRepository.findById(infraInterface.moduleId()).get();
-        String interfaceNameHump = toCamelCase(replace(infraInterface.name(),"-","_"));
-        String moduleNameHump = toCamelCase(replace(infraInterfaceModule.name(),"-","_"));
+        String interfaceNameHump = toCamelCase(infraInterface.name());
+        String interfaceNameSymbol = toSymbolCase(infraInterface.name(), '-');
+        String moduleNameHump = infraInterfaceModule.name();
+        String moduleNameSymbol = toSymbolCase(moduleNameHump, '-');
         String moduleNameHumpUp = upperFirst(moduleNameHump);
 
         bindingMap.put("sceneEnum", CodegenSceneEnum.valueOf("ADMIN"));
@@ -248,6 +250,8 @@ public class CodegenEngine {
             javaMethod = "Post";
         }
         bindingMap.put("javaMethod", javaMethod);
+        // 接口名 -符号链接
+        bindingMap.put("interfaceNameSymbol", interfaceNameSymbol);
         // 接口名驼峰 首字母小写
         bindingMap.put("interfaceNameHump", interfaceNameHump);
         // 接口名驼峰 首字母大写
@@ -256,8 +260,11 @@ public class CodegenEngine {
         parentNames.remove(0);
         Collections.reverse(parentNames);
         bindingMap.put("parentNames", parentNames);
+        // 接口模块名驼峰 首字母小写
         bindingMap.put("moduleNameHump", moduleNameHump);
+        // 接口名模块驼峰 首字母小写
         bindingMap.put("moduleNameHumpUp", moduleNameHumpUp);
+        bindingMap.put("moduleNameSymbol", moduleNameSymbol);
         bindingMap.put("modulePath", String.join("/", parentNames));
 
         List<CodegenInterfaceParam> inputParams = CodegenConvert.INSTANCE.convertList19(infraInterface.inputParams());
@@ -490,10 +497,10 @@ public class CodegenEngine {
                 }else {
                     fileContent.append(interfaceContent);
                 }
-                if(vmPath.contains("convertInterface") && !convertImportList.isEmpty())
+                if(vmPath.contains("convert") && !convertImportList.isEmpty())
                     fileInsertImport(fileContent, convertImportList);
 
-                if((vmPath.contains("serviceImplInterface") || vmPath.contains("serviceInterface") || vmPath.contains("controllerInterface"))
+                if((vmPath.contains("serviceImpl") || vmPath.contains("service") || vmPath.contains("controller"))
                         && !controllerImportList.isEmpty())
                     fileInsertImport(fileContent, controllerImportList);
 
@@ -568,7 +575,7 @@ public class CodegenEngine {
                 oldInterfaceContent = oldInterfaceContent.replaceAll(",\n}", "\n}").replaceAll(",\n  }", "\n  }");
 
                 StringBuilder fileContent = new StringBuilder(FileUtil.readUtf8String(newFile));
-                if(vmPath.contains("controllerInterface") || vmPath.contains("serviceImplInterface")){
+                if(vmPath.contains("controller") || vmPath.contains("serviceImpl")){
                     if(!oldInterfaceContent.contains(") {"))
                         continue;
                     if(!newInterfaceContent.contains(") {"))
@@ -588,7 +595,7 @@ public class CodegenEngine {
                     if(returnIndex > 0){
                         fileContent.replace(returnIndex , returnIndex + oldReturnContent.length(), newReturnContent);
                     }
-                }else if(vmPath.contains("convertInterface") || vmPath.contains("serviceInterface")){
+                }else if(vmPath.contains("convert") || vmPath.contains("service") || vmPath.contains("vueApi") ){
                     int index = fileContent.indexOf(oldInterfaceContent);
                     if(index > 0){
                         fileContent.replace(index , index + oldInterfaceContent.length(), newInterfaceContent);
@@ -596,10 +603,10 @@ public class CodegenEngine {
                 } else {
                     fileContent = new StringBuilder(newInterfaceContent);
                 }
-                if(vmPath.contains("convertInterface") && (!newConvertImportList.isEmpty() || !oldConvertImportList.isEmpty()))
+                if(vmPath.contains("convert") && (!newConvertImportList.isEmpty() || !oldConvertImportList.isEmpty()))
                     fileUpdateImport(fileContent, oldConvertImportList, newConvertImportList);
 
-                if((vmPath.contains("serviceImplInterface") || vmPath.contains("serviceInterface") || vmPath.contains("controllerInterface"))
+                if((vmPath.contains("serviceImpl") || vmPath.contains("service") || vmPath.contains("controller"))
                         && (!newControllerImportList.isEmpty() || !oldControllerImportList.isEmpty()))
                     fileUpdateImport(fileContent, oldControllerImportList, newControllerImportList);
 
@@ -608,7 +615,7 @@ public class CodegenEngine {
 
                 if(vmPath.contains("voOutput") && (!newOutputImportList.isEmpty() || !oldOutputImportList.isEmpty()))
                     fileUpdateImport(fileContent, oldOutputImportList, newOutputImportList);
-                FileUtil.writeUtf8String(fileContent.toString(), newFile);
+//                FileUtil.writeUtf8String(fileContent.toString(), newFile);
 
             }
         }
