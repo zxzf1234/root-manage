@@ -96,8 +96,9 @@ public class CodegenEngine {
             .put(templatePath("interface/convert"), javaModuleFilePath("convert", "${moduleNameHump}Convert"))
             .put(templatePath("interface/serviceImpl"), javaModuleFilePath("service", "${moduleNameHump}ServiceImpl"))
             .put(templatePath("interface/service"), javaModuleFilePath("service", "${moduleNameHump}Service"))
-            .put(templatePath("interface/VOInput"), javaModuleFilePath("vo", "${moduleNameHump}/${moduleNameHumpUp}${interfaceNameHumpUp}Input"))
-            .put(templatePath("interface/VOOutput"), javaModuleFilePath("vo", "${moduleNameHump}/${moduleNameHumpUp}${interfaceNameHumpUp}Output"))
+            .put(templatePath("interface/voInput"), javaModuleFilePath("vo", "${moduleNameHump}/${moduleNameHumpUp}${interfaceNameHumpUp}Input"))
+            .put(templatePath("interface/voOutput"), javaModuleFilePath("vo", "${moduleNameHump}/${moduleNameHumpUp}${interfaceNameHumpUp}Output"))
+            .put(templatePath("interface/vueApi"), vueFilePath("api/${modulePath}/${moduleNameHumpUp}/index.ts"))
             .build();
 
 
@@ -239,7 +240,14 @@ public class CodegenEngine {
         bindingMap.put("interface", infraInterface);
         bindingMap.put("module", infraInterfaceModule);
         // 接口方法 首字母大写
-        bindingMap.put("interfaceMethodUp", upperFirst(infraInterface.method()));
+        String javaMethod = upperFirst(infraInterface.method());
+        if(Objects.equals(javaMethod, "Download")){
+            javaMethod = "Get";
+        }
+        if(Objects.equals(javaMethod, "Upload")){
+            javaMethod = "Post";
+        }
+        bindingMap.put("javaMethod", javaMethod);
         // 接口名驼峰 首字母小写
         bindingMap.put("interfaceNameHump", interfaceNameHump);
         // 接口名驼峰 首字母大写
@@ -451,16 +459,16 @@ public class CodegenEngine {
         for(Map.Entry<String, String> entry : templates.entrySet()){
             String vmPath = entry.getKey();
             String filePath = entry.getValue();
-            if (vmPath.contains("VOInput")
+            if (vmPath.contains("voInput")
                     && (Objects.equals(infraInterface.inputType(), "void") || Objects.equals(infraInterface.inputType(), "param")))
                 continue;
-            if (vmPath.contains("VOOutput")
+            if (vmPath.contains("voOutput")
                     && (Objects.equals(infraInterface.outputType(), "void") || Objects.equals(infraInterface.outputType(), "param")))
                 continue;
             filePath = formatInterfaceFilePath(filePath, bindingMap);
             File newFile;
             if(!FileUtil.exist(filePath)) {
-                if (vmPath.contains("VOInput") || vmPath.contains("VOOutput")){
+                if (vmPath.contains("voInput") || vmPath.contains("voOutput")){
                     newFile = FileUtil.touch(filePath);
                     RuntimeUtil.execForStr("git add " + filePath);
                 } else
@@ -489,10 +497,10 @@ public class CodegenEngine {
                         && !controllerImportList.isEmpty())
                     fileInsertImport(fileContent, controllerImportList);
 
-                if(vmPath.contains("VOInput") && !inputImportList.isEmpty())
+                if(vmPath.contains("voInput") && !inputImportList.isEmpty())
                     fileInsertImport(fileContent, inputImportList);
 
-                if(vmPath.contains("VOOutput") && !outputImportList.isEmpty())
+                if(vmPath.contains("voOutput") && !outputImportList.isEmpty())
                     fileInsertImport(fileContent, outputImportList);
 
                 FileUtil.writeUtf8String(fileContent.toString(), newFile);
@@ -521,7 +529,7 @@ public class CodegenEngine {
         for(Map.Entry<String, String> entry : templates.entrySet()){
             String vmPath = entry.getKey();
             String filePath = entry.getValue();
-            if (vmPath.contains("VOInput")
+            if (vmPath.contains("voInput")
                     && (Objects.equals(newInterface.inputType(), "void") || Objects.equals(newInterface.inputType(), "param"))) {
                 filePath = formatInterfaceFilePath(filePath, oldBindingMap);
                 if(FileUtil.exist(filePath)) {
@@ -529,7 +537,7 @@ public class CodegenEngine {
                 }
                 continue;
             }
-            if (vmPath.contains("VOOutput")
+            if (vmPath.contains("voOutput")
                     && (Objects.equals(newInterface.outputType(), "void") || Objects.equals(newInterface.outputType(), "param"))) {
                 filePath = formatInterfaceFilePath(filePath, oldBindingMap);
                 if(FileUtil.exist(filePath)) {
@@ -540,7 +548,7 @@ public class CodegenEngine {
             filePath = formatInterfaceFilePath(filePath, newBindingMap);
             File newFile;
             if(!FileUtil.exist(filePath)) {
-                if (vmPath.contains("VOInput") || vmPath.contains("VOOutput")){
+                if (vmPath.contains("voInput") || vmPath.contains("voOutput")){
                     newFile = FileUtil.touch(filePath);
                     RuntimeUtil.execForStr("git add " + filePath);
                 } else
@@ -595,10 +603,10 @@ public class CodegenEngine {
                         && (!newControllerImportList.isEmpty() || !oldControllerImportList.isEmpty()))
                     fileUpdateImport(fileContent, oldControllerImportList, newControllerImportList);
 
-                if(vmPath.contains("VOInput") && (!newInputImportList.isEmpty() || !oldInputImportList.isEmpty()))
+                if(vmPath.contains("voInput") && (!newInputImportList.isEmpty() || !oldInputImportList.isEmpty()))
                     fileUpdateImport(fileContent, oldInputImportList, newInputImportList);
 
-                if(vmPath.contains("VOOutput") && (!newOutputImportList.isEmpty() || !oldOutputImportList.isEmpty()))
+                if(vmPath.contains("voOutput") && (!newOutputImportList.isEmpty() || !oldOutputImportList.isEmpty()))
                     fileUpdateImport(fileContent, oldOutputImportList, newOutputImportList);
                 FileUtil.writeUtf8String(fileContent.toString(), newFile);
 

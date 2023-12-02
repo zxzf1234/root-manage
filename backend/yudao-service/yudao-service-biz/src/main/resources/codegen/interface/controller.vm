@@ -1,5 +1,5 @@
 
-    @${interfaceMethodUp}Mapping("/${interface.name}")
+    @${javaMethod}Mapping("/${interface.name}")
     #if(${interface.comment}!="")
     @Operation(summary = "${interface.comment}")
     #end

@@ -202,7 +202,9 @@ export const createInterface = (data: InterfaceVO) => {
   return request.post({ url: '/infra/codegen/interface/create', data })
 }
 
-// 更新接口
+/**
+ * 更新接口
+ */
 export const updateInterface = (data: InterfaceVO) => {
   return request.post({ url: '/infra/codegen/interface/update', data })
 }
@@ -212,7 +214,9 @@ export const getInterface = (id: string) => {
   return request.get({ url: '/infra/codegen/interface/get?id=' + id })
 }
 
-//查询VO类
+/**
+ * 查询VO类
+ */
 export const getInterfaceVOClassList = (params) => {
   return request.get({ url: '/infra/codegen/interface/vo-class/list', params })
 }

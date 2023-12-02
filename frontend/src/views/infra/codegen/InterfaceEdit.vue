@@ -54,6 +54,8 @@
               <el-option label="get" value="get" />
               <el-option label="delete" value="delete" />
               <el-option label="put" value="put" />
+              <el-option label="download" value="download" />
+              <el-option label="upload" value="upload" />
             </el-select>
           </el-form-item>
         </el-col>
