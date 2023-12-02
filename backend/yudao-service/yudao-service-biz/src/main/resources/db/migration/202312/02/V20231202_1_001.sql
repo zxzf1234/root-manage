@@ -1,0 +1,2 @@
+update INFRA_DATABASE_TABLE tb_1_ set NAME = 'infra_dict_no', BUSINESS_NAME = 'data', COMMENT = '编号管理', REMARK = '' where tb_1_.ID = '64d538ec-3b21-4d17-81e0-36861fd066f3';
+ALTER TABLE infra_no RENAME TO infra_dict_no;

@@ -29,7 +29,7 @@ import ${basePackage}.service.vo#foreach ($parentName in $parentNames).$parentNa
 @Tag(name = "${module.comment}")
 @RestController
 ##二级的 businessName 暂时不算在 HTTP 路径上，可以根据需要写
-@RequestMapping("#foreach ($parentName in $parentNames)#if($parentName != ${module.name})/$parentName#end#end/${module.name}")
+@RequestMapping("#foreach ($parentName in $parentNames)#if($parentName != ${nameSymbol})/$parentName#end#end/${nameSymbol}")
 @Validated
 public class ${nameHumpUp}Controller {
 

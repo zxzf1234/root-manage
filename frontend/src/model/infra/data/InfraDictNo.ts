@@ -1,4 +1,4 @@
-export type InfraNo = {
+export type InfraDictNo = {
   keyName: string
   prefix: string
   dateForm: number

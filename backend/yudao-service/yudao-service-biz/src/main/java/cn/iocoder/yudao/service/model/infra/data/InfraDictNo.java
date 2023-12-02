@@ -4,7 +4,7 @@ import cn.iocoder.yudao.service.model.base.BaseEntity;
 import org.babyfish.jimmer.sql.*;
 import java.time.LocalDateTime;
 @Entity
-public interface InfraNo extends BaseEntity {
+public interface InfraDictNo extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id();

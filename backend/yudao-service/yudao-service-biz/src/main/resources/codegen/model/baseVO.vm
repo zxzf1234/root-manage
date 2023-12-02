@@ -37,7 +37,7 @@ public class ${classNameHump}Base {
 
 #foreach ($column in $columns)
 #if (${column.humpName} != "id" && ${column.humpName} != "createTime" && ${column.humpName} != "updateTime" && ${column.humpName} != "creatorId" && ${column.humpName} != "updaterId" && ${column.humpName} != "deleted")
-    #parse("codegen/java/vo/_column.vm")
+    #parse("codegen/model/column.vm")
 #end
 #end
 }

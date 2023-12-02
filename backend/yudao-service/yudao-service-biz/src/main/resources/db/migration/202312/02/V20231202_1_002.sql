@@ -1,0 +1,1 @@
+insert ignore into INFRA_INTERFACE_MODULE(CREATOR_ID, UPDATER_ID, ID, NAME, COMMENT, PARENT_ID, TYPE) values('1', '1', 'a9ce47bc-a3a3-44d3-942a-05ae0dd2a66b', 'dictNo', '字典编号', '0fde120d-ce5d-48e3-ad64-285c8ef82839', '1');

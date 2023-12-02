@@ -62,42 +62,40 @@ public class CodegenEngine {
      * value：生成的路径
      */
     private static final Map<String, String> TABLE_INSERT_TEMPLATES = MapUtil.<String, String>builder(new LinkedHashMap<>()) // 有序
-            // Java module-biz Main
-//            .put(templatePath("model/baseVO"), javaBaseVOFilePath("Base"))
-//            .put(templatePath("model/repository"), javaTableFilePath("repository","${classNameHump}Repository"))
-//            .put(templatePath("model/javaModel"), javaTableFilePath("model","${classNameHump}"))
-            .put(templatePath("model/vueModel"), vueTableFilePath())
+            .put(templatePath("model/baseVO"), javaBaseVOFilePath("Base"))
+            .put(templatePath("model/repository"), javaTableFilePath("repository","${classNameHump}Repository"))
+            .put(templatePath("model/javaModel"), javaTableFilePath("model","${classNameHump}"))
+            .put(templatePath("model/vueModel"), vueFilePath("model/${moduleName}/${table.businessName}/${classNameHump}.ts"))
             .build();
 
     private static final Map<String, String> TABLE_UPDATE_TEMPLATES = MapUtil.<String, String>builder(new LinkedHashMap<>()) // 有序
-            // Java module-biz Main
-//            .put(templatePath("model/baseVO"), javaBaseVOFilePath("Base"))
-//            .put(templatePath("model/javaModel"), javaTableFilePath("model","${classNameHump}"))
-            .put(templatePath("model/vueModel"), vueTableFilePath())
+            .put(templatePath("model/baseVO"), javaBaseVOFilePath("Base"))
+            .put(templatePath("model/javaModel"), javaTableFilePath("model","${classNameHump}"))
+            .put(templatePath("model/vueModel"), vueFilePath("model/${moduleName}/${table.businessName}/${classNameHump}.ts"))
             .build();
 
     private static final Map<String, String> MODULE_TEMPLATES = MapUtil.<String, String>builder(new LinkedHashMap<>()) // 有序
-
             .put(templatePath("interfaceModule/controller"), javaControllerFilePath())
             .put(templatePath("interfaceModule/convert"), javaModuleFilePath("convert", "${nameHumpUp}Convert"))
             .put(templatePath("interfaceModule/serviceImpl"), javaModuleFilePath("service", "${nameHumpUp}ServiceImpl"))
             .put(templatePath("interfaceModule/service"), javaModuleFilePath("service", "${nameHumpUp}Service"))
+            .put(templatePath("interfaceModule/vo"), javaModuleFilePath("vo", "${nameHump}/package-info"))
+            .put(templatePath("interfaceModule/vueApi"), vueFilePath("api/${modulePath}/${nameHump}/index.ts"))
             .build();
 
     private static final Map<String, String> DICT_TEMPLATES = MapUtil.<String, String>builder(new LinkedHashMap<>()) // 有序
-
-            .put(templatePath("dict/javaDictEnum"), javaApiFilePath("enums/${modulePath}/${typeUpHump}Enum.java"))
-            .put(templatePath("dict/javaDictType"), javaApiFilePath("enums/DictTypeConstants.java"))
-            .put(templatePath("dict/vueDictType"), vueFilePath("utils/dict.ts"))
-            .put(templatePath("dict/vueDictEnum"), vueFilePath("utils/constants.ts"))
+            .put(templatePath("dict/javaEnum"), javaApiFilePath("enums/${modulePath}/${typeUpHump}Enum.java"))
+            .put(templatePath("dict/javaType"), javaApiFilePath("enums/DictTypeConstants.java"))
+            .put(templatePath("dict/vueType"), vueFilePath("utils/dict.ts"))
+            .put(templatePath("dict/vueEnum"), vueFilePath("utils/constants.ts"))
             .build();
 
     private static final Map<String, String> INTERFACE_TEMPLATES = MapUtil.<String, String>builder(new LinkedHashMap<>()) // 有序
 
-            .put(templatePath("interface/controllerInterface"), javaFilePath("controller/${sceneEnum.basePackage}/${modulePath}/${moduleNameHump}Controller")+ ".java")
-            .put(templatePath("interface/convertInterface"), javaModuleFilePath("convert", "${moduleNameHump}Convert"))
-            .put(templatePath("interface/serviceImplInterface"), javaModuleFilePath("service", "${moduleNameHump}ServiceImpl"))
-            .put(templatePath("interface/serviceInterface"), javaModuleFilePath("service", "${moduleNameHump}Service"))
+            .put(templatePath("interface/controller"), javaFilePath("controller/${sceneEnum.basePackage}/${modulePath}/${moduleNameHump}Controller")+ ".java")
+            .put(templatePath("interface/convert"), javaModuleFilePath("convert", "${moduleNameHump}Convert"))
+            .put(templatePath("interface/serviceImpl"), javaModuleFilePath("service", "${moduleNameHump}ServiceImpl"))
+            .put(templatePath("interface/service"), javaModuleFilePath("service", "${moduleNameHump}Service"))
             .put(templatePath("interface/VOInput"), javaModuleFilePath("vo", "${moduleNameHump}/${moduleNameHumpUp}${interfaceNameHumpUp}Input"))
             .put(templatePath("interface/VOOutput"), javaModuleFilePath("vo", "${moduleNameHump}/${moduleNameHumpUp}${interfaceNameHumpUp}Output"))
             .build();
@@ -712,8 +710,9 @@ public class CodegenEngine {
         parentNames.remove(0);
         Collections.reverse(parentNames);
         bindingMap.put("parentNames", parentNames);
-        bindingMap.put("nameHumpUp", upperFirst(toCamelCase(replace(module.name(), "-", "_"))));
-        bindingMap.put("nameHump", toCamelCase(replace(module.name(), "-", "_")));
+        bindingMap.put("nameSymbol", toSymbolCase(module.name(),'-'));
+        bindingMap.put("nameHumpUp", upperFirst(module.name()));
+        bindingMap.put("nameHump", 	module.name());
         bindingMap.put("modulePath", String.join("/", parentNames));
         return bindingMap;
     }
@@ -1162,10 +1161,6 @@ public class CodegenEngine {
         return FileUtil.getParent(FileUtil.getAbsolutePath(""), 3) + "/yudao-service/yudao-service-api/src/main/java/${basePackage}/service/" + path;
     }
 
-
-    private static String vueTableFilePath() {
-        return FileUtil.getParent(FileUtil.getAbsolutePath(""), 4) + "/frontend/src/model/${moduleName}/${table.businessName}/${classNameHump}.ts";
-    }
     private static String vueFilePath(String path) {
         return FileUtil.getParent(FileUtil.getAbsolutePath(""), 4) + "/frontend/src/"  + path;
     }

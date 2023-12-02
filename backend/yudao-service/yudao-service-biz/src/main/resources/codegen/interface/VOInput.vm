@@ -20,10 +20,10 @@ import java.time.LocalDateTime;
 @Data
 public class ${moduleNameHumpUp}${interfaceNameHumpUp}Input #if(${interface.inputExtendClass} != "")extends ${interface.inputExtendClass}#end {
 #foreach ($param in $inputParams)
-    #parse("codegen/java/vo/_paramInterface.vm")
+    #parse("codegen/interface/param.vm")
 #end
 #foreach ($subclass in $inputSubclasses)
-    #parse("codegen/java/vo/_subclassInterface.vm")
+    #parse("codegen/interface/subclass.vm")
 #end
 
 }

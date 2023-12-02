@@ -20,9 +20,9 @@ import java.time.LocalDateTime;
 @Data
 public class ${moduleNameHumpUp}${interfaceNameHumpUp}Output #if(${interface.outputExtendClass} != "")extends ${interface.outputExtendClass}#end {
 #foreach ($param in $outputParams)
-    #parse("codegen/java/vo/_paramInterface.vm")
+    #parse("codegen/interface/param.vm")
 #end
 #foreach ($subclass in $outputSubclasses)
-    #parse("codegen/java/vo/_subclassInterface.vm")
+    #parse("codegen/interface/subclass.vm")
 #end
 }

@@ -19,7 +19,11 @@
         />
       </el-form-item>
       <el-form-item label="名称" prop="name">
-        <el-input v-model="formData.name" placeholder="请输入名称" />
+        <el-input
+          v-model="formData.name"
+          placeholder="请输入名称"
+          @keyup="formData.name = formData.name?.replace(/[^a-zA-Z_]/g, '')"
+        />
       </el-form-item>
       <el-form-item label="描述" prop="comment">
         <el-input v-model="formData.comment" placeholder="请输入描述" />
@@ -50,7 +54,7 @@ const formType = ref('') // 表单的类型：create - 新增；update - 修改
 const formData = ref({
   id: undefined,
   parentId: undefined,
-  name: undefined,
+  name: '',
   comment: undefined,
   type: 0
 })
@@ -114,7 +118,7 @@ const resetForm = () => {
   formData.value = {
     id: undefined,
     parentId: undefined,
-    name: undefined,
+    name: '',
     comment: undefined,
     type: 0
   }
