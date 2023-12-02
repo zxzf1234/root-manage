@@ -63,79 +63,45 @@ public class CodegenEngine {
      */
     private static final Map<String, String> TABLE_INSERT_TEMPLATES = MapUtil.<String, String>builder(new LinkedHashMap<>()) // 有序
             // Java module-biz Main
-            .put(javaTemplatePath("vo/baseVO"), javaBaseVOFilePath("Base"))
-            .put(javaTemplatePath("repository/repository"),
-                    javaTableFilePath("repository","${classNameHump}Repository"))
-            .put(javaTemplatePath("model/model"), javaTableFilePath("model","${classNameHump}"))
+//            .put(templatePath("model/baseVO"), javaBaseVOFilePath("Base"))
+//            .put(templatePath("model/repository"), javaTableFilePath("repository","${classNameHump}Repository"))
+//            .put(templatePath("model/javaModel"), javaTableFilePath("model","${classNameHump}"))
+            .put(templatePath("model/vueModel"), vueTableFilePath())
             .build();
 
     private static final Map<String, String> TABLE_UPDATE_TEMPLATES = MapUtil.<String, String>builder(new LinkedHashMap<>()) // 有序
             // Java module-biz Main
-            .put(javaTemplatePath("vo/baseVO"), javaBaseVOFilePath("Base"))
-            .put(javaTemplatePath("model/model"), javaTableFilePath("model","${classNameHump}"))
+//            .put(templatePath("model/baseVO"), javaBaseVOFilePath("Base"))
+//            .put(templatePath("model/javaModel"), javaTableFilePath("model","${classNameHump}"))
+            .put(templatePath("model/vueModel"), vueTableFilePath())
             .build();
 
     private static final Map<String, String> MODULE_TEMPLATES = MapUtil.<String, String>builder(new LinkedHashMap<>()) // 有序
 
-            .put(javaTemplatePath("controller/controller"), javaControllerFilePath())
-            .put(javaTemplatePath("convert/convert"), javaModuleFilePath("convert", "${nameHumpUp}Convert"))
-            .put(javaTemplatePath("service/serviceImpl"), javaModuleFilePath("service", "${nameHumpUp}ServiceImpl"))
-            .put(javaTemplatePath("service/service"), javaModuleFilePath("service", "${nameHumpUp}Service"))
+            .put(templatePath("interfaceModule/controller"), javaControllerFilePath())
+            .put(templatePath("interfaceModule/convert"), javaModuleFilePath("convert", "${nameHumpUp}Convert"))
+            .put(templatePath("interfaceModule/serviceImpl"), javaModuleFilePath("service", "${nameHumpUp}ServiceImpl"))
+            .put(templatePath("interfaceModule/service"), javaModuleFilePath("service", "${nameHumpUp}Service"))
             .build();
 
     private static final Map<String, String> DICT_TEMPLATES = MapUtil.<String, String>builder(new LinkedHashMap<>()) // 有序
 
-            .put(javaTemplatePath("dict/javaDictEnum"), javaApiFilePath("enums/${modulePath}/${typeUpHump}Enum.java"))
-            .put(javaTemplatePath("dict/javaDictType"), javaApiFilePath("enums/DictTypeConstants.java"))
-            .put(javaTemplatePath("dict/vueDictType"), vueFilePath("utils/dict.ts"))
-            .put(javaTemplatePath("dict/vueDictEnum"), vueFilePath("utils/constants.ts"))
+            .put(templatePath("dict/javaDictEnum"), javaApiFilePath("enums/${modulePath}/${typeUpHump}Enum.java"))
+            .put(templatePath("dict/javaDictType"), javaApiFilePath("enums/DictTypeConstants.java"))
+            .put(templatePath("dict/vueDictType"), vueFilePath("utils/dict.ts"))
+            .put(templatePath("dict/vueDictEnum"), vueFilePath("utils/constants.ts"))
             .build();
 
     private static final Map<String, String> INTERFACE_TEMPLATES = MapUtil.<String, String>builder(new LinkedHashMap<>()) // 有序
 
-            .put(javaTemplatePath("controller/controllerInterface"), javaFilePath("controller/${sceneEnum.basePackage}/${modulePath}/${moduleNameHump}Controller")+ ".java")
-            .put(javaTemplatePath("convert/convertInterface"), javaModuleFilePath("convert", "${moduleNameHump}Convert"))
-            .put(javaTemplatePath("service/serviceImplInterface"), javaModuleFilePath("service", "${moduleNameHump}ServiceImpl"))
-            .put(javaTemplatePath("service/serviceInterface"), javaModuleFilePath("service", "${moduleNameHump}Service"))
-            .put(javaTemplatePath("vo/VOInput"), javaModuleFilePath("vo", "${moduleNameHump}/${moduleNameHumpUp}${interfaceNameHumpUp}Input"))
-            .put(javaTemplatePath("vo/VOOutput"), javaModuleFilePath("vo", "${moduleNameHump}/${moduleNameHumpUp}${interfaceNameHumpUp}Output"))
+            .put(templatePath("interface/controllerInterface"), javaFilePath("controller/${sceneEnum.basePackage}/${modulePath}/${moduleNameHump}Controller")+ ".java")
+            .put(templatePath("interface/convertInterface"), javaModuleFilePath("convert", "${moduleNameHump}Convert"))
+            .put(templatePath("interface/serviceImplInterface"), javaModuleFilePath("service", "${moduleNameHump}ServiceImpl"))
+            .put(templatePath("interface/serviceInterface"), javaModuleFilePath("service", "${moduleNameHump}Service"))
+            .put(templatePath("interface/VOInput"), javaModuleFilePath("vo", "${moduleNameHump}/${moduleNameHumpUp}${interfaceNameHumpUp}Input"))
+            .put(templatePath("interface/VOOutput"), javaModuleFilePath("vo", "${moduleNameHump}/${moduleNameHumpUp}${interfaceNameHumpUp}Output"))
             .build();
 
-
-/*
-
-    private static final Table<Integer, String, String> FRONT_TEMPLATES = ImmutableTable.<Integer, String, String>builder()
-            // Vue2 标准模版
-            .put(CodegenFrontTypeEnum.VUE2.getType(), vueTemplatePath("views/index.vue"),
-                    vueFilePath("views/${table.moduleName}/${classNameVar}/index.vue"))
-            .put(CodegenFrontTypeEnum.VUE2.getType(), vueTemplatePath("api/api.js"),
-                    vueFilePath("api/${table.moduleName}/${classNameVar}.js"))
-            // Vue3 标准模版
-            .put(CodegenFrontTypeEnum.VUE3.getType(), vue3TemplatePath("views/index.vue"),
-                    vue3FilePath("views/${table.moduleName}/${classNameVar}/index.vue"))
-            .put(CodegenFrontTypeEnum.VUE3.getType(), vue3TemplatePath("views/form.vue"),
-                    vue3FilePath("views/${table.moduleName}/${classNameVar}/${simpleClassName}Form.vue"))
-            .put(CodegenFrontTypeEnum.VUE3.getType(), vue3TemplatePath("api/api.ts"),
-                    vue3FilePath("api/${table.moduleName}/${classNameVar}/index.ts"))
-            // Vue3 Schema 模版
-            .put(CodegenFrontTypeEnum.VUE3_SCHEMA.getType(), vue3SchemaTemplatePath("views/data.ts"),
-                    vue3FilePath("views/${table.moduleName}/${classNameVar}/${classNameVar}.data.ts"))
-            .put(CodegenFrontTypeEnum.VUE3_SCHEMA.getType(), vue3SchemaTemplatePath("views/index.vue"),
-                    vue3FilePath("views/${table.moduleName}/${classNameVar}/index.vue"))
-            .put(CodegenFrontTypeEnum.VUE3_SCHEMA.getType(), vue3SchemaTemplatePath("views/form.vue"),
-                    vue3FilePath("views/${table.moduleName}/${classNameVar}/${simpleClassName}Form.vue"))
-            .put(CodegenFrontTypeEnum.VUE3_SCHEMA.getType(), vue3SchemaTemplatePath("api/api.ts"),
-                    vue3FilePath("api/${table.moduleName}/${classNameVar}/index.ts"))
-            // Vue3 vben 模版
-            .put(CodegenFrontTypeEnum.VUE3_VBEN.getType(), vue3VbenTemplatePath("views/data.ts"),
-                    vue3FilePath("views/${table.moduleName}/${classNameVar}/${classNameVar}.data.ts"))
-            .put(CodegenFrontTypeEnum.VUE3_VBEN.getType(), vue3VbenTemplatePath("views/index.vue"),
-                    vue3FilePath("views/${table.moduleName}/${classNameVar}/index.vue"))
-            .put(CodegenFrontTypeEnum.VUE3_VBEN.getType(), vue3VbenTemplatePath("views/form.vue"),
-                    vue3FilePath("views/${table.moduleName}/${classNameVar}/${simpleClassName}Modal.vue"))
-            .put(CodegenFrontTypeEnum.VUE3_VBEN.getType(), vue3VbenTemplatePath("api/api.ts"),
-                    vue3FilePath("api/${table.moduleName}/${classNameVar}/index.ts"))
-            .build();*/
 
     @Resource
     private CodegenProperties codegenProperties;
@@ -832,7 +798,7 @@ public class CodegenEngine {
 
     public void generateNewTable(Map<String, Object> bindingMap){
         // 生成table
-        String vmPath = "codegen/sql/newTable.vm";
+        String vmPath = "codegen/model/newTable.vm";
         String filePath = tableFilePath();
         String content = templateEngine.getTemplate(vmPath).render(bindingMap);
         File newFile;
@@ -844,7 +810,7 @@ public class CodegenEngine {
         }
         FileUtil.appendUtf8String(content, newFile);
         // 生成repository
-        vmPath = javaTemplatePath("repository/repository");
+        vmPath = templatePath("model/repository");
         filePath = javaTableFilePath("repository","${classNameHump}Repository");
         filePath = formatTableFilePath(filePath, bindingMap);
         content = templateEngine.getTemplate(vmPath).render(bindingMap);
@@ -914,6 +880,23 @@ public class CodegenEngine {
                 column.setHumpRelatedTable(upperFirst(toCamelCase(column.getRelatedTable())))
                         .setRelatedTableModuleName(opTable.get().businessName());
             }
+            if(Objects.equals(column.getJavaType(), "Long")
+                    || Objects.equals(column.getJavaType(), "String")
+                    || Objects.equals(column.getJavaType(), "Double")
+                    || Objects.equals(column.getJavaType(), "BigDecimal")
+                    || Objects.equals(column.getJavaType(), "UUID")){
+                column.setVueDataType("string");
+            } else if(Objects.equals(column.getJavaType(), "LocalDateTime") ){
+                column.setVueDataType("Date");
+            }else if(Objects.equals(column.getJavaType(), "Integer") ){
+                column.setVueDataType("number");
+            }else if(Objects.equals(column.getJavaType(), "Boolean") ){
+                column.setVueDataType("boolean");
+            }else if(Objects.equals(column.getJavaType(), "List<String>") || Objects.equals(column.getJavaType(), "List<Long>")){
+                column.setVueDataType("string[]");
+            } else if(Objects.equals(column.getJavaType(), "Map<String, Object>") ) {
+                column.setVueDataType("Map<String, Object>");
+            }
             column.setHumpName(toCamelCase(column.getColumnName()));
         }
         List<CodegenDatabaseMapping> codegenMappings = CodegenConvert.INSTANCE.convertList16(table.mappings());
@@ -942,13 +925,6 @@ public class CodegenEngine {
         bindingMap.put("classNameHump", upperFirst(toCamelCase(table.name())));
         return bindingMap;
     }
-
-/*    private Map<String, String> getTemplates(Integer frontType) {
-        Map<String, String> templates = new LinkedHashMap<>();
-        templates.putAll(SERVER_TEMPLATES);
-        templates.putAll(FRONT_TEMPLATES.row(frontType));
-        return templates;
-    }*/
 
     private String formatTableFilePath(String filePath, Map<String, Object> bindingMap) {
         filePath = StrUtil.replace(filePath, "${basePackage}",
@@ -1145,26 +1121,6 @@ public class CodegenEngine {
         return bindingMap;
     }
 
-   /* private String formatFilePath(String filePath, Map<String, Object> bindingMap) {
-        filePath = StrUtil.replace(filePath, "${basePackage}",
-                getStr(bindingMap, "basePackage").replaceAll("\\.", "/"));
-        filePath = StrUtil.replace(filePath, "${classNameVar}",
-                getStr(bindingMap, "classNameVar"));
-        filePath = StrUtil.replace(filePath, "${simpleClassName}",
-                getStr(bindingMap, "simpleClassName"));
-        // sceneEnum 包含的字段
-        CodegenSceneEnum sceneEnum = (CodegenSceneEnum) bindingMap.get("sceneEnum");
-        filePath = StrUtil.replace(filePath, "${sceneEnum.prefixClass}", sceneEnum.getPrefixClass());
-        filePath = StrUtil.replace(filePath, "${sceneEnum.basePackage}", sceneEnum.getBasePackage());
-        // table 包含的字段
-        InfraCodegenTable table = (InfraCodegenTable) bindingMap.get("table");
-        filePath = StrUtil.replace(filePath, "${table.moduleName}", getStr(bindingMap, "moduleName"));
-        filePath = StrUtil.replace(filePath, "${table.businessName}", table.businessName());
-        filePath = StrUtil.replace(filePath, "${simpleClassNameHump}", getStr(bindingMap, "simpleClassNameHump"));
-        filePath = StrUtil.replace(filePath, "${simpleLowerClassNameHump}", getStr(bindingMap, "simpleLowerClassNameHump"));
-        filePath = StrUtil.replace(filePath, "${classNameHump}", getStr(bindingMap, "classNameHump"));
-        return filePath;
-    }*/
 
     private String tableFilePath(){
         String curDate = DateUtil.format(LocalDateTime.now(), "yyyyMMdd");
@@ -1177,8 +1133,8 @@ public class CodegenEngine {
         return filePath;
     }
 
-    private static String javaTemplatePath(String path) {
-        return "codegen/java/" + path + ".vm";
+    private static String templatePath(String path) {
+        return "codegen/" + path + ".vm";
     }
 
     private static String javaBaseVOFilePath(String path) {
@@ -1197,13 +1153,6 @@ public class CodegenEngine {
         return javaFilePath(path) +  "/${modulePath}/" + file + ".java";
     }
 
-/*    private static String javaModuleApiMainFilePath() {
-        return javaFilePath("enums/ErrorCodeConstants_手动操作", "api", "main");
-    }
-
-    private static String javaModuleImplTestFilePath() {
-        return javaFilePath("service/${moduleName}/${table.businessName}/${simpleClassNameHump}ServiceImplTest", "biz", "test");
-    }*/
 
     private static String javaFilePath(String path) {
         return FileUtil.getParent(FileUtil.getAbsolutePath(""), 3) + "/yudao-service/yudao-service-biz/src/main/java/${basePackage}/service/" + path;
@@ -1213,28 +1162,12 @@ public class CodegenEngine {
         return FileUtil.getParent(FileUtil.getAbsolutePath(""), 3) + "/yudao-service/yudao-service-api/src/main/java/${basePackage}/service/" + path;
     }
 
-/*    private static String vueTemplatePath(String path) {
-        return "codegen/vue/" + path + ".vm";
-    }*/
 
+    private static String vueTableFilePath() {
+        return FileUtil.getParent(FileUtil.getAbsolutePath(""), 4) + "/frontend/src/model/${moduleName}/${table.businessName}/${classNameHump}.ts";
+    }
     private static String vueFilePath(String path) {
         return FileUtil.getParent(FileUtil.getAbsolutePath(""), 4) + "/frontend/src/"  + path;
     }
-/*
-    private static String vue3TemplatePath(String path) {
-        return "codegen/vue3/" + path + ".vm";
-    }
 
-    private static String vue3FilePath(String path) {
-        return "yudao-ui-${sceneEnum.basePackage}-vue3/" + // 顶级目录
-                "src/" + path;
-    }
-
-    private static String vue3SchemaTemplatePath(String path) {
-        return "codegen/vue3_schema/" + path + ".vm";
-    }
-
-    private static String vue3VbenTemplatePath(String path) {
-        return "codegen/vue3_vben/" + path + ".vm";
-    }*/
 }

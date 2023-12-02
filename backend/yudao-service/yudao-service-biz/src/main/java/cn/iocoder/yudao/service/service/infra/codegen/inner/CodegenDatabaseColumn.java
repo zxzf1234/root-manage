@@ -40,6 +40,8 @@ public class CodegenDatabaseColumn {
 
     private List<Validation> validations;
 
+    private String vueDataType;
+
     @Data
     public static class Validation extends InfraInterfaceValidationBase {
         private UUID id;
