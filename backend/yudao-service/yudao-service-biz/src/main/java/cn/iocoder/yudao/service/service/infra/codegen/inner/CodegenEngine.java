@@ -595,12 +595,33 @@ public class CodegenEngine {
                     if(returnIndex > 0){
                         fileContent.replace(returnIndex , returnIndex + oldReturnContent.length(), newReturnContent);
                     }
-                }else if(vmPath.contains("convert") || vmPath.contains("service") || vmPath.contains("vueApi") ){
+                }else if(vmPath.contains("convert") || vmPath.contains("service") ){
                     int index = fileContent.indexOf(oldInterfaceContent);
                     if(index > 0){
                         fileContent.replace(index , index + oldInterfaceContent.length(), newInterfaceContent);
                     }
-                } else {
+                    else
+                    {
+                        if(!newInterfaceContent.isEmpty()) {
+                            int lastIndex = fileContent.lastIndexOf("\r\n}");
+                            if(lastIndex > 0) {
+                                fileContent.insert(index, newInterfaceContent);
+                            }else {
+                                fileContent.append(newInterfaceContent);
+                            }
+                        }
+                    }
+                }else if( vmPath.contains("vueApi") ) {
+                    int index = fileContent.indexOf(oldInterfaceContent);
+                    if(index > 0){
+                        fileContent.replace(index , index + oldInterfaceContent.length(), newInterfaceContent);
+                    }
+                    else
+                    {
+                        if(!newInterfaceContent.isEmpty())
+                            fileContent.append(newInterfaceContent);
+                    }
+                }else {
                     fileContent = new StringBuilder(newInterfaceContent);
                 }
                 if(vmPath.contains("convert") && (!newConvertImportList.isEmpty() || !oldConvertImportList.isEmpty()))
@@ -615,7 +636,7 @@ public class CodegenEngine {
 
                 if(vmPath.contains("voOutput") && (!newOutputImportList.isEmpty() || !oldOutputImportList.isEmpty()))
                     fileUpdateImport(fileContent, oldOutputImportList, newOutputImportList);
-//                FileUtil.writeUtf8String(fileContent.toString(), newFile);
+                FileUtil.writeUtf8String(fileContent.toString(), newFile);
 
             }
         }

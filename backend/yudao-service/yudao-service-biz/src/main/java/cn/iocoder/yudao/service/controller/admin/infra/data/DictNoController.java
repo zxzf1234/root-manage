@@ -1,4 +1,5 @@
 package cn.iocoder.yudao.service.controller.admin.infra.data;
+import cn.iocoder.yudao.service.vo.infra.data.dictNo.DictNoGetOutput;
 import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
@@ -33,5 +34,12 @@ public class DictNoController {
 
     @Resource
     private DictNoService dictNoService;
+
+    @GetMapping("/get")
+    @Operation(summary = "获取单个字典编号")
+    @Parameter(name = "id", description = "字典ID", example = "")
+    public CommonResult<DictNoGetOutput> get(@RequestParam("id") String id) {
+        return success(dictNoService.get(id));
+    }
 
 }

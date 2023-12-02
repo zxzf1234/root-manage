@@ -1,5 +1,6 @@
 package cn.iocoder.yudao.service.service.infra.data;
 
+import cn.iocoder.yudao.service.vo.infra.data.dictNo.DictNoGetOutput;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
@@ -22,5 +23,10 @@ import static cn.iocoder.yudao.service.enums.infra.ErrorCodeConstants.*;
 public class DictNoServiceImpl implements DictNoService {
 
 
+
+    @Override
+    public DictNoGetOutput get(String id) {
+        return null;
+    }
 
 }
