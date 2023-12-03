@@ -1,5 +1,7 @@
 package cn.iocoder.yudao.service.service.infra.data;
 
+import cn.iocoder.yudao.service.vo.infra.data.dictNo.DictNoUpdateInput;
+import cn.iocoder.yudao.service.vo.infra.data.dictNo.DictNoCreateInput;
 import cn.iocoder.yudao.service.vo.infra.data.dictNo.DictNoGetOutput;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
@@ -27,6 +29,17 @@ public class DictNoServiceImpl implements DictNoService {
     @Override
     public DictNoGetOutput get(String id) {
         return null;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public String create(DictNoCreateInput inputVO) {
+        return null;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void update(DictNoUpdateInput inputVO) {
     }
 
 }

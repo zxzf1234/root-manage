@@ -6,4 +6,5 @@ export type InfraDictNo = {
   lastDate: Date
   postfixLen: number
   postfixVal: number
+  remark: string
 }

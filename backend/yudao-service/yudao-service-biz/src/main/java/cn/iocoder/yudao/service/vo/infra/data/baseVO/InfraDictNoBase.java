@@ -38,4 +38,7 @@ public class InfraDictNoBase {
     @Schema(description = "后缀值")
     private Integer postfixVal;
 
+    @Schema(description = "备注")
+    private String remark;
+
 }

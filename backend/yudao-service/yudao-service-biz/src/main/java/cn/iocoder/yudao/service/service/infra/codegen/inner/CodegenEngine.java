@@ -492,7 +492,8 @@ public class CodegenEngine {
 
                 StringBuilder fileContent = new StringBuilder(FileUtil.readUtf8String(newFile));
                 int index = fileContent.lastIndexOf("\r\n}");
-                if(index > 0) {
+                // vue前端代码直接追究 java代码要放到最后一个}前
+                if(index > 0 && !vmPath.contains("vueApi")) {
                     fileContent.insert(index, interfaceContent);
                 }else {
                     fileContent.append(interfaceContent);

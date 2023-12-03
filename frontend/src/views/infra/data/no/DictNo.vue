@@ -14,7 +14,7 @@
           v-model="queryParams.name"
           class="!w-240px"
           clearable
-          placeholder="请输入字典名称"
+          placeholder="请输入编号类别"
           @keyup.enter="handleQuery"
         />
       </el-form-item>
@@ -23,7 +23,16 @@
           v-model="queryParams.type"
           class="!w-240px"
           clearable
-          placeholder="请输入字典类型"
+          placeholder="请输入前缀"
+          @keyup.enter="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="前缀" prop="remark">
+        <el-input
+          v-model="queryParams.remark"
+          class="!w-240px"
+          clearable
+          placeholder="请输入前缀"
           @keyup.enter="handleQuery"
         />
       </el-form-item>
@@ -78,12 +87,12 @@
   </ContentWrap>
 
   <!-- 表单弹窗：添加/修改 -->
-  <DictTypeForm ref="formRef" @success="getList" />
+  <DictNoEdit ref="formRef" @success="getList" />
 </template>
 
-<script lang="ts" name="InfraNo" setup>
+<script lang="ts" name="infraDictNo" setup>
 import * as DictTypeApi from '@/api/infra/data/dict/dict'
-import DictTypeForm from './DictTypeForm.vue'
+import DictNoEdit from './DictNoEdit.vue'
 import { formatDate } from '@/utils/formatTime'
 
 const loading = ref(true) // 列表的加载中

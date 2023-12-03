@@ -1,4 +1,6 @@
 package cn.iocoder.yudao.service.controller.admin.infra.data;
+import cn.iocoder.yudao.service.vo.infra.data.dictNo.DictNoUpdateInput;
+import cn.iocoder.yudao.service.vo.infra.data.dictNo.DictNoCreateInput;
 import cn.iocoder.yudao.service.vo.infra.data.dictNo.DictNoGetOutput;
 import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
@@ -40,6 +42,20 @@ public class DictNoController {
     @Parameter(name = "id", description = "字典ID", example = "")
     public CommonResult<DictNoGetOutput> get(@RequestParam("id") String id) {
         return success(dictNoService.get(id));
+    }
+
+    @PostMapping("/create")
+    @Operation(summary = "新建字段编号")
+    @PreAuthorize("@ss.hasPermission('infra:data:dict-no:create')")
+    public CommonResult<String> create(@Valid @RequestBody DictNoCreateInput inputVO) {
+        return success(dictNoService.create(inputVO));
+    }
+
+    @PostMapping("/update")
+    @Operation(summary = "更新字典编号")
+    @PreAuthorize("@ss.hasPermission('infra:data:dict-no:update')")
+    public void update(@Valid @RequestBody DictNoUpdateInput inputVO) {
+        dictNoService.update(inputVO);
     }
 
 }

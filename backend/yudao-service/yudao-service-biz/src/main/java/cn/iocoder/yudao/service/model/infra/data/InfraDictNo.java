@@ -24,4 +24,6 @@ public interface InfraDictNo extends BaseEntity {
 
     Integer postfixVal();
 
+    String remark();
+
 }

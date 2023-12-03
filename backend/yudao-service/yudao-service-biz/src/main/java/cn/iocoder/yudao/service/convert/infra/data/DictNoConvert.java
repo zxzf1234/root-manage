@@ -1,5 +1,7 @@
 package cn.iocoder.yudao.service.convert.infra.data;
 
+import cn.iocoder.yudao.service.vo.infra.data.dictNo.DictNoUpdateInput;
+import cn.iocoder.yudao.service.vo.infra.data.dictNo.DictNoCreateInput;
 import cn.iocoder.yudao.service.vo.infra.data.dictNo.DictNoGetOutput;
 import cn.iocoder.yudao.service.model.infra.data.InfraDictNo;
 import java.util.*;
@@ -17,6 +19,9 @@ public interface DictNoConvert {
     DictNoConvert INSTANCE = Mappers.getMapper(DictNoConvert.class);
 
     DictNoGetOutput getOutputConvert(InfraDictNo output);
+
+    InfraDictNo createInputConvert(DictNoCreateInput input);
+
 }
 
 
