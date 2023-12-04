@@ -9,9 +9,9 @@
       class="-mb-15px"
       label-width="68px"
     >
-      <el-form-item label="编号类别" prop="name">
+      <el-form-item label="编码名称" prop="name">
         <el-input
-          v-model="queryParams.name"
+          v-model="queryParams.keyName"
           class="!w-240px"
           clearable
           placeholder="请输入编号类别"
@@ -20,7 +20,7 @@
       </el-form-item>
       <el-form-item label="前缀" prop="type">
         <el-input
-          v-model="queryParams.type"
+          v-model="queryParams.prefix"
           class="!w-240px"
           clearable
           placeholder="请输入前缀"
@@ -57,7 +57,7 @@
           重置
         </el-button>
         <el-button
-          v-hasPermi="['infra:data:no:create']"
+          v-hasPermi="['infra:data:dict-no:create']"
           plain
           type="primary"
           @click="openForm('create')"
@@ -72,14 +72,14 @@
       :columns="typeColumns"
       :page-param="queryParams"
       @page-change="getList"
-      :page-data="typeData"
+      :page-data="noData"
       adaptive
       @row-dblclick="(row) => openForm('update', row.id)"
     >
       <template #menu="{ row }">
         <context-menu-item
           label="修改"
-          v-hasPermi="['infra:data:no:update']"
+          v-hasPermi="['infra:data:dict-no:update']"
           @click="openForm('update', row.id)"
         />
       </template>
@@ -91,44 +91,37 @@
 </template>
 
 <script lang="ts" name="infraDictNo" setup>
-import * as DictTypeApi from '@/api/infra/data/dict/dict'
+import * as DictNoApi from '@/api/infra/data/dictNo'
 import DictNoEdit from './DictNoEdit.vue'
 import { formatDate } from '@/utils/formatTime'
 
 const loading = ref(true) // 列表的加载中
-const typeData = ref()
+const noData = ref()
 const typeColumns: TableColumnList = [
   {
-    label: '字典编号',
-    prop: 'id'
+    label: '编码名称',
+    prop: 'keyName'
   },
   {
-    label: '字典名称',
-    prop: 'name',
-    showOverflowTooltip: true
+    label: '前缀',
+    prop: 'prefix'
   },
   {
-    label: '字典类型',
-    prop: 'type'
+    label: '日期格式',
+    prop: 'dateForm'
   },
   {
-    label: '一级模块',
-    prop: 'firstModule'
+    label: '日期计算方式',
+    prop: 'dateBase'
   },
   {
-    label: '二级模块',
-    prop: 'secondModule'
-  },
-  {
-    label: '状态',
-    prop: 'status',
-    slot: 'status'
+    label: '后缀长度',
+    prop: 'postfixLen'
   },
   {
     label: '备注',
     prop: 'remark'
   },
-
   {
     label: '创建时间',
     prop: 'createTime',
@@ -139,9 +132,9 @@ const typeColumns: TableColumnList = [
 const queryParams = reactive({
   pageNo: 1,
   pageSize: 10,
-  name: '',
-  type: '',
-  status: undefined,
+  keyName: '',
+  prefix: '',
+  remark: '',
   createTime: []
 })
 const queryFormRef = ref() // 搜索的表单
@@ -150,7 +143,7 @@ const queryFormRef = ref() // 搜索的表单
 const getList = async () => {
   loading.value = true
   try {
-    typeData.value = await DictTypeApi.getDictTypePage(queryParams)
+    noData.value = await DictNoApi.query(queryParams)
   } finally {
     loading.value = false
   }

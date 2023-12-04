@@ -1,7 +1,7 @@
 import request from '@/config/axios'
 import { InfraDictNo } from '@/model/infra/data/InfraDictNo'
 
-export interface InfraDictNoVo extends InfraDictNo {
+export type InfraDictNoVo = InfraDictNo & {
   id: string
 }
 
@@ -15,13 +15,20 @@ export const get = (id) => {
 /**
  * 新建字段编号
  */
-export const create = (params) => {
-  return request.post({ url: '/infra/data/dict-no/create', params })
+export const create = (data: InfraDictNoVo) => {
+  return request.post({ url: '/infra/data/dict-no/create', data })
 }
 
 /**
  * 更新字典编号
  */
-export const update = (params) => {
-  return request.post({ url: '/infra/data/dict-no/update', params })
+export const update = (data) => {
+  return request.post({ url: '/infra/data/dict-no/update', data })
+}
+
+/**
+ * 字典编号查询
+ */
+export const query = (params) => {
+  return request.get({ url: '/infra/data/dict-no/query', params })
 }

@@ -1,0 +1,5 @@
+update INFRA_DATABASE_COLUMN tb_1_ set COLUMN_COMMENT = '主键ID', COLUMN_NAME = 'id', DATA_TYPE = 'VARCHAR(50)', DEFAULT_VALUE = '', DICT_TYPE = '', EXAMPLE = '', JAVA_TYPE = 'UUID', NULLABLE = 0, RELATED_TABLE = '', REQUIRED = 0 where tb_1_.ID = 'd9de42fc-bd74-4da6-9449-8ef027ecfd10';
+ALTER TABLE infra_dict_no
+CHANGE `id` `id` VARCHAR(50) NOT NULL  COMMENT '主键ID';
+update INFRA_INTERFACE set UPDATER_ID = '1', NAME = 'update', COMMENT = '更新字典编号', METHOD = 'post', AUTHORIZE = 'infra:data:dict-no:update', IS_TRANSACTION = 1, MODULE_ID = 'a9ce47bc-a3a3-44d3-942a-05ae0dd2a66b', INPUT_TYPE = 'VOClass', INPUT_EXTEND_CLASS = 'InfraDictNoBase', OUTPUT_TYPE = 'void', OUTPUT_EXTEND_CLASS = '', INPUT_SERVLET = 0 where ID = '07bc988c-f26c-43c8-ae4d-b0569c4fcb98';
+update INFRA_INTERFACE set UPDATER_ID = '1', NAME = 'query', COMMENT = '字典编号查询', METHOD = 'post', AUTHORIZE = 'infra:data:dict-no:query', IS_TRANSACTION = 0, MODULE_ID = 'a9ce47bc-a3a3-44d3-942a-05ae0dd2a66b', INPUT_TYPE = 'VOClass', INPUT_EXTEND_CLASS = 'PageParam', OUTPUT_TYPE = 'VOClassPage', OUTPUT_EXTEND_CLASS = 'InfraDictNoBase', INPUT_SERVLET = 0 where ID = 'e266d92e-95b2-4d3b-b240-017e1cea8ae4';

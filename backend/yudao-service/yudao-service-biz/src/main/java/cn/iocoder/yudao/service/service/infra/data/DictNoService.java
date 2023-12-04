@@ -1,5 +1,7 @@
 package cn.iocoder.yudao.service.service.infra.data;
 
+import cn.iocoder.yudao.service.vo.infra.data.dictNo.DictNoQueryOutput;
+import cn.iocoder.yudao.service.vo.infra.data.dictNo.DictNoQueryInput;
 import cn.iocoder.yudao.service.vo.infra.data.dictNo.DictNoUpdateInput;
 import cn.iocoder.yudao.service.vo.infra.data.dictNo.DictNoCreateInput;
 import cn.iocoder.yudao.service.vo.infra.data.dictNo.DictNoGetOutput;
@@ -18,5 +20,7 @@ public interface DictNoService {
     String create(DictNoCreateInput inputVO);
 
     void update(DictNoUpdateInput inputVO);
+
+    PageResult<DictNoQueryOutput> query(DictNoQueryInput inputVO);
 
 }

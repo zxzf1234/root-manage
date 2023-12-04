@@ -1,4 +1,7 @@
 package cn.iocoder.yudao.service.controller.admin.infra.data;
+import cn.iocoder.yudao.service.vo.infra.data.baseVO.InfraDictNoBase;
+import cn.iocoder.yudao.service.vo.infra.data.dictNo.DictNoQueryOutput;
+import cn.iocoder.yudao.service.vo.infra.data.dictNo.DictNoQueryInput;
 import cn.iocoder.yudao.service.vo.infra.data.dictNo.DictNoUpdateInput;
 import cn.iocoder.yudao.service.vo.infra.data.dictNo.DictNoCreateInput;
 import cn.iocoder.yudao.service.vo.infra.data.dictNo.DictNoGetOutput;
@@ -56,6 +59,13 @@ public class DictNoController {
     @PreAuthorize("@ss.hasPermission('infra:data:dict-no:update')")
     public void update(@Valid @RequestBody DictNoUpdateInput inputVO) {
         dictNoService.update(inputVO);
+    }
+
+    @GetMapping("/query")
+    @Operation(summary = "字典编号查询")
+    @PreAuthorize("@ss.hasPermission('infra:data:dict-no:query')")
+    public CommonResult<PageResult<DictNoQueryOutput>> query(@Valid DictNoQueryInput inputVO) {
+        return success(dictNoService.query(inputVO));
     }
 
 }

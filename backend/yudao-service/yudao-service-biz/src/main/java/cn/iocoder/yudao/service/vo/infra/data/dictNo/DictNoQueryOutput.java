@@ -8,11 +8,10 @@ import javax.validation.constraints.*;
 import org.hibernate.validator.constraints.Length;
 import javax.validation.Valid;
 
-@Schema(description = "更新字典编号")
+@Schema(description = "字典编号查询")
 @Data
-public class DictNoUpdateInput extends InfraDictNoBase {
+public class DictNoQueryOutput extends InfraDictNoBase {
 
-    @Schema(description = "字典ID")
+    @Schema(description = "编号ID")
     private UUID id;
-
 }

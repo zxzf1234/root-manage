@@ -1,5 +1,7 @@
 package cn.iocoder.yudao.service.convert.infra.data;
 
+import cn.iocoder.yudao.service.vo.infra.data.dictNo.DictNoQueryInput;
+import cn.iocoder.yudao.service.vo.infra.data.dictNo.DictNoQueryOutput;
 import cn.iocoder.yudao.service.vo.infra.data.dictNo.DictNoUpdateInput;
 import cn.iocoder.yudao.service.vo.infra.data.dictNo.DictNoCreateInput;
 import cn.iocoder.yudao.service.vo.infra.data.dictNo.DictNoGetOutput;
@@ -21,6 +23,10 @@ public interface DictNoConvert {
     DictNoGetOutput getOutputConvert(InfraDictNo output);
 
     InfraDictNo createInputConvert(DictNoCreateInput input);
+
+    List<DictNoQueryOutput> queryPageOutputConvert(Page<InfraDictNo> output);
+
+    InfraDictNo updateInputConvert(DictNoUpdateInput input);
 
 }
 
