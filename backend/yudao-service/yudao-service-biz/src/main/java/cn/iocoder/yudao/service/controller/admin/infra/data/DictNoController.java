@@ -57,8 +57,8 @@ public class DictNoController {
     @PostMapping("/update")
     @Operation(summary = "更新字典编号")
     @PreAuthorize("@ss.hasPermission('infra:data:dict-no:update')")
-    public void update(@Valid @RequestBody DictNoUpdateInput inputVO) {
-        dictNoService.update(inputVO);
+    public CommonResult<String> update(@Valid @RequestBody DictNoUpdateInput inputVO) {
+        return success(dictNoService.update(inputVO));
     }
 
     @GetMapping("/query")

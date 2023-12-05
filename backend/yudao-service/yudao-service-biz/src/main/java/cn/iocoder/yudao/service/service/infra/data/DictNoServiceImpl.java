@@ -38,13 +38,21 @@ public class DictNoServiceImpl implements DictNoService {
 
     @Override
     public DictNoGetOutput get(String id) {
-        return null;
+        Optional<InfraDictNo> opNo = infraDictNoRepository.findById(UUID.fromString(id));
+        if(opNo.isPresent()) {
+            return DictNoConvert.INSTANCE.getOutputConvert(opNo.get());
+        }
+        else {
+            throw exception(DICT_NO_NOT_EXISTS);
+        }
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public String create(DictNoCreateInput inputVO) {
         InfraDictNo newNo = DictNoConvert.INSTANCE.createInputConvert(inputVO);
+        if(infraDictNoRepository.findByKeyName(newNo.keyName()).isPresent())
+            throw exception(DICT_NO_EXISTS);
         newNo = InfraDictNoDraft.$.produce(newNo, draft -> {
             draft.setLastDate(LocalDate.now().atStartOfDay()).setPostfixVal(1);
         });
@@ -54,9 +62,12 @@ public class DictNoServiceImpl implements DictNoService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void update(DictNoUpdateInput inputVO) {
+    public String update(DictNoUpdateInput inputVO) {
         InfraDictNo updateNo = DictNoConvert.INSTANCE.updateInputConvert(inputVO);
+        if(infraDictNoRepository.findByKeyName(updateNo.keyName()).isPresent())
+            throw exception(DICT_NO_EXISTS);
         infraDictNoRepository.update(updateNo);
+        return updateNo.id().toString();
     }
 
     @Override

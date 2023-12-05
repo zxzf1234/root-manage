@@ -19,7 +19,7 @@ public interface DictNoService {
 
     String create(DictNoCreateInput inputVO);
 
-    void update(DictNoUpdateInput inputVO);
+    String update(DictNoUpdateInput inputVO);
 
     PageResult<DictNoQueryOutput> query(DictNoQueryInput inputVO);
 

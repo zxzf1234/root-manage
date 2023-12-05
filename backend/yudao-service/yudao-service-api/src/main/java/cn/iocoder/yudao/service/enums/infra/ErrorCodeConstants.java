@@ -69,5 +69,9 @@ public interface ErrorCodeConstants {
     ErrorCode  DICT_DATA_VALUE_DUPLICATE= new ErrorCode(1001008203, "已经存在该值的字典数据");
     ErrorCode DICT_DATA_EXPORT_EXCEPTION = new ErrorCode(1001008204, "字段导出异常");
 
+    // ========== 字典编号 1001009000 ==========
+    ErrorCode DICT_NO_EXISTS = new ErrorCode(1001009000, "当前字典编号不存在");
+    ErrorCode DICT_NO_NOT_EXISTS = new ErrorCode(1001009001, "当前字典编号已存在");
+
 
 }

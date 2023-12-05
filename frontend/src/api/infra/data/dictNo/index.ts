@@ -20,15 +20,15 @@ export const create = (data: InfraDictNoVo) => {
 }
 
 /**
- * 更新字典编号
- */
-export const update = (data) => {
-  return request.post({ url: '/infra/data/dict-no/update', data })
-}
-
-/**
  * 字典编号查询
  */
 export const query = (params) => {
   return request.get({ url: '/infra/data/dict-no/query', params })
+}
+
+/**
+ * 更新字典编号
+ */
+export const update = (data) => {
+  return request.post({ url: '/infra/data/dict-no/update', data })
 }

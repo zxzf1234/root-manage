@@ -7,6 +7,9 @@ import org.babyfish.jimmer.spring.repository.JRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.util.StringUtils;
 
+import java.util.Optional;
+import java.util.UUID;
+
 public interface InfraDictNoRepository extends JRepository<InfraDictNo, Long> {
     InfraDictNoTable infraNoTable = InfraDictNoTable.$;
 
@@ -19,4 +22,8 @@ public interface InfraDictNoRepository extends JRepository<InfraDictNo, Long> {
                 .select(infraNoTable)
         );
     }
+
+    Optional<InfraDictNo> findById(UUID id);
+
+    Optional<InfraDictNo> findByKeyName(String keyName);
 }

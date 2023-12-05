@@ -5,30 +5,49 @@
       v-loading="formLoading"
       :model="formData"
       :rules="formRules"
-      label-width="80px"
+      label-width="120px"
     >
-      <el-form-item label="编码名称" prop="keyName">
-        <el-input v-model="formData.keyName" placeholder="请输入编码名称" />
-      </el-form-item>
-      <el-form-item label="前缀" prop="prefix">
-        <el-input v-model="formData.prefix" placeholder="请输入前缀" />
-      </el-form-item>
-      <el-form-item label="日期格式" prop="dateForm">
-        <el-select v-model="formData.dateForm">
-          <el-option label="YYYYMMDD" value="0" />
-          <el-option label="YYMMDD" value="1" />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="日期计算方式" prop="dateBase">
-        <el-select v-model="formData.dateBase">
-          <el-option label="全日期" value="0" />
-          <el-option label="短日期" value="1" />
-          <el-option label="无日期" value="2" />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="后缀长度" prop="postfixLen">
-        <el-input v-model="formData.postfixLen" placeholder="请输入后缀长度" type="textarea" />
-      </el-form-item>
+      <el-row>
+        <el-col :span="8">
+          <el-form-item label="编码名称" prop="keyName">
+            <el-input v-model="formData.keyName" placeholder="请输入编码名称" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="备注" prop="remark">
+            <el-input v-model="formData.remark" placeholder="请输入备注" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="前缀" prop="prefix">
+            <el-input v-model="formData.prefix" placeholder="请输入前缀" />
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="8">
+          <el-form-item label="后缀长度" prop="postfixLen">
+            <el-input v-model="formData.postfixLen" placeholder="请输入后缀长度" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="日期格式" prop="dateForm">
+            <el-select v-model="formData.dateForm">
+              <el-option label="YYYYMMDD" :value="0" />
+              <el-option label="YYMMDD" :value="1" />
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="日期计算方式" prop="dateBase">
+            <el-select v-model="formData.dateBase">
+              <el-option label="全日期" :value="0" />
+              <el-option label="短日期" :value="1" />
+              <el-option label="无日期" :value="2" />
+            </el-select>
+          </el-form-item>
+        </el-col>
+      </el-row>
     </el-form>
     <template #footer>
       <el-button :disabled="formLoading" type="primary" @click="submitForm">确 定</el-button>
@@ -51,7 +70,8 @@ const formData = ref({
   prefix: '',
   dateForm: 0,
   dateBase: 0,
-  postfixLen: 4
+  postfixLen: 4,
+  remark: ''
 })
 const formRules = reactive({
   keyName: [{ required: true, message: '编码名称不能为空', trigger: 'blur' }],
@@ -114,7 +134,8 @@ const resetForm = () => {
     prefix: '',
     dateForm: 0,
     dateBase: 0,
-    postfixLen: 4
+    postfixLen: 4,
+    remark: ''
   }
   formRef.value?.resetFields()
 }

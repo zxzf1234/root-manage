@@ -83,6 +83,12 @@
           @click="openForm('update', row.id)"
         />
       </template>
+      <template #dateForm="{ row }">
+        {{ dateForms[row.dateForm] }}
+      </template>
+      <template #dateBase="{ row }">
+        {{ dateBases[row.dateBase] }}
+      </template>
     </Table>
   </ContentWrap>
 
@@ -97,6 +103,8 @@ import { formatDate } from '@/utils/formatTime'
 
 const loading = ref(true) // 列表的加载中
 const noData = ref()
+const dateForms = ['YYYYMMDD', 'YYMMDD']
+const dateBases = ['全日期', '短日期', '无日期']
 const typeColumns: TableColumnList = [
   {
     label: '编码名称',
@@ -108,11 +116,13 @@ const typeColumns: TableColumnList = [
   },
   {
     label: '日期格式',
-    prop: 'dateForm'
+    prop: 'dateForm',
+    slot: 'dateForm'
   },
   {
     label: '日期计算方式',
-    prop: 'dateBase'
+    prop: 'dateBase',
+    slot: 'dateBase'
   },
   {
     label: '后缀长度',
