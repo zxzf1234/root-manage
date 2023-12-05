@@ -23,4 +23,6 @@ public interface DictNoService {
 
     PageResult<DictNoQueryOutput> query(DictNoQueryInput inputVO);
 
+    String produceNo(String keyName);
+
 }

@@ -26,4 +26,8 @@ public interface InfraDictNoRepository extends JRepository<InfraDictNo, Long> {
     Optional<InfraDictNo> findById(UUID id);
 
     Optional<InfraDictNo> findByKeyName(String keyName);
+
+    default Optional<InfraDictNo> findByKeyNameUpdate(String keyName){
+        return sql().createQuery(infraNoTable).where(infraNoTable.keyName().eq(keyName)).select(infraNoTable).forUpdate().fetchOptional();
+    }
 }
