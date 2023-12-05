@@ -12,8 +12,12 @@ export const ${interfaceNameHump} = ($interfaceInputVar) => {
   return request.${interface.method}({ url: '/${modulePath}/${moduleNameSymbol}/${interfaceNameSymbol}?${interfaceInputVar}=' + ${interfaceInputVar} })
 }
     #else
-export const ${interfaceNameHump} = (params) => {
-  return request.${interface.method}({ url: '/${modulePath}/${moduleNameSymbol}/${interfaceNameSymbol}', params })
+        #set($params = "params")
+        #if(${interface.method} == "post" || ${interface.method} == "put")
+            #set($params = "data")
+        #end
+export const ${interfaceNameHump} = ($params) => {
+  return request.${interface.method}({ url: '/${modulePath}/${moduleNameSymbol}/${interfaceNameSymbol}', $params })
 }
     #end
 #end
