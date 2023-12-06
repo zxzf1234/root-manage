@@ -328,6 +328,7 @@ export const SystemRoleTypeEnum = {
  * @param QRTZ_SIMPLE_TRIGGERS 存储简单的trigger，包括重复次数，间隔，以及触发次数
  * @param QRTZ_SIMPROP_TRIGGERS 存储CalendarIntervalTrigger和DailyTimeIntervalTrigger两种类型的触发器
  * @param QRTZ_TRIGGERS 记录每个触发器的详细信息
+ * @param INFRA_DICT_NO 字典编号
  */
 export const InfraCodegenTableEnum = {
   //菜单
@@ -379,7 +380,18 @@ export const InfraCodegenTableEnum = {
   //存储CalendarIntervalTrigger和DailyTimeIntervalTrigger两种类型的触发器
   QRTZ_SIMPROP_TRIGGERS: 'QRTZ_SIMPROP_TRIGGERS',
   //记录每个触发器的详细信息
-  QRTZ_TRIGGERS: 'QRTZ_TRIGGERS'
+  QRTZ_TRIGGERS: 'QRTZ_TRIGGERS',
+  //字典编号
+  INFRA_DICT_NO: 'INFRA_DICT_NO'
+}
+
+/**
+ * 不需要代码生成的函数
+ * @param DICTNOSERVICEIMPLPRODUCENO 字典编号生成编号
+ */
+export const InfraCodegenExcludeFunctionEnum = {
+  //字典编号生成编号
+  DICTNOSERVICEIMPLPRODUCENO: 'DictNoServiceImpl.produceNo'
 }
 
 /**

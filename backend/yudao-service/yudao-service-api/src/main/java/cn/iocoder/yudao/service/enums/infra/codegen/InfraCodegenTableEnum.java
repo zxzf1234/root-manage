@@ -109,7 +109,11 @@ public enum InfraCodegenTableEnum {
     /**
     * 记录每个触发器的详细信息
     */
-    QRTZ_TRIGGERS("QRTZ_TRIGGERS");
+    QRTZ_TRIGGERS("QRTZ_TRIGGERS"),
+    /**
+    * 字典编号
+    */
+    INFRA_DICT_NO("INFRA_DICT_NO");
 
     private final String value;
 

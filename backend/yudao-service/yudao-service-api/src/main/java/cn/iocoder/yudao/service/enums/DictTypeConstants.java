@@ -30,6 +30,7 @@ public interface DictTypeConstants {
     String ERROR_CODE_TYPE = "system_error_code_type"; // 错误码的类型枚举
 
     // ========== INFRA 模块 ==========
+    String INFRA_CODEGEN_EXCLUDE_FUNCTION = "infra_codegen_exclude_function"; // 不需要代码生成的函数
     String INFRA_CODEGEN_TABLE = "infra_codegen_table"; // 升级时需要代码生成的数据库表
     String INFRA_ERROR_CODE_TYPE = "infra_error_code_type"; // 错误码的类型
     String INFRA_JOB_STATUS = "infra_job_status"; // 定时任务状态
