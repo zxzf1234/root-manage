@@ -56,4 +56,7 @@ public class SystemUserBase {
     @DateTimeFormat(pattern = FORMAT_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND)
     private LocalDateTime loginDate;
 
+    @Schema(description = "用户编号")
+    private String userNo;
+
 }

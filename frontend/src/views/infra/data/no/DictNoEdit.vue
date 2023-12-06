@@ -20,7 +20,12 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="前缀" prop="prefix">
-            <el-input v-model="formData.prefix" placeholder="请输入前缀" />
+            <el-input
+              v-model="formData.prefix"
+              placeholder="请输入前缀"
+              @blur="formData.prefix = formData.prefix.toUpperCase()"
+              @keyup="formData.prefix = formData.prefix.replace(/[^a-zA-Z_]/g, '')"
+            />
           </el-form-item>
         </el-col>
       </el-row>

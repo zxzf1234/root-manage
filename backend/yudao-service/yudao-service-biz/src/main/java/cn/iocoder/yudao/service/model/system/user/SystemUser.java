@@ -48,4 +48,6 @@ public interface SystemUser extends BaseEntity {
     @Nullable
     LocalDateTime loginDate();
 
+    String userNo();
+
 }
