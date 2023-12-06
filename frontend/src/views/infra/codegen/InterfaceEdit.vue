@@ -1124,6 +1124,10 @@ const handleSaveInterface = async () => {
   if (!outputParamRef) return
   const outputValid = await outputParamRef.value.validate()
   if (!outputValid) return
+  if (formData.value.method != 'download' && formData.value.outputType == 'void') {
+    message.alertError('非download的调用方法出参类型不能是void')
+    return
+  }
   // 提交请求
   formLoading.value = true
   try {

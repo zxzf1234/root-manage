@@ -606,7 +606,7 @@ public class CodegenEngine {
                         if(!newInterfaceContent.isEmpty()) {
                             int lastIndex = fileContent.lastIndexOf("\r\n}");
                             if(lastIndex > 0) {
-                                fileContent.insert(index, newInterfaceContent);
+                                fileContent.insert(lastIndex, newInterfaceContent);
                             }else {
                                 fileContent.append(newInterfaceContent);
                             }
