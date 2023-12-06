@@ -1,4 +1,5 @@
 export type SystemUser = {
+  id: string
   username: string
   password: string
   nickname: string
@@ -13,4 +14,8 @@ export type SystemUser = {
   loginIp: string
   loginDate: Date
   userNo: string
+  createTime: Date
+  updateTime: Date
+  creatorId: string
+  updaterId: string
 }
