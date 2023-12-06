@@ -1,35 +1,42 @@
 package cn.iocoder.yudao.service.controller.admin.system.user;
-
-import cn.iocoder.yudao.service.model.system.user.SystemUser;
-import cn.iocoder.yudao.service.vo.system.user.user.*;
-import cn.iocoder.yudao.service.convert.system.user.UserConvert;
-import cn.iocoder.yudao.service.service.system.user.UserService;
-import cn.iocoder.yudao.service.enums.common.CommonSexEnum;
-import cn.iocoder.yudao.framework.common.enums.CommonStatusEnum;
-import cn.iocoder.yudao.framework.common.pojo.CommonResult;
-import cn.iocoder.yudao.framework.common.pojo.PageResult;
-import cn.iocoder.yudao.framework.excel.core.util.ExcelUtils;
-import cn.iocoder.yudao.framework.operatelog.core.annotations.OperateLog;
+import cn.iocoder.yudao.service.vo.system.user.user.UserExportInput;
+import cn.iocoder.yudao.service.vo.system.user.user.UserGetOutput;
+import cn.iocoder.yudao.service.vo.system.user.user.UserListAllSimpleOutput;
+import cn.iocoder.yudao.service.vo.system.user.user.UserPageOutput;
+import cn.iocoder.yudao.service.vo.system.user.user.UserPageInput;
+import cn.iocoder.yudao.service.vo.system.user.user.UserUpdateStatusInput;
+import cn.iocoder.yudao.service.vo.system.user.user.UserUpdatePasswordInput;
+import cn.iocoder.yudao.service.vo.system.user.user.UserUpdateInput;
+import cn.iocoder.yudao.service.vo.system.user.user.UserCreateInput;
+import io.swagger.v3.oas.annotations.Parameters;
+import org.springframework.web.bind.annotation.*;
+import javax.annotation.Resource;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.security.access.prepost.PreAuthorize;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.Operation;
-import org.springframework.data.domain.Page;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+
+import javax.validation.constraints.*;
+import javax.validation.*;
+import javax.servlet.http.*;
+import java.util.*;
+import java.io.IOException;
+
+import cn.iocoder.yudao.framework.common.pojo.PageResult;
+import cn.iocoder.yudao.framework.common.pojo.CommonResult;
+import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
+
+import cn.iocoder.yudao.framework.excel.core.util.ExcelUtils;
+
+import cn.iocoder.yudao.framework.operatelog.core.annotations.OperateLog;
+import static cn.iocoder.yudao.framework.operatelog.core.enums.OperateTypeEnum.*;
+
+import cn.iocoder.yudao.service.service.system.user.UserService;
+import cn.iocoder.yudao.service.vo.system.user.user.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-import java.io.IOException;
-import java.util.*;
-import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
-import static cn.iocoder.yudao.framework.operatelog.core.enums.OperateTypeEnum.EXPORT;
-
-@Tag(name = "管理后台 - 用户")
+@Tag(name = "用户管理")
 @RestController
 @RequestMapping("/system/user")
 @Validated
@@ -39,97 +46,73 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/create")
-    @Operation(summary = "新增用户")
+    @Operation(summary = "新建用户")
     @PreAuthorize("@ss.hasPermission('system:user:create')")
-    public CommonResult<Long> createUser(@Valid @RequestBody UserCreateReq reqVO) {
-        return success(userService.createUser(reqVO));
+    public CommonResult<Long> create(@Valid @RequestBody UserCreateInput inputVO) {
+        return success(userService.create(inputVO));
     }
 
-    @PutMapping("update")
+    @PutMapping("/update")
     @Operation(summary = "修改用户")
     @PreAuthorize("@ss.hasPermission('system:user:update')")
-    public CommonResult<Boolean> updateUser(@Valid @RequestBody UserUpdateReq reqVO) {
-        userService.updateUser(reqVO);
-        return success(true);
+    public CommonResult<Long> update(@Valid @RequestBody UserUpdateInput inputVO) {
+        return success(userService.update(inputVO));
     }
 
     @DeleteMapping("/delete")
     @Operation(summary = "删除用户")
-    @Parameter(name = "id", description = "编号", required = true, example = "1024")
     @PreAuthorize("@ss.hasPermission('system:user:delete')")
-    @Transactional(rollbackFor = Exception.class)
-    public CommonResult<Boolean> deleteUser(@RequestParam("id") Long id) {
-        userService.deleteUser(id);
-        return success(true);
+    @Parameter(name = "id", description = "用户ID", example = "")
+    public CommonResult<Boolean> delete(@RequestParam("id") Long id) {
+        return success(userService.delete(id));
     }
 
     @PutMapping("/update-password")
     @Operation(summary = "重置用户密码")
     @PreAuthorize("@ss.hasPermission('system:user:update-password')")
-    public CommonResult<Boolean> updateUserPassword(@Valid @RequestBody UserUpdatePasswordReqVO reqVO) {
-        userService.updateUserPassword(reqVO.getId(), reqVO.getPassword());
-        return success(true);
+    public CommonResult<Boolean> updatePassword(@Valid @RequestBody UserUpdatePasswordInput inputVO) {
+        return success(userService.updatePassword(inputVO));
     }
 
     @PutMapping("/update-status")
     @Operation(summary = "修改用户状态")
     @PreAuthorize("@ss.hasPermission('system:user:update')")
-    public CommonResult<Boolean> updateUserStatus(@Valid @RequestBody UserUpdateStatusReqVO reqVO) {
-        userService.updateUserStatus(reqVO.getId(), reqVO.getStatus());
-        return success(true);
+    public CommonResult<Boolean> updateStatus(@Valid @RequestBody UserUpdateStatusInput inputVO) {
+        return success(userService.updateStatus(inputVO));
     }
 
     @GetMapping("/page")
-    @Operation(summary = "获得用户分页列表")
+    @Operation(summary = "用户分页列表")
     @PreAuthorize("@ss.hasPermission('system:user:list')")
-    public CommonResult<PageResult<UserPageItemResp>> getUserPage(@Valid UserPageReqVO reqVO) {
-        Page<SystemUser> pageResult = userService.getUserPage(reqVO);
-        List<UserPageItemResp> userList = UserConvert.INSTANCE.convertPageUser(pageResult);
-        return success(new PageResult<>(userList, pageResult.getTotalElements()));
+    public CommonResult<PageResult<UserPageOutput>> page(@Valid UserPageInput inputVO) {
+        return success(userService.page(inputVO));
     }
 
     @GetMapping("/list-all-simple")
-    @Operation(summary = "获取用户精简信息列表", description = "只包含被开启的用户，主要用于前端的下拉选项")
-    public CommonResult<List<UserSimpleRespVO>> getSimpleUserList() {
-        // 获用户列表，只要开启状态的
-        List<SystemUser> systemUsers = userService.getUserListByStatus(CommonStatusEnum.ENABLE.getStatus());
-        // 排序后，返回给前端
-        return success(UserConvert.INSTANCE.convertSimpleListUser(systemUsers));
+    @Operation(summary = "获取用户精简信息列表")
+    public CommonResult<List<UserListAllSimpleOutput>> listAllSimple() {
+        return success(userService.listAllSimple());
     }
 
     @GetMapping("/get")
     @Operation(summary = "获得用户详情")
-    @Parameter(name = "id", description = "编号", required = true, example = "1024")
     @PreAuthorize("@ss.hasPermission('system:user:query')")
-    public CommonResult<UserResp> getUser(@RequestParam("id") Long id) {
-        Optional<SystemUser> systemUser = userService.getUser(id);
-        return systemUser.map(user -> success(UserConvert.INSTANCE.convert(user))).orElseGet(() -> success(new UserResp()));
+    @Parameter(name = "id", description = "用户ID", required = true, example = "")
+    public CommonResult<UserGetOutput> get(@RequestParam("id") Long id) {
+        return success(userService.get(id));
     }
 
     @GetMapping("/export")
     @Operation(summary = "导出用户")
     @PreAuthorize("@ss.hasPermission('system:user:export')")
-    @OperateLog(type = EXPORT)
-    public void exportUserList(@Validated UserExportReqVO reqVO,
-                               HttpServletResponse response) throws IOException {
-        List<UserExcelVO> excelUsers = userService.getExportUserList(reqVO);
-        // 输出
-        ExcelUtils.write(response, "用户数据.xls", "用户列表", UserExcelVO.class, excelUsers);
+    public void export(HttpServletResponse response, @Valid @RequestBody UserExportInput inputVO) throws IOException {
+        userService.export(response, inputVO);
     }
 
     @GetMapping("/get-import-template")
     @Operation(summary = "获得导入用户模板")
-    public void importTemplate(HttpServletResponse response) throws IOException {
-        // 手动创建导出 demo
-        List<UserImportExcelVO> list = Arrays.asList(
-                UserImportExcelVO.builder().username("yunai").deptId(1L).email("yunai@iocoder.cn").mobile("15601691300")
-                        .nickname("芋道").status(CommonStatusEnum.ENABLE.getStatus()).sex(CommonSexEnum.MALE.getValue()).build(),
-                UserImportExcelVO.builder().username("yuanma").deptId(2L).email("yuanma@iocoder.cn").mobile("15601701300")
-                        .nickname("源码").status(CommonStatusEnum.DISABLE.getStatus()).sex(CommonSexEnum.FEMALE.getValue()).build()
-        );
-
-        // 输出
-        ExcelUtils.write(response, "用户导入模板.xls", "用户列表", UserImportExcelVO.class, list);
+    public void getImportTemplate(HttpServletResponse response ) throws IOException {
+        userService.getImportTemplate(response );
     }
 
     @PostMapping("/import")

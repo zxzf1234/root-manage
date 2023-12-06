@@ -1,6 +1,8 @@
 package cn.iocoder.yudao.service.repository.system.user;
 
+import cn.iocoder.yudao.service.vo.system.user.user.UserExportInput;
 import cn.iocoder.yudao.service.vo.system.user.user.UserExportReqVO;
+import cn.iocoder.yudao.service.vo.system.user.user.UserPageInput;
 import cn.iocoder.yudao.service.vo.system.user.user.UserPageReqVO;
 import cn.iocoder.yudao.service.model.system.dept.SystemDeptFetcher;
 import cn.iocoder.yudao.service.model.system.dept.SystemUserPostTable;
@@ -20,7 +22,7 @@ public interface SystemUserRepository extends JRepository<SystemUser, Long>{
 
     SystemUserTable systemUsersTable = SystemUserTable.$;
 
-    default Page<SystemUser> getUserPage(UserPageReqVO reqVO){
+    default Page<SystemUser> getUserPage(UserPageInput reqVO){
 
         return pager(reqVO.getPageNo() - 1, reqVO.getPageSize()).execute(
                 sql()
@@ -33,7 +35,7 @@ public interface SystemUserRepository extends JRepository<SystemUser, Long>{
         );
     }
 
-    default List<SystemUser> getExportUserList(UserExportReqVO reqVO){
+    default List<SystemUser> getExportUserList(UserExportInput reqVO){
         return sql()
                 .createQuery(systemUsersTable).where(systemUsersTable.deleted().eq(false))
                 .whereIf(StringUtils.hasText(reqVO.getUsername()), systemUsersTable.username().like(reqVO.getUsername()))

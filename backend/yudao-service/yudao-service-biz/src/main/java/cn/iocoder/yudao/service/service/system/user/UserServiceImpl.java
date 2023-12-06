@@ -1,47 +1,60 @@
 package cn.iocoder.yudao.service.service.system.user;
-
-import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.io.IoUtil;
-import cn.hutool.core.util.StrUtil;
-import cn.iocoder.yudao.framework.common.enums.CommonStatusEnum;
 import cn.iocoder.yudao.framework.common.exception.ServiceException;
-import cn.iocoder.yudao.framework.common.util.collection.CollectionUtils;
 import cn.iocoder.yudao.framework.datapermission.core.util.DataPermissionUtils;
 import cn.iocoder.yudao.service.api.infra.file.FileApi;
-import cn.iocoder.yudao.service.model.system.user.SystemUser;
-import cn.iocoder.yudao.service.vo.system.user.profile.UserProfileUpdatePasswordReqVO;
-import cn.iocoder.yudao.service.vo.system.user.profile.UserProfileUpdateReqVO;
-import cn.iocoder.yudao.service.vo.system.user.user.*;
-import cn.iocoder.yudao.service.convert.system.user.UserConvert;
-import cn.iocoder.yudao.service.model.system.dept.SystemUserPost;
-import cn.iocoder.yudao.service.model.system.dept.SystemUserPostDraft;
-import cn.iocoder.yudao.service.model.system.user.SystemUserDraft;
 import cn.iocoder.yudao.service.repository.system.dept.SystemUserPostRepository;
 import cn.iocoder.yudao.service.repository.system.user.SystemUserRepository;
 import cn.iocoder.yudao.service.service.system.dept.DeptService;
 import cn.iocoder.yudao.service.service.system.dept.PostService;
 import cn.iocoder.yudao.service.service.system.permission.PermissionService;
+import cn.iocoder.yudao.service.vo.system.user.profile.UserProfileUpdatePasswordReqVO;
+import cn.iocoder.yudao.service.vo.system.user.profile.UserProfileUpdateReqVO;
 import com.google.common.annotations.VisibleForTesting;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import cn.iocoder.yudao.framework.common.util.collection.CollectionUtils;
+import cn.iocoder.yudao.service.model.system.dept.SystemUserPost;
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.io.IoUtil;
+import cn.hutool.core.util.StrUtil;
+import cn.iocoder.yudao.framework.excel.core.util.ExcelUtils;
+import cn.iocoder.yudao.service.enums.common.CommonSexEnum;
 
+import cn.iocoder.yudao.service.model.system.user.SystemUser;
+import cn.iocoder.yudao.service.vo.system.user.user.UserExportInput;
+import cn.iocoder.yudao.service.vo.system.user.user.UserGetOutput;
+import cn.iocoder.yudao.service.vo.system.user.user.UserListAllSimpleOutput;
+import cn.iocoder.yudao.service.vo.system.user.user.UserPageOutput;
+import cn.iocoder.yudao.service.vo.system.user.user.UserPageInput;
+import cn.iocoder.yudao.service.vo.system.user.user.UserUpdateStatusInput;
+import cn.iocoder.yudao.service.vo.system.user.user.UserUpdatePasswordInput;
+import cn.iocoder.yudao.service.vo.system.user.user.UserUpdateInput;
+import cn.iocoder.yudao.service.vo.system.user.user.UserCreateInput;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import cn.iocoder.yudao.service.model.system.user.SystemUserDraft;
+import cn.iocoder.yudao.service.model.system.dept.SystemUserPostDraft;
+import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.data.domain.Page;
+
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
+import javax.servlet.http.HttpServletResponse;
+import org.springframework.transaction.annotation.Transactional;
+import cn.iocoder.yudao.framework.common.pojo.PageResult;
+import cn.iocoder.yudao.service.convert.system.user.UserConvert;
+import cn.iocoder.yudao.service.vo.system.user.user.*;
+import cn.iocoder.yudao.framework.common.enums.CommonStatusEnum;
 
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
-import static cn.iocoder.yudao.framework.common.util.collection.CollectionUtils.convertList;
 import static cn.iocoder.yudao.service.enums.system.ErrorCodeConstants.*;
+import static cn.iocoder.yudao.framework.common.util.collection.CollectionUtils.convertList;
 
 /**
- * 后台用户 Service 实现类
- *
- * @author 芋道源码
+ * 用户管理 Service 实现类
  */
 @Service("adminUserService")
 @Slf4j
@@ -70,12 +83,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Long createUser(UserCreateReq reqVO) {
+    public Long create(UserCreateInput inputVO) {
         // 校验正确性
-        validateUserForCreateOrUpdate(null, reqVO.getUsername(), reqVO.getMobile(), reqVO.getEmail(),
-                reqVO.getDeptId(), reqVO.getPostIds());
-        SystemUser newUserConvert = UserConvert.INSTANCE.convertUser(reqVO);
-        String password = passwordEncoder.encode(reqVO.getPassword());
+        validateUserForCreateOrUpdate(null, inputVO.getUsername(), inputVO.getMobile(), inputVO.getEmail(),
+                inputVO.getDeptId(), inputVO.getPostIds());
+        SystemUser newUserConvert = UserConvert.INSTANCE.createInputConvert(inputVO);
+        String password = passwordEncoder.encode(inputVO.getPassword());
         SystemUser newUser = SystemUserDraft.$.produce(newUserConvert, SystemUsers ->{
             SystemUsers
                     .setStatus(CommonStatusEnum.ENABLE.getStatus())
@@ -85,19 +98,21 @@ public class UserServiceImpl implements UserService {
         return newUser.id();
     }
 
+
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void updateUser(UserUpdateReq reqVO) {
+    public Long update(UserUpdateInput inputVO) {
         // 校验正确性
-        validateUserForCreateOrUpdate(reqVO.getId(), reqVO.getUsername(), reqVO.getMobile(), reqVO.getEmail(),
-                reqVO.getDeptId(), reqVO.getPostIds());
+        validateUserForCreateOrUpdate(inputVO.getId(), inputVO.getUsername(), inputVO.getMobile(), inputVO.getEmail(),
+                inputVO.getDeptId(), inputVO.getPostIds());
         // 更新用户
-        SystemUser updateUser = UserConvert.INSTANCE.convertUser(reqVO);
-        systemUserRepository.update(updateUser);
-        updateUserPost(reqVO, updateUser);
+        SystemUser updateUser = UserConvert.INSTANCE.updateInputConvert(inputVO);
+        updateUser = systemUserRepository.update(updateUser);
+        updateUserPost(inputVO, updateUser);
+        return updateUser.id();
     }
 
-    private void updateUserPost(UserUpdateReq reqVO, SystemUser updateUser) {
+    private void updateUserPost(UserUpdateInput reqVO, SystemUser updateUser) {
         Long userId = reqVO.getId();
         List<Long> dbPostIds = convertList(systemUserPostRepository.findByUserId(userId), SystemUserPost::postId);
         // 计算新增和删除的岗位编号
@@ -119,60 +134,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUserLogin(Long id, String loginIp) {
-        systemUserRepository.UpdateUserLogin(id, loginIp);
-    }
-
-    @Override
-    public void updateUserProfile(Long id, UserProfileUpdateReqVO reqVO) {
-        // 校验正确性
-        validateUserExists(id);
-        validateEmailUnique(id, reqVO.getEmail());
-        validateMobileUnique(id, reqVO.getMobile());
-        // 执行更新
-        SystemUser updateUser = UserConvert.INSTANCE.convertUser(reqVO);
-        updateUser = SystemUserDraft.$.produce(updateUser, SystemUsers ->{
-            SystemUsers
-                    .setId(id);
-        });
-        systemUserRepository.update(updateUser);
-    }
-
-    @Override
-    public void updateUserPassword(Long id, UserProfileUpdatePasswordReqVO reqVO) {
-        // 校验旧密码密码
-        validateOldPassword(id, reqVO.getOldPassword());
-        systemUserRepository.UpdateUserPassword(id, encodePassword(reqVO.getNewPassword()));
-    }
-
-    @Override
-    public String updateUserAvatar(Long id, InputStream avatarFile) throws Exception {
-        validateUserExists(id);
-        // 存储文件
-        String avatar = fileApi.createFile(IoUtil.readBytes(avatarFile));
-        systemUserRepository.UpdateUserAvatar(id, avatar);
-        return avatar;
-    }
-
-    @Override
-    public void updateUserPassword(Long id, String password) {
-        // 校验用户存在
-        validateUserExists(id);
-        // 更新密码
-        systemUserRepository.UpdateUserPassword(id, password);
-    }
-
-    @Override
-    public void updateUserStatus(Long id, Integer status) {
-        // 校验用户存在
-        validateUserExists(id);
-        // 更新状态
-        systemUserRepository.UpdateUserStatus(id, status);
-    }
-
-    @Override
     @Transactional(rollbackFor = Exception.class)
-    public void deleteUser(Long id) {
+    public Boolean delete(Long id) {
         // 校验用户存在
         validateUserExists(id);
         // 删除用户
@@ -181,86 +144,144 @@ public class UserServiceImpl implements UserService {
         permissionService.processUserDeleted(id);
         // 删除用户岗位
         systemUserPostRepository.deleteByUserId(id);
+        return true;
     }
 
     @Override
-    public Optional<SystemUser> getUserByUsername(String username) {
-        return systemUserRepository.findByUsername(username);
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean updatePassword(UserUpdatePasswordInput inputVO) {
+        // 校验旧密码密码
+        validateOldPassword(inputVO.getId(), inputVO.getOldPassword());
+        systemUserRepository.UpdateUserPassword(inputVO.getId(), encodePassword(inputVO.getNewPassword()));
+        return true;
     }
 
-    @Override
-    public Optional<SystemUser> getUserByMobile(String mobile) {
-        return systemUserRepository.findByMobile(mobile);
-    }
-
-    @Override
-    public Page<SystemUser> getUserPage(UserPageReqVO reqVO) {
-        return systemUserRepository.getUserPage(reqVO);
-    }
-
-    @Override
-    public List<UserExcelVO> getExportUserList(UserExportReqVO reqVO) {
-        List<SystemUser> systemUsers = systemUserRepository.getExportUserList(reqVO);
-        return UserConvert.INSTANCE.convertExcelListUser(systemUsers);
-    }
-
-    @Override
-    public Optional<SystemUser> getUser(Long id) {
-        return systemUserRepository.GetUser(id);
-    }
-
-    @Override
-    public List<SystemUser> getUserListByDeptIds(Collection<Long> deptIds) {
-        if (CollUtil.isEmpty(deptIds)) {
-            return Collections.emptyList();
+    /**
+     * 校验旧密码
+     * @param id          用户 id
+     * @param oldPassword 旧密码
+     */
+    @VisibleForTesting
+    void validateOldPassword(Long id, String oldPassword) {
+        Optional<SystemUser> user = systemUserRepository.findById(id);
+        if (!user.isPresent()) {
+            throw exception(USER_NOT_EXISTS);
         }
-        return systemUserRepository.findByDeptIdIn(deptIds);
+        if (!isPasswordMatch(oldPassword, user.get().password())) {
+            throw exception(USER_PASSWORD_FAILED);
+        }
+    }
+
+    /**
+     * 对密码进行加密
+     *
+     * @param password 密码
+     * @return 加密后的密码
+     */
+    private String encodePassword(String password) {
+        return passwordEncoder.encode(password);
+    }
+    @Override
+    public boolean isPasswordMatch(String rawPassword, String encodedPassword) {
+        return passwordEncoder.matches(rawPassword, encodedPassword);
     }
 
     @Override
-    public List<SystemUser> getUserListByPostIds(Collection<Long> postIds) {
-        if (CollUtil.isEmpty(postIds)) {
-            return Collections.emptyList();
-        }
-        return systemUserRepository.getUserListByPostIds(postIds);
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean updateStatus(UserUpdateStatusInput inputVO) {
+        // 校验用户存在
+        validateUserExists(inputVO.getId());
+        // 更新状态
+        systemUserRepository.UpdateUserStatus(inputVO.getId(), inputVO.getStatus());
+        return true;
     }
 
     @Override
-    public List<SystemUser> getUserList(Collection<Long> ids) {
-        if (CollUtil.isEmpty(ids)) {
-            return Collections.emptyList();
-        }
-        return systemUserRepository.findByIds(ids);
+    public PageResult<UserPageOutput> page(UserPageInput inputVO) {
+        Page<SystemUser> pageResult = systemUserRepository.getUserPage(inputVO);
+        List<UserPageOutput> userList = UserConvert.INSTANCE.pagePageOutputConvert(pageResult);
+        return new PageResult<>(userList, pageResult.getTotalElements());
     }
 
     @Override
-    public void validateUserList(Collection<Long> ids) {
-        if (CollUtil.isEmpty(ids)) {
-            return;
+    public List<UserListAllSimpleOutput> listAllSimple() {
+        List<SystemUser> systemUsers = systemUserRepository.GetUserListByStatus(CommonStatusEnum.ENABLE.getStatus());
+        // 排序后，返回给前端
+        return UserConvert.INSTANCE.convertSimpleListUser(systemUsers);
+    }
+
+    @Override
+    public UserGetOutput get(Long id) {
+         Optional<SystemUser> opUser = systemUserRepository.GetUser(id);
+         if(!opUser.isPresent())
+             throw exception(USER_NOT_EXISTS);
+         return UserConvert.INSTANCE.getOutputConvert(opUser.get());
+    }
+
+    @Override
+    public void export(HttpServletResponse response, UserExportInput inputVO) throws IOException {
+        List<SystemUser> systemUsers = systemUserRepository.getExportUserList(inputVO);
+        List<UserExcelVO> excelUsers  = UserConvert.INSTANCE.convertExcelListUser(systemUsers);
+        // 输出
+        ExcelUtils.write(response, "用户数据.xls", "用户列表", UserExcelVO.class, excelUsers);
+    }
+
+    @Override
+    public void getImportTemplate(HttpServletResponse response ) throws IOException {
+        // 手动创建导出 demo
+        List<UserImportExcelVO> list = Arrays.asList(
+                UserImportExcelVO.builder().username("yunai").deptId(1L).email("yunai@iocoder.cn").mobile("15601691300")
+                        .nickname("芋道").status(CommonStatusEnum.ENABLE.getStatus()).sex(CommonSexEnum.MALE.getValue()).build(),
+                UserImportExcelVO.builder().username("yuanma").deptId(2L).email("yuanma@iocoder.cn").mobile("15601701300")
+                        .nickname("源码").status(CommonStatusEnum.DISABLE.getStatus()).sex(CommonSexEnum.FEMALE.getValue()).build()
+        );
+
+        // 输出
+        ExcelUtils.write(response, "用户导入模板.xls", "用户列表", UserImportExcelVO.class, list);
+    }
+
+    @Override
+    public UserImportRespVO importUserList(List<UserImportExcelVO> list, Boolean updateSupport) {
+        if (CollUtil.isEmpty(list)) {
+            throw exception(USER_IMPORT_LIST_IS_EMPTY);
         }
-        // 获得岗位信息
-        List<SystemUser> users = systemUserRepository.findByIds(ids);
-        Map<Long, SystemUser> userMap = CollectionUtils.convertMap(users, SystemUser::id);
-        // 校验
-        ids.forEach(id -> {
-            SystemUser user = userMap.get(id);
-            if (user == null) {
-                throw exception(USER_NOT_EXISTS);
+        UserImportRespVO respVO = UserImportRespVO.builder().createUsernames(new ArrayList<>())
+                .updateUsernames(new ArrayList<>()).failureUsernames(new LinkedHashMap<>()).build();
+        list.forEach(importUser -> {
+            // 校验，判断是否有不符合的原因
+            try {
+                validateUserForCreateOrUpdate(null, null, importUser.getMobile(), importUser.getEmail(),
+                        importUser.getDeptId(), null);
+            } catch (ServiceException ex) {
+                respVO.getFailureUsernames().put(importUser.getUsername(), ex.getMessage());
+                return;
             }
-            if (!CommonStatusEnum.ENABLE.getStatus().equals(user.status())) {
-                throw exception(USER_IS_DISABLE, user.nickname());
+            // 判断如果不存在，在进行插入
+            Optional<SystemUser> existUser = systemUserRepository.findByUsername(importUser.getUsername());
+            if (!existUser.isPresent()) {
+                SystemUser newUserConvert = UserConvert.INSTANCE.convertUser(importUser);
+                newUserConvert = SystemUserDraft.$.produce(newUserConvert, SystemUsers ->{
+                    SystemUsers.setPassword(userInitPassword);
+                });
+                systemUserRepository.insert(newUserConvert);
+                respVO.getCreateUsernames().add(importUser.getUsername());
+                return;
             }
+            // 如果存在，判断是否允许更新
+            if (!updateSupport) {
+                respVO.getFailureUsernames().put(importUser.getUsername(), USER_USERNAME_EXISTS.getMsg());
+                return;
+            }
+            SystemUser updateUser = UserConvert.INSTANCE.convertUser(importUser);
+            systemUserRepository.update(updateUser);
+
+            respVO.getUpdateUsernames().add(importUser.getUsername());
         });
+        return respVO;
     }
-
-    @Override
-    public List<SystemUser> getUserListByNickname(String nickname) {
-        return systemUserRepository.findByNickname(nickname);
-    }
-
 
     private void validateUserForCreateOrUpdate(Long id, String username, String mobile, String email,
-                                              Long deptId, List<Long> postIds) {
+                                               Long deptId, List<Long> postIds) {
         // 关闭数据权限，避免因为没有数据权限，查询不到数据，进而导致唯一校验不正确
         DataPermissionUtils.executeIgnore(() -> {
             // 校验用户存在
@@ -343,81 +364,105 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    /**
-     * 校验旧密码
-     * @param id          用户 id
-     * @param oldPassword 旧密码
-     */
-    @VisibleForTesting
-    void validateOldPassword(Long id, String oldPassword) {
-        Optional<SystemUser> user = systemUserRepository.findById(id);
-        if (!user.isPresent()) {
-            throw exception(USER_NOT_EXISTS);
-        }
-        if (!isPasswordMatch(oldPassword, user.get().password())) {
-            throw exception(USER_PASSWORD_FAILED);
-        }
+    @Override
+    public Optional<SystemUser> getUserByUsername(String username) {
+        return systemUserRepository.findByUsername(username);
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class) // 添加事务，异常则回滚所有导入
-    public UserImportRespVO importUserList(List<UserImportExcelVO> importUsers, boolean isUpdateSupport) {
-        if (CollUtil.isEmpty(importUsers)) {
-            throw exception(USER_IMPORT_LIST_IS_EMPTY);
-        }
-        UserImportRespVO respVO = UserImportRespVO.builder().createUsernames(new ArrayList<>())
-                .updateUsernames(new ArrayList<>()).failureUsernames(new LinkedHashMap<>()).build();
-        importUsers.forEach(importUser -> {
-            // 校验，判断是否有不符合的原因
-            try {
-                validateUserForCreateOrUpdate(null, null, importUser.getMobile(), importUser.getEmail(),
-                        importUser.getDeptId(), null);
-            } catch (ServiceException ex) {
-                respVO.getFailureUsernames().put(importUser.getUsername(), ex.getMessage());
-                return;
-            }
-            // 判断如果不存在，在进行插入
-            Optional<SystemUser> existUser = systemUserRepository.findByUsername(importUser.getUsername());
-            if (!existUser.isPresent()) {
-                SystemUser newUserConvert = UserConvert.INSTANCE.convertUser(importUser);
-                newUserConvert = SystemUserDraft.$.produce(newUserConvert, SystemUsers ->{
-                    SystemUsers.setPassword(userInitPassword);
-                });
-                systemUserRepository.insert(newUserConvert);
-                respVO.getCreateUsernames().add(importUser.getUsername());
-                return;
-            }
-            // 如果存在，判断是否允许更新
-            if (!isUpdateSupport) {
-                respVO.getFailureUsernames().put(importUser.getUsername(), USER_USERNAME_EXISTS.getMsg());
-                return;
-            }
-            SystemUser updateUser = UserConvert.INSTANCE.convertUser(importUser);
-            systemUserRepository.update(updateUser);
+    public Optional<SystemUser> getUserByMobile(String mobile) {
+        return systemUserRepository.findByMobile(mobile);
+    }
 
-            respVO.getUpdateUsernames().add(importUser.getUsername());
+    @Override
+    public void updateUserLogin(Long id, String loginIp) {
+        systemUserRepository.UpdateUserLogin(id, loginIp);
+    }
+
+    @Override
+    public List<SystemUser> getUserListByNickname(String nickname) {
+        return systemUserRepository.findByNickname(nickname);
+    }
+
+    @Override
+    public Optional<SystemUser> getUser(Long id) {
+        return systemUserRepository.GetUser(id);
+    }
+
+    @Override
+    public void updateUserProfile(Long id, UserProfileUpdateReqVO reqVO) {
+        // 校验正确性
+        validateUserExists(id);
+        validateEmailUnique(id, reqVO.getEmail());
+        validateMobileUnique(id, reqVO.getMobile());
+        // 执行更新
+        SystemUser updateUser = UserConvert.INSTANCE.convertUser(reqVO);
+        updateUser = SystemUserDraft.$.produce(updateUser, SystemUsers ->{
+            SystemUsers
+                    .setId(id);
         });
-        return respVO;
+        systemUserRepository.update(updateUser);
     }
 
     @Override
-    public List<SystemUser> getUserListByStatus(Integer status) {
-        return systemUserRepository.GetUserListByStatus(CommonStatusEnum.ENABLE.getStatus());
+    public void updateUserPassword(Long id, UserProfileUpdatePasswordReqVO reqVO) {
+        // 校验旧密码密码
+        validateOldPassword(id, reqVO.getOldPassword());
+        systemUserRepository.UpdateUserPassword(id, encodePassword(reqVO.getNewPassword()));
     }
 
     @Override
-    public boolean isPasswordMatch(String rawPassword, String encodedPassword) {
-        return passwordEncoder.matches(rawPassword, encodedPassword);
+    public String updateUserAvatar(Long id, InputStream avatarFile) throws Exception {
+        validateUserExists(id);
+        // 存储文件
+        String avatar = fileApi.createFile(IoUtil.readBytes(avatarFile));
+        systemUserRepository.UpdateUserAvatar(id, avatar);
+        return avatar;
     }
 
-    /**
-     * 对密码进行加密
-     *
-     * @param password 密码
-     * @return 加密后的密码
-     */
-    private String encodePassword(String password) {
-        return passwordEncoder.encode(password);
+    @Override
+    public List<SystemUser> getUserListByDeptIds(Collection<Long> deptIds) {
+        if (CollUtil.isEmpty(deptIds)) {
+            return Collections.emptyList();
+        }
+        return systemUserRepository.findByDeptIdIn(deptIds);
     }
+
+    @Override
+    public List<SystemUser> getUserListByPostIds(Collection<Long> postIds) {
+        if (CollUtil.isEmpty(postIds)) {
+            return Collections.emptyList();
+        }
+        return systemUserRepository.getUserListByPostIds(postIds);
+    }
+
+    @Override
+    public List<SystemUser> getUserList(Collection<Long> ids) {
+        if (CollUtil.isEmpty(ids)) {
+            return Collections.emptyList();
+        }
+        return systemUserRepository.findByIds(ids);
+    }
+
+    @Override
+    public void validateUserList(Collection<Long> ids) {
+        if (CollUtil.isEmpty(ids)) {
+            return;
+        }
+        // 获得岗位信息
+        List<SystemUser> users = systemUserRepository.findByIds(ids);
+        Map<Long, SystemUser> userMap = CollectionUtils.convertMap(users, SystemUser::id);
+        // 校验
+        ids.forEach(id -> {
+            SystemUser user = userMap.get(id);
+            if (user == null) {
+                throw exception(USER_NOT_EXISTS);
+            }
+            if (!CommonStatusEnum.ENABLE.getStatus().equals(user.status())) {
+                throw exception(USER_IS_DISABLE, user.nickname());
+            }
+        });
+    }
+
 
 }
