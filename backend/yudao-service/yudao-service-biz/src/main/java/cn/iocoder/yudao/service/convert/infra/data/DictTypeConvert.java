@@ -1,5 +1,6 @@
 package cn.iocoder.yudao.service.convert.infra.data;
 
+import cn.iocoder.yudao.service.model.infra.data.InfraDictData;
 import cn.iocoder.yudao.service.vo.infra.data.dictType.DictTypeListAllSimpleOutput;
 import cn.iocoder.yudao.service.vo.infra.data.dictType.DictTypeGetOutput;
 import cn.iocoder.yudao.service.vo.infra.data.dictType.DictTypePageOutput;
@@ -24,6 +25,8 @@ public interface DictTypeConvert {
     InfraDictType createInputConvert(DictTypeCreateInput input);
 
     InfraDictType updateInputConvert(DictTypeUpdateInput input);
+
+    InfraDictData updateInputDataConvert(DictTypeUpdateInput.data input);
 
     List<DictTypePageOutput> pagePageOutputConvert(Page<InfraDictType> output);
 

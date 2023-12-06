@@ -96,7 +96,6 @@ public interface ${classNameHump} extends BaseEntity {
     #end
     @ManyToOne
     @Nullable
-    @OnDissociate(DissociateAction.DELETE)
     ${column.humpRelatedTable} ${column.humpName.substring(0,$humpNameLength)}();
 
     #end

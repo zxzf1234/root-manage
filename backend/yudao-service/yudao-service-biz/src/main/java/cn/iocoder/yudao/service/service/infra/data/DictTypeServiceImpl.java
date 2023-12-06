@@ -1,5 +1,6 @@
 package cn.iocoder.yudao.service.service.infra.data;
 
+import cn.iocoder.yudao.framework.common.util.entity.EntityUtils;
 import cn.iocoder.yudao.service.convert.infra.data.DictDataConvert;
 import cn.iocoder.yudao.service.model.infra.data.*;
 import cn.iocoder.yudao.service.vo.infra.data.dictType.DictTypeUpdateInput;
@@ -11,6 +12,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.service.repository.infra.data.InfraDictDataRepository;
 import cn.iocoder.yudao.service.repository.infra.data.InfraDictTypeRepository;
+import org.babyfish.jimmer.DraftObjects;
 import org.babyfish.jimmer.meta.ImmutableProp;
 import org.babyfish.jimmer.sql.DissociateAction;
 import org.babyfish.jimmer.sql.ast.mutation.SaveMode;
@@ -116,20 +118,34 @@ public class DictTypeServiceImpl implements DictTypeService {
     public Boolean update(DictTypeUpdateInput inputVO) {
         // 校验正确性
         validateDictTypeForCreateOrUpdate(inputVO.getId(), inputVO.getName(), null);
-        InfraDictType oldType = infraDictTypeRepository.findById(inputVO.getId()).get();
-        List<DictTypeUpdateInput.data> newDatas = new ArrayList<>();
+        Optional<InfraDictType> opOldType = infraDictTypeRepository.findById(inputVO.getId());
+        if(!opOldType.isPresent())
+            throw exception(DICT_TYPE_NOT_EXISTS);
         for(DictTypeUpdateInput.data data : inputVO.getDatas()){
-            if(!Objects.equals(data.getOperateType(), "delete")){
-                newDatas.add(data);
+            if(Objects.equals(data.getOperateType(), "delete")){
+                infraDictDataRepository.deleteById(data.getId());
+            }else if(Objects.equals(data.getOperateType(), "new")){
+                InfraDictData newData = DictTypeConvert.INSTANCE.updateInputDataConvert(data);
+                infraDictDataRepository.insert(newData);
+            }else {
+                InfraDictData updateData = DictTypeConvert.INSTANCE.updateInputDataConvert(data);
+                Optional<InfraDictData> opOldData = infraDictDataRepository.findById(updateData.id());
+                if(!opOldData.isPresent())
+                    throw exception(DICT_DATA_NOT_EXISTS);
+                if (!EntityUtils.isEquals(opOldData.get(), updateData))
+                    infraDictDataRepository.update(updateData);
             }
         }
-        inputVO.setDatas(newDatas);
+
         // 更新字典类型
         InfraDictType updateType = DictTypeConvert.INSTANCE.updateInputConvert(inputVO);
-
-        infraDictTypeRepository.update(updateType);
+        updateType = InfraDictTypeDraft.$.produce(updateType, draft -> {
+            DraftObjects.unload(draft, InfraDictTypeProps.DATAS);
+        });
+        if (!EntityUtils.isEquals(opOldType.get(), updateType))
+            infraDictTypeRepository.update(updateType);
         updateType = infraDictTypeRepository.findById(inputVO.getId()).get();
-        codegenEngine.dictUpdateExecute(oldType, updateType);
+        codegenEngine.dictUpdateExecute(opOldType.get(), updateType);
         return true;
     }
 

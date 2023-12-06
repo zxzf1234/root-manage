@@ -27,7 +27,6 @@ public interface SystemUser extends BaseEntity {
 
     @ManyToOne
     @Nullable
-    @OnDissociate(DissociateAction.DELETE)
     SystemDept dept();
 
     @Nullable
