@@ -1,2 +1,2 @@
 
-    ${interfaceOutput} ${interfaceNameHump}(#if(${interface.inputServlet})HttpServletResponse response#if(${interfaceInput} != ""),#end #end#if(${interfaceInput} != "")${interfaceInput} ${interfaceInputVar}#end);
+    ${interfaceOutput} ${interfaceNameHump}(#if(${interface.inputServlet})HttpServletResponse response#if(${interfaceInput} != ""),#end #end#if(${interfaceInput} != "")${interfaceInput} ${interfaceInputVar}#end)#if(${interface.method}=="download") throws IOException#end;

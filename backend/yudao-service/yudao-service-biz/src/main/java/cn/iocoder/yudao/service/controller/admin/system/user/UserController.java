@@ -59,12 +59,12 @@ public class UserController {
         return success(userService.update(inputVO));
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("/deleted")
     @Operation(summary = "删除用户")
     @PreAuthorize("@ss.hasPermission('system:user:delete')")
     @Parameter(name = "id", description = "用户ID", example = "")
-    public CommonResult<Boolean> delete(@RequestParam("id") Long id) {
-        return success(userService.delete(id));
+    public CommonResult<Boolean> deleted(@RequestParam("id") Long id) {
+        return success(userService.deleted(id));
     }
 
     @PutMapping("/update-password")

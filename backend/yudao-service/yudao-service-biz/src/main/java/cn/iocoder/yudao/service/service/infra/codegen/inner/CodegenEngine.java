@@ -80,7 +80,7 @@ public class CodegenEngine {
             .put(templatePath("interfaceModule/serviceImpl"), javaModuleFilePath("service", "${nameHumpUp}ServiceImpl"))
             .put(templatePath("interfaceModule/service"), javaModuleFilePath("service", "${nameHumpUp}Service"))
             .put(templatePath("interfaceModule/vo"), javaModuleFilePath("vo", "${nameHump}/package-info"))
-            .put(templatePath("interfaceModule/vueApi"), vueFilePath("api/${modulePath}/${nameHump}/index.ts"))
+            .put(templatePath("interfaceModule/vueApi"), vueFilePath("api/${vueModulePath}/${nameHump}/index.ts"))
             .build();
 
     private static final Map<String, String> DICT_TEMPLATES = MapUtil.<String, String>builder(new LinkedHashMap<>()) // 有序
@@ -98,7 +98,7 @@ public class CodegenEngine {
             .put(templatePath("interface/service"), javaModuleFilePath("service", "${moduleNameHump}Service"))
             .put(templatePath("interface/voInput"), javaModuleFilePath("vo", "${moduleNameHump}/${moduleNameHumpUp}${interfaceNameHumpUp}Input"))
             .put(templatePath("interface/voOutput"), javaModuleFilePath("vo", "${moduleNameHump}/${moduleNameHumpUp}${interfaceNameHumpUp}Output"))
-            .put(templatePath("interface/vueApi"), vueFilePath("api/${modulePath}/${moduleNameHumpUp}/index.ts"))
+            .put(templatePath("interface/vueApi"), vueFilePath("api/${vueModulePath}/${moduleNameHump}/index.ts"))
             .build();
 
 
@@ -262,11 +262,14 @@ public class CodegenEngine {
         bindingMap.put("parentNames", parentNames);
         // 接口模块名驼峰 首字母小写
         bindingMap.put("moduleNameHump", moduleNameHump);
-        // 接口名模块驼峰 首字母小写
+        // 接口名模块驼峰 首字母大写
         bindingMap.put("moduleNameHumpUp", moduleNameHumpUp);
         bindingMap.put("moduleNameSymbol", moduleNameSymbol);
         bindingMap.put("modulePath", String.join("/", parentNames));
-
+        String vueModulePath = String.join("/", parentNames);
+        if(parentNames.get(parentNames.size()-1).equals(moduleNameHump))
+            vueModulePath = vueModulePath.substring(0, vueModulePath.length() - moduleNameHump.length() - 1);
+        bindingMap.put("vueModulePath", vueModulePath);
         List<CodegenInterfaceParam> inputParams = CodegenConvert.INSTANCE.convertList19(infraInterface.inputParams());
         convertParams(inputParams);
         bindingMap.put("inputParams", inputParams);
@@ -684,6 +687,7 @@ public class CodegenEngine {
         filePath = StrUtil.replace(filePath, "${moduleNameHumpUp}", getStr(bindingMap, "moduleNameHumpUp"));
         filePath = StrUtil.replace(filePath, "${interfaceNameHumpUp}", getStr(bindingMap, "interfaceNameHumpUp"));
         filePath = StrUtil.replace(filePath, "${modulePath}", getStr(bindingMap, "modulePath"));
+        filePath = StrUtil.replace(filePath, "${vueModulePath}", getStr(bindingMap, "vueModulePath"));
 
         return filePath;
     }
@@ -751,6 +755,10 @@ public class CodegenEngine {
         bindingMap.put("nameHumpUp", upperFirst(module.name()));
         bindingMap.put("nameHump", 	module.name());
         bindingMap.put("modulePath", String.join("/", parentNames));
+        String vueModulePath = String.join("/", parentNames);
+        if(parentNames.get(parentNames.size()-1).equals(module.name()))
+            vueModulePath = vueModulePath.substring(0, vueModulePath.length() - module.name().length() - 1);
+        bindingMap.put("vueModulePath", vueModulePath);
         return bindingMap;
     }
 
@@ -798,6 +806,7 @@ public class CodegenEngine {
         filePath = StrUtil.replace(filePath, "${nameHump}", getStr(bindingMap, "nameHump"));
         filePath = StrUtil.replace(filePath, "${nameHumpUp}", getStr(bindingMap, "nameHumpUp"));
         filePath = StrUtil.replace(filePath, "${modulePath}", getStr(bindingMap, "modulePath"));
+        filePath = StrUtil.replace(filePath, "${vueModulePath}", getStr(bindingMap, "vueModulePath"));
         InfraInterfaceModule module = (InfraInterfaceModule) bindingMap.get("module");
         filePath = StrUtil.replace(filePath, "${module.name}", module.name());
 

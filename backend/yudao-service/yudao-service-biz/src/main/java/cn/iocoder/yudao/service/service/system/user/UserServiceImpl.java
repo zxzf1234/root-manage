@@ -135,7 +135,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Boolean delete(Long id) {
+    public Boolean deleted(Long id) {
         // 校验用户存在
         validateUserExists(id);
         // 删除用户

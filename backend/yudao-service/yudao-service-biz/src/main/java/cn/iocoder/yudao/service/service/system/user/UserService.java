@@ -29,7 +29,7 @@ public interface UserService {
 
     Long update(UserUpdateInput inputVO);
 
-    Boolean delete(Long id);
+    Boolean deleted(Long id);
 
     Boolean updatePassword(UserUpdatePasswordInput inputVO);
 

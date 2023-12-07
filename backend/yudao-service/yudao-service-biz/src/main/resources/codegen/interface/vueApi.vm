@@ -4,12 +4,12 @@
  */
 #if(${interfaceInput} == "")${interfaceInput}
 export const ${interfaceNameHump} = () => {
-  return request.${interface.method}({ url: '/${modulePath}/${moduleNameSymbol}/${interfaceNameSymbol}' })
+  return request.${interface.method}({ url: '/${vueModulePath}/${moduleNameSymbol}/${interfaceNameSymbol}' })
 }
 #else
     #if(${interfaceInputSingleParam}!="")
 export const ${interfaceNameHump} = ($interfaceInputVar) => {
-  return request.${interface.method}({ url: '/${modulePath}/${moduleNameSymbol}/${interfaceNameSymbol}?${interfaceInputVar}=' + ${interfaceInputVar} })
+  return request.${interface.method}({ url: '/${vueModulePath}/${moduleNameSymbol}/${interfaceNameSymbol}?${interfaceInputVar}=' + ${interfaceInputVar} })
 }
     #else
         #set($params = "params")
@@ -17,7 +17,7 @@ export const ${interfaceNameHump} = ($interfaceInputVar) => {
             #set($params = "data")
         #end
 export const ${interfaceNameHump} = ($params) => {
-  return request.${interface.method}({ url: '/${modulePath}/${moduleNameSymbol}/${interfaceNameSymbol}', $params })
+  return request.${interface.method}({ url: '/${vueModulePath}/${moduleNameSymbol}/${interfaceNameSymbol}', $params })
 }
     #end
 #end
