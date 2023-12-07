@@ -85,7 +85,6 @@ export const deleted = (id) => {
 /**
  * 获取用户精简信息列表
  */
-
 export const listAllSimple = () => {
   return request.get({ url: '/system/user/list-all-simple' })
 }
@@ -100,7 +99,6 @@ export const page = (params) => {
 /**
  * 获得导入用户模板
  */
-
 export const getImportTemplate = () => {
   return request.download({ url: '/system/user/get-import-template' })
 }

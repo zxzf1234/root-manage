@@ -2,7 +2,7 @@
 /**
  * ${interface.comment}
  */
-#if(${interfaceInput} == "")${interfaceInput}
+#if(${interfaceInput} == "")
 export const ${interfaceNameHump} = () => {
   return request.${interface.method}({ url: '/${vueModulePath}/${moduleNameSymbol}/${interfaceNameSymbol}' })
 }
