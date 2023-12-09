@@ -3,7 +3,7 @@ package cn.iocoder.yudao.service.service.system.user;
 import cn.iocoder.yudao.service.model.system.user.SystemUser;
 import cn.iocoder.yudao.service.vo.system.user.profile.UserProfileUpdatePasswordReqVO;
 import cn.iocoder.yudao.service.vo.system.user.profile.UserProfileUpdateReqVO;
-import cn.iocoder.yudao.service.vo.system.user.user.UserExportInput;
+import cn.iocoder.yudao.service.vo.system.user.user.UserExportedInput;
 import cn.iocoder.yudao.service.vo.system.user.user.UserGetOutput;
 import cn.iocoder.yudao.service.vo.system.user.user.UserListAllSimpleOutput;
 import cn.iocoder.yudao.service.vo.system.user.user.UserPageOutput;
@@ -41,7 +41,7 @@ public interface UserService {
 
     UserGetOutput get(Long id);
 
-    void export(HttpServletResponse response, UserExportInput inputVO) throws IOException;
+    void exported(HttpServletResponse response, UserExportedInput inputVO) throws IOException;
 
     void getImportTemplate(HttpServletResponse response ) throws IOException;
 

@@ -44,7 +44,7 @@
   </Dialog>
 </template>
 <script lang="ts" name="SystemNotifyTemplateSendForm" setup>
-import * as UserApi from '@/api/system/user'
+import * as UserApi from '@/api/system/user/user'
 import * as NotifyTemplateApi from '@/api/system/notify/template'
 const message = useMessage() // 消息弹窗
 
@@ -88,7 +88,7 @@ const open = async (id: number) => {
     formLoading.value = false
   }
   // 加载用户列表
-  userOption.value = await UserApi.getSimpleUserList()
+  userOption.value = await UserApi.listAllSimple()
 }
 defineExpose({ open }) // 提供 open 方法，用于打开弹窗
 

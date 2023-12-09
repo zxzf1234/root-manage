@@ -41,7 +41,7 @@
   </Dialog>
 </template>
 <script lang="ts" name="SystemUserImportForm" setup>
-import * as UserApi from '@/api/system/user'
+import * as UserApi from '@/api/system/user/user'
 import { getAccessToken, getTenantId } from '@/utils/auth'
 import download from '@/utils/download'
 
@@ -125,7 +125,7 @@ const handleExceed = (): void => {
 
 /** 下载模板操作 */
 const importTemplate = async () => {
-  const res = await UserApi.importUserTemplate()
+  const res = await UserApi.getImportTemplate()
   download.excel(res, '用户导入模版.xls')
 }
 </script>

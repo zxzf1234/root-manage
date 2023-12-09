@@ -102,11 +102,11 @@ public class UserController {
         return success(userService.get(id));
     }
 
-    @GetMapping("/export")
+    @GetMapping("/exported")
     @Operation(summary = "导出用户")
     @PreAuthorize("@ss.hasPermission('system:user:export')")
-    public void export(HttpServletResponse response, @Valid @RequestBody UserExportInput inputVO) throws IOException {
-        userService.export(response, inputVO);
+    public void exported(@Validated UserExportedInput inputVO, HttpServletResponse response) throws IOException {
+        userService.exported(response, inputVO);
     }
 
     @GetMapping("/get-import-template")

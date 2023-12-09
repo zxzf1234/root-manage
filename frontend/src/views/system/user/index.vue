@@ -148,7 +148,7 @@
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
 import { formatDate } from '@/utils/formatTime'
 import download from '@/utils/download'
-import * as UserApi from '@/api/system/user'
+import * as UserApi from '@/api/system/user/user'
 import UserForm from './UserForm.vue'
 import UserImportForm from './UserImportForm.vue'
 import UserAssignRoleForm from './UserAssignRoleForm.vue'
@@ -209,7 +209,7 @@ const userData = ref()
 const getList = async () => {
   loading.value = true
   try {
-    userData.value = await UserApi.getUserPage(queryParams)
+    userData.value = await UserApi.page(queryParams)
   } finally {
     loading.value = false
   }
@@ -252,7 +252,7 @@ const handleStatusChange = async (row: UserApi.UserVO) => {
     const text = row.status === CommonStatusEnum.ENABLE ? '启用' : '停用'
     await message.confirm('确认要"' + text + '""' + row.username + '"用户吗?')
     // 发起修改状态
-    await UserApi.updateUserStatus(row.id, row.status)
+    await UserApi.updateStatus({ id: row.id, status: row.status })
     // 刷新列表
     await getList()
   } catch {
@@ -270,7 +270,7 @@ const handleExport = async () => {
     await message.exportConfirm()
     // 发起导出
     exportLoading.value = true
-    const data = await UserApi.exportUser(queryParams)
+    const data = await UserApi.exported(queryParams)
     download.excel(data, '用户数据.xls')
   } catch {
   } finally {
@@ -284,7 +284,7 @@ const handleDelete = async (id: number) => {
     // 删除的二次确认
     await message.delConfirm()
     // 发起删除
-    await UserApi.deleteUser(id)
+    await UserApi.deleted(id)
     message.success(t('common.delSuccess'))
     // 刷新列表
     await getList()
@@ -301,7 +301,7 @@ const handleResetPwd = async (row: UserApi.UserVO) => {
     )
     const password = result.value
     // 发起重置
-    await UserApi.resetUserPwd(row.id, password)
+    await UserApi.updatePassword({ id: row.id, password: password })
     message.success('修改成功，新密码是：' + password)
   } catch {}
 }

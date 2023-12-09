@@ -15,9 +15,6 @@ public class UserUpdatePasswordInput  {
     private Long id;
 
     @Schema(description = "新密码")
-    private String newPassword;
-
-    @Schema(description = "旧密码")
-    private String oldPassword;
+    private String password;
 
 }

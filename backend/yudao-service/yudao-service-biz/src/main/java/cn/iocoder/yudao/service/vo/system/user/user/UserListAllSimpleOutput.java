@@ -11,8 +11,8 @@ import javax.validation.Valid;
 @Data
 public class UserListAllSimpleOutput  {
 
-    @Schema(description = "用户账号", example = "yudao")
-    private String username;
+    @Schema(description = "用户昵称", example = "yudao")
+    private String nickname;
 
     @Schema(description = "主键ID")
     private Long id;

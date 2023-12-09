@@ -1,0 +1,2 @@
+update INFRA_INTERFACE_PARAM set UPDATER_ID = '1', DELETED = 0, NAME = 'password', COMMENT = '新密码', IS_LIST = 0, VARIABLE_TYPE = 'String', RELATED_ID = '', RELATED_TYPE = '0', EXAMPLE = '', REQUIRED = 0, PARENT_ID = 'dd04d72d-ad79-445b-a74b-197e06382d28', PARENT_TYPE = '0', INOUT_TYPE = '0' where ID = '5e106bbf-423f-41cf-a529-d53a1d100293';
+delete tb_1_ from INFRA_INTERFACE_PARAM tb_1_ where tb_1_.ID in ('7e0771b1-dfec-4883-957e-3845b5d15641') and tb_1_.DELETED = 0;

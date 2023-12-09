@@ -80,7 +80,7 @@ public class CodegenEngine {
             .put(templatePath("interfaceModule/serviceImpl"), javaModuleFilePath("service", "${nameHumpUp}ServiceImpl"))
             .put(templatePath("interfaceModule/service"), javaModuleFilePath("service", "${nameHumpUp}Service"))
             .put(templatePath("interfaceModule/vo"), javaModuleFilePath("vo", "${nameHump}/package-info"))
-            .put(templatePath("interfaceModule/vueApi"), vueFilePath("api/${vueModulePath}/${nameHump}/index.ts"))
+            .put(templatePath("interfaceModule/vueApi"), vueFilePath("api/${vueModulePath}/${nameHump}.ts"))
             .build();
 
     private static final Map<String, String> DICT_TEMPLATES = MapUtil.<String, String>builder(new LinkedHashMap<>()) // 有序
@@ -98,7 +98,7 @@ public class CodegenEngine {
             .put(templatePath("interface/service"), javaModuleFilePath("service", "${moduleNameHump}Service"))
             .put(templatePath("interface/voInput"), javaModuleFilePath("vo", "${moduleNameHump}/${moduleNameHumpUp}${interfaceNameHumpUp}Input"))
             .put(templatePath("interface/voOutput"), javaModuleFilePath("vo", "${moduleNameHump}/${moduleNameHumpUp}${interfaceNameHumpUp}Output"))
-            .put(templatePath("interface/vueApi"), vueFilePath("api/${vueModulePath}/${moduleNameHump}/index.ts"))
+            .put(templatePath("interface/vueApi"), vueFilePath("api/${vueModulePath}/${moduleNameHump}.ts"))
             .build();
 
 
@@ -397,7 +397,7 @@ public class CodegenEngine {
             {
                 input = "List<" + input + ">";
             }
-            if(!Objects.equals(infraInterface.method(), "get")){
+            if(!Objects.equals(javaMethod, "Get")){
                 inputRequest = "@RequestBody ";
             }
             inputValid = "@Valid ";

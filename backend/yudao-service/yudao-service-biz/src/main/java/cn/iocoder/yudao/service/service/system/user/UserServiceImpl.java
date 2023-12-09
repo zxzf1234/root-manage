@@ -151,8 +151,9 @@ public class UserServiceImpl implements UserService {
     @Transactional(rollbackFor = Exception.class)
     public Boolean updatePassword(UserUpdatePasswordInput inputVO) {
         // 校验旧密码密码
-        validateOldPassword(inputVO.getId(), inputVO.getOldPassword());
-        systemUserRepository.UpdateUserPassword(inputVO.getId(), encodePassword(inputVO.getNewPassword()));
+        // 校验用户存在
+        validateUserExists(inputVO.getId());
+        systemUserRepository.UpdateUserPassword(inputVO.getId(), encodePassword(inputVO.getPassword()));
         return true;
     }
 
@@ -219,7 +220,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void export(HttpServletResponse response, UserExportInput inputVO) throws IOException {
+    public void exported(HttpServletResponse response, UserExportedInput inputVO) throws IOException {
         List<SystemUser> systemUsers = systemUserRepository.getExportUserList(inputVO);
         List<UserExcelVO> excelUsers  = UserConvert.INSTANCE.convertExcelListUser(systemUsers);
         // 输出

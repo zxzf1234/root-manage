@@ -7,7 +7,7 @@ import cn.iocoder.yudao.service.model.system.dept.SystemPost;
 import cn.iocoder.yudao.service.model.system.permission.SystemRole;
 import cn.iocoder.yudao.service.vo.system.user.profile.UserProfileResp;
 import cn.iocoder.yudao.service.vo.system.user.profile.UserProfileUpdateReqVO;
-import cn.iocoder.yudao.service.vo.system.user.user.UserExportInput;
+import cn.iocoder.yudao.service.vo.system.user.user.UserExportedInput;
 import cn.iocoder.yudao.service.vo.system.user.user.UserGetOutput;
 import cn.iocoder.yudao.service.vo.system.user.user.UserListAllSimpleOutput;
 import cn.iocoder.yudao.service.vo.system.user.user.UserPageInput;

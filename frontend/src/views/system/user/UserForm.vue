@@ -101,7 +101,7 @@ import { CommonStatusEnum } from '@/utils/constants'
 import { defaultProps, handleTree } from '@/utils/tree'
 import * as PostApi from '@/api/system/post'
 import * as DeptApi from '@/api/system/dept'
-import * as UserApi from '@/api/system/user'
+import * as UserApi from '@/api/system/user/user'
 
 const { t } = useI18n() // 国际化
 const message = useMessage() // 消息弹窗
@@ -157,7 +157,7 @@ const open = async (type: string, id?: number) => {
   if (id) {
     formLoading.value = true
     try {
-      formData.value = await UserApi.getUser(id)
+      formData.value = await UserApi.get(id)
     } finally {
       formLoading.value = false
     }
@@ -181,10 +181,10 @@ const submitForm = async () => {
   try {
     const data = formData.value as unknown as UserApi.UserVO
     if (formType.value === 'create') {
-      await UserApi.createUser(data)
+      await UserApi.create(data)
       message.success(t('common.createSuccess'))
     } else {
-      await UserApi.updateUser(data)
+      await UserApi.update(data)
       message.success(t('common.updateSuccess'))
     }
     dialogVisible.value = false

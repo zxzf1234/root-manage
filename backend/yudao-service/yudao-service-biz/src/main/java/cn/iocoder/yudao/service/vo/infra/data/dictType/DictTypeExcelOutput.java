@@ -14,9 +14,6 @@ import java.util.UUID;
 @Data
 public class DictTypeExcelOutput {
 
-    @ExcelProperty("字典主键")
-    private UUID id;
-
     @ExcelProperty("字典名称")
     private String name;
 

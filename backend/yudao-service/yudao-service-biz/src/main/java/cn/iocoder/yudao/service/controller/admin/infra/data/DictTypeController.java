@@ -78,7 +78,7 @@ public class DictTypeController {
     @GetMapping("/export")
     @Operation(summary = "导出数据类型")
     @PreAuthorize("@ss.hasPermission('system:data:dict:query')")
-    public void export(HttpServletResponse response, @Valid DictTypeExportInput inputVO) {
+    public void export(@Valid DictTypeExportInput inputVO, HttpServletResponse response) {
         dictTypeService.export(response, inputVO);
     }
 

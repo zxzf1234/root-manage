@@ -73,7 +73,7 @@ public class DictDataController {
     @Operation(summary = "导出字典数据")
     @PreAuthorize("@ss.hasPermission('infra:data:dict:export')")
     @Parameter(name = "DictDataExportInput", description = "字典类型导出 Request", example = "")
-    public void export(HttpServletResponse response, @Valid DictDataExportInput inputVO) {
+    public void export(@Valid DictDataExportInput inputVO, HttpServletResponse response) {
         dictDataService.export(response, inputVO);
     }
 

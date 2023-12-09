@@ -61,7 +61,7 @@
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
 import { defaultProps, handleTree } from '@/utils/tree'
 import * as DeptApi from '@/api/system/dept'
-import * as UserApi from '@/api/system/user'
+import * as UserApi from '@/api/system/user/user'
 import { CommonStatusEnum } from '@/utils/constants'
 
 const { t } = useI18n() // 国际化
@@ -113,7 +113,7 @@ const open = async (type: string, id?: number) => {
     }
   }
   // 获得用户列表
-  userList.value = await UserApi.getSimpleUserList()
+  userList.value = await UserApi.listAllSimple()
   // 获得部门树
   await getTree()
 }
@@ -165,7 +165,7 @@ const resetForm = () => {
 const getTree = async () => {
   deptTree.value = []
   const data = await DeptApi.getSimpleDeptList()
-  let dept: Tree = { id: 0, name: '顶级部门', children: [] }
+  let dept: Tree = { id: '0', name: '顶级部门', children: [] }
   dept.children = handleTree(data)
   deptTree.value.push(dept)
 }
