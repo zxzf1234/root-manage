@@ -9,7 +9,7 @@
     #if(${interfaceInputSingleParam}!="")
     ${interfaceInputSingleParam}
     #end
-    public#if(${interfaceOutput}!="void") CommonResult<${interfaceOutput}>#else void#end ${interfaceNameHump}(${interfaceInputValid}${interfaceInputRequest}#if(${interfaceInput} != "")${interfaceInput} ${interfaceInputVar}#end#if(${interfaceInput} != ""), #end#if(${interface.inputServlet}), HttpServletResponse response#end) #if(${interface.method}=="download")throws IOException #end{
+    public#if(${interfaceOutput}!="void") CommonResult<${interfaceOutput}>#else void#end ${interfaceNameHump}(${interfaceInputValid}${interfaceInputRequest}#if(${interfaceInput} != "")${interfaceInput} ${interfaceInputVar}#end#if(${interface.inputServlet})#if(${interfaceInput} != ""),#end HttpServletResponse response#end) #if(${interface.method}=="download")throws IOException #end{
         #if(${interfaceOutput}!="void")
         return success(${moduleNameHump}Service.${interfaceNameHump}(#if(${interface.inputServlet})response#if(${interfaceInput} != ""),#end #end#if(${interfaceInput} != "")${interfaceInputVar}#end));
         #else

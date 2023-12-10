@@ -1,5 +1,6 @@
 package cn.iocoder.yudao.service.service.system.dept;
 
+import cn.iocoder.yudao.service.vo.system.dept.dept.DeptGetOutput;
 import cn.iocoder.yudao.service.vo.system.dept.dept.DeptListAllSimpleOutput;
 import cn.iocoder.yudao.service.vo.system.dept.dept.DeptListOutput;
 import cn.iocoder.yudao.service.vo.system.dept.dept.DeptListInput;
@@ -7,7 +8,6 @@ import cn.iocoder.yudao.service.vo.system.dept.dept.DeptUpdateInput;
 import cn.iocoder.yudao.service.vo.system.dept.dept.DeptCreateInput;
 import cn.hutool.core.collection.CollUtil;
 import cn.iocoder.yudao.framework.common.enums.CommonStatusEnum;
-import cn.iocoder.yudao.service.vo.system.dept.dept.DeptListReq;
 import cn.iocoder.yudao.service.convert.system.dept.DeptConvert;
 import cn.iocoder.yudao.service.enums.system.dept.DeptIdEnum;
 import cn.iocoder.yudao.service.model.system.dept.SystemDept;
@@ -39,23 +39,6 @@ public class DeptServiceImpl implements DeptService {
 
     @Resource
     private SystemDeptRepository systemDeptRepository;
-
-    @Override
-    public void deleteDept(Long id) {
-        // 校验是否存在
-        validateDeptExists(id);
-        // 校验是否有子部门
-        if (systemDeptRepository.countByParentId(id) > 0) {
-            throw exception(DEPT_EXITS_CHILDREN);
-        }
-        // 删除部门
-        systemDeptRepository.deleteById(id);
-    }
-
-    @Override
-    public List<SystemDept> getDeptList(DeptListReq reqVO) {
-        return systemDeptRepository.selectList(reqVO);
-    }
 
     @Override
     public List<SystemDept> getDeptListByParentId(Long parentId, boolean recursive) {
@@ -217,7 +200,7 @@ public class DeptServiceImpl implements DeptService {
     }
 
     @Override
-    public Boolean delete(Long id) {
+    public Boolean deleted(Long id) {
         // 校验是否存在
         validateDeptExists(id);
         // 校验是否有子部门
@@ -239,12 +222,20 @@ public class DeptServiceImpl implements DeptService {
     @Override
     public List<DeptListAllSimpleOutput> listAllSimple() {
         // 获得部门列表，只要开启状态的
-        DeptListReq reqVO = new DeptListReq();
+        DeptListInput reqVO = new DeptListInput();
         reqVO.setStatus(CommonStatusEnum.ENABLE.getStatus());
         List<SystemDept> list = systemDeptRepository.selectList(reqVO);
         // 排序后，返回给前端
         list.sort(Comparator.comparing(SystemDept::sort));
         return DeptConvert.INSTANCE.listAllSimpleListOutputConvert(list);
+    }
+
+    @Override
+    public DeptGetOutput get(Long id) {
+        Optional<SystemDept> opDept = systemDeptRepository.findById(id);
+        if(!opDept.isPresent())
+            throw exception(DEPT_NOT_FOUND);
+        return DeptConvert.INSTANCE.getOutputConvert(opDept.get());
     }
 
 }

@@ -95,7 +95,7 @@ const checkStrictly = ref(true) // 是否严格模式，即父子不关联
 const open = async (row: RoleApi.RoleVO) => {
   dialogVisible.value = true
   resetForm()
-  deptOptions.value = handleTree(await DeptApi.getSimpleDeptList())
+  deptOptions.value = handleTree(await DeptApi.listAllSimple())
   formData.id = row.id
   formData.name = row.name
   formData.code = row.code

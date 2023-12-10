@@ -134,7 +134,7 @@ const deptData = ref()
 const getList = async () => {
   loading.value = true
   try {
-    const data = await DeptApi.getDeptList(queryParams)
+    const data = await DeptApi.list(queryParams)
     deptData.value = handleTree(data)
   } finally {
     loading.value = false
@@ -174,7 +174,7 @@ const handleDelete = async (id: number) => {
     // 删除的二次确认
     await message.delConfirm()
     // 发起删除
-    await DeptApi.deleteDept(id)
+    await DeptApi.deleted(id)
     message.success(t('common.delSuccess'))
     // 刷新列表
     await getList()

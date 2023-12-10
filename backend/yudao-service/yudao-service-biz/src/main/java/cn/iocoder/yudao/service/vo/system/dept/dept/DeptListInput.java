@@ -4,10 +4,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import java.util.*;
 import javax.validation.constraints.*;
+import org.hibernate.validator.constraints.Length;
+import javax.validation.Valid;
 
 @Schema(description = "获取部门列表")
 @Data
 public class DeptListInput  {
+
     @Schema(description = "展示状态,参见 CommonStatusEnum 枚举类", example = "1")
     private Integer status;
 

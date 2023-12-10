@@ -32,7 +32,7 @@ const treeRef = ref<InstanceType<typeof ElTree>>()
 
 /** 获得部门树 */
 const getTree = async () => {
-  const res = await DeptApi.getSimpleDeptList()
+  const res = await DeptApi.listAllSimple()
   deptList.value = []
   deptList.value.push(...handleTree(res))
 }

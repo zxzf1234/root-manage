@@ -1,5 +1,6 @@
 package cn.iocoder.yudao.service.controller.admin.system.dept;
 
+import cn.iocoder.yudao.service.vo.system.dept.dept.DeptGetOutput;
 import cn.iocoder.yudao.service.vo.system.dept.dept.DeptListAllSimpleOutput;
 import cn.iocoder.yudao.service.vo.system.dept.dept.DeptListOutput;
 import cn.iocoder.yudao.service.vo.system.dept.dept.DeptListInput;
@@ -34,14 +35,6 @@ public class DeptController {
     @Resource
     private DeptService deptService;
 
-    @GetMapping("/get")
-    @Operation(summary = "获得部门信息")
-    @Parameter(name = "id", description = "编号", required = true, example = "1024")
-    @PreAuthorize("@ss.hasPermission('system:dept:query')")
-    public CommonResult<DeptResp> getDept(@RequestParam("id") Long id) {
-        return success(DeptConvert.INSTANCE.convert(deptService.getDept(id)));
-    }
-
     @PostMapping("/create")
     @Operation(summary = "创建部门")
     @PreAuthorize("@ss.hasPermission('system:dept:create')")
@@ -55,12 +48,13 @@ public class DeptController {
     public CommonResult<Boolean> update(@Valid @RequestBody DeptUpdateInput inputVO) {
         return success(deptService.update(inputVO));
     }
-    @DeleteMapping("/delete")
+    
+    @DeleteMapping("/deleted")
     @Operation(summary = "删除部门")
     @PreAuthorize("@ss.hasPermission('system:dept:delete')")
     @Parameter(name = "id", description = "部门编号", required = true, example = "1024")
-    public CommonResult<Boolean> delete(@RequestParam("id") Long id) {
-        return success(deptService.delete(id));
+    public CommonResult<Boolean> deleted(@RequestParam("id") Long id) {
+        return success(deptService.deleted(id));
     }
 
     @GetMapping("/list")
@@ -74,6 +68,14 @@ public class DeptController {
     @Operation(summary = "获取部门精简信息列表")
     public CommonResult<List<DeptListAllSimpleOutput>> listAllSimple() {
         return success(deptService.listAllSimple());
+    }
+
+    @GetMapping("/get")
+    @Operation(summary = "获得单个部门信息")
+    @PreAuthorize("@ss.hasPermission('system:dept:query')")
+    @Parameter(name = "id", description = "部门ID", example = "")
+    public CommonResult<DeptGetOutput> get(@RequestParam("id") Long id) {
+        return success(deptService.get(id));
     }
 
 }

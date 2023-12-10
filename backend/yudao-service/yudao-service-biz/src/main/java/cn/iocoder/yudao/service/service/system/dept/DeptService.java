@@ -1,5 +1,6 @@
 package cn.iocoder.yudao.service.service.system.dept;
 
+import cn.iocoder.yudao.service.vo.system.dept.dept.DeptGetOutput;
 import cn.iocoder.yudao.service.vo.system.dept.dept.DeptListAllSimpleOutput;
 import cn.iocoder.yudao.service.vo.system.dept.dept.DeptListOutput;
 import cn.iocoder.yudao.service.vo.system.dept.dept.DeptListInput;
@@ -7,9 +8,6 @@ import cn.iocoder.yudao.service.vo.system.dept.dept.DeptUpdateInput;
 import cn.iocoder.yudao.service.vo.system.dept.dept.DeptCreateInput;
 import cn.hutool.core.collection.CollUtil;
 import cn.iocoder.yudao.framework.common.util.collection.CollectionUtils;
-import cn.iocoder.yudao.service.vo.system.dept.dept.DeptCreateReq;
-import cn.iocoder.yudao.service.vo.system.dept.dept.DeptListReq;
-import cn.iocoder.yudao.service.vo.system.dept.dept.DeptUpdateReq;
 import cn.iocoder.yudao.service.model.system.dept.SystemDept;
 
 import java.util.Collection;
@@ -23,22 +21,6 @@ import java.util.Map;
  * @author 芋道源码
  */
 public interface DeptService {
-
-
-    /**
-     * 删除部门
-     *
-     * @param id 部门编号
-     */
-    void deleteDept(Long id);
-
-    /**
-     * 筛选部门列表
-     *
-     * @param reqVO 筛选条件请求 VO
-     * @return 部门列表
-     */
-    List<SystemDept> getDeptList(DeptListReq reqVO);
 
     /**
      * 获得所有子部门，从缓存中
@@ -92,10 +74,12 @@ public interface DeptService {
 
     Boolean update(DeptUpdateInput inputVO);
 
-    Boolean delete(Long id);
+    Boolean deleted(Long id);
 
     List<DeptListOutput> list(DeptListInput inputVO);
 
     List<DeptListAllSimpleOutput> listAllSimple();
+
+    DeptGetOutput get(Long id);
 
 }

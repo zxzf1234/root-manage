@@ -12,32 +12,44 @@ export interface DeptVO {
   createTime: Date
 }
 
-// 查询部门（精简)列表
-export const getSimpleDeptList = async (): Promise<DeptVO[]> => {
-  return await request.get({ url: '/system/dept/list-all-simple' })
+/**
+ * 获取部门列表
+ */
+export const list = (params) => {
+  return request.get({ url: '/system/dept/list', params })
 }
 
-// 查询部门列表
-export const getDeptList = async (params) => {
-  return await request.get({ url: '/system/dept/list', params })
+/**
+ * 获取部门精简信息列表
+ */
+export const listAllSimple = () => {
+  return request.get({ url: '/system/dept/list-all-simple' })
 }
 
-// 查询部门详情
-export const getDept = async (id: number) => {
-  return await request.get({ url: '/system/dept/get?id=' + id })
+/**
+ * 更新部门
+ */
+export const update = (data) => {
+  return request.put({ url: '/system/dept/update', data })
 }
 
-// 新增部门
-export const createDept = async (data: DeptVO) => {
-  return await request.post({ url: '/system/dept/create', data: data })
+/**
+ * 创建部门
+ */
+export const create = (data) => {
+  return request.post({ url: '/system/dept/create', data })
 }
 
-// 修改部门
-export const updateDept = async (params: DeptVO) => {
-  return await request.put({ url: '/system/dept/update', data: params })
+/**
+ * 获得单个部门信息
+ */
+export const get = (id) => {
+  return request.get({ url: '/system/dept/get?id=' + id })
 }
 
-// 删除部门
-export const deleteDept = async (id: number) => {
-  return await request.delete({ url: '/system/dept/delete?id=' + id })
+/**
+ * 删除部门
+ */
+export const deleted = (id) => {
+  return request.delete({ url: '/system/dept/deleted?id=' + id })
 }

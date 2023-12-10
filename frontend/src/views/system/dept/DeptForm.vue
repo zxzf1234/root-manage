@@ -107,7 +107,7 @@ const open = async (type: string, id?: number) => {
   if (id) {
     formLoading.value = true
     try {
-      formData.value = await DeptApi.getDept(id)
+      formData.value = await DeptApi.get(id)
     } finally {
       formLoading.value = false
     }
@@ -131,10 +131,10 @@ const submitForm = async () => {
   try {
     const data = formData.value as unknown as DeptApi.DeptVO
     if (formType.value === 'create') {
-      await DeptApi.createDept(data)
+      await DeptApi.create(data)
       message.success(t('common.createSuccess'))
     } else {
-      await DeptApi.updateDept(data)
+      await DeptApi.update(data)
       message.success(t('common.updateSuccess'))
     }
     dialogVisible.value = false
@@ -164,7 +164,7 @@ const resetForm = () => {
 /** 获得部门树 */
 const getTree = async () => {
   deptTree.value = []
-  const data = await DeptApi.getSimpleDeptList()
+  const data = await DeptApi.listAllSimple()
   let dept: Tree = { id: '0', name: '顶级部门', children: [] }
   dept.children = handleTree(data)
   deptTree.value.push(dept)
