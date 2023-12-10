@@ -1,4 +1,4 @@
-package cn.iocoder.yudao.service.vo.infra.permission.role;
+package cn.iocoder.yudao.service.vo.system.role.role;
 
 import cn.iocoder.yudao.framework.excel.core.annotations.DictFormat;
 import cn.iocoder.yudao.framework.excel.core.convert.DictConvert;

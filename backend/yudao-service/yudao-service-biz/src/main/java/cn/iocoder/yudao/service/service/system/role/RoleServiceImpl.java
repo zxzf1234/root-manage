@@ -1,9 +1,8 @@
 package cn.iocoder.yudao.service.service.system.role;
 
 import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.collection.CollectionUtil;
+
 import static cn.iocoder.yudao.framework.common.util.collection.CollectionUtils.convertMap;
 import cn.iocoder.yudao.framework.common.enums.CommonStatusEnum;
 import cn.iocoder.yudao.framework.common.util.object.ObjectUtils;
@@ -16,7 +15,7 @@ import cn.iocoder.yudao.service.model.system.role.SystemRole;
 import cn.iocoder.yudao.service.model.system.role.SystemRoleDraft;
 import cn.iocoder.yudao.service.repository.system.role.SystemRoleRepository;
 import cn.iocoder.yudao.service.service.system.permission.PermissionService;
-import cn.iocoder.yudao.service.vo.infra.permission.role.RoleExcelVO;
+import cn.iocoder.yudao.service.vo.system.role.role.RoleExcelVO;
 import cn.iocoder.yudao.service.vo.system.role.role.RoleListAllSimpleOutput;
 import cn.iocoder.yudao.service.vo.system.role.role.RolePageInput;
 import cn.iocoder.yudao.service.vo.system.role.role.RolePageOutput;

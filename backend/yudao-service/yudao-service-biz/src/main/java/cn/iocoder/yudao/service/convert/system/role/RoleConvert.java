@@ -1,6 +1,6 @@
 package cn.iocoder.yudao.service.convert.system.role;
 
-import cn.iocoder.yudao.service.vo.infra.permission.role.RoleExcelVO;
+import cn.iocoder.yudao.service.vo.system.role.role.RoleExcelVO;
 import cn.iocoder.yudao.service.vo.system.role.role.*;
 import cn.iocoder.yudao.service.model.system.role.SystemRole;
 

@@ -1,8 +1,6 @@
 package cn.iocoder.yudao.service.repository.system.role;
 
 import cn.iocoder.yudao.service.model.system.role.SystemRole;
-import cn.iocoder.yudao.service.vo.infra.permission.role.RoleExportReqVO;
-import cn.iocoder.yudao.service.vo.infra.permission.role.RolePageReqVO;
 import cn.iocoder.yudao.service.model.system.role.SystemRoleTable;
 import cn.iocoder.yudao.service.vo.system.role.role.RoleExportedInput;
 import cn.iocoder.yudao.service.vo.system.role.role.RolePageInput;
