@@ -8,7 +8,7 @@
   </Dialog>
 </template>
 <script lang="ts" name="SystemMailAccountForm" setup>
-import * as MailAccountApi from '@/api/system/mail/account'
+import * as MailAccountApi from '@/api/infra/mail/account'
 import { allSchemas, rules } from './account.data'
 
 const { t } = useI18n() // 国际化

@@ -37,7 +37,7 @@
   </Dialog>
 </template>
 <script lang="ts" name="SystemSmsTemplateSendForm" setup>
-import * as SmsTemplateApi from '@/api/system/sms/smsTemplate'
+import * as SmsTemplateApi from '@/api/infra/sms/smsTemplate'
 
 const message = useMessage() // 消息弹窗
 

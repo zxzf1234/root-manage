@@ -62,13 +62,13 @@
 <script lang="ts" name="SystemSmsLogDetail" setup>
 import { DICT_TYPE } from '@/utils/dict'
 import { formatDate } from '@/utils/formatTime'
-import * as SmsLogApi from '@/api/system/sms/smsLog'
-import * as SmsChannelApi from '@/api/system/sms/smsChannel'
+import * as SmsLogApi from '@/api/infra/sms/smsLog'
+import * as SmsChannelApi from '@/api/infra/sms/smsChannel'
 
 const dialogVisible = ref(false) // 弹窗的是否展示
 const detailLoading = ref(false) // 表单的加载中
 const detailData = ref() // 详情数据
-const channelList = ref([]) // 短信渠道列表
+const channelList = ref<SmsChannelApi.SmsChannelVO[]>([]) // 短信渠道列表
 
 /** 打开弹窗 */
 const open = async (data: SmsLogApi.SmsLogVO) => {

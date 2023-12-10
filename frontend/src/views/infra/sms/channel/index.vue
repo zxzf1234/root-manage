@@ -132,7 +132,7 @@
 <script setup lang="ts" name="SystemSmsChannel">
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
 import { dateFormatter } from '@/utils/formatTime'
-import * as SmsChannelApi from '@/api/system/sms/smsChannel'
+import * as SmsChannelApi from '@/api/infra/sms/smsChannel'
 import SmsChannelForm from './SmsChannelForm.vue'
 const { t } = useI18n() // 国际化
 const message = useMessage() // 消息弹窗

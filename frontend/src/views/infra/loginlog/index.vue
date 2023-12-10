@@ -108,7 +108,7 @@
 import { DICT_TYPE } from '@/utils/dict'
 import { dateFormatter } from '@/utils/formatTime'
 import download from '@/utils/download'
-import * as LoginLogApi from '@/api/system/loginLog'
+import * as LoginLogApi from '@/api/infra/loginLog'
 import LoginLogDetail from './LoginLogDetail.vue'
 const message = useMessage() // 消息弹窗
 

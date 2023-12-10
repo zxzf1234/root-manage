@@ -28,7 +28,7 @@
 <script lang="ts" name="SystemLoginLogDetail" setup>
 import { DICT_TYPE } from '@/utils/dict'
 import { formatDate } from '@/utils/formatTime'
-import * as LoginLogApi from '@/api/system/loginLog'
+import * as LoginLogApi from '@/api/infra/loginLog'
 
 const dialogVisible = ref(false) // 弹窗的是否展示
 const detailLoading = ref(false) // 表单的加载中

@@ -121,11 +121,11 @@
 </template>
 <script setup lang="ts" name="SystemMailTemplate">
 import { allSchemas } from './template.data'
-import * as MailTemplateApi from '@/api/system/mail/template'
+import * as MailTemplateApi from '@/api/infra/mail/template'
 import MailTemplateForm from './MailTemplateForm.vue'
 import MailTemplateSendForm from './MailTemplateSendForm.vue'
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
-import * as MailAccountApi from '@/api/system/mail/account'
+import * as MailAccountApi from '@/api/infra/mail/account'
 
 const queryParams = reactive({
   code: undefined,

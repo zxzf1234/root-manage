@@ -98,10 +98,10 @@
 </template>
 <script setup lang="ts" name="SystemMailLog">
 import { allSchemas } from './log.data'
-import * as MailLogApi from '@/api/system/mail/log'
+import * as MailLogApi from '@/api/infra/mail/log'
 import MailLogDetail from './MailLogDetail.vue'
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
-import * as MailAccountApi from '@/api/system/mail/account'
+import * as MailAccountApi from '@/api/infra/mail/account'
 
 const queryParams = reactive({
   userId: undefined,

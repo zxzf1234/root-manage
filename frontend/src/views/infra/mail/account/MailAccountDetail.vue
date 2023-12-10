@@ -4,7 +4,7 @@
   </Dialog>
 </template>
 <script lang="ts" name="SystemMailAccountDetail" setup>
-import * as MailAccountApi from '@/api/system/mail/account'
+import * as MailAccountApi from '@/api/infra/mail/account'
 import { allSchemas } from './account.data'
 
 const dialogVisible = ref(false) // 弹窗的是否展示

@@ -14,7 +14,7 @@
   </Dialog>
 </template>
 <script lang="ts" name="SystemMailTemplateForm" setup>
-import * as MailTemplateApi from '@/api/system/mail/template'
+import * as MailTemplateApi from '@/api/infra/mail/template'
 import { allSchemas, rules } from './template.data'
 
 const { t } = useI18n() // 国际化

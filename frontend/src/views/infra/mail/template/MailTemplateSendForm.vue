@@ -32,7 +32,7 @@
   </Dialog>
 </template>
 <script lang="ts" name="SystemMailTemplateSendForm" setup>
-import * as MailTemplateApi from '@/api/system/mail/template'
+import * as MailTemplateApi from '@/api/infra/mail/template'
 
 const message = useMessage() // 消息弹窗
 

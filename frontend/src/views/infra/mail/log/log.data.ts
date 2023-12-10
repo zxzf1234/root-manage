@@ -1,6 +1,6 @@
 import type { CrudSchema } from '@/hooks/web/useCrudSchemas'
 import { dateFormatter } from '@/utils/formatTime'
-import * as MailAccountApi from '@/api/system/mail/account'
+import * as MailAccountApi from '@/api/infra/mail/account'
 
 // 邮箱账号的列表
 const accountList = await MailAccountApi.getSimpleMailAccountList()

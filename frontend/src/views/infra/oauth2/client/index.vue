@@ -122,7 +122,7 @@
 <script setup lang="ts" name="SystemOAuth2Client">
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
 import { dateFormatter } from '@/utils/formatTime'
-import * as ClientApi from '@/api/system/oauth2/client'
+import * as ClientApi from '@/api/infra/oauth2/client'
 import ClientForm from './ClientForm.vue'
 const message = useMessage() // 消息弹窗
 const { t } = useI18n() // 国际化

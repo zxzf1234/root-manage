@@ -65,8 +65,8 @@
 </template>
 <script lang="ts" name="SystemSmsTemplateForm" setup>
 import { DICT_TYPE, getDictLabel, getIntDictOptions } from '@/utils/dict'
-import * as SmsTemplateApi from '@/api/system/sms/smsTemplate'
-import * as SmsChannelApi from '@/api/system/sms/smsChannel'
+import * as SmsTemplateApi from '@/api/infra/sms/smsTemplate'
+import * as SmsChannelApi from '@/api/infra/sms/smsChannel'
 import { CommonStatusEnum } from '@/utils/constants'
 
 const { t } = useI18n() // 国际化

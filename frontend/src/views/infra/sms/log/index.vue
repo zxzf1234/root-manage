@@ -188,8 +188,8 @@
 import { DICT_TYPE, getIntDictOptions, getDictLabel } from '@/utils/dict'
 import { dateFormatter, formatDate } from '@/utils/formatTime'
 import download from '@/utils/download'
-import * as SmsChannelApi from '@/api/system/sms/smsChannel'
-import * as SmsLogApi from '@/api/system/sms/smsLog'
+import * as SmsChannelApi from '@/api/infra/sms/smsChannel'
+import * as SmsLogApi from '@/api/infra/sms/smsLog'
 import SmsLogDetail from './SmsLogDetail.vue'
 import { number } from 'vue-types'
 const message = useMessage() // 消息弹窗
@@ -201,6 +201,7 @@ const queryFormRef = ref() // 搜索的表单
 const queryParams = reactive({
   id: number,
   pageSize: 10,
+  pageNo: 1,
   channelId: null,
   templateId: null,
   mobile: '',
@@ -210,7 +211,7 @@ const queryParams = reactive({
   receiveTime: []
 })
 const exportLoading = ref(false) // 导出的加载中
-const channelList = ref([]) // 短信渠道列表
+const channelList = ref<SmsChannelApi.SmsChannelVO[]>([]) // 短信渠道列表
 
 /** 查询列表 */
 const getList = async () => {

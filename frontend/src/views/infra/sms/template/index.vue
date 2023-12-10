@@ -214,8 +214,8 @@
 <script setup lang="ts" name="SystemSmsTemplate">
 import { DICT_TYPE, getIntDictOptions, getDictLabel } from '@/utils/dict'
 import { dateFormatter } from '@/utils/formatTime'
-import * as SmsTemplateApi from '@/api/system/sms/smsTemplate'
-import * as SmsChannelApi from '@/api/system/sms/smsChannel'
+import * as SmsTemplateApi from '@/api/infra/sms/smsTemplate'
+import * as SmsChannelApi from '@/api/infra/sms/smsChannel'
 import download from '@/utils/download'
 import SmsTemplateForm from './SmsTemplateForm.vue'
 import SmsTemplateSendForm from './SmsTemplateSendForm.vue'

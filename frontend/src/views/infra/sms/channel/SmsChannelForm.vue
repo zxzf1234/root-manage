@@ -52,7 +52,7 @@
 </template>
 <script lang="ts" name="SystemSmsChannelForm" setup>
 import { DICT_TYPE, getIntDictOptions, getStrDictOptions } from '@/utils/dict'
-import * as SmsChannelApi from '@/api/system/sms/smsChannel'
+import * as SmsChannelApi from '@/api/infra/sms/smsChannel'
 import { CommonStatusEnum } from '@/utils/constants'
 
 const { t } = useI18n() // 国际化

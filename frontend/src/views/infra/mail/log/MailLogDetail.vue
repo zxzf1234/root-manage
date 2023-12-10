@@ -10,7 +10,7 @@
   </Dialog>
 </template>
 <script lang="ts" name="SystemMailLogDetail" setup>
-import * as MailLogApi from '@/api/system/mail/log'
+import * as MailLogApi from '@/api/infra/mail/log'
 import { allSchemas } from './log.data'
 
 const dialogVisible = ref(false) // 弹窗的是否展示
