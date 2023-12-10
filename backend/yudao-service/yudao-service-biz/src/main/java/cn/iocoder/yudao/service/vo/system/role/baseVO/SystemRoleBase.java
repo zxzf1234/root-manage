@@ -1,4 +1,4 @@
-package cn.iocoder.yudao.service.vo.system.permission.baseVO;
+package cn.iocoder.yudao.service.vo.system.role.baseVO;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;

@@ -1,6 +1,6 @@
 package cn.iocoder.yudao.service.api.system.permission;
 
-import cn.iocoder.yudao.service.service.system.permission.RoleService;
+import cn.iocoder.yudao.service.service.system.role.RoleService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

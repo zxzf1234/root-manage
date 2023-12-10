@@ -30,7 +30,7 @@ const message = useMessage() // 消息弹窗
 const dialogVisible = ref(false) // 弹窗的是否展示
 const formLoading = ref(false) // 表单的加载中：1）修改时的数据加载；2）提交的按钮禁用
 const formData = ref({
-  id: undefined,
+  id: 0,
   nickname: '',
   username: '',
   roleIds: []
@@ -54,7 +54,7 @@ const open = async (row: UserApi.UserVO) => {
     formLoading.value = false
   }
   // 获得角色列表
-  roleList.value = await RoleApi.getSimpleRoleList()
+  roleList.value = await RoleApi.listAllSimple()
 }
 defineExpose({ open }) // 提供 open 方法，用于打开弹窗
 
@@ -84,7 +84,7 @@ const submitForm = async () => {
 /** 重置表单 */
 const resetForm = () => {
   formData.value = {
-    id: undefined,
+    id: 0,
     nickname: '',
     username: '',
     roleIds: []

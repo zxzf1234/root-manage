@@ -1,12 +1,8 @@
-package cn.iocoder.yudao.service.model.system.permission;
+package cn.iocoder.yudao.service.model.system.role;
 
 import cn.iocoder.yudao.service.model.base.BaseEntity;
 import org.babyfish.jimmer.sql.*;
 import java.util.List;
-
-
-
-
 @Entity
 public interface SystemRole extends BaseEntity {
     @Id

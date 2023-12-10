@@ -64,7 +64,15 @@
             <Icon class="mr-5px" icon="ep:refresh" />
             重置
           </el-button>
-
+          <el-button
+            type="primary"
+            plain
+            @click="openForm('create')"
+            v-hasPermi="['system:role:create']"
+          >
+            <Icon class="mr-5px" icon="ep:plus" />
+            新建
+          </el-button>
           <el-button
             v-hasPermi="['system:role:export']"
             :loading="exportLoading"
@@ -103,7 +111,12 @@
         />
       </template>
       <template #status="{ row }">
-        <dict-tag :type="DICT_TYPE.COMMON_STATUS" :value="row.status" />
+        <el-switch
+          v-model="row.status"
+          :active-value="0"
+          :inactive-value="1"
+          @change="handleStatusChange(row)"
+        />
       </template>
     </Table>
     <!-- 表单弹窗：添加/修改 -->
@@ -123,6 +136,7 @@ import RoleDataPermissionForm from './RoleDataPermissionForm.vue'
 import download from '@/utils/download'
 import * as RoleApi from '@/api/system/role'
 import { formatDate } from '@/utils/formatTime'
+import { CommonStatusEnum } from '@/utils/constants'
 const message = useMessage() // 消息弹窗
 const { t } = useI18n() // 国际化
 const exportLoading = ref(false) // 导出的加载中
@@ -144,7 +158,7 @@ const Roledata = ref()
 const getList = async () => {
   loading.value = true
   try {
-    Roledata.value = await RoleApi.getRolePage(queryParams)
+    Roledata.value = await RoleApi.page(queryParams)
   } finally {
     loading.value = false
   }
@@ -167,7 +181,7 @@ const handleExport = async () => {
     await message2.exportConfirm()
     // 发起导出
     exportLoading.value = true
-    const data = await RoleApi.exportRole(queryParams)
+    const data = await RoleApi.exported(queryParams)
     download.excel(data, '角色列表.xls')
   } catch {
   } finally {
@@ -187,7 +201,7 @@ const handleDelete = async (id: number) => {
     // 删除的二次确认
     await message.delConfirm()
     // 发起删除
-    await RoleApi.deleteRole(id)
+    await RoleApi.deleted(id)
     message.success(t('common.delSuccess'))
     // 刷新列表
     await getList()
@@ -202,6 +216,23 @@ const queryParams = reactive({
   status: undefined,
   createTime: []
 })
+
+/** 修改角色状态 */
+const handleStatusChange = async (row: RoleApi.RoleVO) => {
+  try {
+    // 修改状态的二次确认
+    const text = row.status === CommonStatusEnum.ENABLE ? '启用' : '停用'
+    await message.confirm('确认要' + text + '"' + row.name + '"角色吗?')
+    // 发起修改状态
+    await RoleApi.updateStatus({ id: row.id, status: row.status })
+    // 刷新列表
+    await getList()
+  } catch {
+    // 取消后，进行恢复按钮
+    row.status =
+      row.status === CommonStatusEnum.ENABLE ? CommonStatusEnum.DISABLED : CommonStatusEnum.ENABLE
+  }
+}
 
 const columns: TableColumnList = [
   {
@@ -231,7 +262,7 @@ const columns: TableColumnList = [
   {
     label: '状态',
     prop: 'status',
-    slot: 'isStatus'
+    slot: 'status'
   },
   {
     label: '创建时间',

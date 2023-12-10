@@ -6,7 +6,7 @@ import cn.iocoder.yudao.service.api.system.sms.dto.code.SmsCodeUseReqDTO;
 import cn.iocoder.yudao.service.api.system.social.dto.SocialUserBindReqDTO;
 import cn.iocoder.yudao.service.model.infra.data.SystemMenu;
 import cn.iocoder.yudao.service.model.infra.oauth2.SystemOauth2AccessToken;
-import cn.iocoder.yudao.service.model.system.permission.SystemRole;
+import cn.iocoder.yudao.service.model.system.role.SystemRole;
 import cn.iocoder.yudao.service.model.system.user.SystemUser;
 import cn.iocoder.yudao.service.vo.infra.auth.*;
 import org.mapstruct.Mapper;

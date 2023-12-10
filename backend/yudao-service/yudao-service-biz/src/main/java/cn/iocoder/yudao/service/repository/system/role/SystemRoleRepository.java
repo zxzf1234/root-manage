@@ -1,9 +1,11 @@
-package cn.iocoder.yudao.service.repository.system.permission;
+package cn.iocoder.yudao.service.repository.system.role;
 
+import cn.iocoder.yudao.service.model.system.role.SystemRole;
 import cn.iocoder.yudao.service.vo.infra.permission.role.RoleExportReqVO;
 import cn.iocoder.yudao.service.vo.infra.permission.role.RolePageReqVO;
-import cn.iocoder.yudao.service.model.system.permission.SystemRole;
-import cn.iocoder.yudao.service.model.system.permission.SystemRoleTable;
+import cn.iocoder.yudao.service.model.system.role.SystemRoleTable;
+import cn.iocoder.yudao.service.vo.system.role.role.RoleExportedInput;
+import cn.iocoder.yudao.service.vo.system.role.role.RolePageInput;
 import org.babyfish.jimmer.spring.repository.JRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.util.StringUtils;
@@ -15,18 +17,18 @@ import java.util.Optional;
 public interface SystemRoleRepository extends JRepository<SystemRole, Long> {
     SystemRoleTable systemRoleTable = SystemRoleTable.$;
 
-    default List<SystemRole> selectList(RoleExportReqVO reqVO){
+    default List<SystemRole> selectList(RoleExportedInput reqVO){
         return sql()
                 .createQuery(systemRoleTable)
                 .whereIf(reqVO.getStatus() != null, systemRoleTable.status().eq(reqVO.getStatus()))
                 .whereIf(StringUtils.hasText(reqVO.getCode()), systemRoleTable.code().eq(reqVO.getCode()))
-                .whereIf(StringUtils.hasText(reqVO.getName()), systemRoleTable.name().eq(reqVO.getName()))
+//                .whereIf(StringUtils.hasText(reqVO.getName()), systemRoleTable.name().eq(reqVO.getName()))
                 .whereIf(reqVO.getCreateTime() != null, ()-> systemRoleTable.createTime().between(reqVO.getCreateTime()[0], reqVO.getCreateTime()[1]))
                 .select(systemRoleTable)
                 .execute();
     }
 
-    default Page<SystemRole> pageSelect(RolePageReqVO reqVO){
+    default Page<SystemRole> pageSelect(RolePageInput reqVO){
         return pager(reqVO.getPageNo() - 1, reqVO.getPageSize()).execute(
                 sql()
                         .createQuery(systemRoleTable)

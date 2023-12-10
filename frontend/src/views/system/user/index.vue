@@ -250,7 +250,7 @@ const handleStatusChange = async (row: UserApi.UserVO) => {
   try {
     // 修改状态的二次确认
     const text = row.status === CommonStatusEnum.ENABLE ? '启用' : '停用'
-    await message.confirm('确认要"' + text + '""' + row.username + '"用户吗?')
+    await message.confirm('确认要' + text + '"' + row.username + '"用户吗?')
     // 发起修改状态
     await UserApi.updateStatus({ id: row.id, status: row.status })
     // 刷新列表

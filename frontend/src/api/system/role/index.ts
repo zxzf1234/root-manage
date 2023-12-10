@@ -12,50 +12,58 @@ export interface RoleVO {
   createTime: Date
 }
 
-export interface UpdateStatusReqVO {
-  id: number
-  status: number
+/**
+ * 创建角色
+ */
+export const create = (data) => {
+  return request.post({ url: '/system/role/create', data })
 }
 
-// 查询角色列表
-export const getRolePage = async (params) => {
-  return await request.get({ url: '/system/role/page', params })
+/**
+ * 修改角色
+ */
+export const update = (data) => {
+  return request.put({ url: '/system/role/update', data })
 }
 
-// 查询角色（精简)列表
-export const getSimpleRoleList = async (): Promise<RoleVO[]> => {
-  return await request.get({ url: '/system/role/list-all-simple' })
+/**
+ * 修改角色状态
+ */
+export const updateStatus = (data) => {
+  return request.put({ url: '/system/role/update-status', data })
 }
 
-// 查询角色详情
-export const getRole = async (id: number) => {
-  return await request.get({ url: '/system/role/get?id=' + id })
+/**
+ * 删除角色
+ */
+export const deleted = (id) => {
+  return request.delete({ url: '/system/role/deleted?id=' + id })
 }
 
-// 新增角色
-export const createRole = async (data: RoleVO) => {
-  return await request.post({ url: '/system/role/create', data })
+/**
+ * 获得单个角色信息
+ */
+export const get = (id) => {
+  return request.get({ url: '/system/role/get?id=' + id })
 }
 
-// 修改角色
-export const updateRole = async (data: RoleVO) => {
-  return await request.put({ url: '/system/role/update', data })
+/**
+ * 获取角色信息-分页
+ */
+export const page = (params) => {
+  return request.get({ url: '/system/role/page', params })
 }
 
-// 修改角色状态
-export const updateRoleStatus = async (data: UpdateStatusReqVO) => {
-  return await request.put({ url: '/system/role/update-status', data })
+/**
+ * 获取角色精简信息列表
+ */
+export const listAllSimple = () => {
+  return request.get({ url: '/system/role/list-all-simple' })
 }
 
-// 删除角色
-export const deleteRole = async (id: number) => {
-  return await request.delete({ url: '/system/role/delete?id=' + id })
-}
-
-// 导出角色
-export const exportRole = (params) => {
-  return request.download({
-    url: '/system/role/export',
-    params
-  })
+/**
+ * 导出角色信息
+ */
+export const exported = (params) => {
+  return request.download({ url: '/system/role/exported', params })
 }

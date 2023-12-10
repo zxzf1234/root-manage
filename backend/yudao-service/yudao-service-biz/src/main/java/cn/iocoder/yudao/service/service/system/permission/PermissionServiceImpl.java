@@ -13,10 +13,12 @@ import cn.iocoder.yudao.service.enums.system.permission.SystemDataScopeEnum;
 import cn.iocoder.yudao.service.model.infra.data.SystemMenu;
 import cn.iocoder.yudao.service.model.system.dept.SystemDept;
 import cn.iocoder.yudao.service.model.system.permission.*;
+import cn.iocoder.yudao.service.model.system.role.SystemRole;
 import cn.iocoder.yudao.service.repository.system.permission.SystemRoleMenuRepository;
 import cn.iocoder.yudao.service.repository.system.permission.SystemUserRoleRepository;
 import cn.iocoder.yudao.service.service.infra.data.MenuService;
 import cn.iocoder.yudao.service.service.system.dept.DeptService;
+import cn.iocoder.yudao.service.service.system.role.RoleService;
 import cn.iocoder.yudao.service.service.system.user.UserService;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Suppliers;
@@ -75,7 +77,7 @@ public class PermissionServiceImpl implements PermissionService {
 
         // 判断角色是否包含超级管理员。如果是超级管理员，获取到全部
         List<SystemRole> roleList = roleService.getRoleListFrom(roleIds);
-        if (roleService.hasAnySuperAdmin(roleList)) {
+        if (roleService.hasAnySuperAdmin(roleIds)) {
             return menuService.getMenuList(menuTypes, menusStatuses);
         }
 
@@ -303,5 +305,6 @@ public class PermissionServiceImpl implements PermissionService {
         }
         return result;
     }
+
 
 }

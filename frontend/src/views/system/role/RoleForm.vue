@@ -73,7 +73,7 @@ const open = async (type: string, id?: number) => {
   if (id) {
     formLoading.value = true
     try {
-      formData.value = await RoleApi.getRole(id)
+      formData.value = await RoleApi.get(id)
     } finally {
       formLoading.value = false
     }
@@ -107,10 +107,10 @@ const submitForm = async () => {
     const data = formData.value as unknown as RoleApi.RoleVO
 
     if (formType.value === 'create') {
-      await RoleApi.createRole(data)
+      await RoleApi.create(data)
       message.success(t('common.createSuccess'))
     } else {
-      await RoleApi.updateRole(data)
+      await RoleApi.update(data)
       message.success(t('common.updateSuccess'))
     }
     dialogVisible.value = false
