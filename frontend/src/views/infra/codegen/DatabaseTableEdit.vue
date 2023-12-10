@@ -370,7 +370,7 @@
   </Dialog>
 </template>
 <script lang="ts" name="InfraCodegenDatabaseTableEdit" setup>
-import * as DictDataApi from '@/api/system/dict/dict.type'
+import * as DictApi from '@/api/infra/data/dict'
 import * as CodegenApi from '@/api/infra/codegen'
 import { ElTable } from 'element-plus'
 const message = useMessage() // 消息弹窗
@@ -413,7 +413,7 @@ const formType = ref('') // 表单的类型：create - 新增；update - 修改
 
 const tableOptions = ref<CodegenApi.DatabaseTableVO[]>([])
 
-const dictOptions = ref<DictDataApi.DictTypeVO[]>()
+const dictOptions = ref<DictApi.DictTypeVO[]>()
 
 /** 打开弹窗 */
 const open = async (type: string, id?: string) => {
@@ -607,7 +607,7 @@ const close = async () => {
 
 /** 查询字典下拉列表 */
 const getDictOptions = async () => {
-  dictOptions.value = await DictDataApi.getSimpleDictTypeList()
+  dictOptions.value = await DictApi.getSimpleDictTypeList()
 }
 
 const getTableOptions = async (name: string) => {

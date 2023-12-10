@@ -33,7 +33,7 @@
 <script setup lang="tsx" name="SystemArea">
 import type { Column } from 'element-plus'
 import AreaForm from './AreaForm.vue'
-import * as AreaApi from '@/api/system/area'
+import * as AreaApi from '@/api/infra/area'
 
 // 表格的 column 字段
 const columns: Column[] = [

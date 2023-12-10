@@ -21,7 +21,7 @@
   </Dialog>
 </template>
 <script lang="ts" name="SystemAreaForm" setup>
-import * as AreaApi from '@/api/system/area'
+import * as AreaApi from '@/api/infra/area'
 
 const message = useMessage() // 消息弹窗
 

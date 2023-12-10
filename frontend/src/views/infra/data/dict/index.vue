@@ -128,7 +128,7 @@
 <script lang="ts" name="InfraDictType" setup>
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
 
-import * as DictTypeApi from '@/api/infra/data/dict/dict'
+import * as DictTypeApi from '@/api/infra/data/dict'
 import DictTypeForm from './DictTypeForm.vue'
 import download from '@/utils/download'
 import { formatDate } from '@/utils/formatTime'

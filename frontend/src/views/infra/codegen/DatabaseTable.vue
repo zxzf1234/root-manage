@@ -126,7 +126,6 @@
 import * as CodegenApi from '@/api/infra/codegen'
 import DatabaseTableEdit from './DatabaseTableEdit.vue'
 import { ElTable } from 'element-plus'
-import * as DictDataApi from '@/api/system/dict/dict.type'
 
 const dbTableLoading = ref(true) // 数据源的加载中
 const databaseTableData = ref<CodegenApi.DatabaseTableVO[]>([]) // 表的列表
@@ -199,15 +198,8 @@ const newTable = () => {
   editRef.value.open('create')
 }
 
-/** 查询字典下拉列表 */
-const dictOptions = ref<DictDataApi.DictTypeVO[]>()
-const getDictOptions = async () => {
-  dictOptions.value = await DictDataApi.getSimpleDictTypeList()
-}
-
 /** 初始化 **/
 onMounted(async () => {
   await getList()
-  await getDictOptions()
 })
 </script>

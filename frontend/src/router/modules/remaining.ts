@@ -87,14 +87,14 @@ const remainingRouter: AppRouteRecordRaw[] = [
       {
         path: 'type/data/:dictType',
         component: () => import('@/views/infra/dict/data/index.vue'),
-        name: 'SystemDictData',
+        name: 'InfraDictData',
         meta: {
           title: '字典数据',
           noCache: true,
           hidden: true,
           canTo: true,
           icon: '',
-          activeMenu: '/system/dict'
+          activeMenu: '/infra/dict'
         }
       }
     ]

@@ -10,10 +10,11 @@ export type DictDataVO = {
   cssClass: string
   dataEnum: string
   remark: string
+  dictType: string
 }
 
 export type DictTypeVO = {
-  id: string | undefined
+  id: string
   name: string
   type: string
   status: number

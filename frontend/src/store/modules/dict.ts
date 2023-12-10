@@ -1,10 +1,8 @@
 import { defineStore } from 'pinia'
 import { store } from '../index'
-// @ts-ignore
-import { DictDataVO } from '@/api/system/dict/types'
 import { CACHE_KEY, useCache } from '@/hooks/web/useCache'
 const { wsCache } = useCache('sessionStorage')
-import { listSimpleDictData } from '@/api/system/dict/dict.data'
+import * as DictApi from '@/api/infra/data/dict'
 
 export interface DictValueType {
   value: any
@@ -45,12 +43,12 @@ export const useDictStore = defineStore('dict', {
         this.dictMap = dictMap
         this.isSetDict = true
       } else {
-        const res = await listSimpleDictData()
+        const res = await DictApi.listSimpleDictData()
         // 设置数据
         const dictDataMap = new Map<string, any>()
-        res.forEach((dictData: DictDataVO) => {
+        res.forEach((dictData: DictApi.DictDataVO) => {
           // 获得 dictType 层级
-          const enumValueObj = dictDataMap[dictData.dictType]
+          const enumValueObj = dictDataMap[dictData?.dictType]
           if (!enumValueObj) {
             dictDataMap[dictData.dictType] = []
           }
@@ -75,10 +73,10 @@ export const useDictStore = defineStore('dict', {
     },
     async resetDict() {
       wsCache.delete(CACHE_KEY.DICT_CACHE)
-      const res = await listSimpleDictData()
+      const res = await DictApi.listSimpleDictData()
       // 设置数据
       const dictDataMap = new Map<string, any>()
-      res.forEach((dictData: DictDataVO) => {
+      res.forEach((dictData: DictApi.DictDataVO) => {
         // 获得 dictType 层级
         const enumValueObj = dictDataMap[dictData.dictType]
         if (!enumValueObj) {

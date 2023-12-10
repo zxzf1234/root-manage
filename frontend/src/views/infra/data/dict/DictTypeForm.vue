@@ -100,7 +100,7 @@
 </template>
 <script lang="ts" name="InfraDictTypeForm" setup>
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
-import * as DictTypeApi from '@/api/infra/data/dict/dict'
+import * as DictTypeApi from '@/api/infra/data/dict'
 import { CommonStatusEnum } from '@/utils/constants'
 
 const { t } = useI18n() // 国际化
@@ -138,7 +138,7 @@ const dialogTitle = ref('') // 弹窗的标题
 const formLoading = ref(false) // 表单的加载中：1）修改时的数据加载；2）提交的按钮禁用
 const formType = ref('') // 表单的类型：create - 新增；update - 修改
 const formData = ref<DictTypeApi.DictTypeVO>({
-  id: undefined,
+  id: '',
   name: '',
   type: '',
   status: CommonStatusEnum.ENABLE,
@@ -230,7 +230,8 @@ const handleAddData = () => {
     cssClass: '',
     remark: '',
     dataEnum: '',
-    operateType: 'new'
+    operateType: 'new',
+    dictType: formData.value.id
   }
 
   formData.value.datas.push(data)
@@ -282,7 +283,7 @@ const submitForm = async () => {
 /** 重置表单 */
 const resetForm = () => {
   formData.value = {
-    id: undefined,
+    id: '',
     type: '',
     name: '',
     firstModule: '',
