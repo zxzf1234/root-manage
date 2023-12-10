@@ -1,0 +1,1 @@
+update INFRA_INTERFACE_MODULE set UPDATER_ID = '1', DELETED = 0, NAME = 'dept', COMMENT = '部门管理', PARENT_ID = '93fdb50f-3a13-4df0-8cff-87d8cbd4952a', TYPE = '1' where ID = '4f94136e-cdfd-4cc6-9b05-f160c3196879';

@@ -85,7 +85,7 @@ import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
 import { handleTree } from '@/utils/tree'
 import * as DeptApi from '@/api/system/dept'
 import DeptForm from './DeptForm.vue'
-import * as UserApi from '@/api/system/user/user'
+import * as UserApi from '@/api/system/user'
 import { formatDate } from '@/utils/formatTime'
 const message = useMessage() // 消息弹窗
 const { t } = useI18n() // 国际化

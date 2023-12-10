@@ -41,12 +41,6 @@ public interface UserConvert {
 
     UserGetOutput getOutputConvert(SystemUser output);
 
-    UserResp convert(SystemUser bean);
-
-    UserPageItemResp.dept convertDept(SystemDept bean);
-
-    List<UserPageItemResp> convertPageUser(Page<SystemUser> bean);
-
     @Mapping(source = "dept.name", target = "deptName")
     @Mapping(source = "dept.leaderUser.nickname", target = "deptLeaderNickname")
     UserExcelVO convertExcelUser(SystemUser bean);
@@ -54,10 +48,6 @@ public interface UserConvert {
     List<UserExcelVO> convertExcelListUser(List<SystemUser> bean);
 
     List<UserListAllSimpleOutput> convertSimpleListUser(List<SystemUser> list);
-
-    SystemUser convertUser(UserCreateReq bean);
-
-    SystemUser convertUser(UserUpdateReq bean);
 
     SystemUser convertUser(UserImportExcelVO bean);
 

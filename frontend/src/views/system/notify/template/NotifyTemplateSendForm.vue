@@ -44,7 +44,7 @@
   </Dialog>
 </template>
 <script lang="ts" name="SystemNotifyTemplateSendForm" setup>
-import * as UserApi from '@/api/system/user/user'
+import * as UserApi from '@/api/system/user'
 import * as NotifyTemplateApi from '@/api/system/notify/template'
 const message = useMessage() // 消息弹窗
 

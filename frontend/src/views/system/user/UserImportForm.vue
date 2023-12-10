@@ -41,7 +41,7 @@
   </Dialog>
 </template>
 <script lang="ts" name="SystemUserImportForm" setup>
-import * as UserApi from '@/api/system/user/user'
+import * as UserApi from '@/api/system/user'
 import { getAccessToken, getTenantId } from '@/utils/auth'
 import download from '@/utils/download'
 

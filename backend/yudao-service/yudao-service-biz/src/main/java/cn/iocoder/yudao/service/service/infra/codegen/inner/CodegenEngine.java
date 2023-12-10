@@ -80,7 +80,7 @@ public class CodegenEngine {
             .put(templatePath("interfaceModule/serviceImpl"), javaModuleFilePath("service", "${nameHumpUp}ServiceImpl"))
             .put(templatePath("interfaceModule/service"), javaModuleFilePath("service", "${nameHumpUp}Service"))
             .put(templatePath("interfaceModule/vo"), javaModuleFilePath("vo", "${nameHump}/package-info"))
-            .put(templatePath("interfaceModule/vueApi"), vueFilePath("api/${vueModulePath}/${nameHump}.ts"))
+            .put(templatePath("interfaceModule/vueApi"), vueFilePath("api/${modulePath}/${vueFileName}.ts"))
             .build();
 
     private static final Map<String, String> DICT_TEMPLATES = MapUtil.<String, String>builder(new LinkedHashMap<>()) // 有序
@@ -98,7 +98,7 @@ public class CodegenEngine {
             .put(templatePath("interface/service"), javaModuleFilePath("service", "${moduleNameHump}Service"))
             .put(templatePath("interface/voInput"), javaModuleFilePath("vo", "${moduleNameHump}/${moduleNameHumpUp}${interfaceNameHumpUp}Input"))
             .put(templatePath("interface/voOutput"), javaModuleFilePath("vo", "${moduleNameHump}/${moduleNameHumpUp}${interfaceNameHumpUp}Output"))
-            .put(templatePath("interface/vueApi"), vueFilePath("api/${vueModulePath}/${moduleNameHump}.ts"))
+            .put(templatePath("interface/vueApi"), vueFilePath("api/${modulePath}/${vueFileName}.ts"))
             .build();
 
 
@@ -266,10 +266,14 @@ public class CodegenEngine {
         bindingMap.put("moduleNameHumpUp", moduleNameHumpUp);
         bindingMap.put("moduleNameSymbol", moduleNameSymbol);
         bindingMap.put("modulePath", String.join("/", parentNames));
+        String vueFileName = moduleNameHump;
         String vueModulePath = String.join("/", parentNames);
-        if(parentNames.get(parentNames.size()-1).equals(moduleNameHump))
+        if(parentNames.get(parentNames.size()-1).equals(moduleNameHump)) {
             vueModulePath = vueModulePath.substring(0, vueModulePath.length() - moduleNameHump.length() - 1);
+            vueFileName = "index";
+        }
         bindingMap.put("vueModulePath", vueModulePath);
+        bindingMap.put("vueFileName", vueFileName);
         List<CodegenInterfaceParam> inputParams = CodegenConvert.INSTANCE.convertList19(infraInterface.inputParams());
         convertParams(inputParams);
         bindingMap.put("inputParams", inputParams);
@@ -688,6 +692,7 @@ public class CodegenEngine {
         filePath = StrUtil.replace(filePath, "${interfaceNameHumpUp}", getStr(bindingMap, "interfaceNameHumpUp"));
         filePath = StrUtil.replace(filePath, "${modulePath}", getStr(bindingMap, "modulePath"));
         filePath = StrUtil.replace(filePath, "${vueModulePath}", getStr(bindingMap, "vueModulePath"));
+        filePath = StrUtil.replace(filePath, "${vueFileName}", getStr(bindingMap, "vueFileName"));
 
         return filePath;
     }
@@ -755,10 +760,14 @@ public class CodegenEngine {
         bindingMap.put("nameHumpUp", upperFirst(module.name()));
         bindingMap.put("nameHump", 	module.name());
         bindingMap.put("modulePath", String.join("/", parentNames));
+        String vueFileName = module.name();
         String vueModulePath = String.join("/", parentNames);
-        if(parentNames.get(parentNames.size()-1).equals(module.name()))
+        if(parentNames.get(parentNames.size()-1).equals(module.name())) {
             vueModulePath = vueModulePath.substring(0, vueModulePath.length() - module.name().length() - 1);
+            vueFileName = "index";
+        }
         bindingMap.put("vueModulePath", vueModulePath);
+        bindingMap.put("vueFileName", vueFileName);
         return bindingMap;
     }
 
@@ -807,6 +816,7 @@ public class CodegenEngine {
         filePath = StrUtil.replace(filePath, "${nameHumpUp}", getStr(bindingMap, "nameHumpUp"));
         filePath = StrUtil.replace(filePath, "${modulePath}", getStr(bindingMap, "modulePath"));
         filePath = StrUtil.replace(filePath, "${vueModulePath}", getStr(bindingMap, "vueModulePath"));
+        filePath = StrUtil.replace(filePath, "${vueFileName}", getStr(bindingMap, "vueFileName"));
         InfraInterfaceModule module = (InfraInterfaceModule) bindingMap.get("module");
         filePath = StrUtil.replace(filePath, "${module.name}", module.name());
 
