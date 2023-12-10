@@ -73,7 +73,7 @@
 </template>
 <script setup lang="ts" name="SystemMailAccount">
 import { allSchemas } from './account.data'
-import * as MailAccountApi from '@/api/system/mail/account'
+import * as MailAccountApi from '@/api/infra/mail/account'
 import MailAccountForm from './MailAccountForm.vue'
 import MailAccountDetail from './MailAccountDetail.vue'
 const dbTableLoading = ref(true) // 数据源的加载中

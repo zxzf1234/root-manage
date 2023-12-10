@@ -146,7 +146,7 @@
 <script lang="ts" name="SystemOAuth2ClientForm" setup>
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
 import { CommonStatusEnum } from '@/utils/constants'
-import * as ClientApi from '@/api/system/oauth2/client'
+import * as ClientApi from '@/api/infra/oauth2/client'
 
 const { t } = useI18n() // 国际化
 const message = useMessage() // 消息弹窗
