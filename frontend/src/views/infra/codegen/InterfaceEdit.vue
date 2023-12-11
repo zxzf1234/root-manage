@@ -37,7 +37,11 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="接口名" prop="name">
-            <el-input v-model="formData.name" placeholder="请输入名称" />
+            <el-input
+              v-model="formData.name"
+              placeholder="请输入名称"
+              @keyup="formData.name = formData.name.replace(/[^a-zA-Z_]/g, '')"
+            />
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -169,7 +173,12 @@
             </template>
           </el-table-column>
           <el-table-column label="参数名" min-width="10%">
-            <template #default="scope"> <el-input v-model="scope.row.name" /> </template>
+            <template #default="scope">
+              <el-input
+                v-model="scope.row.name"
+                @keyup="scope.row.name = scope.row.name.replace(/[^a-zA-Z_]/g, '')"
+              />
+            </template>
           </el-table-column>
           <el-table-column label="参数描述" min-width="10%">
             <template #default="scope">
@@ -302,7 +311,12 @@
             </template>
           </el-table-column>
           <el-table-column label="参数名" min-width="10%">
-            <template #default="scope"> <el-input v-model="scope.row.name" /> </template>
+            <template #default="scope">
+              <el-input
+                v-model="scope.row.name"
+                @keyup="scope.row.name = scope.row.name.replace(/[^a-zA-Z_]/g, '')"
+              />
+            </template>
           </el-table-column>
           <el-table-column label="参数描述" min-width="10%">
             <template #default="scope">
@@ -473,7 +487,12 @@
             </template>
           </el-table-column>
           <el-table-column label="子类名" min-width="10%">
-            <template #default="scopeClass"> <el-input v-model="scopeClass.row.name" /> </template>
+            <template #default="scopeClass">
+              <el-input
+                v-model="scopeClass.row.name"
+                @keyup="scopeClass.row.name = scopeClass.row.name.replace(/[^a-zA-Z_]/g, '')"
+              />
+            </template>
           </el-table-column>
           <el-table-column label="子类描述" min-width="10%">
             <template #default="scopeClass">
@@ -558,7 +577,12 @@
                   </template>
                 </el-table-column>
                 <el-table-column label="参数名" min-width="10%">
-                  <template #default="scope"> <el-input v-model="scope.row.name" /> </template>
+                  <template #default="scope">
+                    <el-input
+                      v-model="scope.row.name"
+                      @keyup="scopeClass.row.name = scopeClass.row.name.replace(/[^a-zA-Z_]/g, '')"
+                    />
+                  </template>
                 </el-table-column>
                 <el-table-column label="参数描述" min-width="10%">
                   <template #default="scope">

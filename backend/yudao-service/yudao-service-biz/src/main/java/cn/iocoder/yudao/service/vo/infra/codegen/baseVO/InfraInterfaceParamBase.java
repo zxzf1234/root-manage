@@ -13,6 +13,7 @@ import javax.validation.constraints.*;
 public class InfraInterfaceParamBase {
 
     @Schema(description = "参数名", example = "name")
+    @NotBlank(message = "参数名不能为空")
     private String name;
 
     @Schema(description = "描述", example = "字段名")
@@ -22,6 +23,7 @@ public class InfraInterfaceParamBase {
     private Boolean isList;
 
     @Schema(description = "参数类型", example = "string")
+    @NotBlank(message = "参数类型不能为空")
     private String variableType;
 
     @Schema(description = "关联字段id", example = "23423423")

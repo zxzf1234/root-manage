@@ -7,6 +7,10 @@ import cn.iocoder.yudao.service.vo.infra.codegen.baseVO.InfraInterfaceValidation
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,12 +20,16 @@ public class InterfaceEditInput extends InfraInterfaceBase {
     @Schema(description = "编号", required = true, example = "1")
     private UUID id;
 
+    @Valid
     private List<inputParam> inputParams;
 
+    @Valid
     private List<outputParam> outputParams;
 
+    @Valid
     private List<inputSubclass> inputSubclasses;
 
+    @Valid
     private List<outputSubclass> outputSubclasses;
 
     @Schema(description = "入参子类")
