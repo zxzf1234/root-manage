@@ -92,10 +92,10 @@ public class CodegenEngine {
 
     private static final Map<String, String> INTERFACE_TEMPLATES = MapUtil.<String, String>builder(new LinkedHashMap<>()) // 有序
 
-            .put(templatePath("interface/controller"), javaFilePath("controller/${sceneEnum.basePackage}/${modulePath}/${moduleNameHump}Controller")+ ".java")
-            .put(templatePath("interface/convert"), javaModuleFilePath("convert", "${moduleNameHump}Convert"))
-            .put(templatePath("interface/serviceImpl"), javaModuleFilePath("service", "${moduleNameHump}ServiceImpl"))
-            .put(templatePath("interface/service"), javaModuleFilePath("service", "${moduleNameHump}Service"))
+            .put(templatePath("interface/controller"), javaFilePath("controller/${sceneEnum.basePackage}/${modulePath}/${moduleNameHumpUp}Controller")+ ".java")
+            .put(templatePath("interface/convert"), javaModuleFilePath("convert", "${moduleNameHumpUp}Convert"))
+            .put(templatePath("interface/serviceImpl"), javaModuleFilePath("service", "${moduleNameHumpUp}ServiceImpl"))
+            .put(templatePath("interface/service"), javaModuleFilePath("service", "${moduleNameHumpUp}Service"))
             .put(templatePath("interface/voInput"), javaModuleFilePath("vo", "${moduleNameHump}/${moduleNameHumpUp}${interfaceNameHumpUp}Input"))
             .put(templatePath("interface/voOutput"), javaModuleFilePath("vo", "${moduleNameHump}/${moduleNameHumpUp}${interfaceNameHumpUp}Output"))
             .put(templatePath("interface/vueApi"), vueFilePath("api/${modulePath}/${vueFileName}.ts"))
@@ -544,23 +544,24 @@ public class CodegenEngine {
         for(Map.Entry<String, String> entry : templates.entrySet()){
             String vmPath = entry.getKey();
             String filePath = entry.getValue();
-            if (vmPath.contains("voInput")
-                    && (Objects.equals(newInterface.inputType(), "void") || Objects.equals(newInterface.inputType(), "param"))) {
+            // 删除旧的传入传出参数类
+            if (vmPath.contains("voInput")) {
                 filePath = formatInterfaceFilePath(filePath, oldBindingMap);
                 if(FileUtil.exist(filePath)) {
                     RuntimeUtil.execForStr("git rm -f " + filePath);
                 }
-                continue;
+                if (Objects.equals(newInterface.inputType(), "void") || Objects.equals(newInterface.inputType(), "param"))
+                    continue;
             }
-            if (vmPath.contains("voOutput")
-                    && (Objects.equals(newInterface.outputType(), "void") || Objects.equals(newInterface.outputType(), "param"))) {
+            if (vmPath.contains("voOutput")) {
                 filePath = formatInterfaceFilePath(filePath, oldBindingMap);
                 if(FileUtil.exist(filePath)) {
                     RuntimeUtil.execForStr("git rm -f " + filePath);
                 }
-                continue;
+                if(Objects.equals(newInterface.outputType(), "void") || Objects.equals(newInterface.outputType(), "param"))
+                    continue;
             }
-            filePath = formatInterfaceFilePath(filePath, newBindingMap);
+            filePath = formatInterfaceFilePath(entry.getValue(), newBindingMap);
             File newFile;
             if(!FileUtil.exist(filePath)) {
                 if (vmPath.contains("voInput") || vmPath.contains("voOutput")){
@@ -584,15 +585,35 @@ public class CodegenEngine {
 
                 StringBuilder fileContent = new StringBuilder(FileUtil.readUtf8String(newFile));
                 if(vmPath.contains("controller") || vmPath.contains("serviceImpl")){
-                    if(!oldInterfaceContent.contains(") {"))
+                    int oldSplitFirstIndex = 0, newSplitFirstIndex = 0;
+                    int oldSplitSecondIndex = 0, newSplitSecondIndex = 0;
+                    // 查找函数拆分的下标 根据) {或) throws IOException { 拆分成两部分
+                    if(oldInterfaceContent.contains(") {")) {
+                        oldSplitFirstIndex = oldInterfaceContent.indexOf(") {");
+                        oldSplitSecondIndex = oldSplitFirstIndex + ") {".length() + 2;
+                    }
+                    if(oldSplitFirstIndex == 0 && oldInterfaceContent.contains(") throws IOException {")){
+                        oldSplitFirstIndex = oldInterfaceContent.indexOf(") throws IOException {");
+                        oldSplitSecondIndex = oldSplitFirstIndex + ") throws IOException {".length() + 2;
+                    }
+                    if(oldSplitFirstIndex == 0)
                         continue;
-                    if(!newInterfaceContent.contains(") {"))
-                        continue;
-                    String oldFunctionContent = oldInterfaceContent.substring(0, oldInterfaceContent.indexOf(") {"));
-                    String oldReturnContent = oldInterfaceContent.substring(oldInterfaceContent.indexOf(") {") + 5) ;
 
-                    String newFunctionContent = newInterfaceContent.substring(0, newInterfaceContent.indexOf(") {"));
-                    String newReturnContent = newInterfaceContent.substring(newInterfaceContent.indexOf(") {") + 5);
+                    if(newInterfaceContent.contains(") {") ) {
+                        newSplitFirstIndex = newInterfaceContent.indexOf(") {");
+                        newSplitSecondIndex = newSplitFirstIndex + ") {".length() + 2;
+                    }
+                    if(newSplitFirstIndex == 0 && newInterfaceContent.contains(") throws IOException {")) {
+                        newSplitFirstIndex = newInterfaceContent.indexOf(") throws IOException {");
+                        newSplitSecondIndex = newSplitFirstIndex + ") throws IOException {".length() + 2;
+                    }
+                    if(newSplitFirstIndex == 0)
+                        continue;
+                    String oldFunctionContent = oldInterfaceContent.substring(0, oldSplitFirstIndex);
+                    String oldReturnContent = oldInterfaceContent.substring(oldSplitSecondIndex) ;
+
+                    String newFunctionContent = newInterfaceContent.substring(0, newSplitFirstIndex);
+                    String newReturnContent = newInterfaceContent.substring(newSplitSecondIndex);
 
                     int functionIndex = fileContent.indexOf(oldFunctionContent);
                     if(functionIndex > 0){
