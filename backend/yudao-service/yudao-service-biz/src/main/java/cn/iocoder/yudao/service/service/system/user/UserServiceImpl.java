@@ -5,8 +5,8 @@ import cn.iocoder.yudao.service.api.infra.file.FileApi;
 import cn.iocoder.yudao.service.repository.system.dept.SystemUserPostRepository;
 import cn.iocoder.yudao.service.repository.system.user.SystemUserRepository;
 import cn.iocoder.yudao.service.service.system.dept.DeptService;
-import cn.iocoder.yudao.service.service.system.dept.PostService;
 import cn.iocoder.yudao.service.service.system.permission.PermissionService;
+import cn.iocoder.yudao.service.service.system.post.PostService;
 import cn.iocoder.yudao.service.vo.system.user.profile.UserProfileUpdatePasswordReqVO;
 import cn.iocoder.yudao.service.vo.system.user.profile.UserProfileUpdateReqVO;
 import com.google.common.annotations.VisibleForTesting;
@@ -22,7 +22,6 @@ import cn.iocoder.yudao.framework.excel.core.util.ExcelUtils;
 import cn.iocoder.yudao.service.enums.common.CommonSexEnum;
 
 import cn.iocoder.yudao.service.model.system.user.SystemUser;
-import cn.iocoder.yudao.service.vo.system.user.user.UserExportInput;
 import cn.iocoder.yudao.service.vo.system.user.user.UserGetOutput;
 import cn.iocoder.yudao.service.vo.system.user.user.UserListAllSimpleOutput;
 import cn.iocoder.yudao.service.vo.system.user.user.UserPageOutput;
@@ -36,7 +35,7 @@ import cn.iocoder.yudao.service.model.system.user.SystemUserDraft;
 import cn.iocoder.yudao.service.model.system.dept.SystemUserPostDraft;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
-import org.springframework.validation.annotation.Validated;
+
 import org.springframework.data.domain.Page;
 
 import java.io.IOException;

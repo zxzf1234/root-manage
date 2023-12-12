@@ -41,7 +41,7 @@
           type="primary"
           plain
           @click="openForm('create')"
-          v-hasPermi="['system:notice:create']"
+          v-hasPermi="['system:post:create']"
         >
           <Icon icon="ep:plus" class="mr-5px" /> 新增
         </el-button>
@@ -50,7 +50,7 @@
           plain
           @click="handleExport"
           :loading="exportLoading"
-          v-hasPermi="['infra:config:export']"
+          v-hasPermi="['system:post:export']"
         >
           <Icon icon="ep:download" class="mr-5px" /> 导出
         </el-button>
@@ -143,7 +143,7 @@ const postData = ref()
 const getList = async () => {
   loading.value = true
   try {
-    postData.value = await PostApi.getPostPage(queryParams)
+    postData.value = await PostApi.page(queryParams)
   } finally {
     loading.value = false
   }
@@ -173,7 +173,7 @@ const handleDelete = async (id: number) => {
     // 删除的二次确认
     await message.delConfirm()
     // 发起删除
-    await PostApi.deletePost(id)
+    await PostApi.deleted(id)
     message.success(t('common.delSuccess'))
     // 刷新列表
     await getList()
@@ -187,7 +187,7 @@ const handleExport = async () => {
     await message.exportConfirm()
     // 发起导出
     exportLoading.value = true
-    const data = await PostApi.exportPost(queryParams)
+    const data = await PostApi.exported(queryParams)
     download.excel(data, '岗位列表.xls')
   } catch {
   } finally {

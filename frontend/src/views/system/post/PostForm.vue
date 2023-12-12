@@ -74,7 +74,7 @@ const open = async (type: string, id?: number) => {
   if (id) {
     formLoading.value = true
     try {
-      formData.value = await PostApi.getPost(id)
+      formData.value = await PostApi.get(id)
     } finally {
       formLoading.value = false
     }
@@ -94,10 +94,10 @@ const submitForm = async () => {
   try {
     const data = formData.value as unknown as PostApi.PostVO
     if (formType.value === 'create') {
-      await PostApi.createPost(data)
+      await PostApi.create(data)
       message.success(t('common.createSuccess'))
     } else {
-      await PostApi.updatePost(data)
+      await PostApi.update(data)
       message.success(t('common.updateSuccess'))
     }
     dialogVisible.value = false
@@ -114,7 +114,7 @@ const resetForm = () => {
     id: undefined,
     name: '',
     code: '',
-    sort: undefined,
+    sort: 0,
     status: CommonStatusEnum.ENABLE,
     remark: ''
   }

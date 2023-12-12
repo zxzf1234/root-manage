@@ -10,37 +10,51 @@ export interface PostVO {
   createTime?: Date
 }
 
-// 查询岗位列表
-export const getPostPage = async (params: PageParam) => {
-  return await request.get({ url: '/system/post/page', params })
+/**
+ * 创建岗位
+ */
+export const create = (data) => {
+  return request.post({ url: '/system/post/create', data })
 }
 
-// 获取岗位精简信息列表
-export const getSimplePostList = async (): Promise<PostVO[]> => {
-  return await request.get({ url: '/system/post/list-all-simple' })
+/**
+ * 修改岗位
+ */
+export const update = (data) => {
+  return request.put({ url: '/system/post/update', data })
 }
 
-// 查询岗位详情
-export const getPost = async (id: number) => {
-  return await request.get({ url: '/system/post/get?id=' + id })
+/**
+ * 删除岗位
+ */
+export const deleted = (id) => {
+  return request.delete({ url: '/system/post/deleted?id=' + id })
 }
 
-// 新增岗位
-export const createPost = async (data: PostVO) => {
-  return await request.post({ url: '/system/post/create', data })
+/**
+ * 获得单个岗位信息
+ */
+export const get = (id) => {
+  return request.get({ url: '/system/post/get?id=' + id })
 }
 
-// 修改岗位
-export const updatePost = async (data: PostVO) => {
-  return await request.put({ url: '/system/post/update', data })
+/**
+ * 获取岗位精简信息列表
+ */
+export const listAllSimple = () => {
+  return request.get({ url: '/system/post/list-all-simple' })
 }
 
-// 删除岗位
-export const deletePost = async (id: number) => {
-  return await request.delete({ url: '/system/post/delete?id=' + id })
+/**
+ * 导出岗位信息
+ */
+export const exported = (params) => {
+  return request.download({ url: '/system/post/exported', params })
 }
 
-// 导出岗位
-export const exportPost = async (params) => {
-  return await request.download({ url: '/system/post/export', params })
+/**
+ * 获得岗位分页列表
+ */
+export const page = (params) => {
+  return request.get({ url: '/system/post/page', params })
 }
