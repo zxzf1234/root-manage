@@ -135,7 +135,8 @@ public interface ErrorCodeConstants {
     ErrorCode NOTIFY_TEMPLATE_NOT_EXISTS = new ErrorCode(1002026000, "站内信模版不存在");
     ErrorCode NOTIFY_TEMPLATE_CODE_DUPLICATE = new ErrorCode(1002026001, "已经存在编码为【{}】的站内信模板");
 
-    // ========== 站内信模版 1002027000 ==========
+    // ========== 站内信信息 1002027000 ==========
+    ErrorCode NOTIFY_MESSAGE_NOT_EXISTS = new ErrorCode(1002027000, "站内信消息不存在");
 
     // ========== 站内信发送 1002028000 ==========
     ErrorCode NOTIFY_SEND_TEMPLATE_PARAM_MISS = new ErrorCode(1002025000, "模板参数({})缺失");

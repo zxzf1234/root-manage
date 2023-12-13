@@ -108,7 +108,7 @@
 </template>
 <script setup lang="ts" name="SystemNotifyMessage">
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
-import * as NotifyMessageApi from '@/api/system/notify/message'
+import * as NotifyMessageApi from '@/api/system/notify/notifyMessage'
 import NotifyMessageDetail from './NotifyMessageDetail.vue'
 import { formatDate } from '@/utils/formatTime'
 const loading = ref(true) // 列表的加载中
@@ -183,7 +183,7 @@ const notifyData = ref()
 const getList = async () => {
   loading.value = true
   try {
-    notifyData.value = await NotifyMessageApi.getNotifyMessagePage(queryParams)
+    notifyData.value = await NotifyMessageApi.page(queryParams)
   } finally {
     loading.value = false
   }

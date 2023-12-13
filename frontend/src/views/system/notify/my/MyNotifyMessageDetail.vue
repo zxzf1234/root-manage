@@ -25,7 +25,7 @@
 <script lang="ts" name="MyNotifyMessageDetailDetail" setup>
 import { DICT_TYPE } from '@/utils/dict'
 import { formatDate } from '@/utils/formatTime'
-import * as NotifyMessageApi from '@/api/system/notify/message'
+import * as NotifyMessageApi from '@/api/system/notify/notifyMessage'
 
 const dialogVisible = ref(false) // 弹窗的是否展示
 const detailLoading = ref(false) // 表单的加载中

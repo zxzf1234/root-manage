@@ -118,7 +118,7 @@
 <script setup lang="ts" name="SystemMyNotify">
 import { DICT_TYPE, getBoolDictOptions } from '@/utils/dict'
 import { dateFormatter } from '@/utils/formatTime'
-import * as NotifyMessageApi from '@/api/system/notify/message'
+import * as NotifyMessageApi from '@/api/system/notify/notifyMessage'
 import MyNotifyMessageDetail from './MyNotifyMessageDetail.vue'
 const message = useMessage() // 消息
 
@@ -139,7 +139,7 @@ const selectedIds = ref<number[]>([]) // 表格的选中 ID 数组
 const getList = async () => {
   loading.value = true
   try {
-    const data = await NotifyMessageApi.getMyNotifyMessagePage(queryParams)
+    const data = await NotifyMessageApi.myPage(queryParams)
     list.value = data.list
     total.value = data.total
   } finally {
@@ -171,13 +171,13 @@ const openDetail = (data: NotifyMessageApi.NotifyMessageVO) => {
 
 /** 标记一条站内信已读 */
 const handleReadOne = async (id) => {
-  await NotifyMessageApi.updateNotifyMessageRead(id)
+  await NotifyMessageApi.updateRead(id)
   await getList()
 }
 
 /** 标记全部站内信已读 **/
 const handleUpdateAll = async () => {
-  await NotifyMessageApi.updateAllNotifyMessageRead()
+  await NotifyMessageApi.updateAllRead()
   message.success('全部已读成功！')
   tableRef.value.clearSelection()
   await getList()
@@ -188,7 +188,7 @@ const handleUpdateList = async () => {
   if (selectedIds.value.length === 0) {
     return
   }
-  await NotifyMessageApi.updateNotifyMessageRead(selectedIds.value)
+  await NotifyMessageApi.updateRead(selectedIds.value)
   message.success('批量已读成功！')
   tableRef.value.clearSelection()
   await getList()

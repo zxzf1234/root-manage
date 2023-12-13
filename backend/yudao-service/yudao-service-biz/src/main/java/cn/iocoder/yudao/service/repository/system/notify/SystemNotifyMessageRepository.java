@@ -4,6 +4,8 @@ import cn.iocoder.yudao.service.vo.system.notify.message.NotifyMessageMyPageReqV
 import cn.iocoder.yudao.service.vo.system.notify.message.NotifyMessagePageReqVO;
 import cn.iocoder.yudao.service.model.system.notify.SystemNotifyMessage;
 import cn.iocoder.yudao.service.model.system.notify.SystemNotifyMessageTable;
+import cn.iocoder.yudao.service.vo.system.notify.notifyMessage.NotifyMessageMyPageInput;
+import cn.iocoder.yudao.service.vo.system.notify.notifyMessage.NotifyMessagePageInput;
 import org.babyfish.jimmer.spring.repository.JRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.util.StringUtils;
@@ -14,7 +16,7 @@ import java.util.List;
 public interface SystemNotifyMessageRepository extends JRepository<SystemNotifyMessage, Long> {
     SystemNotifyMessageTable systemNotifyMessageTable = SystemNotifyMessageTable.$;
 
-    default Page<SystemNotifyMessage> selectPage(NotifyMessagePageReqVO reqVO){
+    default Page<SystemNotifyMessage> selectPage(NotifyMessagePageInput reqVO){
         return pager(reqVO.getPageNo() - 1, reqVO.getPageSize()).execute(
                 sql()
                         .createQuery(systemNotifyMessageTable)
@@ -27,7 +29,7 @@ public interface SystemNotifyMessageRepository extends JRepository<SystemNotifyM
         );
     }
 
-    default Page<SystemNotifyMessage> selectPage(NotifyMessageMyPageReqVO reqVO, Long userId, Integer userType){
+    default Page<SystemNotifyMessage> selectPage(NotifyMessageMyPageInput reqVO, Long userId, Integer userType){
         return pager(reqVO.getPageNo() - 1, reqVO.getPageSize()).execute(
                 sql()
                         .createQuery(systemNotifyMessageTable)
