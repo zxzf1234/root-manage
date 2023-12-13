@@ -81,7 +81,7 @@ const open = async (type: string, id?: number) => {
   if (id) {
     formLoading.value = true
     try {
-      formData.value = await NoticeApi.getNotice(id)
+      formData.value = await NoticeApi.get(id)
     } finally {
       formLoading.value = false
     }
@@ -101,10 +101,10 @@ const submitForm = async () => {
   try {
     const data = formData.value as unknown as NoticeApi.NoticeVO
     if (formType.value === 'create') {
-      await NoticeApi.createNotice(data)
+      await NoticeApi.create(data)
       message.success(t('common.createSuccess'))
     } else {
-      await NoticeApi.updateNotice(data)
+      await NoticeApi.update(data)
       message.success(t('common.updateSuccess'))
     }
     dialogVisible.value = false

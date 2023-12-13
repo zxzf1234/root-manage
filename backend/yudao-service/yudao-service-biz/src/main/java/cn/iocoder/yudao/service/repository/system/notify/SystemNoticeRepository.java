@@ -1,6 +1,6 @@
 package cn.iocoder.yudao.service.repository.system.notify;
 
-import cn.iocoder.yudao.service.vo.system.notify.notice.NoticePageReqVO;
+import cn.iocoder.yudao.service.vo.system.notice.notice.NoticePageInput;
 import cn.iocoder.yudao.service.model.system.notify.SystemNotice;
 import cn.iocoder.yudao.service.model.system.notify.SystemNoticeTable;
 import org.babyfish.jimmer.spring.repository.JRepository;
@@ -9,7 +9,7 @@ import org.springframework.util.StringUtils;
 
 public interface SystemNoticeRepository extends JRepository<SystemNotice, Long> {
     SystemNoticeTable systemNoticeTable = SystemNoticeTable.$;
-    default Page<SystemNotice> selectPage(NoticePageReqVO reqVO){
+    default Page<SystemNotice> selectPage(NoticePageInput reqVO){
         return pager(reqVO.getPageNo() - 1, reqVO.getPageSize()).execute(
                 sql()
                         .createQuery(systemNoticeTable)

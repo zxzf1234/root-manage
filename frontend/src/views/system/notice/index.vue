@@ -131,7 +131,7 @@ const noticeData = ref()
 const getList = async () => {
   loading.value = true
   try {
-    noticeData.value = await NoticeApi.getNoticePage(queryParams)
+    noticeData.value = await NoticeApi.page(queryParams)
   } finally {
     loading.value = false
   }
@@ -161,7 +161,7 @@ const handleDelete = async (id: number) => {
     // 删除的二次确认
     await message.delConfirm()
     // 发起删除
-    await NoticeApi.deleteNotice(id)
+    await NoticeApi.deleted(id)
     message.success(t('common.delSuccess'))
     // 刷新列表
     await getList()

@@ -5,8 +5,6 @@ import cn.iocoder.yudao.framework.excel.core.util.ExcelUtils;
 import cn.iocoder.yudao.service.convert.system.post.PostConvert;
 import cn.iocoder.yudao.service.model.system.dept.SystemPost;
 import cn.iocoder.yudao.service.repository.system.dept.SystemPostRepository;
-import cn.iocoder.yudao.service.vo.system.dept.post.PostExcelVO;
-import cn.iocoder.yudao.service.vo.system.dept.post.PostResp;
 import cn.iocoder.yudao.service.vo.system.post.post.PostPageOutput;
 import cn.iocoder.yudao.service.vo.system.post.post.PostPageInput;
 import cn.iocoder.yudao.service.vo.system.post.post.PostExportedOutput;

@@ -1,7 +1,5 @@
 package cn.iocoder.yudao.service.repository.system.dept;
 
-import cn.iocoder.yudao.service.vo.system.dept.post.PostExportReqVO;
-import cn.iocoder.yudao.service.vo.system.dept.post.PostPageReqVO;
 import cn.iocoder.yudao.service.model.system.dept.SystemPost;
 import cn.iocoder.yudao.service.model.system.dept.SystemPostTable;
 import cn.iocoder.yudao.service.vo.system.post.post.PostExportedInput;
