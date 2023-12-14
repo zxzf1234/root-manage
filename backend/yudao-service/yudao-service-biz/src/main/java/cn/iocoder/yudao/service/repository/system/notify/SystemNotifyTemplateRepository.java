@@ -1,5 +1,6 @@
 package cn.iocoder.yudao.service.repository.system.notify;
 
+import cn.iocoder.yudao.service.vo.system.notify.notifyTemplate.NotifyTemplatePageInput;
 import cn.iocoder.yudao.service.vo.system.notify.template.NotifyTemplatePageReqVO;
 import cn.iocoder.yudao.service.model.system.notify.SystemNotifyTemplate;
 import cn.iocoder.yudao.service.model.system.notify.SystemNotifyTemplateTable;
@@ -12,7 +13,7 @@ import java.util.Optional;
 public interface SystemNotifyTemplateRepository extends JRepository<SystemNotifyTemplate, Long> {
     SystemNotifyTemplateTable systemNotifyTemplateTable = SystemNotifyTemplateTable.$;
 
-    default Page<SystemNotifyTemplate> selectPage(NotifyTemplatePageReqVO reqVO){
+    default Page<SystemNotifyTemplate> selectPage(NotifyTemplatePageInput reqVO){
         return pager(reqVO.getPageNo() - 1, reqVO.getPageSize()).execute(
                 sql()
                         .createQuery(systemNotifyTemplateTable)

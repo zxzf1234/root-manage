@@ -202,6 +202,7 @@
                 <el-option label="LocalDateTime[]" value="LocalDateTime[]" />
                 <el-option label="Boolean" value="Boolean" />
                 <el-option label="UUID" value="UUID" />
+                <el-option label="Map<String, Object>" value="Map<String, Object>" />
                 <el-option label="VO类" value="VOClass" />
                 <el-option label="子类" value="Subclass" />
               </el-select>
