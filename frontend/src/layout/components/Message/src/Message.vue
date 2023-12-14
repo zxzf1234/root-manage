@@ -1,7 +1,7 @@
 <script lang="ts" name="Message" setup>
 import { formatDate } from '@/utils/formatTime'
 import { propTypes } from '@/utils/propTypes'
-import * as NotifyMessageApi from '@/api/system/notify/message'
+import * as NotifyMessageApi from '@/api/system/notify/notifyMessage'
 
 const { push } = useRouter()
 const activeName = ref('notice')
@@ -10,7 +10,7 @@ const list = ref<any[]>([]) // 消息列表
 
 // 获得消息列表
 const getList = async () => {
-  list.value = await NotifyMessageApi.getUnreadNotifyMessageList()
+  list.value = await NotifyMessageApi.getUnreadList(10)
   // 强制设置 unreadCount 为 0，避免小红点因为轮询太慢，不消除
   unreadCount.value = 0
 }
@@ -19,7 +19,7 @@ defineProps({
 })
 // 获得未读消息数
 const getUnreadCount = async () => {
-  NotifyMessageApi.getUnreadNotifyMessageCount().then((data) => {
+  NotifyMessageApi.getUnreadCount().then((data) => {
     unreadCount.value = data
   })
 }

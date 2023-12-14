@@ -1,7 +1,5 @@
 package cn.iocoder.yudao.service.repository.system.notify;
 
-import cn.iocoder.yudao.service.vo.system.notify.message.NotifyMessageMyPageReqVO;
-import cn.iocoder.yudao.service.vo.system.notify.message.NotifyMessagePageReqVO;
 import cn.iocoder.yudao.service.model.system.notify.SystemNotifyMessage;
 import cn.iocoder.yudao.service.model.system.notify.SystemNotifyMessageTable;
 import cn.iocoder.yudao.service.vo.system.notify.notifyMessage.NotifyMessageMyPageInput;
