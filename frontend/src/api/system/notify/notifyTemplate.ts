@@ -1,4 +1,23 @@
 import request from '@/config/axios'
+
+export interface NotifyTemplateVO {
+  id?: number
+  name: string
+  nickname: string
+  code: string
+  content: string
+  type: string
+  params: Array<string>
+  status: number
+  remark: string
+}
+
+export interface NotifySendReqVO {
+  userId: number | null
+  templateCode: string
+  templateParams: Map<String, Object>
+}
+
 /**
  * 创建站内信模版
  */

@@ -54,7 +54,7 @@
 </template>
 <script setup lang="ts">
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
-import * as NotifyTemplateApi from '@/api/system/notify/template'
+import * as NotifyTemplateApi from '@/api/system/notify/notifyTemplate'
 import { CommonStatusEnum } from '@/utils/constants'
 const message = useMessage() // 消息弹窗
 
@@ -96,7 +96,7 @@ const open = async (type: string, id?: number) => {
   if (id) {
     formLoading.value = true
     try {
-      formData.value = await NotifyTemplateApi.getNotifyTemplate(id)
+      formData.value = await NotifyTemplateApi.get(id)
     } finally {
       formLoading.value = false
     }
@@ -115,10 +115,10 @@ const submitForm = async () => {
   try {
     const data = formData.value as unknown as NotifyTemplateApi.NotifyTemplateVO
     if (formType.value === 'create') {
-      await NotifyTemplateApi.createNotifyTemplate(data)
+      await NotifyTemplateApi.create(data)
       message.success('新增成功')
     } else {
-      await NotifyTemplateApi.updateNotifyTemplate(data)
+      await NotifyTemplateApi.update(data)
       message.success('修改成功')
     }
     dialogVisible.value = false

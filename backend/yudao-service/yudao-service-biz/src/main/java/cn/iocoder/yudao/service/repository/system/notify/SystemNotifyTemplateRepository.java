@@ -1,7 +1,6 @@
 package cn.iocoder.yudao.service.repository.system.notify;
 
 import cn.iocoder.yudao.service.vo.system.notify.notifyTemplate.NotifyTemplatePageInput;
-import cn.iocoder.yudao.service.vo.system.notify.template.NotifyTemplatePageReqVO;
 import cn.iocoder.yudao.service.model.system.notify.SystemNotifyTemplate;
 import cn.iocoder.yudao.service.model.system.notify.SystemNotifyTemplateTable;
 import org.babyfish.jimmer.spring.repository.JRepository;

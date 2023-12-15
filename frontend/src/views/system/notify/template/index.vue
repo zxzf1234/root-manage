@@ -111,7 +111,7 @@
 <script setup lang="ts" name="NotifySmsTemplate">
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
 // import { dateFormatter } from '@/utils/formatTime'
-import * as NotifyTemplateApi from '@/api/system/notify/template'
+import * as NotifyTemplateApi from '@/api/system/notify/notifyTemplate'
 import NotifyTemplateForm from './NotifyTemplateForm.vue'
 import NotifyTemplateSendForm from './NotifyTemplateSendForm.vue'
 import { formatDate } from '@/utils/formatTime'
@@ -174,7 +174,7 @@ const nofityTemplate = ref()
 const getList = async () => {
   loading.value = true
   try {
-    nofityTemplate.value = await NotifyTemplateApi.getNotifyTemplatePage(queryParams)
+    nofityTemplate.value = await NotifyTemplateApi.page(queryParams)
   } finally {
     loading.value = false
   }
@@ -203,7 +203,7 @@ const handleDelete = async (id: number) => {
     // 删除的二次确认
     await message.delConfirm()
     // 发起删除
-    await NotifyTemplateApi.deleteNotifyTemplateApi(id)
+    await NotifyTemplateApi.deleted(id)
     message.success('删除成功')
     // 刷新列表
     await getList()

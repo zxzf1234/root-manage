@@ -45,7 +45,7 @@
 </template>
 <script lang="ts" name="SystemNotifyTemplateSendForm" setup>
 import * as UserApi from '@/api/system/user'
-import * as NotifyTemplateApi from '@/api/system/notify/template'
+import * as NotifyTemplateApi from '@/api/system/notify/notifyTemplate'
 const message = useMessage() // 消息弹窗
 
 const dialogVisible = ref(false) // 弹窗的是否展示
@@ -71,7 +71,7 @@ const open = async (id: number) => {
   // 设置数据
   formLoading.value = true
   try {
-    const data = await NotifyTemplateApi.getNotifyTemplate(id)
+    const data = await NotifyTemplateApi.get(id)
     // 设置动态表单
     formData.value.content = data.content
     formData.value.params = data.params
