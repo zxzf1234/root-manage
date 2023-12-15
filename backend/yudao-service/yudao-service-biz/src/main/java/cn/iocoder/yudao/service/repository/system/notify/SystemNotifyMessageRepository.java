@@ -1,7 +1,9 @@
 package cn.iocoder.yudao.service.repository.system.notify;
 
 import cn.iocoder.yudao.service.model.system.notify.SystemNotifyMessage;
+import cn.iocoder.yudao.service.model.system.notify.SystemNotifyMessageFetcher;
 import cn.iocoder.yudao.service.model.system.notify.SystemNotifyMessageTable;
+import cn.iocoder.yudao.service.model.system.user.SystemUserFetcher;
 import cn.iocoder.yudao.service.vo.system.notify.notifyMessage.NotifyMessageMyPageInput;
 import cn.iocoder.yudao.service.vo.system.notify.notifyMessage.NotifyMessagePageInput;
 import org.babyfish.jimmer.spring.repository.JRepository;
@@ -24,7 +26,7 @@ public interface SystemNotifyMessageRepository extends JRepository<SystemNotifyM
                         .whereIf(reqVO.getUserId() != null, systemNotifyMessageTable.userId().eq(reqVO.getUserId()))
                         .whereIf(reqVO.getUserType() != null, systemNotifyMessageTable.userType().eq(reqVO.getUserType()))
                         .whereIf(reqVO.getCreateTime() !=null, ()-> systemNotifyMessageTable.createTime().between(reqVO.getCreateTime()[0], reqVO.getCreateTime()[1]))
-                        .select(systemNotifyMessageTable)
+                        .select(systemNotifyMessageTable.fetch(SystemNotifyMessageFetcher.$.allTableFields().user(SystemUserFetcher.$.username())))
         );
     }
 
