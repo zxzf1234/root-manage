@@ -93,6 +93,9 @@
       @page-change="getList"
       save-key="role"
     >
+      <template #type="{ row }">
+        {{ getDictObj(DICT_TYPE.SYSTEM_ROLE_TYPE, row.type).label }}
+      </template>
       <template #menu="{ row }">
         <context-menu-item
           label="编辑"
@@ -129,7 +132,7 @@
   </div>
 </template>
 <script lang="ts" name="SystemRole" setup>
-import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
+import { DICT_TYPE, getIntDictOptions, getDictObj } from '@/utils/dict'
 import RoleForm from './RoleForm.vue'
 import RoleAssignMenuForm from './RoleAssignMenuForm.vue'
 import RoleDataPermissionForm from './RoleDataPermissionForm.vue'
@@ -236,16 +239,13 @@ const handleStatusChange = async (row: RoleApi.RoleVO) => {
 
 const columns: TableColumnList = [
   {
-    label: '用户编号',
-    prop: 'id'
-  },
-  {
-    label: '用户昵称',
+    label: '角色名称',
     prop: 'name'
   },
   {
     label: '角色类型',
-    prop: 'type'
+    prop: 'type',
+    slot: 'type'
   },
   {
     label: '角色标识',

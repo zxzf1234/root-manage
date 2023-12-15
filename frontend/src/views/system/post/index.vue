@@ -104,10 +104,6 @@ const queryParams = reactive({
 })
 const columns: TableColumnList = [
   {
-    label: '岗位编号',
-    prop: 'id'
-  },
-  {
     label: '岗位名称',
     prop: 'name'
   },

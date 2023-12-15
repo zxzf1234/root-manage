@@ -97,10 +97,6 @@ const queryParams = reactive({
 
 const columns: TableColumnList = [
   {
-    label: '公告编号',
-    prop: 'id'
-  },
-  {
     label: '公告标题',
     prop: 'title'
   },

@@ -101,6 +101,7 @@
         :page-data="userData"
         @page-change="getList"
         adaptive
+        heightPer="80"
         save-key="user"
       >
         <template #menu="{ row }">

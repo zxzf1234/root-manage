@@ -124,10 +124,6 @@ const queryParams = reactive({
 })
 const columns: TableColumnList = [
   {
-    label: '编号',
-    prop: 'id'
-  },
-  {
     label: '用户类型',
     prop: 'userType',
     slot: 'userType'

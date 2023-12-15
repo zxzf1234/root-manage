@@ -1,0 +1,1 @@
+insert ignore into INFRA_INTERFACE_PARAM(CREATOR_ID, UPDATER_ID, DELETED, ID, NAME, COMMENT, IS_LIST, VARIABLE_TYPE, RELATED_ID, RELATED_TYPE, EXAMPLE, REQUIRED, PARENT_ID, PARENT_TYPE, INOUT_TYPE) values('1', '1', 0, '005e0cc9-dd2b-46e3-9416-d115db601f5f', 'createTime', '创建时间', 0, 'LocalDateTime', '', '0', '', 0, '6bb2a75e-6a9b-4b6c-97c4-5c22724dd6dd', '0', '1');
