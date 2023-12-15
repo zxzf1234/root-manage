@@ -165,8 +165,9 @@ const detailRef = ref()
 const openDetail = (data: NotifyMessageApi.NotifyMessageVO) => {
   if (!data.readStatus) {
     handleReadOne(data.id)
+  } else {
+    detailRef.value.open(data)
   }
-  detailRef.value.open(data)
 }
 
 /** 标记一条站内信已读 */

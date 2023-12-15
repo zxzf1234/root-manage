@@ -16,8 +16,8 @@ public class NotifyTemplateSendNotifyInput  {
     @Schema(description = "模板编码")
     private String templateCode;
 
-    @Schema(description = "主键ID")
-    private Long id;
+    @Schema(description = "用户ID")
+    private Long userId;
 
     @Schema(description = "模板参数")
     private Map<String, Object> templateParams;

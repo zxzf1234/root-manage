@@ -32,4 +32,5 @@ public interface NotifyTemplateService {
 
     SystemNotifyTemplate getNotifyTemplateByCodeFromCache(String code);
 
+
 }

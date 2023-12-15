@@ -80,13 +80,13 @@ public class NotifyMessageServiceImpl implements NotifyMessageService {
 
     @Override
     public Boolean updateRead(List<Long> ids) {
-        systemNotifyMessageRepository.updateNotifyMessageRead(ids, getLoginUserId(), UserTypeEnum.ADMIN.getValue());
+        systemNotifyMessageRepository.updateNotifyMessageRead(ids, getLoginUserId());
         return true;
     }
 
     @Override
     public Boolean updateAllRead() {
-        systemNotifyMessageRepository.updateAllNotifyMessageRead(getLoginUserId(), UserTypeEnum.ADMIN.getValue());
+        systemNotifyMessageRepository.updateAllNotifyMessageRead(getLoginUserId());
         return true;
     }
 

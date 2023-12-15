@@ -86,7 +86,7 @@ public class NotifyTemplateController {
     @Operation(summary = "发送站内信")
     @PreAuthorize("@ss.hasPermission('system:notify-template:send-notify')")
     public CommonResult<Long> sendNotify(@Valid @RequestBody NotifyTemplateSendNotifyInput inputVO) {
-        return success(notifySendService.sendSingleNotifyToAdmin(inputVO.getId(), inputVO.getTemplateCode(), inputVO.getTemplateParams()));
+        return success(notifySendService.sendSingleNotifyToAdmin(inputVO.getUserId(), inputVO.getTemplateCode(), inputVO.getTemplateParams()));
     }
 
 }

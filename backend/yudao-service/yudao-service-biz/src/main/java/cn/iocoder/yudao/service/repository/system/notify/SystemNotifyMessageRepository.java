@@ -8,6 +8,7 @@ import org.babyfish.jimmer.spring.repository.JRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -38,20 +39,22 @@ public interface SystemNotifyMessageRepository extends JRepository<SystemNotifyM
                         .select(systemNotifyMessageTable)
         );
     }
-    default int updateAllNotifyMessageRead(Long userId, Integer userType){
+    default int updateAllNotifyMessageRead(Long userId){
         return sql()
                 .createUpdate(systemNotifyMessageTable)
-                .set(systemNotifyMessageTable.userType(), userType)
+                .set(systemNotifyMessageTable.readStatus(), true)
+                .set(systemNotifyMessageTable.readTime(), LocalDateTime.now())
                 .where(systemNotifyMessageTable.userId().eq(userId))
                 .execute();
     }
 
-    default int updateNotifyMessageRead(Collection<Long> ids, Long userId, Integer userType){
+    default int updateNotifyMessageRead(Collection<Long> ids, Long userId){
         return sql()
                 .createUpdate(systemNotifyMessageTable)
-                .set(systemNotifyMessageTable.userId(), userId)
-                .set(systemNotifyMessageTable.userType(), userType)
+                .set(systemNotifyMessageTable.readStatus(), true)
+                .set(systemNotifyMessageTable.readTime(), LocalDateTime.now())
                 .where(systemNotifyMessageTable.id().in(ids))
+                .where(systemNotifyMessageTable.userId().eq(userId))
                 .execute();
     }
 

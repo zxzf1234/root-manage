@@ -261,8 +261,8 @@ public class DatabaseTableServiceImpl implements DatabaseTableService {
                 ||!Objects.equals(oldColumn.dictType(), reqVoColumn.getDictType())
                 ||!Objects.equals(oldColumn.example(), reqVoColumn.getExample())
                 ||!Objects.equals(oldColumn.javaType(), reqVoColumn.getJavaType())
-                ||!Objects.equals(oldColumn.required(), reqVoColumn.getRequired()
-                ||!Objects.equals(oldColumn.relatedTable(), reqVoColumn.getRelatedTable()))
+                ||!Objects.equals(oldColumn.required(), reqVoColumn.getRequired())
+                ||!Objects.equals(oldColumn.relatedTable(), reqVoColumn.getRelatedTable())
 
         ) {
             isColumnChange = true;

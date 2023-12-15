@@ -43,7 +43,7 @@
     </template>
   </Dialog>
 </template>
-<script lang="ts" name="SystemNotifyTemplateSendForm" setup>
+<script lang="ts" setup>
 import * as UserApi from '@/api/system/user'
 import * as NotifyTemplateApi from '@/api/system/notify/notifyTemplate'
 const message = useMessage() // 消息弹窗
@@ -102,6 +102,7 @@ const submitForm = async () => {
   formLoading.value = true
   try {
     const data = formData.value as NotifyTemplateApi.NotifySendReqVO
+    console.log(data)
     const logId = await NotifyTemplateApi.sendNotify(data)
     if (logId) {
       message.success('提交发送成功！发送结果，见发送日志编号：' + logId)
