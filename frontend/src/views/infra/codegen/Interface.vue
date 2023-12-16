@@ -54,7 +54,7 @@
           <context-menu-item label="修改" @click="openForm('update', row.id)" />
         </template>
         <template #isTransaction="{ row }">
-          <dict-tag :type="DICT_TYPE.COMMON_STATUS" :value="row.isTransaction == 'true' ? 1 : 0" />
+          <dict-tag :type="DICT_TYPE.COMMON_STATUS" :value="row.isTransaction ? 1 : 0" />
         </template>
       </Table>
     </el-row>
@@ -303,6 +303,8 @@ const subclassColumns: TableColumnList = [
 const getList = async () => {
   dbTableLoading.value = true
   try {
+    const dd = await CodegenApi.getInterfaceList(queryParams)
+    console.log(dd)
     interfaceData.value = await CodegenApi.getInterfaceList(queryParams)
   } finally {
     dbTableLoading.value = false

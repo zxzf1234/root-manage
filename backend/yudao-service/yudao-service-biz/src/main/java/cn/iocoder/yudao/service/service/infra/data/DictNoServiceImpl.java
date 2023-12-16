@@ -79,7 +79,6 @@ public class DictNoServiceImpl implements DictNoService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public String produceNo(String keyName){
        Optional<InfraDictNo> opNo =  infraDictNoRepository.findByKeyNameUpdate(keyName);
        if (!opNo.isPresent())
