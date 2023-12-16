@@ -1153,6 +1153,14 @@ const handleSaveInterface = async () => {
     message.alertError('非download的调用方法出参类型不能是void')
     return
   }
+  if (formData.value.inputType != 'void' && formData.value.inputParams.length == 0) {
+    message.alertError('入参类型不是void 必须添加入参参数')
+    return
+  }
+  if (formData.value.outputType != 'void' && formData.value.outputParams.length == 0) {
+    message.alertError('出参类型不是void 必须添加出参参数')
+    return
+  }
   // 提交请求
   formLoading.value = true
   try {
