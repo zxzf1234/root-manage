@@ -25,5 +25,5 @@ public class NotifyMessagePageOutput extends SystemNotifyMessageBase {
     private LocalDateTime createTime;
 
     @Schema(description = "用户名称")
-    private String userName;
+    private String username;
 }

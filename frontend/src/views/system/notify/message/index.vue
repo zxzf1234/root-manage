@@ -129,8 +129,8 @@ const columns: TableColumnList = [
     slot: 'userType'
   },
   {
-    label: '用户编号',
-    prop: 'userId'
+    label: '用户名称',
+    prop: 'username'
   },
   {
     label: '模板编码',

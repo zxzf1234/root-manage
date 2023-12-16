@@ -3,6 +3,7 @@ package cn.iocoder.yudao.service.convert.system.notify;
 import cn.iocoder.yudao.service.vo.system.notify.notifyMessage.NotifyMessageGetUnreadListOutput;
 import cn.iocoder.yudao.service.vo.system.notify.notifyMessage.NotifyMessageMyPageOutput;
 import cn.iocoder.yudao.service.vo.system.notify.notifyMessage.NotifyMessageMyPageInput;
+import cn.iocoder.yudao.service.vo.system.notify.notifyMessage.NotifyMessagePageOutput;
 import cn.iocoder.yudao.service.vo.system.notify.notifyMessage.NotifyMessagePageInput;
 import cn.iocoder.yudao.service.vo.system.notify.notifyMessage.NotifyMessagePageOutput;
 import cn.iocoder.yudao.service.vo.system.notify.notifyMessage.NotifyMessageGetOutput;
@@ -27,7 +28,7 @@ public interface NotifyMessageConvert {
 
     List<NotifyMessagePageOutput> pagePageOutputConvert(Page<SystemNotifyMessage> output);
 
-    @Mapping(source = "user.username", target = "userName")
+    @Mapping(source = "user.username", target = "username")
     NotifyMessagePageOutput pageOutputConvert(SystemNotifyMessage output);
 
     List<NotifyMessageMyPageOutput> myPagePageOutputConvert(Page<SystemNotifyMessage> output);
