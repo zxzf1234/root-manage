@@ -176,7 +176,7 @@
             <template #default="scope">
               <el-input
                 v-model="scope.row.name"
-                @keyup="scope.row.name = scope.row.name.replace(/[^a-zA-Z_]/g, '')"
+                @keyup="scope.row.name = scope.row.name.replace(/[^a-zA-Z]/g, '')"
               />
             </template>
           </el-table-column>
@@ -434,7 +434,12 @@
                   </template>
                 </el-table-column>
                 <el-table-column label="参数名" min-width="10%">
-                  <template #default="scope"> <el-input v-model="scope.row.name" /> </template>
+                  <template #default="scope">
+                    <el-input
+                      v-model="scope.row.name"
+                      @keyup="scope.row.name = scope.row.name.replace(/[^a-zA-Z]/g, '')"
+                    />
+                  </template>
                 </el-table-column>
                 <el-table-column label="参数描述" min-width="10%">
                   <template #default="scope">
@@ -581,7 +586,7 @@
                   <template #default="scope">
                     <el-input
                       v-model="scope.row.name"
-                      @keyup="scopeClass.row.name = scopeClass.row.name.replace(/[^a-zA-Z_]/g, '')"
+                      @keyup="scopeClass.row.name = scopeClass.row.name.replace(/[^a-zA-Z]/g, '')"
                     />
                   </template>
                 </el-table-column>
@@ -666,6 +671,7 @@ import { defaultProps, handleTree } from '@/utils/tree'
 import * as CodegenApi from '@/api/infra/codegen'
 import { ElTable } from 'element-plus'
 import InterfaceRelatedParam from './InterfaceRelatedParam.vue'
+import { camelCase } from 'lodash-es'
 
 const { t } = useI18n() // 国际化
 const message = useMessage() // 消息弹窗
@@ -1056,6 +1062,7 @@ const handleAddRelatedColumn = (scope) => {
   }
   relatedParamRef.value.open(params)
 }
+
 const handleBatchRelatedParam = (dbSelectdColumnList) => {
   if (tabActiveName.value === 'inputParamSubclass') {
     inputSubclassTable.value?.toggleRowExpansion(inputSubclassCurrentRow.value, true)
@@ -1066,7 +1073,7 @@ const handleBatchRelatedParam = (dbSelectdColumnList) => {
   dbSelectdColumnList.forEach((element) => {
     const newParam = {
       id: crypto.randomUUID(),
-      name: element.columnName,
+      name: camelCase(element.columnName),
       comment: element.columnComment,
       isList: 0,
       variableType: element.javaType,
