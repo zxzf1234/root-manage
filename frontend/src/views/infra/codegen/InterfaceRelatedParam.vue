@@ -31,18 +31,6 @@
           </el-form-item>
         </template>
         <template v-else>
-          <el-form-item label="模块" prop="moduleName">
-            <el-tree-select
-              v-model="queryParams.moduleName"
-              :data="moduleTree"
-              :props="defaultProps"
-              check-strictly
-              default-expand-all
-              placeholder="请选择模块"
-              value-key="Id"
-              @keyup.enter="getList"
-            />
-          </el-form-item>
           <el-form-item label="接口名" prop="name">
             <el-input
               v-model="queryParams.name"
@@ -80,8 +68,10 @@
                 :data="scope.row.columns"
                 style="width: 1100px"
                 class="mx-10"
+                max-height="400"
                 @row-dblclick="(row) => handleColumnDblclick(row, scope)"
               >
+                <el-table-column type="index" width="50" />
                 <el-table-column label="字段列名" prop="columnName" />
                 <el-table-column label="java类型" prop="javaType" />
                 <el-table-column label="字段描述" prop="columnComment" />
@@ -142,7 +132,6 @@
 <script lang="ts" name="InterfaceRelatedParam" setup>
 import * as CodegenApi from '@/api/infra/codegen'
 import { ElTable } from 'element-plus'
-import { defaultProps, handleTree } from '@/utils/tree'
 export type selectedColumnVO = {
   id: string
   tableName: string
@@ -156,7 +145,6 @@ const message = useMessage() // 消息弹窗
 
 const dialogVisible = ref(false) // 弹窗的是否展示
 const dbLoading = ref(true) // 数据源的加载中
-const moduleTree = ref() // 树形结构
 
 const dbTableList = ref<CodegenApi.DatabaseTableVO[]>([]) // 表的列表
 const dbVOList = ref<CodegenApi.InterfaceVoClassVO[]>([]) // 接口的列表
@@ -183,7 +171,6 @@ const open = async (params) => {
   else if ((variableType & (1 << 2)) > 0) queryParams.variableType = '2'
   else queryParams.variableType = '3'
   await getList()
-  await getTree()
 }
 defineExpose({ open }) // 提供 open 方法，用于打开弹窗
 
@@ -247,12 +234,5 @@ const handleVariableTypeChange = () => {
 /** 关闭弹窗 */
 const close = async () => {
   dialogVisible.value = false
-}
-
-/** 获得模块树 */
-const getTree = async () => {
-  moduleTree.value = []
-  const data = await CodegenApi.getSimpleList()
-  moduleTree.value = handleTree(data)
 }
 </script>
