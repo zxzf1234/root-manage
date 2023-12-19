@@ -68,7 +68,7 @@
       <template v-if="queryParams.variableType === '1'">
         <el-table
           :data="dbTableList"
-          height="700"
+          height="720"
           highlight-current-row
           row-key="id"
           @row-dblclick="handleTableDblclick"
