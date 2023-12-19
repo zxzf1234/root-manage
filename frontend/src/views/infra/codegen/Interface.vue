@@ -54,7 +54,7 @@
           <context-menu-item label="修改" @click="openForm('update', row.id)" />
         </template>
         <template #isTransaction="{ row }">
-          <dict-tag :type="DICT_TYPE.COMMON_STATUS" :value="row.isTransaction ? 1 : 0" />
+          <dict-tag :type="DICT_TYPE.COMMON_STATUS" :value="row.isTransaction ? 0 : 1" />
         </template>
       </Table>
     </el-row>
