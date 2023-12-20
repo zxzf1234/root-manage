@@ -6,7 +6,7 @@
   </ContentWrap>
 </template>
 <script setup lang="ts" name="InfraAdminServer">
-import * as ConfigApi from '@/api/infra/config'
+import * as ConfigApi from '@/api/infra/data/config'
 
 const loading = ref(true) // 是否加载中
 const src = ref(import.meta.env.VITE_BASE_URL + '/admin/applications')
