@@ -139,7 +139,7 @@
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
 import { dateFormatter } from '@/utils/formatTime'
 import download from '@/utils/download'
-import * as OperateLogApi from '@/api/system/operatelog'
+import * as OperateLogApi from '@/api/infra/operatelog'
 import OperateLogDetail from './OperateLogDetail.vue'
 const message = useMessage() // 消息弹窗
 
