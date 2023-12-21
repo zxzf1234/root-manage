@@ -1,5 +1,6 @@
 package cn.iocoder.yudao.framework.jackson.core.databind;
 
+import cn.hutool.core.date.DateUtil;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -24,7 +25,11 @@ public class LocalDateTimeDeserializer extends JsonDeserializer<LocalDateTime> {
     public LocalDateTime deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
         if (p.getValueAsString().isEmpty())
             return null;
-        else
-            return LocalDateTime.parse(p.getValueAsString(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        else {
+            if (p.getValueAsString().length() > 10)
+                return LocalDateTime.parse(p.getValueAsString(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            else
+                return DateUtil.parseLocalDateTime(p.getValueAsString(), "yyyy-MM-dd");
+        }
     }
 }
