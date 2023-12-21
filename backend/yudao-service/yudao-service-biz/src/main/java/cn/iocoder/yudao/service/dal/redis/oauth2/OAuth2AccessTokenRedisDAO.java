@@ -38,8 +38,8 @@ public class OAuth2AccessTokenRedisDAO {
         // 清理多余字段，避免缓存
 
         accessTokenDO = SystemOauth2AccessTokenDraft.$.produce(accessTokenDO, SystemOauth2AccessToken->{
-            SystemOauth2AccessToken.setUpdaterId(0L).setUpdateTime(LocalDateTime.of(1970,1, 1, 0, 0,0))
-                    .setCreateTime(LocalDateTime.of(1970,1, 1, 0, 0,0)).setDeleted(false);
+            SystemOauth2AccessToken.setUpdaterId(0L).setUpdateTime(LocalDateTime.now())
+                    .setCreateTime(LocalDateTime.now()).setDeleted(false);
         });
         long time = LocalDateTimeUtil.between(LocalDateTime.now(), accessTokenDO.expiresTime(), ChronoUnit.SECONDS);
         if(time == 0)
