@@ -52,6 +52,13 @@ import java.util.UUID;
         #break
     #end
 #end
+## 处理 BigDecimal 字段的引入
+#foreach ($column in $columns)
+    #if (${column.javaType.contains("BigDecimal")} == true)
+import java.math.BigDecimal;
+        #break
+    #end
+#end
 @Entity
 public interface ${classNameHump} extends BaseEntity {
 #foreach ($column in $columns)
