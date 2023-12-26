@@ -2,11 +2,9 @@ package cn.iocoder.yudao.service.model.infra.codegen;
 
 import cn.iocoder.yudao.service.model.base.BaseEntity;
 import org.babyfish.jimmer.sql.*;
-import org.babyfish.jimmer.sql.meta.UUIDIdGenerator;
-
 import java.util.List;
+import org.babyfish.jimmer.sql.meta.UUIDIdGenerator;
 import java.util.UUID;
-
 @Entity
 public interface InfraDatabaseTable extends BaseEntity {
     @Id
@@ -20,7 +18,9 @@ public interface InfraDatabaseTable extends BaseEntity {
 
     String remark();
 
-    String businessName();
+    String firstModule();
+
+    String secondModule();
 
     @OneToMany(mappedBy = "table", orderedProps =@OrderedProp("sort"))
     List<InfraDatabaseColumn> columns();
@@ -30,4 +30,5 @@ public interface InfraDatabaseTable extends BaseEntity {
 
     @OneToMany(mappedBy = "table")
     List<InfraDatabaseMapping> mappings();
+
 }

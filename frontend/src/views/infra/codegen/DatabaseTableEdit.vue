@@ -27,12 +27,19 @@
             <el-input v-model="formData.comment" placeholder="请输入" />
           </el-form-item>
         </el-col>
-        <el-col :span="12">
-          <el-form-item label="业务名" prop="businessName">
-            <el-input v-model="formData.businessName" placeholder="请输入" />
+      </el-row>
+      <el-row>
+        <el-col :span="8">
+          <el-form-item label="一级模块" prop="firstModule">
+            <el-input v-model="formData.firstModule" placeholder="请输入" />
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="8">
+          <el-form-item label="二级模块" prop="secondModule">
+            <el-input v-model="formData.secondModule" placeholder="请输入" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
           <el-form-item label="备注" prop="remark">
             <el-input v-model="formData.remark" :rows="1" type="textarea" />
           </el-form-item>
@@ -381,7 +388,8 @@ const formData = ref<CodegenApi.DatabaseTableVO>({
   id: '0',
   name: '',
   comment: '',
-  businessName: '',
+  firstModule: '',
+  secondModule: '',
   remark: '',
   columns: [],
   indexes: [],
@@ -390,7 +398,8 @@ const formData = ref<CodegenApi.DatabaseTableVO>({
 const rules = reactive({
   name: [{ required: true, message: '表名称不能为空', trigger: 'blur' }],
   comment: [{ required: true, message: '表描述不能为空', trigger: 'blur' }],
-  businessName: [{ required: true, message: '业务名不能为空', trigger: 'blur' }]
+  firstModule: [{ required: true, message: '一级模块不能为空', trigger: 'blur' }],
+  secondModule: [{ required: true, message: '二级模块不能为空', trigger: 'blur' }]
 })
 
 const columnCurrentRow = ref()
@@ -433,7 +442,8 @@ const open = async (type: string, id?: string) => {
       id: tableId,
       name: '',
       comment: '',
-      businessName: '',
+      firstModule: '',
+      secondModule: '',
       remark: '',
       columns: [
         {

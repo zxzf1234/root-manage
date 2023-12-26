@@ -1,0 +1,1 @@
+UPDATE infra_database_table SET second_module = first_module, first_module = SUBSTRING(`name`, 1, LOCATE('_', `name`) - 1);

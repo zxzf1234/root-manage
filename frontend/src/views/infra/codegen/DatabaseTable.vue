@@ -20,12 +20,21 @@
           @keyup.enter="getList"
         />
       </el-form-item>
-      <el-form-item label="模块名" prop="businessName">
+      <el-form-item label="一级模块" prop="firstModule">
         <el-input
-          v-model="queryParams.businessName"
+          v-model="queryParams.firstModule"
           class="!w-240px"
           clearable
-          placeholder="请输入模块名"
+          placeholder="请输入一级模块"
+          @keyup.enter="getList"
+        />
+      </el-form-item>
+      <el-form-item label="二级模块" prop="secondModule">
+        <el-input
+          v-model="queryParams.secondModule"
+          class="!w-240px"
+          clearable
+          placeholder="请输入二级模块"
           @keyup.enter="getList"
         />
       </el-form-item>
@@ -132,7 +141,8 @@ const databaseTableData = ref<CodegenApi.DatabaseTableVO[]>([]) // 表的列表
 const queryParams = reactive({
   name: undefined,
   comment: undefined,
-  businessName: undefined
+  firstModule: undefined,
+  secondModule: undefined
 })
 const queryFormRef = ref() // 搜索的表单
 const activeName = ref('column')
@@ -150,8 +160,12 @@ const databaseTableColumns: TableColumnList = [
     prop: 'comment'
   },
   {
-    label: '模块名',
-    prop: 'businessName'
+    label: '一级模块',
+    prop: 'firstModule'
+  },
+  {
+    label: '二级模块',
+    prop: 'secondModule'
   },
   {
     label: '备注',

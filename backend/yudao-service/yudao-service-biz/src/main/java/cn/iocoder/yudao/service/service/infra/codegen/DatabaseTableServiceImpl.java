@@ -174,11 +174,12 @@ public class DatabaseTableServiceImpl implements DatabaseTableService {
 
         // 更新table
         if(!Objects.equals(tableOptional.get().name(), reqVo.getName())
-                || !Objects.equals(tableOptional.get().businessName(), reqVo.getBusinessName())
+                || !Objects.equals(tableOptional.get().firstModule(), reqVo.getFirstModule())
+                || !Objects.equals(tableOptional.get().secondModule(), reqVo.getSecondModule())
                 || !Objects.equals(tableOptional.get().remark(), reqVo.getRemark())
                 || !Objects.equals(tableOptional.get().comment(), reqVo.getComment())){
             InfraDatabaseTable updateDatabaseTable = InfraDatabaseTableDraft.$.produce(draft -> {
-                draft.setName(reqVo.getName()).setBusinessName(reqVo.getBusinessName()).setComment(reqVo.getComment()).setRemark(reqVo.getRemark()).setId(reqVo.getId());
+                draft.setName(reqVo.getName()).setFirstModule(reqVo.getFirstModule()).setSecondModule(reqVo.getSecondModule()).setComment(reqVo.getComment()).setRemark(reqVo.getRemark()).setId(reqVo.getId());
             });
             infraDatabaseTableRepository.updateById(reqVo.getId(), updateDatabaseTable);
         }

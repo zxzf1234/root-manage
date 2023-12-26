@@ -65,13 +65,13 @@ public class CodegenEngine {
             .put(templatePath("model/baseVO"), javaBaseVOFilePath("Base"))
             .put(templatePath("model/repository"), javaTableFilePath("repository","${classNameHump}Repository"))
             .put(templatePath("model/javaModel"), javaTableFilePath("model","${classNameHump}"))
-            .put(templatePath("model/vueModel"), vueFilePath("model/${moduleName}/${table.businessName}/${classNameHump}.ts"))
+            .put(templatePath("model/vueModel"), vueFilePath("model/${moduleName}/${table.secondModule}/${classNameHump}.ts"))
             .build();
 
     private static final Map<String, String> TABLE_UPDATE_TEMPLATES = MapUtil.<String, String>builder(new LinkedHashMap<>()) // 有序
             .put(templatePath("model/baseVO"), javaBaseVOFilePath("Base"))
             .put(templatePath("model/javaModel"), javaTableFilePath("model","${classNameHump}"))
-            .put(templatePath("model/vueModel"), vueFilePath("model/${moduleName}/${table.businessName}/${classNameHump}.ts"))
+            .put(templatePath("model/vueModel"), vueFilePath("model/${moduleName}/${table.secondModule}/${classNameHump}.ts"))
             .build();
 
     private static final Map<String, String> MODULE_TEMPLATES = MapUtil.<String, String>builder(new LinkedHashMap<>()) // 有序
@@ -202,13 +202,12 @@ public class CodegenEngine {
             return "";
         if(opVoClass.get().type() == 0) {
             InfraDatabaseTable table = infraDatabaseTableRepository.findById(UUID.fromString(opVoClass.get().parentId())).get();
-            String moduleName = table.name().substring(0, table.name().indexOf("_"));
             extendClassImport = new StringBuilder("import " +
                     getStr(bindingMap, "basePackage").replaceAll("\\.", ".") +
                     ".service.vo." +
-                    moduleName +
+                    table.firstModule() +
                     "." +
-                    table.businessName() +
+                    table.secondModule() +
                     ".baseVO." +
                     upperFirst(toCamelCase((table.name()))) +
                     "Base"+
@@ -323,9 +322,9 @@ public class CodegenEngine {
                 inputSrcExtendTableImport = "import " +
                         getStr(bindingMap, "basePackage").replaceAll("\\.", ".") +
                         ".service.model." +
-                        table.name().substring(0, table.name().indexOf("_")) +
+                        table.firstModule() +
                         "." +
-                        table.businessName() +
+                        table.secondModule() +
                         "." +
                         upperFirst(toCamelCase(inputSrcExtendClass))
                         + ";";
@@ -350,9 +349,9 @@ public class CodegenEngine {
             outputSrcExtendTableImport = "import " +
                     getStr(bindingMap, "basePackage").replaceAll("\\.", ".") +
                     ".service.model." +
-                    table.name().substring(0, table.name().indexOf("_")) +
+                    table.firstModule()+
                     "."+
-                    table.businessName()+
+                    table.secondModule()+
                     "."+
                     upperFirst(toCamelCase(outputSrcExtendClass)) +
                     ";";
@@ -954,7 +953,7 @@ public class CodegenEngine {
             if(!column.getRelatedTable().isEmpty()) {
                 Optional<InfraDatabaseTable> opTable = infraDatabaseTableRepository.findByName(column.getRelatedTable());
                 column.setHumpRelatedTable(upperFirst(toCamelCase(column.getRelatedTable())))
-                        .setRelatedTableModuleName(opTable.get().businessName());
+                        .setRelatedTableModuleName(opTable.get().secondModule());
             }
             if(Objects.equals(column.getJavaType(), "Long")
                     || Objects.equals(column.getJavaType(), "String")
@@ -986,7 +985,7 @@ public class CodegenEngine {
         bindingMap.put("mappings", codegenMappings);
         bindingMap.put("sceneEnum", CodegenSceneEnum.valueOf("ADMIN"));
         // 模块名称 例子system
-        String moduleName = table.name().substring(0, table.name().indexOf("_"));
+        String moduleName = table.firstModule();
         bindingMap.put("moduleName", moduleName);
         // 简称类名 下划线命名 例子config_setting
         String simpleClassName = removePrefix(table.name(), moduleName+ "_");
@@ -1016,7 +1015,7 @@ public class CodegenEngine {
         // table 包含的字段
         InfraDatabaseTable table = (InfraDatabaseTable) bindingMap.get("table");
         filePath = StrUtil.replace(filePath, "${moduleName}", getStr(bindingMap, "moduleName"));
-        filePath = StrUtil.replace(filePath, "${table.businessName}", table.businessName());
+        filePath = StrUtil.replace(filePath, "${table.secondModule}", table.secondModule());
         filePath = StrUtil.replace(filePath, "${simpleClassNameHump}", getStr(bindingMap, "simpleClassNameHump"));
         filePath = StrUtil.replace(filePath, "${simpleLowerClassNameHump}", getStr(bindingMap, "simpleLowerClassNameHump"));
         filePath = StrUtil.replace(filePath, "${classNameHump}", getStr(bindingMap, "classNameHump"));
@@ -1214,7 +1213,7 @@ public class CodegenEngine {
     }
 
     private static String javaBaseVOFilePath(String path) {
-        return javaFilePath("vo/${moduleName}/${table.businessName}/${sceneEnum.prefixClass}baseVO/${classNameHump}" + path) + ".java";
+        return javaFilePath("vo/${moduleName}/${table.secondModule}/${sceneEnum.prefixClass}baseVO/${classNameHump}" + path) + ".java";
     }
 
     private static String javaControllerFilePath() {
@@ -1222,7 +1221,7 @@ public class CodegenEngine {
     }
 
     private static String javaTableFilePath(String path, String file) {
-        return javaFilePath(path) +  "/${moduleName}/${table.businessName}/" + file + ".java";
+        return javaFilePath(path) +  "/${moduleName}/${table.secondModule}/" + file + ".java";
     }
 
     private static String javaModuleFilePath(String path, String file) {

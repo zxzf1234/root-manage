@@ -15,6 +15,9 @@ public class DatabaseTableListReqVO extends PageParam {
     @Schema(description = "表描述,模糊匹配", example = "芋道")
     private String comment;
 
-    @Schema(description = "模块名,模糊匹配", example = "芋道")
-    private String businessName;
+    @Schema(description = "一级模块,模糊匹配", example = "芋道")
+    private String firstModule;
+
+    @Schema(description = "二级模块,模糊匹配", example = "芋道")
+    private String secondModule;
 }

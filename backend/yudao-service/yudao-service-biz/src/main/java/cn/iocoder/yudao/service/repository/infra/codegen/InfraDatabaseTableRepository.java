@@ -14,13 +14,16 @@ public interface InfraDatabaseTableRepository extends JRepository<InfraDatabaseT
     InfraDatabaseTableTable infraDatabaseTableTable = InfraDatabaseTableTable.$;
 
     default Page<InfraDatabaseTable> selectList(DatabaseTableListReqVO listReqVO){
-        return pager(listReqVO.getPageNo() - 1, listReqVO.getPageSize()).execute(sql().createQuery(infraDatabaseTableTable)
-                .whereIf(StringUtils.hasText(listReqVO.getComment()), infraDatabaseTableTable.comment().like(listReqVO.getComment()))
-                .whereIf(StringUtils.hasText(listReqVO.getName()), infraDatabaseTableTable.name().like(listReqVO.getName()))
-                .whereIf(StringUtils.hasText(listReqVO.getBusinessName()), infraDatabaseTableTable.businessName().like(listReqVO.getBusinessName()))
-                .orderBy(infraDatabaseTableTable.businessName())
-                .orderBy(infraDatabaseTableTable.name())
-                .select(infraDatabaseTableTable)
+        return pager(listReqVO.getPageNo() - 1, listReqVO.getPageSize()).execute(
+                sql().createQuery(infraDatabaseTableTable)
+                        .whereIf(StringUtils.hasText(listReqVO.getComment()), infraDatabaseTableTable.comment().like(listReqVO.getComment()))
+                        .whereIf(StringUtils.hasText(listReqVO.getName()), infraDatabaseTableTable.name().like(listReqVO.getName()))
+                        .whereIf(StringUtils.hasText(listReqVO.getFirstModule()), infraDatabaseTableTable.firstModule().like(listReqVO.getFirstModule()))
+                        .whereIf(StringUtils.hasText(listReqVO.getSecondModule()), infraDatabaseTableTable.secondModule().like(listReqVO.getSecondModule()))
+                        .orderBy(infraDatabaseTableTable.firstModule())
+                        .orderBy(infraDatabaseTableTable.secondModule())
+                        .orderBy(infraDatabaseTableTable.name())
+                        .select(infraDatabaseTableTable)
         );
 
     }
@@ -29,7 +32,8 @@ public interface InfraDatabaseTableRepository extends JRepository<InfraDatabaseT
         return sql().createQuery(infraDatabaseTableTable)
                 .whereIf(StringUtils.hasText(listReqVO.getComment()), infraDatabaseTableTable.comment().like(listReqVO.getComment()))
                 .whereIf(StringUtils.hasText(listReqVO.getName()), infraDatabaseTableTable.name().like(listReqVO.getName()))
-                .whereIf(StringUtils.hasText(listReqVO.getBusinessName()), infraDatabaseTableTable.businessName().like(listReqVO.getBusinessName()))
+                .whereIf(StringUtils.hasText(listReqVO.getFirstModule()), infraDatabaseTableTable.firstModule().like(listReqVO.getFirstModule()))
+                .whereIf(StringUtils.hasText(listReqVO.getSecondModule()), infraDatabaseTableTable.secondModule().like(listReqVO.getSecondModule()))
                 .select(infraDatabaseTableTable.fetch(InfraDatabaseTableFetcher.$.allScalarFields()
                         .columns(InfraDatabaseColumnFetcher.$.allTableFields())))
                 .execute();
@@ -57,7 +61,8 @@ public interface InfraDatabaseTableRepository extends JRepository<InfraDatabaseT
     default void updateById(UUID id, InfraDatabaseTable newTable){
         sql().createUpdate(infraDatabaseTableTable)
                 .set(infraDatabaseTableTable.name(), newTable.name())
-                .set(infraDatabaseTableTable.businessName(), newTable.businessName())
+                .set(infraDatabaseTableTable.firstModule(), newTable.firstModule())
+                .set(infraDatabaseTableTable.secondModule(), newTable.secondModule())
                 .set(infraDatabaseTableTable.comment(), newTable.comment())
                 .set(infraDatabaseTableTable.remark(), newTable.remark())
                 .where(infraDatabaseTableTable.id().eq(id))

@@ -4,7 +4,8 @@ export type DatabaseTableVO = {
   id: string
   name: string
   comment: string
-  businessName: string
+  firstModule: string
+  secondModule: string
   remark: string
   columns: DatabaseColumnVO[]
   indexes: DatabaseIndexVO[]
