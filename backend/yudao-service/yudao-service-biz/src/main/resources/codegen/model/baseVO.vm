@@ -1,4 +1,4 @@
-package ${basePackage}.service.vo.${moduleName}.${table.businessName}.baseVO;
+package ${basePackage}.service.vo.${table.firstModule}.${table.secondModule}.baseVO;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;

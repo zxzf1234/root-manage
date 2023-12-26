@@ -1,7 +1,7 @@
-package ${basePackage}.service.repository.${moduleName}.${table.businessName};
+package ${basePackage}.service.repository.${table.firstModule}.${table.secondModule};
 
-import ${basePackage}.service.model.${moduleName}.${table.businessName}.${classNameHump};
-import ${basePackage}.service.model.${moduleName}.${table.businessName}.${classNameHump}Table;
+import ${basePackage}.service.model.${table.firstModule}.${table.secondModule}.${classNameHump};
+import ${basePackage}.service.model.${table.firstModule}.${table.secondModule}.${classNameHump}Table;
 import org.babyfish.jimmer.spring.repository.JRepository;
 #*
 ## 字段模板

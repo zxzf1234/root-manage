@@ -65,13 +65,13 @@ public class CodegenEngine {
             .put(templatePath("model/baseVO"), javaBaseVOFilePath("Base"))
             .put(templatePath("model/repository"), javaTableFilePath("repository","${classNameHump}Repository"))
             .put(templatePath("model/javaModel"), javaTableFilePath("model","${classNameHump}"))
-            .put(templatePath("model/vueModel"), vueFilePath("model/${moduleName}/${table.secondModule}/${classNameHump}.ts"))
+            .put(templatePath("model/vueModel"), vueFilePath("model/${table.firstModule}/${table.secondModule}/${classNameHump}.ts"))
             .build();
 
     private static final Map<String, String> TABLE_UPDATE_TEMPLATES = MapUtil.<String, String>builder(new LinkedHashMap<>()) // 有序
             .put(templatePath("model/baseVO"), javaBaseVOFilePath("Base"))
             .put(templatePath("model/javaModel"), javaTableFilePath("model","${classNameHump}"))
-            .put(templatePath("model/vueModel"), vueFilePath("model/${moduleName}/${table.secondModule}/${classNameHump}.ts"))
+            .put(templatePath("model/vueModel"), vueFilePath("model/${table.firstModule}/${table.secondModule}/${classNameHump}.ts"))
             .build();
 
     private static final Map<String, String> MODULE_TEMPLATES = MapUtil.<String, String>builder(new LinkedHashMap<>()) // 有序
@@ -984,17 +984,7 @@ public class CodegenEngine {
         bindingMap.put("indexes", table.indexes());
         bindingMap.put("mappings", codegenMappings);
         bindingMap.put("sceneEnum", CodegenSceneEnum.valueOf("ADMIN"));
-        // 模块名称 例子system
-        String moduleName = table.firstModule();
-        bindingMap.put("moduleName", moduleName);
-        // 简称类名 下划线命名 例子config_setting
-        String simpleClassName = removePrefix(table.name(), moduleName+ "_");
-        bindingMap.put("simpleClassName", simpleClassName );
-        // 简称类名 驼峰命名 例子ConfigSetting
-        bindingMap.put("simpleClassNameHump", upperFirst(toCamelCase(simpleClassName)));
 
-        // 简称类名 驼峰命名 首字母小写 例子configSetting
-        bindingMap.put("simpleLowerClassNameHump", toCamelCase(simpleClassName));
 
         // 全程类名 驼峰命名 例子SystemConfigSetting
         bindingMap.put("classNameHump", upperFirst(toCamelCase(table.name())));
@@ -1006,17 +996,14 @@ public class CodegenEngine {
                 getStr(bindingMap, "basePackage").replaceAll("\\.", "/"));
         filePath = StrUtil.replace(filePath, "${classNameVar}",
                 getStr(bindingMap, "classNameVar"));
-        filePath = StrUtil.replace(filePath, "${simpleClassName}",
-                getStr(bindingMap, "simpleClassName"));
         // sceneEnum 包含的字段
         CodegenSceneEnum sceneEnum = (CodegenSceneEnum) bindingMap.get("sceneEnum");
         filePath = StrUtil.replace(filePath, "${sceneEnum.prefixClass}", sceneEnum.getPrefixClass());
         filePath = StrUtil.replace(filePath, "${sceneEnum.basePackage}", sceneEnum.getBasePackage());
         // table 包含的字段
         InfraDatabaseTable table = (InfraDatabaseTable) bindingMap.get("table");
-        filePath = StrUtil.replace(filePath, "${moduleName}", getStr(bindingMap, "moduleName"));
+        filePath = StrUtil.replace(filePath, "${table.firstModule}", table.firstModule());
         filePath = StrUtil.replace(filePath, "${table.secondModule}", table.secondModule());
-        filePath = StrUtil.replace(filePath, "${simpleClassNameHump}", getStr(bindingMap, "simpleClassNameHump"));
         filePath = StrUtil.replace(filePath, "${simpleLowerClassNameHump}", getStr(bindingMap, "simpleLowerClassNameHump"));
         filePath = StrUtil.replace(filePath, "${classNameHump}", getStr(bindingMap, "classNameHump"));
         return filePath;
@@ -1213,7 +1200,7 @@ public class CodegenEngine {
     }
 
     private static String javaBaseVOFilePath(String path) {
-        return javaFilePath("vo/${moduleName}/${table.secondModule}/${sceneEnum.prefixClass}baseVO/${classNameHump}" + path) + ".java";
+        return javaFilePath("vo/${table.firstModule}/${table.secondModule}/${sceneEnum.prefixClass}baseVO/${classNameHump}" + path) + ".java";
     }
 
     private static String javaControllerFilePath() {
@@ -1221,7 +1208,7 @@ public class CodegenEngine {
     }
 
     private static String javaTableFilePath(String path, String file) {
-        return javaFilePath(path) +  "/${moduleName}/${table.secondModule}/" + file + ".java";
+        return javaFilePath(path) +  "/${table.firstModule}/${table.secondModule}/" + file + ".java";
     }
 
     private static String javaModuleFilePath(String path, String file) {
