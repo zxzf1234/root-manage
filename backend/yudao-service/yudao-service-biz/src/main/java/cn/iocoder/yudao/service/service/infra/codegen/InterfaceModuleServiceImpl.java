@@ -42,6 +42,8 @@ public class InterfaceModuleServiceImpl implements InterfaceModuleService{
         module = infraInterfaceModuleRepository.insert(module);
         if(module.type() == 1)
             codegenEngine.moduleInsertExecute(module);
+        else
+            codegenEngine.moduleEnumsInsertExecute(module);
         return module.id().toString();
     }
 

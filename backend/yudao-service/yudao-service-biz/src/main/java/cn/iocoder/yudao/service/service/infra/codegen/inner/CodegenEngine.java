@@ -82,6 +82,9 @@ public class CodegenEngine {
             .put(templatePath("interfaceModule/vo"), javaModuleFilePath("vo", "${nameHump}/package-info"))
             .put(templatePath("interfaceModule/vueApi"), vueFilePath("api/${modulePath}/${vueFileName}.ts"))
             .build();
+    private static final Map<String, String> ENUMS_MODULE_TEMPLATES = MapUtil.<String, String>builder(new LinkedHashMap<>()) // 有序
+            .put(templatePath("interfaceModule/error"), javaApiFilePath("enums/${modulePath}/ErrorCodeConstants.java"))
+            .build();
 
     private static final Map<String, String> DICT_TEMPLATES = MapUtil.<String, String>builder(new LinkedHashMap<>()) // 有序
             .put(templatePath("dict/javaEnum"), javaApiFilePath("enums/${modulePath}/${typeUpHump}Enum.java"))
@@ -717,6 +720,35 @@ public class CodegenEngine {
         return filePath;
     }
 
+    public void moduleEnumsInsertExecute(InfraInterfaceModule module){
+        Map<String, Object> bindingMap = getModuleBindingMap(module);
+        generateEnumsModule(bindingMap);
+    }
+
+    public void generateEnumsModule(Map<String, Object> bindingMap)
+    {
+        Map<String, String> templates = new LinkedHashMap<>(MODULE_TEMPLATES);
+        templates.forEach((vmPath, filePath) -> {
+            filePath = formatModuleFilePath(filePath, bindingMap);
+            File newFile;
+            if(!FileUtil.exist(filePath)) {
+                newFile = FileUtil.touch(filePath);
+                RuntimeUtil.execForStr("git add " + filePath);
+            }else{
+                newFile = FileUtil.file(filePath);
+            }
+
+            String content = "";
+            if(!vmPath.isEmpty()) {
+                content = templateEngine.getTemplate(vmPath).render(bindingMap);
+                // 去除字段后面多余的 , 逗号
+                content = content.replaceAll(",\n}", "\n}").replaceAll(",\n  }", "\n  }");
+
+                FileUtil.writeUtf8String(content, newFile);
+            }
+        });
+    }
+
     public void moduleInsertExecute(InfraInterfaceModule module){
         Map<String, Object> bindingMap = getModuleBindingMap(module);
         generateModule(bindingMap);
@@ -765,6 +797,7 @@ public class CodegenEngine {
             RuntimeUtil.execForStr("git rm -f " + filePath);
         });
     }
+
 
     private Map<String, Object> getModuleBindingMap(InfraInterfaceModule module){
         Map<String, Object> bindingMap = new HashMap<>(globalBindingMap);
