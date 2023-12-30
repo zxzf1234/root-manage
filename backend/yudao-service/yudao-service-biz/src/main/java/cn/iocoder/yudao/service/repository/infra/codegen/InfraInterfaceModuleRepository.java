@@ -31,4 +31,6 @@ public interface InfraInterfaceModuleRepository extends JRepository<InfraInterfa
     void deleteById(UUID id);
 
     int countByParentId(String parentId);
+
+    Optional<InfraInterfaceModule> findFirstByName(String name);
 }

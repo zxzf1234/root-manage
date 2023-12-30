@@ -83,7 +83,7 @@ public class CodegenEngine {
             .put(templatePath("interfaceModule/vueApi"), vueFilePath("api/${modulePath}/${vueFileName}.ts"))
             .build();
     private static final Map<String, String> ENUMS_MODULE_TEMPLATES = MapUtil.<String, String>builder(new LinkedHashMap<>()) // 有序
-            .put(templatePath("interfaceModule/error"), javaApiFilePath("enums/${modulePath}/ErrorCodeConstants.java"))
+            .put(templatePath("interfaceModule/errorCodeConstants"), javaApiFilePath("enums/${module.name}/ErrorCodeConstants.java"))
             .build();
 
     private static final Map<String, String> DICT_TEMPLATES = MapUtil.<String, String>builder(new LinkedHashMap<>()) // 有序
@@ -721,15 +721,45 @@ public class CodegenEngine {
     }
 
     public void moduleEnumsInsertExecute(InfraInterfaceModule module){
-        Map<String, Object> bindingMap = getModuleBindingMap(module);
-        generateEnumsModule(bindingMap);
+        Optional<InfraInterfaceModule> opAdminModule = infraInterfaceModuleRepository.findFirstByName("admin");
+        if(!opAdminModule.isPresent())
+            return;
+        if(!UUID.fromString(module.parentId()).equals(opAdminModule.get().id())){
+            return;
+        }
+        int moduleCount = infraInterfaceModuleRepository.countByParentId(module.parentId());
+        Map<String, Object> bindingMap = getEnumsModuleBindingMap(module,moduleCount);
+        generateEnumsModule(bindingMap, module);
     }
 
-    public void generateEnumsModule(Map<String, Object> bindingMap)
+    private Map<String, Object> getEnumsModuleBindingMap(InfraInterfaceModule module, int moduleCount){
+        Map<String, Object> bindingMap = new HashMap<>(globalBindingMap);
+
+        bindingMap.put("sceneEnum", CodegenSceneEnum.valueOf("ADMIN"));
+        bindingMap.put("moduleIndex", moduleCount);
+        List<String> parentNames = getParentName(module.id());
+        bindingMap.put("module", module);
+
+        return bindingMap;
+    }
+
+    private String formatEnumsModuleFilePath(String filePath, Map<String, Object> bindingMap, InfraInterfaceModule module) {
+        filePath = StrUtil.replace(filePath, "${basePackage}",
+                getStr(bindingMap, "basePackage").replaceAll("\\.", "/"));
+        // sceneEnum 包含的字段
+        CodegenSceneEnum sceneEnum = (CodegenSceneEnum) bindingMap.get("sceneEnum");
+        filePath = StrUtil.replace(filePath, "${sceneEnum.prefixClass}", sceneEnum.getPrefixClass());
+        filePath = StrUtil.replace(filePath, "${sceneEnum.basePackage}", sceneEnum.getBasePackage());
+        filePath = StrUtil.replace(filePath, "${module.name}", module.name());
+
+        return filePath;
+    }
+
+    public void generateEnumsModule(Map<String, Object> bindingMap, InfraInterfaceModule module)
     {
-        Map<String, String> templates = new LinkedHashMap<>(MODULE_TEMPLATES);
+        Map<String, String> templates = new LinkedHashMap<>(ENUMS_MODULE_TEMPLATES);
         templates.forEach((vmPath, filePath) -> {
-            filePath = formatModuleFilePath(filePath, bindingMap);
+            filePath = formatEnumsModuleFilePath(filePath, bindingMap, module);
             File newFile;
             if(!FileUtil.exist(filePath)) {
                 newFile = FileUtil.touch(filePath);

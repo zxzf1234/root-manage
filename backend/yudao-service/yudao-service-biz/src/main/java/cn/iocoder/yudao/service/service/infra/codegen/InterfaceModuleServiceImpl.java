@@ -6,6 +6,7 @@ import cn.iocoder.yudao.service.repository.infra.codegen.InfraInterfaceModuleRep
 import cn.iocoder.yudao.service.service.infra.codegen.inner.CodegenEngine;
 import cn.iocoder.yudao.service.vo.infra.codegen.interfaceModule.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -37,6 +38,7 @@ public class InterfaceModuleServiceImpl implements InterfaceModuleService{
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public String create(InterfaceModuleCreateReq reqVO){
         InfraInterfaceModule module = CodegenConvert.INSTANCE.convert(reqVO);
         module = infraInterfaceModuleRepository.insert(module);
@@ -48,6 +50,7 @@ public class InterfaceModuleServiceImpl implements InterfaceModuleService{
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public String update(InterfaceModuleUpdateReq reqVO){
         Optional<InfraInterfaceModule> opModule = infraInterfaceModuleRepository.findById(reqVO.getId());
         if (!opModule.isPresent())
@@ -70,6 +73,7 @@ public class InterfaceModuleServiceImpl implements InterfaceModuleService{
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void deleteModule(String id){
         int count = infraInterfaceModuleRepository.countByParentId(id);
         if(count > 0)
