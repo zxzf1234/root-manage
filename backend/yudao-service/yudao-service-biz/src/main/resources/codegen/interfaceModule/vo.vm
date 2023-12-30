@@ -1,4 +1,4 @@
 /**
 * ${module.comment} vo 类
 */
-package ${basePackage}.service.vo#foreach ($parentName in $parentNames).$parentName#end.${nameHumpUp};
+package ${basePackage}.service.vo#foreach ($parentName in $parentNames).$parentName#end.${nameHump};
