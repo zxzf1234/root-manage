@@ -562,7 +562,7 @@ const dataTypeBlur = (scope) => {
   scope.row.dataType = scope.row.dataType.toUpperCase().trim()
   if (scope.row.dataType.includes('CHAR') || scope.row.dataType.includes('TEXT')) {
     scope.row.javaType = 'String'
-    scope.row.defaultValue = ''
+    scope.row.defaultValue = "''"
   }
   if (scope.row.dataType.includes('INT')) {
     scope.row.javaType = 'Integer'
