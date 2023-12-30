@@ -141,10 +141,6 @@ const typeData = ref()
 const tabActiveName = ref('dictData')
 const typeColumns: TableColumnList = [
   {
-    label: '字典编号',
-    prop: 'id'
-  },
-  {
     label: '字典名称',
     prop: 'name',
     showOverflowTooltip: true
@@ -179,10 +175,6 @@ const typeColumns: TableColumnList = [
 ]
 const dataColumns: TableColumnList = [
   {
-    label: '数据编码',
-    prop: 'id'
-  },
-  {
     label: '数据标签',
     prop: 'label'
   },
@@ -192,7 +184,7 @@ const dataColumns: TableColumnList = [
   },
   {
     label: '数据枚举',
-    prop: 'enum'
+    prop: 'dataEnum'
   },
   {
     label: '排序',

@@ -30,6 +30,7 @@ public interface InfraDictTypeRepository extends JRepository<InfraDictType, Long
                         .whereIf(StringUtils.hasText(reqVO.getName()),infraDictTypeTable.name().like(reqVO.getName()))
                         .whereIf(StringUtils.hasText(reqVO.getType()),infraDictTypeTable.type().like(reqVO.getType()))
                         .whereIf(reqVO.getCreateTime() != null,  () -> infraDictTypeTable.createTime().between(reqVO.getCreateTime()[0], reqVO.getCreateTime()[1]))
+                        .orderBy(infraDictTypeTable.createTime().desc())
                         .select(infraDictTypeTable)
         );
     }
