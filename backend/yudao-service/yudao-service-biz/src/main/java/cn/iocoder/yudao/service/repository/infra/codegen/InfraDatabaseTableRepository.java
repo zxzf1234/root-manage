@@ -20,9 +20,7 @@ public interface InfraDatabaseTableRepository extends JRepository<InfraDatabaseT
                         .whereIf(StringUtils.hasText(listReqVO.getName()), infraDatabaseTableTable.name().like(listReqVO.getName()))
                         .whereIf(StringUtils.hasText(listReqVO.getFirstModule()), infraDatabaseTableTable.firstModule().like(listReqVO.getFirstModule()))
                         .whereIf(StringUtils.hasText(listReqVO.getSecondModule()), infraDatabaseTableTable.secondModule().like(listReqVO.getSecondModule()))
-                        .orderBy(infraDatabaseTableTable.firstModule())
-                        .orderBy(infraDatabaseTableTable.secondModule())
-                        .orderBy(infraDatabaseTableTable.name())
+                        .orderBy(infraDatabaseTableTable.createTime().desc())
                         .select(infraDatabaseTableTable)
         );
 

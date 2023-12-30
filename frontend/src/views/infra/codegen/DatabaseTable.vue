@@ -135,6 +135,7 @@
 import * as CodegenApi from '@/api/infra/codegen'
 import DatabaseTableEdit from './DatabaseTableEdit.vue'
 import { ElTable } from 'element-plus'
+import { formatDate } from '@/utils/formatTime'
 
 const dbTableLoading = ref(true) // 数据源的加载中
 const databaseTableData = ref<CodegenApi.DatabaseTableVO[]>([]) // 表的列表
@@ -170,6 +171,11 @@ const databaseTableColumns: TableColumnList = [
   {
     label: '备注',
     prop: 'remark'
+  },
+  {
+    label: '创建时间',
+    prop: 'createTime',
+    formatter: ({ createTime }) => formatDate(createTime)
   }
 ]
 
