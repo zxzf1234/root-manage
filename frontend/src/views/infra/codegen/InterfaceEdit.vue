@@ -733,7 +733,7 @@ const open = async (type: string, id?: string) => {
   dialogVisible.value = true
   dialogTitle.value = t('action.' + type)
   formType.value = type
-  resetForm()
+
   // 修改时，设置数据
   if (id) {
     formLoading.value = true
@@ -744,6 +744,9 @@ const open = async (type: string, id?: string) => {
     }
   } else {
     formData.value.id = crypto.randomUUID()
+    const oldModuleId = formData.value.moduleId
+    resetForm()
+    formData.value.moduleId = oldModuleId
   }
   // 获得模块树
   await getTree()
