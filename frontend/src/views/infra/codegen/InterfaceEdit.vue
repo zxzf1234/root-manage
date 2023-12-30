@@ -651,7 +651,7 @@
           </el-table-column>
           <el-table-column label="继承类" min-width="20%">
             <template #default="scopeClass">
-              <el-input v-model="scopeClass.row.inheritClass" disabled />
+              <el-input v-model="scopeClass.row.inheritClass" disabled style="width: 70%" />
               <el-button @click="handleAddRelatedColumn(scopeClass)"> 添加 </el-button>
             </template>
           </el-table-column>
@@ -1115,7 +1115,7 @@ const handleBatchRelatedParam = (dbSelectdColumnList) => {
 const handleRelatedParam = (row) => {
   if (relateType == 1) {
     if (row.relatedType === '1') {
-      relatedRef.value.name = row.columnName
+      relatedRef.value.name = camelCase(row.columnName)
       relatedRef.value.variableType = row.javaType
       relatedRef.value.comment = row.columnComment
       relatedRef.value.example = row.example
