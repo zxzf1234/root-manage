@@ -1015,8 +1015,11 @@ public class CodegenEngine {
         {
             if(!column.getRelatedTable().isEmpty()) {
                 Optional<InfraDatabaseTable> opTable = infraDatabaseTableRepository.findByName(column.getRelatedTable());
+                if(!opTable.isPresent())
+                    return null;
                 column.setHumpRelatedTable(upperFirst(toCamelCase(column.getRelatedTable())))
-                        .setRelatedTableModuleName(opTable.get().secondModule());
+                        .setFirstModule(opTable.get().firstModule())
+                        .setSecondModule(opTable.get().secondModule());
             }
             if(Objects.equals(column.getJavaType(), "Long")
                     || Objects.equals(column.getJavaType(), "String")

@@ -36,7 +36,9 @@ public class CodegenDatabaseColumn {
 
     private String humpRelatedTable;
 
-    private String relatedTableModuleName;
+    private String firstModule;
+
+    private String secondModule;
 
     private List<Validation> validations;
 

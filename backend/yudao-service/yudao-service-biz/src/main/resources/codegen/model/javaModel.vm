@@ -3,7 +3,7 @@ package ${basePackage}.service.model.${table.firstModule}.${table.secondModule};
 import ${basePackage}.service.model.base.BaseEntity;
 #foreach ($column in $columns)
 #if (${column.relatedTable} !="")
-import ${basePackage}.service.model.${table.firstModule}.${column.relatedTableModuleName}.${column.humpRelatedTable};
+import ${basePackage}.service.model.${column.firstModule}.${column.secondModule}.${column.humpRelatedTable};
 #end
 #end
 import org.babyfish.jimmer.sql.*;
