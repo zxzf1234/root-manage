@@ -743,10 +743,10 @@ const open = async (type: string, id?: string) => {
       formLoading.value = false
     }
   } else {
-    formData.value.id = crypto.randomUUID()
     const oldModuleId = formData.value.moduleId
     resetForm()
     formData.value.moduleId = oldModuleId
+    formData.value.id = crypto.randomUUID()
   }
   // 获得模块树
   await getTree()
