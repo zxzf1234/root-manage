@@ -1136,6 +1136,7 @@ const handleRelatedParam = (row) => {
     relatedRef.value.relatedType = row.relatedType
   } else if (relateType == 2) {
     relatedRef.value.inheritClass = row.name
+    relatedRef.value.comment = row.comment
     relatedRef.value.inheritType = row.relatedType
   } else if (relateType == 3) {
     formData.value.inputExtendClass = row.name
