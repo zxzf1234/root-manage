@@ -188,6 +188,11 @@ public class DatabaseTableServiceImpl implements DatabaseTableService {
             updateSql.replace(updateSql.lastIndexOf(","), updateSql.lastIndexOf(",") + 1, ";") ;
         else
             updateSql = new StringBuilder("");
+        Optional<InfraInterfaceVoClass>  opUpdateVoClass = infraInterfaceVoClassRepository.findFirstByParentId(reqVo.getId().toString());
+        InfraInterfaceVoClass updateVoClass = InfraInterfaceVoClassDraft.$.produce(opUpdateVoClass.get(), draft -> {
+            draft.setComment(reqVo.getComment());
+        });
+        infraInterfaceVoClassRepository.update(updateVoClass);
         InfraDatabaseTable updateDatabaseTable = infraDatabaseTableRepository.findDetailById(reqVo.getId()).get();
         codegenEngine.tableUpdateExecute(updateDatabaseTable, reqVo, updateSql.toString());
         return tableOptional.get().id();

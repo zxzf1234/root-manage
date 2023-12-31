@@ -303,8 +303,6 @@ const subclassColumns: TableColumnList = [
 const getList = async () => {
   dbTableLoading.value = true
   try {
-    const dd = await CodegenApi.getInterfaceList(queryParams)
-    console.log(dd)
     interfaceData.value = await CodegenApi.getInterfaceList(queryParams)
   } finally {
     dbTableLoading.value = false

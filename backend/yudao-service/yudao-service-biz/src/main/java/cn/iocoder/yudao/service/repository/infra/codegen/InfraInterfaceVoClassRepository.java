@@ -24,4 +24,6 @@ public interface InfraInterfaceVoClassRepository extends JRepository<InfraInterf
     Optional<InfraInterfaceVoClass> findById(UUID id);
 
     Optional<InfraInterfaceVoClass> findByName(String name);
+
+    Optional<InfraInterfaceVoClass> findFirstByParentId(String parentId);
 }
