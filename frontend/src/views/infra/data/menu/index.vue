@@ -103,7 +103,7 @@
             v-hasPermi="['infra:data:menu:create']"
             link
             type="primary"
-            @click="openForm('create', undefined, scope.row.id)"
+            @click="openForm('create', undefined, scope.row.id, scope.row.type)"
           >
             新增
           </el-button>
@@ -167,8 +167,8 @@ const resetQuery = () => {
 
 /** 添加/修改操作 */
 const formRef = ref()
-const openForm = (type: string, id?: string, parentId?: string) => {
-  formRef.value.open(type, id, parentId)
+const openForm = (type: string, id?: string, parentId?: string, parentType?: number) => {
+  formRef.value.open(type, id, parentId, parentType)
 }
 
 /** 展开/折叠操作 */

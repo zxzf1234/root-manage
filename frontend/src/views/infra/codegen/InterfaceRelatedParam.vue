@@ -8,6 +8,7 @@
             <el-option v-if="(variableType & (1 << 1)) > 0" label="table字段" value="1" />
             <el-option v-if="(variableType & (1 << 2)) > 0" label="VO类" value="2" />
             <el-option v-if="(variableType & (1 << 3)) > 0" label="子类" value="3" />
+            <el-option v-if="(variableType & (1 << 4)) > 0" label="常用字段" value="4" />
           </el-select>
         </el-form-item>
         <template v-if="queryParams.variableType === '1'">
@@ -97,7 +98,7 @@
           <el-table-column label="模块" prop="moduleName" />
         </el-table>
       </template>
-      <template v-else>
+      <template v-else-if="queryParams.variableType === '3'">
         <el-table
           :data="dbSubclasses"
           height="700"
@@ -108,6 +109,19 @@
           <el-table-column label="子类名" prop="name" />
           <el-table-column label="子类描述" prop="comment" />
           <el-table-column label="继承类" prop="inheritClass" />
+        </el-table>
+      </template>
+      <template v-else>
+        <el-table
+          :data="dbCommonField"
+          height="700"
+          highlight-current-row
+          row-key="id"
+          @row-dblclick="handleCommonFieldDblclick"
+        >
+          <el-table-column label="字段名" prop="name" />
+          <el-table-column label="字段描述" prop="comment" />
+          <el-table-column label="java类型" prop="javaType" />
         </el-table>
       </template>
     </ContentWrap>
@@ -149,6 +163,10 @@ const dbLoading = ref(true) // 数据源的加载中
 const dbTableList = ref<CodegenApi.DatabaseTableVO[]>([]) // 表的列表
 const dbVOList = ref<CodegenApi.InterfaceVoClassVO[]>([]) // 接口的列表
 const dbSubclasses = ref<CodegenApi.InterfaceSubclassVO[]>([]) // 子类的列表
+const dbCommonField = ref([
+  { name: 'isSuccess', Comment: '是否成功', javaType: 'Boolean' },
+  { name: 'operateType', Comment: '操作方式', javaType: 'String' }
+])
 const queryParams = reactive({
   name: undefined,
   comment: undefined,
@@ -223,6 +241,10 @@ const handleVODblclick = (row) => {
 const handleSubclassDblclick = (row) => {
   row.relatedColumn = row.name
   row.relatedType = queryParams.variableType
+  emit('rowDblclick', row)
+  close()
+}
+const handleCommonFieldDblclick = (row) => {
   emit('rowDblclick', row)
   close()
 }

@@ -152,13 +152,15 @@ const formRules = reactive({
 const formRef = ref() // 表单 Ref
 
 /** 打开弹窗 */
-const open = async (type: string, id?: string, parentId?: string) => {
+const open = async (type: string, id?: string, parentId?: string, parentType?: number) => {
   dialogVisible.value = true
   dialogTitle.value = t('action.' + type)
   formType.value = type
   resetForm()
   if (parentId) {
     formData.value.parentId = parentId
+    if (parentType == 1) formData.value.type = 2
+    if (parentType == 2) formData.value.type = 3
   }
   // 修改时，设置数据
   if (id) {

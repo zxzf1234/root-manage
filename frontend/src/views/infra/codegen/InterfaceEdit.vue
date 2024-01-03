@@ -1029,14 +1029,14 @@ const handleAddRelatedColumn = (scope) => {
   let variableType = 0
   if (tabActiveName.value === 'inputParam') {
     Subclasses = formData.value.inputSubclasses
-    variableType = (1 << 1) | (1 << 2) | (1 << 3)
+    variableType = (1 << 1) | (1 << 2) | (1 << 3) | (1 << 4)
     relateType = 1
   } else if (tabActiveName.value === 'inputParamSubclass') {
     formData.value.inputSubclasses.forEach((item: CodegenApi.InterfaceSubclassVO) => {
       if (item.name != '' && item.name != relatedRef.value.name) Subclasses.push(item)
     })
     if (scope.row.hasOwnProperty('relatedColumn')) {
-      variableType = (1 << 1) | (1 << 2) | (1 << 3)
+      variableType = (1 << 1) | (1 << 2) | (1 << 3) | (1 << 4)
       relateType = 1
     } else {
       variableType = (1 << 2) | (1 << 3)
@@ -1044,13 +1044,13 @@ const handleAddRelatedColumn = (scope) => {
     }
   } else if (tabActiveName.value === 'outputParam') {
     Subclasses = formData.value.outputSubclasses
-    variableType = (1 << 1) | (1 << 2) | (1 << 3)
+    variableType = (1 << 1) | (1 << 2) | (1 << 3) | (1 << 4)
     relateType = 1
   } else {
     formData.value.outputSubclasses.forEach((item: CodegenApi.InterfaceSubclassVO) => {
       if (item.name != '' && item.name != relatedRef.value.name) Subclasses.push(item)
       if (scope.row.hasOwnProperty('relatedColumn')) {
-        variableType = (1 << 1) | (1 << 2) | (1 << 3)
+        variableType = (1 << 1) | (1 << 2) | (1 << 3) | (1 << 4)
         relateType = 1
       } else {
         variableType = (1 << 2) | (1 << 3)
@@ -1126,10 +1126,14 @@ const handleRelatedParam = (row) => {
       relatedRef.value.name = row.name
       relatedRef.value.variableType = 'VOClass'
       relatedRef.value.comment = row.comment
-    } else {
+    } else if (row.relatedType === '3') {
       relatedRef.value.name = row.name
       relatedRef.value.comment = row.comment
       relatedRef.value.variableType = 'Subclass'
+    } else {
+      relatedRef.value.name = row.name
+      relatedRef.value.comment = row.comment
+      relatedRef.value.variableType = row.javaType
     }
     relatedRef.value.relatedColumn = row.relatedColumn
     relatedRef.value.relatedId = row.id
