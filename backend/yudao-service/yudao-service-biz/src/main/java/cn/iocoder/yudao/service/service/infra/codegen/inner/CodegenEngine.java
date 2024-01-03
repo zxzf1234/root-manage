@@ -980,12 +980,14 @@ public class CodegenEngine {
         });
     }
 
-    public void tableUpdateExecute(InfraDatabaseTable table, DatabaseUpdateReq reqVo, String updateSql){
-        Map<String, Object> bindingMap = getTableBindingMap(table);
+    public void tableUpdateExecute(InfraDatabaseTable newTable, InfraDatabaseTable oldTable, String updateSql){
+        Map<String, Object> bindingMap = getTableBindingMap(newTable);
         generateUpdateTable(bindingMap);
         generateUpdateTable(updateSql);
-        if (!Objects.equals(table.name(), reqVo.getName())){
-            deleteOldTableFile(reqVo);
+        if (!Objects.equals(newTable.name(), oldTable.name())
+                || !Objects.equals(newTable.firstModule(), oldTable.firstModule())
+                || !Objects.equals(newTable.secondModule(), oldTable.secondModule())){
+            deleteOldTableFile(oldTable);
         }
     }
 
@@ -1004,8 +1006,22 @@ public class CodegenEngine {
 
     }
 
-    private void deleteOldTableFile(DatabaseUpdateReq reqVo){
+    private void deleteOldTableFile(InfraDatabaseTable oldTable){
+        Map<String, Object> bindingMap = getTableBindingMap(oldTable);
+        generateUpdateOldTable(bindingMap);
+    }
 
+    public void generateUpdateOldTable(Map<String, Object> bindingMap)
+    {
+        Map<String, String> templates = new LinkedHashMap<>(TABLE_UPDATE_TEMPLATES);
+        templates.forEach((vmPath, filePath) -> {
+            filePath = formatTableFilePath(filePath, bindingMap);
+
+            if(FileUtil.exist(filePath)) {
+                RuntimeUtil.execForStr("git rm -f " + filePath);
+            }
+
+        });
     }
 
     private Map<String, Object> getTableBindingMap(InfraDatabaseTable table){

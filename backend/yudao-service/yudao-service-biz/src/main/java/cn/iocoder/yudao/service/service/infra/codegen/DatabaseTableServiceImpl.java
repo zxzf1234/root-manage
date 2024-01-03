@@ -121,7 +121,7 @@ public class DatabaseTableServiceImpl implements DatabaseTableService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public UUID updateTable(DatabaseUpdateReq reqVo){
-        Optional<InfraDatabaseTable> tableOptional = infraDatabaseTableRepository.findById(reqVo.getId());
+        Optional<InfraDatabaseTable> tableOptional = infraDatabaseTableRepository.findDetailById(reqVo.getId());
         if (!tableOptional.isPresent())
             throw exception(CODEGEN_DATABASE_TABLE_NOT_EXISTS);
         List<DatabaseUpdateReq.Column> reqVoColumnList = reqVo.getColumns();
@@ -188,13 +188,21 @@ public class DatabaseTableServiceImpl implements DatabaseTableService {
             updateSql.replace(updateSql.lastIndexOf(","), updateSql.lastIndexOf(",") + 1, ";") ;
         else
             updateSql = new StringBuilder("");
+
+        if(!Objects.equals(tableOptional.get().name(), reqVo.getName()))
+            updateSql.append("ALTER TABLE ").append(tableOptional.get().name())
+                    .append(" RENAME TO ").append(reqVo.getName()).append(";\n");
+
+        // 更新VoClass
         Optional<InfraInterfaceVoClass>  opUpdateVoClass = infraInterfaceVoClassRepository.findFirstByParentId(reqVo.getId().toString());
         InfraInterfaceVoClass updateVoClass = InfraInterfaceVoClassDraft.$.produce(opUpdateVoClass.get(), draft -> {
             draft.setComment(reqVo.getComment());
         });
         infraInterfaceVoClassRepository.update(updateVoClass);
+
+        // 执行代码生成
         InfraDatabaseTable updateDatabaseTable = infraDatabaseTableRepository.findDetailById(reqVo.getId()).get();
-        codegenEngine.tableUpdateExecute(updateDatabaseTable, reqVo, updateSql.toString());
+        codegenEngine.tableUpdateExecute(updateDatabaseTable, tableOptional.get(), updateSql.toString());
         return tableOptional.get().id();
     }
 
