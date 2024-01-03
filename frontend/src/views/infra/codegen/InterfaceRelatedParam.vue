@@ -164,8 +164,8 @@ const dbTableList = ref<CodegenApi.DatabaseTableVO[]>([]) // 表的列表
 const dbVOList = ref<CodegenApi.InterfaceVoClassVO[]>([]) // 接口的列表
 const dbSubclasses = ref<CodegenApi.InterfaceSubclassVO[]>([]) // 子类的列表
 const dbCommonField = ref([
-  { name: 'isSuccess', Comment: '是否成功', javaType: 'Boolean' },
-  { name: 'operateType', Comment: '操作方式', javaType: 'String' }
+  { name: 'isSuccess', comment: '是否成功', javaType: 'Boolean' },
+  { name: 'operateType', comment: '操作方式', javaType: 'String' }
 ])
 const queryParams = reactive({
   name: undefined,
@@ -245,6 +245,7 @@ const handleSubclassDblclick = (row) => {
   close()
 }
 const handleCommonFieldDblclick = (row) => {
+  row.relatedType = queryParams.variableType
   emit('rowDblclick', row)
   close()
 }
