@@ -568,6 +568,10 @@ const dataTypeBlur = (scope) => {
     scope.row.javaType = 'Integer'
     scope.row.defaultValue = 0
   }
+  if (scope.row.dataType.includes('BIGINT')) {
+    scope.row.javaType = 'Long'
+    scope.row.defaultValue = 0
+  }
   if (scope.row.dataType.includes('FLOAT')) {
     scope.row.javaType = 'Long'
     scope.row.defaultValue = 0
