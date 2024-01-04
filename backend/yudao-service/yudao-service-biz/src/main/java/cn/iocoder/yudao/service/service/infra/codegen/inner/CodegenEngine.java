@@ -173,13 +173,16 @@ public class CodegenEngine {
     private void convertParams(List<CodegenInterfaceParam> params){
         for(CodegenInterfaceParam param : params)
         {
+            param.setClassType(0);
             if(Objects.equals(param.getVariableType(), "VOClass")) {
                 InfraInterfaceVoClass voClass = infraInterfaceVoClassRepository.findById(UUID.fromString(param.getRelatedId())).get();
                 param.setVariableType(voClass.name());
+                param.setClassType(1);
             }
             if(Objects.equals(param.getVariableType(), "Subclass")) {
                 InfraInterfaceSubclass subclass = infraInterfaceSubclassRepository.findById(UUID.fromString(param.getRelatedId())).get();
                 param.setVariableType(subclass.name());
+                param.setClassType(2);
             }
             param.setHumpName(toCamelCase(param.getName()));
         }

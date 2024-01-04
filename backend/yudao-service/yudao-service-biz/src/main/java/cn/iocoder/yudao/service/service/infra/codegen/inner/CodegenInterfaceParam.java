@@ -35,6 +35,8 @@ public class CodegenInterfaceParam {
 
     private List<Validation> validations;
 
+    private Integer classType;
+
     @Data
     public static class Validation extends InfraInterfaceValidationBase {
         private UUID id;
