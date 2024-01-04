@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 public class InfraDictNoBase {
 
     @Schema(description = "编码名称")
+    @Size(max = 50, message = "编码名称最大长度为50")
     private String keyName;
 
     @Schema(description = "前缀")

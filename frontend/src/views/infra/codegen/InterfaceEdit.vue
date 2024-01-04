@@ -292,7 +292,7 @@
                       <el-option label="Size" value="Size" />
                       <el-option label="Length" value="Length" />
                       <el-option label="Email" value="Email" />
-                      <el-option label="Mobile" value="Range" />
+                      <el-option label="Mobile" value="Mobile" />
                       <el-option label="InEnum" value="InEnum" />
                       <el-option label="URL" value="URL" />
                     </el-select>

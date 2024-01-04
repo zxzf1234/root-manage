@@ -81,7 +81,7 @@
                       <el-option label="Size" value="Size" />
                       <el-option label="Length" value="Length" />
                       <el-option label="Email" value="Email" />
-                      <el-option label="Mobile" value="Range" />
+                      <el-option label="Mobile" value="Mobile" />
                       <el-option label="InEnum" value="InEnum" />
                       <el-option label="URL" value="URL" />
                     </el-select>
@@ -563,6 +563,41 @@ const dataTypeBlur = (scope) => {
   if (scope.row.dataType.includes('CHAR') || scope.row.dataType.includes('TEXT')) {
     scope.row.javaType = 'String'
     scope.row.defaultValue = "''"
+    if (
+      scope.row.dataType.includes('(') &&
+      scope.row.dataType.includes(')') &&
+      scope.row.dataType.indexOf('(') < scope.row.dataType.indexOf(')')
+    ) {
+      let fieldLength = scope.row.dataType.substring(
+        scope.row.dataType.indexOf('(') + 1,
+        scope.row.dataType.indexOf(')')
+      )
+      console.log(fieldLength)
+      let isExists = false
+      if (scope.row.validations != undefined) {
+        scope.row.validations.forEach((element) => {
+          if (element.validation == 'Size') {
+            isExists = true
+            element.validationCondition = 'max = ' + fieldLength
+            element.message = scope.row.columnComment + '最大长度为' + fieldLength
+          }
+        })
+      }
+      if (isExists) {
+        columnTable.value?.toggleRowExpansion(columnCurrentRow.value, true)
+      } else {
+        const newValidation = {
+          id: crypto.randomUUID(),
+          parentId: columnCurrentRow.value.id,
+          validation: 'Size',
+          validationCondition: 'max = ' + fieldLength,
+          message: scope.row.columnComment + '最大长度为' + fieldLength,
+          operateType: 'new'
+        }
+        if (scope.row.validations == undefined) scope.row.value.validations = [newValidation]
+        else scope.row.validations.push(newValidation)
+      }
+    }
   }
   if (scope.row.dataType.includes('INT')) {
     scope.row.javaType = 'Integer'
