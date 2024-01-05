@@ -3,7 +3,7 @@
     <CropperAvatar
       ref="cropperRef"
       :btnProps="{ preIcon: 'ant-design:cloud-upload-outlined' }"
-      :showBtn="false"
+      :showBtn="isShowBtn"
       :value="avatar"
       width="120px"
       @change="handelUpload"
@@ -19,6 +19,9 @@ const props = defineProps({
 })
 const avatar = computed(() => {
   return props.img
+})
+const isShowBtn = computed(() => {
+  return props.img == '' ? true : false
 })
 
 const cropperRef = ref()
