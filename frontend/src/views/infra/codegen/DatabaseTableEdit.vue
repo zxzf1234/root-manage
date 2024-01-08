@@ -276,6 +276,7 @@
                 v-model="scope.row.required"
                 false-label="false"
                 true-label="true"
+                @change="clickRequired(scope)"
                 :disabled="
                   scope.row.columnName == 'id' ||
                   scope.row.columnName == 'create_time' ||
@@ -557,6 +558,69 @@ const open = async (type: string, id?: string) => {
   await getTableOptions('')
 }
 defineExpose({ open }) // 提供 open 方法，用于打开弹窗
+const clickRequired = (scope) => {
+  let validation = ''
+  if (scope.row.javaType == 'String') {
+    validation = 'NotBlank'
+  } else if (
+    scope.row.javaType == 'List<Long>' ||
+    scope.row.javaType == 'List<String>' ||
+    scope.row.javaType == 'Map<String, Object>'
+  ) {
+    validation = 'NotEmpty'
+  } else if (
+    scope.row.javaType == 'Long' ||
+    scope.row.javaType == 'Integer' ||
+    scope.row.javaType == 'Double' ||
+    scope.row.javaType == 'BigDecimal' ||
+    scope.row.javaType == 'LocalDateTime'
+  ) {
+    validation = 'NotNull'
+  } else {
+    return
+  }
+  if (scope.row.required == 'true') {
+    let isExists = false
+    if (scope.row.validations != undefined) {
+      scope.row.validations.forEach((element) => {
+        if (element.validation == validation) {
+          isExists = true
+        }
+      })
+    }
+    if (!isExists) {
+      const newValidation = {
+        id: crypto.randomUUID(),
+        parentId: scope.row.id,
+        validation: validation,
+        validationCondition: '',
+        message: scope.row.columnComment + '不能为空',
+        operateType: 'new'
+      }
+      columnTable.value?.toggleRowExpansion(scope.row, true)
+      if (scope.row.validations == undefined) scope.row.value.validations = [newValidation]
+      else scope.row.validations.push(newValidation)
+    }
+  } else {
+    let index = -1
+    if (scope.row.validations != undefined) {
+      let tmpIndex = 0
+      scope.row.validations.forEach((element) => {
+        if (element.validation == validation) {
+          index = tmpIndex
+        }
+        tmpIndex++
+      })
+      if (index > -1) {
+        if (formType.value === 'create') {
+          scope.row.validations.splice(index, 1)
+        } else {
+          scope.row.validations[index].operateType = 'delete'
+        }
+      }
+    }
+  }
+}
 
 const dataTypeBlur = (scope) => {
   scope.row.dataType = scope.row.dataType.toUpperCase().trim()
@@ -572,7 +636,6 @@ const dataTypeBlur = (scope) => {
         scope.row.dataType.indexOf('(') + 1,
         scope.row.dataType.indexOf(')')
       )
-      console.log(fieldLength)
       let isExists = false
       if (scope.row.validations != undefined) {
         scope.row.validations.forEach((element) => {
@@ -584,17 +647,17 @@ const dataTypeBlur = (scope) => {
         })
       }
       if (isExists) {
-        columnTable.value?.toggleRowExpansion(columnCurrentRow.value, true)
+        columnTable.value?.toggleRowExpansion(scope.row, true)
       } else {
         const newValidation = {
           id: crypto.randomUUID(),
-          parentId: columnCurrentRow.value.id,
+          parentId: scope.row.id,
           validation: 'Size',
           validationCondition: 'max = ' + fieldLength,
           message: scope.row.columnComment + '最大长度为' + fieldLength,
           operateType: 'new'
         }
-        if (scope.row.validations == undefined) scope.row.value.validations = [newValidation]
+        if (scope.row.validations == undefined) scope.row.validations = [newValidation]
         else scope.row.validations.push(newValidation)
       }
     }

@@ -196,7 +196,8 @@ public class DatabaseTableServiceImpl implements DatabaseTableService {
         // 更新VoClass
         Optional<InfraInterfaceVoClass>  opUpdateVoClass = infraInterfaceVoClassRepository.findFirstByParentId(reqVo.getId().toString());
         InfraInterfaceVoClass updateVoClass = InfraInterfaceVoClassDraft.$.produce(opUpdateVoClass.get(), draft -> {
-            draft.setComment(reqVo.getComment());
+            draft.setComment(reqVo.getComment())
+                    .setName(upperFirst(StrUtil.toCamelCase(reqVo.getName())) + "Base");
         });
         infraInterfaceVoClassRepository.update(updateVoClass);
 
