@@ -15,7 +15,13 @@
         <el-button @click="close">关闭</el-button>
       </el-form-item>
     </el-form>
-    <el-form ref="formRef" :model="formData" :rules="rules" label-width="120px">
+    <el-form
+      ref="formRef"
+      :model="formData"
+      :rules="rules"
+      label-width="120px"
+      v-loading="formLoading"
+    >
       <el-row>
         <el-col :span="12">
           <el-form-item label="表名称" prop="name">
@@ -57,6 +63,7 @@
           row-key="id"
           @current-change="handleCurrentColumnChange"
           :row-style="rowStyle"
+          v-loading="formLoading"
         >
           <el-table-column type="expand">
             <template #default="scope">
@@ -84,6 +91,8 @@
                       <el-option label="Mobile" value="Mobile" />
                       <el-option label="InEnum" value="InEnum" />
                       <el-option label="URL" value="URL" />
+                      <el-option label="DecimalMax" value="DecimalMax" />
+                      <el-option label="DecimalMin" value="DecimalMin" />
                     </el-select>
                   </template>
                 </el-table-column>
@@ -425,18 +434,25 @@ const tableOptions = ref<CodegenApi.DatabaseTableVO[]>([])
 
 const dictOptions = ref<DictApi.DictTypeVO[]>()
 
+const formLoading = ref(false) // 表单的加载中：1）修改时的数据加载；2）提交的按钮禁用
+
 /** 打开弹窗 */
 const open = async (type: string, id?: string) => {
   resetForm()
   formType.value = type
   if (id) {
-    tableId = id
-    const data = await CodegenApi.getDatabaseTable(id)
-    data.columns.forEach((item: CodegenApi.DatabaseColumnVO) => {
-      if (columnSort < item.sort && item.sort < 1000) columnSort = item.sort
-    })
-    formData.value = data
-    columnSort++
+    formLoading.value = true
+    try {
+      tableId = id
+      const data = await CodegenApi.getDatabaseTable(id)
+      formData.value = data
+      data.columns.forEach((item: CodegenApi.DatabaseColumnVO) => {
+        if (columnSort < item.sort && item.sort < 1000) columnSort = item.sort
+      })
+      columnSort++
+    } finally {
+      formLoading.value = false
+    }
   } else {
     tableId = crypto.randomUUID()
     formData.value = {
@@ -621,6 +637,32 @@ const clickRequired = (scope) => {
     }
   }
 }
+const autoAddValidation = (scope, fieldLength, validation, tip, validationCondition) => {
+  let isExists = false
+  if (scope.row.validations != undefined) {
+    scope.row.validations.forEach((element) => {
+      if (element.validation == validation) {
+        isExists = true
+        element.validationCondition = validationCondition
+        element.message = scope.row.columnComment + tip + fieldLength
+      }
+    })
+  }
+  if (isExists) {
+    columnTable.value?.toggleRowExpansion(scope.row, true)
+  } else {
+    const newValidation = {
+      id: crypto.randomUUID(),
+      parentId: scope.row.id,
+      validation: validation,
+      validationCondition: validationCondition,
+      message: scope.row.columnComment + tip + fieldLength,
+      operateType: 'new'
+    }
+    if (scope.row.validations == undefined) scope.row.validations = [newValidation]
+    else scope.row.validations.push(newValidation)
+  }
+}
 
 const dataTypeBlur = (scope) => {
   scope.row.dataType = scope.row.dataType.toUpperCase().trim()
@@ -636,53 +678,31 @@ const dataTypeBlur = (scope) => {
         scope.row.dataType.indexOf('(') + 1,
         scope.row.dataType.indexOf(')')
       )
-      let isExists = false
-      if (scope.row.validations != undefined) {
-        scope.row.validations.forEach((element) => {
-          if (element.validation == 'Size') {
-            isExists = true
-            element.validationCondition = 'max = ' + fieldLength
-            element.message = scope.row.columnComment + '最大长度为' + fieldLength
-          }
-        })
-      }
-      if (isExists) {
-        columnTable.value?.toggleRowExpansion(scope.row, true)
-      } else {
-        const newValidation = {
-          id: crypto.randomUUID(),
-          parentId: scope.row.id,
-          validation: 'Size',
-          validationCondition: 'max = ' + fieldLength,
-          message: scope.row.columnComment + '最大长度为' + fieldLength,
-          operateType: 'new'
-        }
-        if (scope.row.validations == undefined) scope.row.validations = [newValidation]
-        else scope.row.validations.push(newValidation)
-      }
+      let validation = 'Size'
+      autoAddValidation(scope, fieldLength, validation, '长度不能超过', 'max = ' + fieldLength)
     }
-  }
-  if (scope.row.dataType.includes('INT')) {
+  } else if (scope.row.dataType.includes('TINYINT')) {
     scope.row.javaType = 'Integer'
     scope.row.defaultValue = 0
-  }
-  if (scope.row.dataType.includes('BIGINT')) {
+    autoAddValidation(scope, '127', 'Range', '最大不能超过', 'max = 127')
+  } else if (scope.row.dataType.includes('INT')) {
+    scope.row.javaType = 'Integer'
+    scope.row.defaultValue = 0
+    autoAddValidation(scope, '100000000', 'Range', '最大不能超过', 'max = 100000000')
+  } else if (scope.row.dataType.includes('BIGINT')) {
     scope.row.javaType = 'Long'
     scope.row.defaultValue = 0
-  }
-  if (scope.row.dataType.includes('FLOAT')) {
+  } else if (scope.row.dataType.includes('FLOAT')) {
     scope.row.javaType = 'Long'
     scope.row.defaultValue = 0
-  }
-  if (scope.row.dataType.includes('DOUBLE')) {
+  } else if (scope.row.dataType.includes('DOUBLE')) {
     scope.row.javaType = 'Double'
     scope.row.defaultValue = 0
-  }
-  if (scope.row.dataType.includes('DECIMAL')) {
+  } else if (scope.row.dataType.includes('DECIMAL')) {
     scope.row.javaType = 'BigDecimal'
     scope.row.defaultValue = 0
-  }
-  if (scope.row.dataType.includes('DATE') || scope.row.dataType.includes('TIME'))
+    autoAddValidation(scope, '10000000000', 'DecimalMax', '最大不能超过', 'value = "10000000000"')
+  } else if (scope.row.dataType.includes('DATE') || scope.row.dataType.includes('TIME'))
     scope.row.javaType = 'LocalDateTime'
 }
 
