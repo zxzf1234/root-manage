@@ -80,6 +80,7 @@ public class CodegenEngine {
             .put(templatePath("interfaceModule/serviceImpl"), templatePath("interfaceModule/serviceImplPath"))
             .put(templatePath("interfaceModule/service"), templatePath("interfaceModule/servicePath"))
             .put(templatePath("interfaceModule/vo"), templatePath("interfaceModule/voPath"))
+            .put(templatePath("interfaceModule/errorCode"), templatePath("interfaceModule/errorCodePath"))
             .put(templatePath("interfaceModule/vueApi"), templatePath("interfaceModule/vueApiPath"))
             .build();
     private static final Map<String, String> GROUP_MODULE_TEMPLATES = MapUtil.<String, String>builder(new LinkedHashMap<>()) // 有序
@@ -850,7 +851,6 @@ public class CodegenEngine {
 
         bindingMap.put("sceneEnum", CodegenSceneEnum.valueOf("ADMIN"));
         bindingMap.put("moduleIndex", moduleCount);
-        List<String> parentNames = getParentName(module.id());
         bindingMap.put("module", module);
 
         return bindingMap;
@@ -952,6 +952,7 @@ public class CodegenEngine {
         }
         bindingMap.put("vueModulePath", vueModulePath);
         bindingMap.put("vueFileName", vueFileName);
+        bindingMap.put("moduleRootName", parentNames.get(parentNames.size()-1));
         return bindingMap;
     }
 
@@ -981,10 +982,18 @@ public class CodegenEngine {
             String content = "";
             if(!vmPath.isEmpty()) {
                 content = templateEngine.getTemplate(vmPath).render(bindingMap);
-                // 去除字段后面多余的 , 逗号
-                content = content.replaceAll(",\n}", "\n}").replaceAll(",\n  }", "\n  }");
+                if(vmPath.contains("errorCode")){
+                    StringBuilder fileContent = new StringBuilder(FileUtil.readUtf8String(newFile));
+                    int index = fileContent.lastIndexOf("\r\n}");
+                    int count = fileContent.toString().split("// ==========").length - 1;
+                    fileContent.insert(index, content);
+                    FileUtil.writeUtf8String(fileContent.toString(), newFile);
+                }else {
+                    // 去除字段后面多余的 , 逗号
+                    content = content.replaceAll(",\n}", "\n}").replaceAll(",\n  }", "\n  }");
 
-                FileUtil.writeUtf8String(content, newFile);
+                    FileUtil.writeUtf8String(content, newFile);
+                }
             }
         });
     }

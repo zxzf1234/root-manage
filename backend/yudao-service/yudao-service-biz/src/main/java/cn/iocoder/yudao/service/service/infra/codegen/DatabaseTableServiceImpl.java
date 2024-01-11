@@ -218,10 +218,10 @@ public class DatabaseTableServiceImpl implements DatabaseTableService {
     }
 
     private String newColumn(DatabaseUpdateReq.Column reqVoColumn){
-        InfraDatabaseColumn newColumn = CodegenConvert.INSTANCE.convert(reqVoColumn);
         List<InfraInterfaceValidation> validations = CodegenConvert.INSTANCE.convertList17(reqVoColumn.getValidations());
         infraInterfaceValidationRepository.saveAll(validations);
         reqVoColumn.setValidations(Collections.emptyList());
+        InfraDatabaseColumn newColumn = CodegenConvert.INSTANCE.convert(reqVoColumn);
         infraDatabaseColumnRepository.insert(newColumn);
         return "ADD COLUMN `" + newColumn.columnName() + "`"
                 + " " + newColumn.dataType()

@@ -16,6 +16,7 @@ public interface InfraInterfaceModuleRepository extends JRepository<InfraInterfa
     default List<InfraInterfaceModule> selectList(InterfaceModuleListReqVO reqVO){
         return sql().createQuery(infraInterfaceModuleTable)
                 .whereIf(StringUtils.hasText(reqVO.getName()), infraInterfaceModuleTable.name().like(reqVO.getName()))
+                .orderBy(infraInterfaceModuleTable.sort())
                 .select(infraInterfaceModuleTable)
                 .execute();
     }

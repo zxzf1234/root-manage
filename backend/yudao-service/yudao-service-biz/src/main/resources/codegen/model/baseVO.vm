@@ -5,6 +5,7 @@ import lombok.*;
 import java.util.*;
 import javax.validation.constraints.*;
 import org.hibernate.validator.constraints.*;
+import javax.validation.constraints.NotEmpty;
 #foreach ($column in $columns)
 #if (${column.javaType} == "BigDecimal")
 import java.math.BigDecimal;

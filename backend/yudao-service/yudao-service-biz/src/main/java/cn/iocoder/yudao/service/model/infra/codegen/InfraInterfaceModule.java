@@ -2,12 +2,8 @@ package cn.iocoder.yudao.service.model.infra.codegen;
 
 import cn.iocoder.yudao.service.model.base.BaseEntity;
 import org.babyfish.jimmer.sql.*;
-
-
 import org.babyfish.jimmer.sql.meta.UUIDIdGenerator;
 import java.util.UUID;
-
-
 @Entity
 public interface InfraInterfaceModule extends BaseEntity {
     @Id
@@ -21,5 +17,7 @@ public interface InfraInterfaceModule extends BaseEntity {
     String parentId();
 
     Integer type();
+
+    Integer sort();
 
 }

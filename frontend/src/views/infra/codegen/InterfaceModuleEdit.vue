@@ -28,6 +28,9 @@
       <el-form-item label="描述" prop="comment">
         <el-input v-model="formData.comment" placeholder="请输入描述" />
       </el-form-item>
+      <el-form-item label="排序" prop="sort">
+        <el-input v-model="formData.sort" placeholder="请输入排序" />
+      </el-form-item>
       <el-form-item label="菜单类型" prop="type">
         <el-radio-group v-model="formData.type">
           <el-radio-button label="0">分组</el-radio-button>>
@@ -56,7 +59,8 @@ const formData = ref({
   parentId: undefined,
   name: '',
   comment: undefined,
-  type: 0
+  type: 0,
+  sort: 0
 })
 const formRules = reactive({
   parentId: [{ required: true, message: '上级分组不能为空', trigger: 'blur' }],
@@ -120,7 +124,8 @@ const resetForm = () => {
     parentId: undefined,
     name: '',
     comment: undefined,
-    type: 0
+    type: 0,
+    sort: 0
   }
   formRef.value?.resetFields()
 }

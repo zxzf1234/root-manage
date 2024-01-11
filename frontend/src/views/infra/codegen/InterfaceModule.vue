@@ -40,6 +40,7 @@
       @row-dblclick="(row) => openForm('update', row.id)"
     >
       <el-table-column prop="name" label="名称" width="260" />
+      <el-table-column prop="sort" label="排序" width="120" />
       <el-table-column label="类型" width="120">
         <template #default="scope">
           {{ scope.row.type == 0 ? '分组' : '模块' }}
