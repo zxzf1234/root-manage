@@ -31,8 +31,6 @@ import cn.iocoder.yudao.service.framework.codegen.config.SchemaHistory;
 import cn.iocoder.yudao.service.model.infra.codegen.*;
 import cn.iocoder.yudao.service.model.infra.data.InfraDictType;
 import cn.iocoder.yudao.service.repository.infra.codegen.*;
-import cn.iocoder.yudao.service.vo.infra.codegen.database.DatabaseUpdateReq;
-import org.apache.velocity.runtime.directive.Foreach;
 import org.jsoup.internal.StringUtil;
 import org.springframework.stereotype.Component;
 
@@ -77,15 +75,15 @@ public class CodegenEngine {
             .build();
 
     private static final Map<String, String> MODULE_TEMPLATES = MapUtil.<String, String>builder(new LinkedHashMap<>()) // 有序
-            .put(templatePath("interfaceModule/controller"), javaControllerFilePath())
-            .put(templatePath("interfaceModule/convert"), javaModuleFilePath("convert", "${nameHumpUp}Convert"))
-            .put(templatePath("interfaceModule/serviceImpl"), javaModuleFilePath("service", "${nameHumpUp}ServiceImpl"))
-            .put(templatePath("interfaceModule/service"), javaModuleFilePath("service", "${nameHumpUp}Service"))
-            .put(templatePath("interfaceModule/vo"), javaModuleFilePath("vo", "${nameHump}/package-info"))
-            .put(templatePath("interfaceModule/vueApi"), vueFilePath("api/${modulePath}/${vueFileName}.ts"))
+            .put(templatePath("interfaceModule/controller"), templatePath("interfaceModule/controllerPath"))
+            .put(templatePath("interfaceModule/convert"), templatePath("interfaceModule/convertPath"))
+            .put(templatePath("interfaceModule/serviceImpl"), templatePath("interfaceModule/serviceImplPath"))
+            .put(templatePath("interfaceModule/service"), templatePath("interfaceModule/servicePath"))
+            .put(templatePath("interfaceModule/vo"), templatePath("interfaceModule/voPath"))
+            .put(templatePath("interfaceModule/vueApi"), templatePath("interfaceModule/vueApiPath"))
             .build();
-    private static final Map<String, String> ENUMS_MODULE_TEMPLATES = MapUtil.<String, String>builder(new LinkedHashMap<>()) // 有序
-            .put(templatePath("interfaceModule/errorCodeConstants"), javaApiFilePath("enums/${module.name}/ErrorCodeConstants.java"))
+    private static final Map<String, String> GROUP_MODULE_TEMPLATES = MapUtil.<String, String>builder(new LinkedHashMap<>()) // 有序
+            .put(templatePath("interfaceModule/errorCodeModule"), templatePath("interfaceModule/errorCodeModulePath"))
             .build();
 
     private static final Map<String, String> DICT_TEMPLATES = MapUtil.<String, String>builder(new LinkedHashMap<>()) // 有序
@@ -844,7 +842,7 @@ public class CodegenEngine {
         }
         int moduleCount = infraInterfaceModuleRepository.countByParentId(module.parentId());
         Map<String, Object> bindingMap = getEnumsModuleBindingMap(module,moduleCount);
-        generateEnumsModule(bindingMap, module);
+        generateEnumsModule(bindingMap);
     }
 
     private Map<String, Object> getEnumsModuleBindingMap(InfraInterfaceModule module, int moduleCount){
@@ -858,23 +856,11 @@ public class CodegenEngine {
         return bindingMap;
     }
 
-    private String formatEnumsModuleFilePath(String filePath, Map<String, Object> bindingMap, InfraInterfaceModule module) {
-        filePath = StrUtil.replace(filePath, "${basePackage}",
-                getStr(bindingMap, "basePackage").replaceAll("\\.", "/"));
-        // sceneEnum 包含的字段
-        CodegenSceneEnum sceneEnum = (CodegenSceneEnum) bindingMap.get("sceneEnum");
-        filePath = StrUtil.replace(filePath, "${sceneEnum.prefixClass}", sceneEnum.getPrefixClass());
-        filePath = StrUtil.replace(filePath, "${sceneEnum.basePackage}", sceneEnum.getBasePackage());
-        filePath = StrUtil.replace(filePath, "${module.name}", module.name());
-
-        return filePath;
-    }
-
-    public void generateEnumsModule(Map<String, Object> bindingMap, InfraInterfaceModule module)
+    public void generateEnumsModule(Map<String, Object> bindingMap)
     {
-        Map<String, String> templates = new LinkedHashMap<>(ENUMS_MODULE_TEMPLATES);
+        Map<String, String> templates = new LinkedHashMap<>(GROUP_MODULE_TEMPLATES);
         templates.forEach((vmPath, filePath) -> {
-            filePath = formatEnumsModuleFilePath(filePath, bindingMap, module);
+            filePath = templateEngine.getTemplate(filePath).render(bindingMap);
             File newFile;
             if(!FileUtil.exist(filePath)) {
                 newFile = FileUtil.touch(filePath);
@@ -921,8 +907,9 @@ public class CodegenEngine {
         Map<String, Object> newBindingMap = getModuleBindingMap(newModule);
         Map<String, String> templates = new LinkedHashMap<>(MODULE_TEMPLATES);
         templates.forEach((vmPath, filePath) -> {
-            String oldFilePath = formatModuleFilePath(filePath, oldBindingMap);
-            String newFilePath = formatModuleFilePath(filePath, newBindingMap);
+            String oldFilePath = templateEngine.getTemplate(filePath).render(oldBindingMap);
+            String newFilePath = templateEngine.getTemplate(filePath).render(newBindingMap);
+
             if(!FileUtil.exist(oldFilePath))
                 return;
             String content = FileUtil.readUtf8String(oldFilePath);
@@ -938,11 +925,10 @@ public class CodegenEngine {
         Map<String, Object> bindingMap = getModuleBindingMap(module);
         Map<String, String> templates = new LinkedHashMap<>(MODULE_TEMPLATES);
         templates.forEach((vmPath, filePath) -> {
-            filePath = formatModuleFilePath(filePath, bindingMap);
+            filePath = templateEngine.getTemplate(filePath).render(bindingMap);
             RuntimeUtil.execForStr("git rm -f " + filePath);
         });
     }
-
 
     private Map<String, Object> getModuleBindingMap(InfraInterfaceModule module){
         Map<String, Object> bindingMap = new HashMap<>(globalBindingMap);
@@ -983,7 +969,7 @@ public class CodegenEngine {
     {
         Map<String, String> templates = new LinkedHashMap<>(MODULE_TEMPLATES);
         templates.forEach((vmPath, filePath) -> {
-            filePath = formatModuleFilePath(filePath, bindingMap);
+            filePath = templateEngine.getTemplate(filePath).render(bindingMap);
             File newFile;
             if(!FileUtil.exist(filePath)) {
                 newFile = FileUtil.touch(filePath);
@@ -1001,24 +987,6 @@ public class CodegenEngine {
                 FileUtil.writeUtf8String(content, newFile);
             }
         });
-    }
-
-    private String formatModuleFilePath(String filePath, Map<String, Object> bindingMap) {
-        filePath = StrUtil.replace(filePath, "${basePackage}",
-                getStr(bindingMap, "basePackage").replaceAll("\\.", "/"));
-        // sceneEnum 包含的字段
-        CodegenSceneEnum sceneEnum = (CodegenSceneEnum) bindingMap.get("sceneEnum");
-        filePath = StrUtil.replace(filePath, "${sceneEnum.prefixClass}", sceneEnum.getPrefixClass());
-        filePath = StrUtil.replace(filePath, "${sceneEnum.basePackage}", sceneEnum.getBasePackage());
-        filePath = StrUtil.replace(filePath, "${nameHump}", getStr(bindingMap, "nameHump"));
-        filePath = StrUtil.replace(filePath, "${nameHumpUp}", getStr(bindingMap, "nameHumpUp"));
-        filePath = StrUtil.replace(filePath, "${modulePath}", getStr(bindingMap, "modulePath"));
-        filePath = StrUtil.replace(filePath, "${vueModulePath}", getStr(bindingMap, "vueModulePath"));
-        filePath = StrUtil.replace(filePath, "${vueFileName}", getStr(bindingMap, "vueFileName"));
-        InfraInterfaceModule module = (InfraInterfaceModule) bindingMap.get("module");
-        filePath = StrUtil.replace(filePath, "${module.name}", module.name());
-
-        return filePath;
     }
 
     public void generateInsertTable(Map<String, Object> bindingMap)
@@ -1398,10 +1366,6 @@ public class CodegenEngine {
 
     private static String javaBaseVOFilePath(String path) {
         return javaFilePath("vo/${table.firstModule}/${table.secondModule}/${sceneEnum.prefixClass}baseVO/${classNameHump}" + path) + ".java";
-    }
-
-    private static String javaControllerFilePath() {
-        return javaFilePath("controller/${sceneEnum.basePackage}/${modulePath}/${nameHumpUp}Controller")+ ".java";
     }
 
     private static String javaTableFilePath(String path, String file) {
