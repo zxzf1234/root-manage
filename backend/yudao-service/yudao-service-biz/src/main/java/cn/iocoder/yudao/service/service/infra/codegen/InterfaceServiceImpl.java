@@ -107,7 +107,8 @@ public class InterfaceServiceImpl implements InterfaceService{
         infraInterfaceParamRepository.saveAll(newParams);
         infraInterfaceValidationRepository.saveAll(newValidations);
         codegenEngine.interfaceInsert(newInterface.id());
-        return newInterface.id().toString();
+        throw exception(CODEGEN_INTERFACE_EXITS);
+//        return newInterface.id().toString();
     }
 
     @Override

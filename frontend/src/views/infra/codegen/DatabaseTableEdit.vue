@@ -685,13 +685,13 @@ const dataTypeBlur = (scope) => {
     scope.row.javaType = 'Integer'
     scope.row.defaultValue = 0
     autoAddValidation(scope, '127', 'Range', '最大不能超过', 'max = 127')
+  } else if (scope.row.dataType.includes('BIGINT')) {
+    scope.row.javaType = 'Long'
+    scope.row.defaultValue = 0
   } else if (scope.row.dataType.includes('INT')) {
     scope.row.javaType = 'Integer'
     scope.row.defaultValue = 0
     autoAddValidation(scope, '100000000', 'Range', '最大不能超过', 'max = 100000000')
-  } else if (scope.row.dataType.includes('BIGINT')) {
-    scope.row.javaType = 'Long'
-    scope.row.defaultValue = 0
   } else if (scope.row.dataType.includes('FLOAT')) {
     scope.row.javaType = 'Long'
     scope.row.defaultValue = 0

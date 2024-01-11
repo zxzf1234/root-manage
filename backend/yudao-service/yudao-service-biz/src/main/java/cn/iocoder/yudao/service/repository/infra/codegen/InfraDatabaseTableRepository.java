@@ -69,5 +69,14 @@ public interface InfraDatabaseTableRepository extends JRepository<InfraDatabaseT
 
     Optional<InfraDatabaseTable> findById(UUID id);
 
-    Optional<InfraDatabaseTable> findByName(String name);
+    default Optional<InfraDatabaseTable> findByName(String name){
+        return sql().createQuery(infraDatabaseTableTable)
+                .where(infraDatabaseTableTable.name().eq(name))
+                .select(infraDatabaseTableTable.fetch(InfraDatabaseTableFetcher.$.allTableFields()
+                        .columns(InfraDatabaseColumnFetcher.$.allTableFields())
+                        .indexes(InfraDatabaseIndexFetcher.$.allTableFields())
+                        .mappings(InfraDatabaseMappingFetcher.$.allTableFields())
+                ))
+                .fetchOptional();
+    };
 }

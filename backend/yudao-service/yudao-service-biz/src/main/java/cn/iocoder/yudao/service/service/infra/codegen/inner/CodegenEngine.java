@@ -32,6 +32,7 @@ import cn.iocoder.yudao.service.model.infra.codegen.*;
 import cn.iocoder.yudao.service.model.infra.data.InfraDictType;
 import cn.iocoder.yudao.service.repository.infra.codegen.*;
 import cn.iocoder.yudao.service.vo.infra.codegen.database.DatabaseUpdateReq;
+import org.apache.velocity.runtime.directive.Foreach;
 import org.jsoup.internal.StringUtil;
 import org.springframework.stereotype.Component;
 
@@ -40,6 +41,7 @@ import javax.annotation.Resource;
 import java.io.File;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static cn.hutool.core.map.MapUtil.getStr;
 import static cn.hutool.core.text.CharSequenceUtil.*;
@@ -93,15 +95,25 @@ public class CodegenEngine {
             .put(templatePath("dict/vueEnum"), vueFilePath("utils/constants.ts"))
             .build();
 
-    private static final Map<String, String> INTERFACE_TEMPLATES = MapUtil.<String, String>builder(new LinkedHashMap<>()) // 有序
+    private static final Map<String, String> INTERFACE_INSERT_TEMPLATES = MapUtil.<String, String>builder(new LinkedHashMap<>()) // 有序
+            .put(templatePath("interface/controller"), templatePath("interface/controllerPath"))
+            .put(templatePath("interface/convert"), templatePath("interface/convertPath"))
+            .put(templatePath("interface/serviceImpl"), templatePath("interface/serviceImplPath"))
+            .put(templatePath("interface/service"), templatePath("interface/servicePath"))
+            .put(templatePath("interface/voInput"), templatePath("interface/voInputPath"))
+            .put(templatePath("interface/voOutput"), templatePath("interface/voOutputPath"))
+            .put(templatePath("interface/repository"), templatePath("interface/repositoryPath"))
+            .put(templatePath("interface/vueApi"), templatePath("interface/vueApiPath"))
+            .build();
 
-            .put(templatePath("interface/controller"), javaFilePath("controller/${sceneEnum.basePackage}/${modulePath}/${moduleNameHumpUp}Controller")+ ".java")
-            .put(templatePath("interface/convert"), javaModuleFilePath("convert", "${moduleNameHumpUp}Convert"))
-            .put(templatePath("interface/serviceImpl"), javaModuleFilePath("service", "${moduleNameHumpUp}ServiceImpl"))
-            .put(templatePath("interface/service"), javaModuleFilePath("service", "${moduleNameHumpUp}Service"))
-            .put(templatePath("interface/voInput"), javaModuleFilePath("vo", "${moduleNameHump}/${moduleNameHumpUp}${interfaceNameHumpUp}Input"))
-            .put(templatePath("interface/voOutput"), javaModuleFilePath("vo", "${moduleNameHump}/${moduleNameHumpUp}${interfaceNameHumpUp}Output"))
-            .put(templatePath("interface/vueApi"), vueFilePath("api/${modulePath}/${vueFileName}.ts"))
+    private static final Map<String, String> INTERFACE_UPDATE_TEMPLATES = MapUtil.<String, String>builder(new LinkedHashMap<>()) // 有序
+            .put(templatePath("interface/controller"), templatePath("interface/controllerPath"))
+            .put(templatePath("interface/convert"), templatePath("interface/convertPath"))
+            .put(templatePath("interface/serviceImpl"), templatePath("interface/serviceImplPath"))
+            .put(templatePath("interface/service"), templatePath("interface/servicePath"))
+            .put(templatePath("interface/voInput"), templatePath("interface/voInputPath"))
+            .put(templatePath("interface/voOutput"), templatePath("interface/voOutputPath"))
+            .put(templatePath("interface/vueApi"), templatePath("interface/vueApiPath"))
             .build();
 
 
@@ -168,6 +180,8 @@ public class CodegenEngine {
         globalBindingMap.put("DictConvertClassName", DictConvert.class.getName());
         globalBindingMap.put("OperateLogClassName", OperateLog.class.getName());
         globalBindingMap.put("OperateTypeEnumClassName", OperateTypeEnum.class.getName());
+        globalBindingMap.put("javaPath", FileUtil.getParent(FileUtil.getAbsolutePath(""), 3));
+        globalBindingMap.put("vuePath", FileUtil.getParent(FileUtil.getAbsolutePath(""), 4));
     }
 
     private void convertParams(List<CodegenInterfaceParam> params){
@@ -234,6 +248,93 @@ public class CodegenEngine {
         return extendClassImport.toString();
     }
 
+    private String generateInterfaceRepositoryFunction(Map<String, Object> bindingMap){
+        InfraInterface infraInterface = (InfraInterface) bindingMap.get("interface");
+        InfraDatabaseTable table = (InfraDatabaseTable) bindingMap.get("table");
+        String moduleNameHumpUp = (String) bindingMap.get("moduleNameHumpUp");
+        String interfaceNameHump = (String) bindingMap.get("interfaceNameHump");
+        String inputClass = moduleNameHumpUp + upperFirst(interfaceNameHump) + "Input";
+        StringBuilder function = new StringBuilder();
+        List<InfraDatabaseIndex> indexList = table.indexes().stream().filter(index-> index.indexType().equals("UNIQUE INDEX")).collect(Collectors.toList());
+        if(indexList.isEmpty())
+            return "";
+        InfraDatabaseIndex uniqueIndex = indexList.get(0);
+        List<String> uniqueColumnName = uniqueIndex.columnNames();
+        StringBuilder columnFunction = new StringBuilder();
+        StringBuilder columnParam =new StringBuilder();
+        for(String columnName : uniqueColumnName){
+            if(columnFunction.toString().isEmpty()){
+                columnFunction.append(upperFirst(toCamelCase(columnName)));
+            }
+            else{
+                columnFunction.append("And").append(upperFirst(toCamelCase(columnName)));
+            }
+            List<InfraDatabaseColumn> columnList = table.columns().stream().filter(column -> column.columnName().equals(columnName)).collect(Collectors.toList());
+            if(columnParam.toString().isEmpty()){
+                columnParam.append(columnList.get(0).javaType()).append(" ").append(toCamelCase(columnName));
+            }else {
+                columnParam.append(", ").append(columnList.get(0).javaType()).append(" ").append(toCamelCase(columnName));
+            }
+        }
+        if(infraInterface.name().toLowerCase().contains("update")){
+            function.append("    Optional<").append(upperFirst(toCamelCase(table.name()))).append("> findFirstBy")
+                    .append(columnFunction).append("AndIdNot(")
+                    .append(columnParam)
+                    .append(", Long id")
+                    .append(");\r\n");
+        }
+        if(infraInterface.name().toLowerCase().contains("create")){
+            function.append("    Optional<").append(upperFirst(toCamelCase(table.name()))).append("> findFirstBy")
+                    .append(columnFunction)
+                    .append("(")
+                    .append(columnParam)
+                    .append(");\r\n");
+        }
+        String tableTable = toCamelCase(table.name()) + "Table";
+        StringBuilder where = new StringBuilder();
+        if(infraInterface.name().toLowerCase().contains("query")){
+            for(InfraInterfaceParam param : infraInterface.inputParams()) {
+                List<InfraDatabaseColumn> columnList = table.columns().stream().filter(column -> column.id().toString().equals(param.relatedId())).collect(Collectors.toList());
+                if(!columnList.isEmpty()){
+                    where.append("                .whereIf(");
+                    if(param.variableType().equals("String")){
+                        where.append("StringUtils.hasText(inputVO.get").append(upperFirst(param.name())).append("()), ")
+                                .append(tableTable).append(".").append(param.name()).append("().like(inputVO.get").append(upperFirst(param.name())).append("()))");
+                    }else {
+                        where.append("inputVO.get").append(upperFirst(param.name())).append("() != null, ");
+                        if(param.variableType().contains("[]")){
+                            where.append("() -> ").append(tableTable).append(".").append(param.name()).append("()")
+                                    .append(".between(inputVO.get").append(upperFirst(param.name())).append("()[0], inputVO.get").append(upperFirst(param.name())).append("()[1]))");
+                        }else{
+                            where.append(tableTable).append(".").append(param.name()).append("().eq(inputVO.get").append(upperFirst(param.name())).append("()))");
+                        }
+                    }
+                    where.append("\r\n");
+                }
+            }
+        }
+        if(infraInterface.name().toLowerCase().contains("pagequery")){
+            function.append("    default Page<").append(upperFirst(toCamelCase(table.name()))).append("> ")
+                    .append(infraInterface.name())
+                    .append("(") .append(inputClass)
+                    .append((" inputVO){\r\n        return pager(inputVO.getPageNo() - 1, inputVO.getPageSize()).execute(sql().createQuery("))
+                    .append(tableTable).append(")\r\n")
+                    .append(where)
+                    .append("                .orderBy(").append(tableTable).append(".id())\r\n")
+                    .append("                .select(").append(tableTable).append(")\r\n        );\r\n    }\r\n");
+        }
+        if(infraInterface.name().toLowerCase().contains("listquery")){
+            function.append("    default List<").append(upperFirst(toCamelCase(table.name()))).append("> ")
+                    .append(infraInterface.name()).append("(") .append(inputClass)
+                    .append((" inputVO){\r\n        return sql().createQuery(")).append(tableTable).append(")\r\n")
+                    .append(where)
+                    .append("                .orderBy(").append(tableTable).append(".id())\r\n")
+                    .append("                .select(").append(tableTable).append(").execute();\r\n    }\r\n");
+
+        }
+        return function.toString();
+    }
+
     private Map<String, Object> getInterfaceBindingMap(InfraInterface infraInterface){
         Map<String, Object> bindingMap = new HashMap<>(globalBindingMap);
         InfraInterfaceModule infraInterfaceModule =  infraInterfaceModuleRepository.findById(infraInterface.moduleId()).get();
@@ -291,6 +392,7 @@ public class CodegenEngine {
         List<String> convertImportList = new ArrayList<>();
         List<String> inputImportList = new ArrayList<>();
         List<String> outputImportList = new ArrayList<>();
+        List<String> repositoryList = new ArrayList<>();
 
         List<CodegenInterfaceSubclass> inputSubclasses = CodegenConvert.INSTANCE.convertList20(infraInterface.inputSubclasses());
         for(CodegenInterfaceSubclass inputSubclass : inputSubclasses){
@@ -314,6 +416,7 @@ public class CodegenEngine {
         }
         bindingMap.put("outputSubclasses", outputSubclasses);
         // src_extend_class
+        bindingMap.put("isGenerateRepository", false);
         String inputSrcExtendClass = "";
         String inputSrcExtendTableImport = "";
         String inputExtendClassImport = "";
@@ -335,8 +438,14 @@ public class CodegenEngine {
                         upperFirst(toCamelCase(inputSrcExtendClass))
                         + ";";
                 inputSrcExtendClass = upperFirst(toCamelCase(inputSrcExtendClass));
-
                 inputExtendClassImport = getExtendClassImport(infraInterface.inputExtendClass(), bindingMap);
+                if((infraInterface.name().toLowerCase().contains("update") || infraInterface.name().toLowerCase().contains("create"))
+                    && table.indexes().stream().anyMatch(index -> index.indexType().equals("UNIQUE INDEX"))){
+                    bindingMap.put("table", table);
+                    bindingMap.put("classNameHump", upperFirst(toCamelCase(table.name())));
+                    bindingMap.put("repositoryFunction", generateInterfaceRepositoryFunction(bindingMap));
+                    bindingMap.put("isGenerateRepository", true);
+                }
             }
             convertImportList.add(inputSrcExtendTableImport);
             inputImportList.add(inputExtendClassImport);
@@ -365,6 +474,12 @@ public class CodegenEngine {
             outputExtendClassImport = getExtendClassImport(infraInterface.outputExtendClass(), bindingMap);
             convertImportList.add(outputSrcExtendTableImport);
             outputImportList.add(outputExtendClassImport);
+            if(infraInterface.name().toLowerCase().contains("pagequery") || infraInterface.name().toLowerCase().contains("listquery")){
+                bindingMap.put("table", table);
+                bindingMap.put("classNameHump", upperFirst(toCamelCase(table.name())));
+                bindingMap.put("repositoryFunction", generateInterfaceRepositoryFunction(bindingMap));
+                bindingMap.put("isGenerateRepository", true);
+            }
         }
         bindingMap.put("outputSrcExtendClass", outputSrcExtendClass);
 
@@ -375,6 +490,8 @@ public class CodegenEngine {
         String inputRequest = "";
         String inputValid = "";
         String inputSingleParam = "";
+        bindingMap.put("isGenerateVoInput", false);
+        bindingMap.put("isGenerateVoOutput", false);
         if(Objects.equals(infraInterface.inputType(), "void")){
             input = "";
         }else if(Objects.equals(infraInterface.inputType(), "param")){
@@ -400,6 +517,7 @@ public class CodegenEngine {
             }
             inputImport.append(".").append(moduleNameHump).append(".").append(input).append(";");
             controllerImportList.add(inputImport.toString());
+
             convertImportList.add(inputImport.toString());
 
             if(Objects.equals(infraInterface.inputType(), "VOClassList"))
@@ -410,6 +528,11 @@ public class CodegenEngine {
                 inputRequest = "@RequestBody ";
             }
             inputValid = "@Valid ";
+            if(infraInterface.name().toLowerCase().contains("pagequery") || infraInterface.name().toLowerCase().contains("listquery")){
+                repositoryList.add(inputImport.toString());
+                bindingMap.put("isGenerateRepository", true);
+            }
+            bindingMap.put("isGenerateVoInput", true);
         }
         bindingMap.put("interfaceInput", input);
         bindingMap.put("interfaceInputVar", inputVar);
@@ -445,6 +568,8 @@ public class CodegenEngine {
             if(Objects.equals(infraInterface.outputType(), "VOClassPage")) {
                 output = "PageResult<" + output + ">";
             }
+
+            bindingMap.put("isGenerateVoOutput", true);
         }
         bindingMap.put("interfaceOutput", output);
 
@@ -452,6 +577,7 @@ public class CodegenEngine {
         bindingMap.put("convertImportList", convertImportList);
         bindingMap.put("inputImportList", inputImportList);
         bindingMap.put("outputImportList", outputImportList);
+        bindingMap.put("repositoryList", repositoryList);
 
         return bindingMap;
     }
@@ -472,19 +598,20 @@ public class CodegenEngine {
         List<String> convertImportList = Convert.toList(String.class, bindingMap.get("convertImportList"));
         List<String> inputImportList = Convert.toList(String.class, bindingMap.get("inputImportList"));
         List<String> outputImportList = Convert.toList(String.class, bindingMap.get("outputImportList"));
+        List<String> repositoryList = Convert.toList(String.class, bindingMap.get("repositoryList"));
 
 
-        Map<String, String> templates = new LinkedHashMap<>(INTERFACE_TEMPLATES);
+        Map<String, String> templates = new LinkedHashMap<>(INTERFACE_INSERT_TEMPLATES);
         for(Map.Entry<String, String> entry : templates.entrySet()){
             String vmPath = entry.getKey();
             String filePath = entry.getValue();
-            if (vmPath.contains("voInput")
-                    && (Objects.equals(infraInterface.inputType(), "void") || Objects.equals(infraInterface.inputType(), "param")))
+            if (vmPath.contains("voInput") && bindingMap.get("isGenerateVoInput").equals(false))
                 continue;
-            if (vmPath.contains("voOutput")
-                    && (Objects.equals(infraInterface.outputType(), "void") || Objects.equals(infraInterface.outputType(), "param")))
+            if (vmPath.contains("voOutput") && bindingMap.get("isGenerateVoOutput").equals(false))
                 continue;
-            filePath = formatInterfaceFilePath(filePath, bindingMap);
+            if (vmPath.contains("repository") && bindingMap.get("isGenerateRepository").equals(false))
+                continue;
+            filePath = templateEngine.getTemplate(filePath).render(bindingMap);
             File newFile;
             if(!FileUtil.exist(filePath)) {
                 if (vmPath.contains("voInput") || vmPath.contains("voOutput")){
@@ -504,7 +631,7 @@ public class CodegenEngine {
 
                 StringBuilder fileContent = new StringBuilder(FileUtil.readUtf8String(newFile));
                 int index = fileContent.lastIndexOf("\r\n}");
-                // vue前端代码直接追究 java代码要放到最后一个}前
+                // vue前端代码直接追加 java代码要放到最后一个}前
                 if(index > 0 && !vmPath.contains("vueApi")) {
                     fileContent.insert(index, interfaceContent);
                 }else {
@@ -522,6 +649,9 @@ public class CodegenEngine {
 
                 if(vmPath.contains("voOutput") && !outputImportList.isEmpty())
                     fileInsertImport(fileContent, outputImportList);
+
+                if(vmPath.contains("repository") && !repositoryList.isEmpty())
+                    fileInsertImport(fileContent, repositoryList);
 
                 FileUtil.writeUtf8String(fileContent.toString(), newFile);
 
@@ -545,13 +675,13 @@ public class CodegenEngine {
         List<String> oldInputImportList = Convert.toList(String.class, oldBindingMap.get("inputImportList"));
         List<String> oldOutputImportList = Convert.toList(String.class, oldBindingMap.get("outputImportList"));
 
-        Map<String, String> templates = new LinkedHashMap<>(INTERFACE_TEMPLATES);
+        Map<String, String> templates = new LinkedHashMap<>(INTERFACE_UPDATE_TEMPLATES);
         for(Map.Entry<String, String> entry : templates.entrySet()){
             String vmPath = entry.getKey();
             String filePath = entry.getValue();
             // 删除旧的传入传出参数类
             if (vmPath.contains("voInput")) {
-                filePath = formatInterfaceFilePath(filePath, oldBindingMap);
+                filePath = templateEngine.getTemplate(filePath).render(oldBindingMap);
                 if(FileUtil.exist(filePath)) {
                     RuntimeUtil.execForStr("git rm -f " + filePath);
                 }
@@ -559,14 +689,14 @@ public class CodegenEngine {
                     continue;
             }
             if (vmPath.contains("voOutput")) {
-                filePath = formatInterfaceFilePath(filePath, oldBindingMap);
+                filePath = templateEngine.getTemplate(filePath).render(oldBindingMap);
                 if(FileUtil.exist(filePath)) {
                     RuntimeUtil.execForStr("git rm -f " + filePath);
                 }
                 if(Objects.equals(newInterface.outputType(), "void") || Objects.equals(newInterface.outputType(), "param"))
                     continue;
             }
-            filePath = formatInterfaceFilePath(entry.getValue(), newBindingMap);
+            filePath = templateEngine.getTemplate(filePath).render(newBindingMap);
             File newFile;
             if(!FileUtil.exist(filePath)) {
                 if (vmPath.contains("voInput") || vmPath.contains("voOutput")){
@@ -703,24 +833,6 @@ public class CodegenEngine {
             if(fileContent.indexOf(strImport) < 0)
                 fileContent.insert(insertImportIndex, strImport + "\r\n");
         }
-    }
-
-    private String formatInterfaceFilePath(String filePath, Map<String, Object> bindingMap) {
-        filePath = StrUtil.replace(filePath, "${basePackage}",
-                getStr(bindingMap, "basePackage").replaceAll("\\.", "/"));
-        // sceneEnum 包含的字段
-        CodegenSceneEnum sceneEnum = (CodegenSceneEnum) bindingMap.get("sceneEnum");
-        filePath = StrUtil.replace(filePath, "${sceneEnum.prefixClass}", sceneEnum.getPrefixClass());
-        filePath = StrUtil.replace(filePath, "${sceneEnum.basePackage}", sceneEnum.getBasePackage());
-        filePath = StrUtil.replace(filePath, "${nameHump}", getStr(bindingMap, "nameHump"));
-        filePath = StrUtil.replace(filePath, "${moduleNameHump}", getStr(bindingMap, "moduleNameHump"));
-        filePath = StrUtil.replace(filePath, "${moduleNameHumpUp}", getStr(bindingMap, "moduleNameHumpUp"));
-        filePath = StrUtil.replace(filePath, "${interfaceNameHumpUp}", getStr(bindingMap, "interfaceNameHumpUp"));
-        filePath = StrUtil.replace(filePath, "${modulePath}", getStr(bindingMap, "modulePath"));
-        filePath = StrUtil.replace(filePath, "${vueModulePath}", getStr(bindingMap, "vueModulePath"));
-        filePath = StrUtil.replace(filePath, "${vueFileName}", getStr(bindingMap, "vueFileName"));
-
-        return filePath;
     }
 
     public void moduleEnumsInsertExecute(InfraInterfaceModule module){
