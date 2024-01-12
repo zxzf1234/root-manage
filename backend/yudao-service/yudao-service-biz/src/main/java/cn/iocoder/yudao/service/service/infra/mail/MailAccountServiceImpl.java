@@ -21,7 +21,7 @@ import java.util.Map;
 
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
 import static cn.iocoder.yudao.framework.common.util.collection.CollectionUtils.convertMap;
-import static cn.iocoder.yudao.service.enums.system.ErrorCodeConstants.*;
+import static cn.iocoder.yudao.service.enums.infra.ErrorCodeConstants.*;
 
 /**
  * 邮箱账号 Service 实现类

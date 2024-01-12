@@ -20,8 +20,8 @@ import javax.annotation.Resource;
 import java.util.List;
 
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
-import static cn.iocoder.yudao.service.enums.system.ErrorCodeConstants.SMS_CHANNEL_HAS_CHILDREN;
-import static cn.iocoder.yudao.service.enums.system.ErrorCodeConstants.SMS_CHANNEL_NOT_EXISTS;
+import static cn.iocoder.yudao.service.enums.infra.ErrorCodeConstants.SMS_CHANNEL_HAS_CHILDREN;
+import static cn.iocoder.yudao.service.enums.infra.ErrorCodeConstants.SMS_CHANNEL_NOT_EXISTS;
 
 /**
  * 短信渠道 Service 实现类

@@ -28,7 +28,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
-import static cn.iocoder.yudao.service.enums.system.ErrorCodeConstants.*;
+import static cn.iocoder.yudao.service.enums.infra.ErrorCodeConstants.*;
 
 /**
  * 短信发送 Service 发送的实现

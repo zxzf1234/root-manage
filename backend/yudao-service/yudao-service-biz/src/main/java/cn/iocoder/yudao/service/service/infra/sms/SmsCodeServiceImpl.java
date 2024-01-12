@@ -21,7 +21,7 @@ import java.util.Optional;
 import static cn.hutool.core.util.RandomUtil.randomInt;
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
 import static cn.iocoder.yudao.framework.common.util.date.DateUtils.isToday;
-import static cn.iocoder.yudao.service.enums.system.ErrorCodeConstants.*;
+import static cn.iocoder.yudao.service.enums.infra.ErrorCodeConstants.*;
 
 /**
  * 短信验证码 Service 实现类

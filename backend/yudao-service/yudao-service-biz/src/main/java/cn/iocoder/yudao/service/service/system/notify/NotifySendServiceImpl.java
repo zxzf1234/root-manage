@@ -14,6 +14,7 @@ import java.util.Objects;
 
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
 import static cn.iocoder.yudao.service.enums.system.ErrorCodeConstants.*;
+import static cn.iocoder.yudao.service.enums.infra.ErrorCodeConstants.*;
 
 /**
  * 站内信发送 Service 实现类

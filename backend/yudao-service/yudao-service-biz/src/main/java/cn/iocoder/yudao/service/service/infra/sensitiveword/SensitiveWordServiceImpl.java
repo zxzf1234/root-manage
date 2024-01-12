@@ -24,8 +24,8 @@ import java.util.*;
 
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
 import static cn.iocoder.yudao.framework.common.util.collection.CollectionUtils.filterList;
-import static cn.iocoder.yudao.service.enums.system.ErrorCodeConstants.SENSITIVE_WORD_EXISTS;
-import static cn.iocoder.yudao.service.enums.system.ErrorCodeConstants.SENSITIVE_WORD_NOT_EXISTS;
+import static cn.iocoder.yudao.service.enums.infra.ErrorCodeConstants.SENSITIVE_WORD_EXISTS;
+import static cn.iocoder.yudao.service.enums.infra.ErrorCodeConstants.SENSITIVE_WORD_NOT_EXISTS;
 
 /**
  * 敏感词 Service 实现类

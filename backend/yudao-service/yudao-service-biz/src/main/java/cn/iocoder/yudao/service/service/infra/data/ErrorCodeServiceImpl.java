@@ -25,8 +25,8 @@ import java.util.Optional;
 
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
 import static cn.iocoder.yudao.framework.common.util.collection.CollectionUtils.*;
-import static cn.iocoder.yudao.service.enums.system.ErrorCodeConstants.ERROR_CODE_DUPLICATE;
-import static cn.iocoder.yudao.service.enums.system.ErrorCodeConstants.ERROR_CODE_NOT_EXISTS;
+import static cn.iocoder.yudao.service.enums.infra.ErrorCodeConstants.ERROR_CODE_DUPLICATE;
+import static cn.iocoder.yudao.service.enums.infra.ErrorCodeConstants.ERROR_CODE_NOT_EXISTS;
 
 /**
  * 错误码 Service 实现类

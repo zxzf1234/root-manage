@@ -30,6 +30,7 @@ import java.util.Optional;
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
 import static cn.iocoder.yudao.framework.common.util.collection.CollectionUtils.convertSet;
 import static cn.iocoder.yudao.framework.common.util.json.JsonUtils.toJsonString;
+import static cn.iocoder.yudao.service.enums.infra.ErrorCodeConstants.*;
 import static cn.iocoder.yudao.service.enums.system.ErrorCodeConstants.*;
 
 /**

@@ -952,7 +952,10 @@ public class CodegenEngine {
         }
         bindingMap.put("vueModulePath", vueModulePath);
         bindingMap.put("vueFileName", vueFileName);
-        bindingMap.put("moduleRootName", parentNames.get(parentNames.size()-1));
+        String moduleRootName = parentNames.get(0);
+        Optional<InfraInterfaceModule> moduleRoot = infraInterfaceModuleRepository.findFirstByName(moduleRootName);
+        moduleRoot.ifPresent(infraInterfaceModule -> bindingMap.put("moduleRootIndex", String.format("%03d", infraInterfaceModule.sort())));
+        bindingMap.put("moduleRootName", moduleRootName);
         return bindingMap;
     }
 
@@ -986,8 +989,11 @@ public class CodegenEngine {
                     StringBuilder fileContent = new StringBuilder(FileUtil.readUtf8String(newFile));
                     int index = fileContent.lastIndexOf("\r\n}");
                     int count = fileContent.toString().split("// ==========").length - 1;
+                    content = content.replace("${moduleIndex}", String.format("%03d", count));
                     fileContent.insert(index, content);
-                    FileUtil.writeUtf8String(fileContent.toString(), newFile);
+                    System.out.println(fileContent);
+                    System.out.println(filePath);
+//                    FileUtil.writeUtf8String(fileContent.toString(), newFile);
                 }else {
                     // 去除字段后面多余的 , 逗号
                     content = content.replaceAll(",\n}", "\n}").replaceAll(",\n  }", "\n  }");

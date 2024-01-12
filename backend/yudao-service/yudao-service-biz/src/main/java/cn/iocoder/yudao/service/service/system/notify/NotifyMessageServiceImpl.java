@@ -24,7 +24,7 @@ import cn.iocoder.yudao.service.convert.system.notify.NotifyMessageConvert;
 import cn.iocoder.yudao.service.vo.system.notify.notifyMessage.*;
 
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
-import static cn.iocoder.yudao.service.enums.system.ErrorCodeConstants.*;
+import static cn.iocoder.yudao.service.enums.infra.ErrorCodeConstants.*;
 import static cn.iocoder.yudao.framework.security.core.util.SecurityFrameworkUtils.getLoginUserId;
 
 /**

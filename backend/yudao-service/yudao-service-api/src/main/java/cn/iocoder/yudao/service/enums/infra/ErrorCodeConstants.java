@@ -45,9 +45,18 @@ public interface ErrorCodeConstants {
     ErrorCode CODEGEN_DATABASE_MAPPING_NOT_EXITS = new ErrorCode(1001004019, "数据库表映射不存在");
     ErrorCode CODEGEN_DATABASE_TABLE_COLUMN_DISTINCT = new ErrorCode(1001004020, "数据库表字段重复");
 
-    // ========== 字典类型（测试）1001005000 ==========
-    ErrorCode TEST_DEMO_NOT_EXISTS = new ErrorCode(1001005000, "测试示例不存在");
-
+    // ========== 字典类型 1001005000 ==========
+    ErrorCode DICT_TYPE_NOT_EXISTS = new ErrorCode(1001005000, "当前字典类型不存在");
+    ErrorCode DICT_TYPE_NOT_ENABLE = new ErrorCode(1001005001, "字典类型不处于开启状态，不允许选择");
+    ErrorCode DICT_TYPE_NAME_DUPLICATE = new ErrorCode(1001005002, "已经存在该名字的字典类型");
+    ErrorCode DICT_TYPE_TYPE_DUPLICATE = new ErrorCode(1001005003, "已经存在该类型的字典类型");
+    ErrorCode DICT_TYPE_HAS_CHILDREN = new ErrorCode(1001005004, "无法删除，该字典类型还有字典数据");
+    ErrorCode DICT_TYPE_EXPORT_EXCEPTION = new ErrorCode(1001005005, "无法删除，该字典类型还有字典数据");
+    ErrorCode DICT_DATA_NOT_EXISTS = new ErrorCode(1001005101, "当前字典数据不存在");
+    ErrorCode DICT_DATA_NOT_ENABLE = new ErrorCode(1001005102, "字典数据({})不处于开启状态，不允许选择");
+    ErrorCode  DICT_DATA_VALUE_DUPLICATE= new ErrorCode(1001005203, "已经存在该值的字典数据");
+    ErrorCode DICT_DATA_EXPORT_EXCEPTION = new ErrorCode(1001005204, "字段导出异常");
+    
     // ========== 文件配置 1001006000 ==========
     ErrorCode FILE_CONFIG_NOT_EXISTS = new ErrorCode(1001006000, "文件配置不存在");
     ErrorCode FILE_CONFIG_DELETE_FAIL_MASTER = new ErrorCode(1001006001, "该文件配置不允许删除，原因：它是主配置，删除会导致无法上传文件");
@@ -56,22 +65,87 @@ public interface ErrorCodeConstants {
     ErrorCode DATA_SOURCE_CONFIG_NOT_EXISTS = new ErrorCode(1001007000, "数据源配置不存在");
     ErrorCode DATA_SOURCE_CONFIG_NOT_OK = new ErrorCode(1001007001, "数据源配置不正确，无法进行连接");
 
-    // ========== 字典类型 1001008000 ==========
-    ErrorCode DICT_TYPE_NOT_EXISTS = new ErrorCode(1001008000, "当前字典类型不存在");
-    ErrorCode DICT_TYPE_NOT_ENABLE = new ErrorCode(1001008001, "字典类型不处于开启状态，不允许选择");
-    ErrorCode DICT_TYPE_NAME_DUPLICATE = new ErrorCode(1001008002, "已经存在该名字的字典类型");
-    ErrorCode DICT_TYPE_TYPE_DUPLICATE = new ErrorCode(1001008003, "已经存在该类型的字典类型");
-    ErrorCode DICT_TYPE_HAS_CHILDREN = new ErrorCode(1001008004, "无法删除，该字典类型还有字典数据");
-    ErrorCode DICT_TYPE_EXPORT_EXCEPTION = new ErrorCode(1001008005, "无法删除，该字典类型还有字典数据");
-
-    ErrorCode DICT_DATA_NOT_EXISTS = new ErrorCode(1001008101, "当前字典数据不存在");
-    ErrorCode DICT_DATA_NOT_ENABLE = new ErrorCode(1001008102, "字典数据({})不处于开启状态，不允许选择");
-    ErrorCode  DICT_DATA_VALUE_DUPLICATE= new ErrorCode(1001008203, "已经存在该值的字典数据");
-    ErrorCode DICT_DATA_EXPORT_EXCEPTION = new ErrorCode(1001008204, "字段导出异常");
+    // ========== 字典编号 1001008000 ==========
+    ErrorCode DICT_NO_EXISTS = new ErrorCode(1001008000, "当前字典编号不存在");
+    ErrorCode DICT_NO_NOT_EXISTS = new ErrorCode(1001008001, "当前字典编号已存在");
 
     // ========== 字典编号 1001009000 ==========
-    ErrorCode DICT_NO_EXISTS = new ErrorCode(1001009000, "当前字典编号不存在");
-    ErrorCode DICT_NO_NOT_EXISTS = new ErrorCode(1001009001, "当前字典编号已存在");
 
+    // ========== 短信渠道 1001010000 ==========
+    ErrorCode SMS_CHANNEL_NOT_EXISTS = new ErrorCode(1001010000, "短信渠道不存在");
+    ErrorCode SMS_CHANNEL_DISABLE = new ErrorCode(1001010001, "短信渠道不处于开启状态，不允许选择");
+    ErrorCode SMS_CHANNEL_HAS_CHILDREN = new ErrorCode(1001010002, "无法删除，该短信渠道还有短信模板");
 
+    // ========== 短信模板 1001011000 ==========
+    ErrorCode SMS_TEMPLATE_NOT_EXISTS = new ErrorCode(1001011000, "短信模板不存在");
+    ErrorCode SMS_TEMPLATE_CODE_DUPLICATE = new ErrorCode(1001011001, "已经存在编码为【{}】的短信模板");
+
+    // ========== 短信发送 1001012000 ==========
+    ErrorCode SMS_SEND_MOBILE_NOT_EXISTS = new ErrorCode(1001012000, "手机号不存在");
+    ErrorCode SMS_SEND_MOBILE_TEMPLATE_PARAM_MISS = new ErrorCode(1001012001, "模板参数({})缺失");
+    ErrorCode SMS_SEND_TEMPLATE_NOT_EXISTS = new ErrorCode(1001012002, "短信模板不存在");
+
+    // ========== 短信验证码 1001013000 ==========
+    ErrorCode SMS_CODE_NOT_FOUND = new ErrorCode(1001013000, "验证码不存在");
+    ErrorCode SMS_CODE_EXPIRED = new ErrorCode(1001013001, "验证码已过期");
+    ErrorCode SMS_CODE_USED = new ErrorCode(1001013002, "验证码已使用");
+    ErrorCode SMS_CODE_NOT_CORRECT = new ErrorCode(1001013003, "验证码不正确");
+    ErrorCode SMS_CODE_EXCEED_SEND_MAXIMUM_QUANTITY_PER_DAY = new ErrorCode(1001013004, "超过每日短信发送数量");
+    ErrorCode SMS_CODE_SEND_TOO_FAST = new ErrorCode(1001013005, "短信发送过于频率");
+    ErrorCode SMS_CODE_IS_EXISTS = new ErrorCode(1001013006, "手机号已被使用");
+    ErrorCode SMS_CODE_IS_UNUSED = new ErrorCode(1001013007, "验证码未被使用");
+
+    // ========== 错误码模块 1001014000 ==========
+    ErrorCode ERROR_CODE_NOT_EXISTS = new ErrorCode(1001014000, "错误码不存在");
+    ErrorCode ERROR_CODE_DUPLICATE = new ErrorCode(1001014001, "已经存在编码为【{}】的错误码");
+
+    // ========== 社交用户 1001015000 ==========
+    ErrorCode SOCIAL_USER_AUTH_FAILURE = new ErrorCode(1001015000, "社交授权失败，原因是：{}");
+    ErrorCode SOCIAL_USER_UNBIND_NOT_SELF = new ErrorCode(1001015001, "社交解绑失败，非当前用户绑定");
+    ErrorCode SOCIAL_USER_NOT_FOUND = new ErrorCode(1001015002, "社交授权失败，找不到对应的用户");
+
+    // ========== 系统敏感词 1001016000 =========
+    ErrorCode SENSITIVE_WORD_NOT_EXISTS = new ErrorCode(1001016000, "系统敏感词在所有标签中都不存在");
+    ErrorCode SENSITIVE_WORD_EXISTS = new ErrorCode(1001016001, "系统敏感词已在标签中存在");
+
+    // ========== OAuth2 客户端 1001017000 =========
+    ErrorCode OAUTH2_CLIENT_NOT_EXISTS = new ErrorCode(1001017000, "OAuth2 客户端不存在");
+    ErrorCode OAUTH2_CLIENT_EXISTS = new ErrorCode(1001017001, "OAuth2 客户端编号已存在");
+    ErrorCode OAUTH2_CLIENT_DISABLE = new ErrorCode(1001017002, "OAuth2 客户端已禁用");
+    ErrorCode OAUTH2_CLIENT_AUTHORIZED_GRANT_TYPE_NOT_EXISTS = new ErrorCode(1001017003, "不支持该授权类型");
+    ErrorCode OAUTH2_CLIENT_SCOPE_OVER = new ErrorCode(1001017004, "授权范围过大");
+    ErrorCode OAUTH2_CLIENT_REDIRECT_URI_NOT_MATCH = new ErrorCode(1001017005, "无效 redirect_uri: {}");
+    ErrorCode OAUTH2_CLIENT_CLIENT_SECRET_ERROR = new ErrorCode(1001017006, "无效 client_secret: {}");
+
+    // ========== OAuth2 授权 1001018000 =========
+    ErrorCode OAUTH2_GRANT_CLIENT_ID_MISMATCH = new ErrorCode(1001018000, "client_id 不匹配");
+    ErrorCode OAUTH2_GRANT_REDIRECT_URI_MISMATCH = new ErrorCode(1001018001, "redirect_uri 不匹配");
+    ErrorCode OAUTH2_GRANT_STATE_MISMATCH = new ErrorCode(1001018002, "state 不匹配");
+    ErrorCode OAUTH2_GRANT_CODE_NOT_EXISTS = new ErrorCode(1001018003, "code 不存在");
+
+    // ========== OAuth2 授权 1001019000 =========
+    ErrorCode OAUTH2_CODE_NOT_EXISTS = new ErrorCode(1001019000, "code 不存在");
+    ErrorCode OAUTH2_CODE_EXPIRE = new ErrorCode(1001019001, "code 已过期");
+
+    // ========== 邮箱账号 1001020000 ==========
+    ErrorCode MAIL_ACCOUNT_NOT_EXISTS = new ErrorCode(1001020000, "邮箱账号不存在");
+    ErrorCode MAIL_ACCOUNT_RELATE_TEMPLATE_EXISTS = new ErrorCode(1001020001, "无法删除，该邮箱账号还有邮件模板");
+
+    // ========== 邮件模版 1001021000 ==========
+    ErrorCode MAIL_TEMPLATE_NOT_EXISTS = new ErrorCode(1001021000, "邮件模版不存在");
+    ErrorCode MAIL_TEMPLATE_CODE_EXISTS = new ErrorCode(1001021001, "邮件模版 code({}) 已存在");
+
+    // ========== 邮件发送 1001022000 ==========
+    ErrorCode MAIL_SEND_TEMPLATE_PARAM_MISS = new ErrorCode(1001022000, "模板参数({})缺失");
+    ErrorCode MAIL_SEND_MAIL_NOT_EXISTS = new ErrorCode(1001022000, "邮箱不存在");
+
+    // ========== 站内信模版 1001024000 ==========
+    ErrorCode NOTIFY_TEMPLATE_NOT_EXISTS = new ErrorCode(1001024000, "站内信模版不存在");
+    ErrorCode NOTIFY_TEMPLATE_CODE_DUPLICATE = new ErrorCode(1001024001, "已经存在编码为【{}】的站内信模板");
+
+    // ========== 站内信信息 1001025000 ==========
+    ErrorCode NOTIFY_MESSAGE_NOT_EXISTS = new ErrorCode(1001025000, "站内信消息不存在");
+
+    // ========== 站内信发送 1001026000 ==========
+    ErrorCode NOTIFY_SEND_TEMPLATE_PARAM_MISS = new ErrorCode(1001026000, "模板参数({})缺失");
 }

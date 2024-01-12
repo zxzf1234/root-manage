@@ -59,86 +59,9 @@ public interface ErrorCodeConstants {
     ErrorCode POST_NAME_DUPLICATE = new ErrorCode(1002005002, "已经存在该名字的岗位");
     ErrorCode POST_CODE_DUPLICATE = new ErrorCode(1002005003, "已经存在该标识的岗位");
 
-    // ========== 通知公告 1002008000 ==========
-    ErrorCode NOTICE_NOT_FOUND = new ErrorCode(1002008001, "当前通知公告不存在");
-
-    // ========== 短信渠道 1002011000 ==========
-    ErrorCode SMS_CHANNEL_NOT_EXISTS = new ErrorCode(1002011000, "短信渠道不存在");
-    ErrorCode SMS_CHANNEL_DISABLE = new ErrorCode(1002011001, "短信渠道不处于开启状态，不允许选择");
-    ErrorCode SMS_CHANNEL_HAS_CHILDREN = new ErrorCode(1002011002, "无法删除，该短信渠道还有短信模板");
-
-    // ========== 短信模板 1002012000 ==========
-    ErrorCode SMS_TEMPLATE_NOT_EXISTS = new ErrorCode(1002012000, "短信模板不存在");
-    ErrorCode SMS_TEMPLATE_CODE_DUPLICATE = new ErrorCode(1002012001, "已经存在编码为【{}】的短信模板");
-
-    // ========== 短信发送 1002013000 ==========
-    ErrorCode SMS_SEND_MOBILE_NOT_EXISTS = new ErrorCode(1002013000, "手机号不存在");
-    ErrorCode SMS_SEND_MOBILE_TEMPLATE_PARAM_MISS = new ErrorCode(1002013001, "模板参数({})缺失");
-    ErrorCode SMS_SEND_TEMPLATE_NOT_EXISTS = new ErrorCode(1002013002, "短信模板不存在");
-
-    // ========== 短信验证码 1002014000 ==========
-    ErrorCode SMS_CODE_NOT_FOUND = new ErrorCode(1002014000, "验证码不存在");
-    ErrorCode SMS_CODE_EXPIRED = new ErrorCode(1002014001, "验证码已过期");
-    ErrorCode SMS_CODE_USED = new ErrorCode(1002014002, "验证码已使用");
-    ErrorCode SMS_CODE_NOT_CORRECT = new ErrorCode(1002014003, "验证码不正确");
-    ErrorCode SMS_CODE_EXCEED_SEND_MAXIMUM_QUANTITY_PER_DAY = new ErrorCode(1002014004, "超过每日短信发送数量");
-    ErrorCode SMS_CODE_SEND_TOO_FAST = new ErrorCode(1002014005, "短信发送过于频率");
-    ErrorCode SMS_CODE_IS_EXISTS = new ErrorCode(1002014006, "手机号已被使用");
-    ErrorCode SMS_CODE_IS_UNUSED = new ErrorCode(1002014007, "验证码未被使用");
+    // ========== 通知公告 1002006000 ==========
+    ErrorCode NOTICE_NOT_FOUND = new ErrorCode(1002006001, "当前通知公告不存在");
 
 
-    // ========== 错误码模块 1002017000 ==========
-    ErrorCode ERROR_CODE_NOT_EXISTS = new ErrorCode(1002017000, "错误码不存在");
-    ErrorCode ERROR_CODE_DUPLICATE = new ErrorCode(1002017001, "已经存在编码为【{}】的错误码");
-
-    // ========== 社交用户 1002018000 ==========
-    ErrorCode SOCIAL_USER_AUTH_FAILURE = new ErrorCode(1002018000, "社交授权失败，原因是：{}");
-    ErrorCode SOCIAL_USER_UNBIND_NOT_SELF = new ErrorCode(1002018001, "社交解绑失败，非当前用户绑定");
-    ErrorCode SOCIAL_USER_NOT_FOUND = new ErrorCode(1002018002, "社交授权失败，找不到对应的用户");
-
-    // ========== 系统敏感词 1002019000 =========
-    ErrorCode SENSITIVE_WORD_NOT_EXISTS = new ErrorCode(1002019000, "系统敏感词在所有标签中都不存在");
-    ErrorCode SENSITIVE_WORD_EXISTS = new ErrorCode(1002019001, "系统敏感词已在标签中存在");
-
-    // ========== OAuth2 客户端 1002020000 =========
-    ErrorCode OAUTH2_CLIENT_NOT_EXISTS = new ErrorCode(1002020000, "OAuth2 客户端不存在");
-    ErrorCode OAUTH2_CLIENT_EXISTS = new ErrorCode(1002020001, "OAuth2 客户端编号已存在");
-    ErrorCode OAUTH2_CLIENT_DISABLE = new ErrorCode(1002020002, "OAuth2 客户端已禁用");
-    ErrorCode OAUTH2_CLIENT_AUTHORIZED_GRANT_TYPE_NOT_EXISTS = new ErrorCode(1002020003, "不支持该授权类型");
-    ErrorCode OAUTH2_CLIENT_SCOPE_OVER = new ErrorCode(1002020004, "授权范围过大");
-    ErrorCode OAUTH2_CLIENT_REDIRECT_URI_NOT_MATCH = new ErrorCode(1002020005, "无效 redirect_uri: {}");
-    ErrorCode OAUTH2_CLIENT_CLIENT_SECRET_ERROR = new ErrorCode(1002020006, "无效 client_secret: {}");
-
-    // ========== OAuth2 授权 1002021000 =========
-    ErrorCode OAUTH2_GRANT_CLIENT_ID_MISMATCH = new ErrorCode(1002021000, "client_id 不匹配");
-    ErrorCode OAUTH2_GRANT_REDIRECT_URI_MISMATCH = new ErrorCode(1002021001, "redirect_uri 不匹配");
-    ErrorCode OAUTH2_GRANT_STATE_MISMATCH = new ErrorCode(1002021002, "state 不匹配");
-    ErrorCode OAUTH2_GRANT_CODE_NOT_EXISTS = new ErrorCode(1002021003, "code 不存在");
-
-    // ========== OAuth2 授权 1002022000 =========
-    ErrorCode OAUTH2_CODE_NOT_EXISTS = new ErrorCode(1002022000, "code 不存在");
-    ErrorCode OAUTH2_CODE_EXPIRE = new ErrorCode(1002022001, "code 已过期");
-
-    // ========== 邮箱账号 1002023000 ==========
-    ErrorCode MAIL_ACCOUNT_NOT_EXISTS = new ErrorCode(1002023000, "邮箱账号不存在");
-    ErrorCode MAIL_ACCOUNT_RELATE_TEMPLATE_EXISTS = new ErrorCode(1002023001, "无法删除，该邮箱账号还有邮件模板");
-
-    // ========== 邮件模版 1002024000 ==========
-    ErrorCode MAIL_TEMPLATE_NOT_EXISTS = new ErrorCode(1002024000, "邮件模版不存在");
-    ErrorCode MAIL_TEMPLATE_CODE_EXISTS = new ErrorCode(1002024001, "邮件模版 code({}) 已存在");
-
-    // ========== 邮件发送 1002025000 ==========
-    ErrorCode MAIL_SEND_TEMPLATE_PARAM_MISS = new ErrorCode(1002025000, "模板参数({})缺失");
-    ErrorCode MAIL_SEND_MAIL_NOT_EXISTS = new ErrorCode(1002025000, "邮箱不存在");
-
-    // ========== 站内信模版 1002026000 ==========
-    ErrorCode NOTIFY_TEMPLATE_NOT_EXISTS = new ErrorCode(1002026000, "站内信模版不存在");
-    ErrorCode NOTIFY_TEMPLATE_CODE_DUPLICATE = new ErrorCode(1002026001, "已经存在编码为【{}】的站内信模板");
-
-    // ========== 站内信信息 1002027000 ==========
-    ErrorCode NOTIFY_MESSAGE_NOT_EXISTS = new ErrorCode(1002027000, "站内信消息不存在");
-
-    // ========== 站内信发送 1002028000 ==========
-    ErrorCode NOTIFY_SEND_TEMPLATE_PARAM_MISS = new ErrorCode(1002025000, "模板参数({})缺失");
 
 }

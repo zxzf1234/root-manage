@@ -1,1 +1,1 @@
-${javaPath}/yudao-service/yudao-service-biz/src/main/java/${basePackage.replaceAll("\.", "/")}/service/service/${modulePath}/${nameHump}/package-info.java
+${javaPath}/yudao-service/yudao-service-biz/src/main/java/${basePackage.replaceAll("\.", "/")}/service/service/${modulePath}/${nameHumpUp}Service.java
