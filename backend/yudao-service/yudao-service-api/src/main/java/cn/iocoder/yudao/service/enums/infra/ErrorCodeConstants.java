@@ -148,4 +148,6 @@ public interface ErrorCodeConstants {
 
     // ========== 站内信发送 1001026000 ==========
     ErrorCode NOTIFY_SEND_TEMPLATE_PARAM_MISS = new ErrorCode(1001026000, "模板参数({})缺失");
+
+
 }

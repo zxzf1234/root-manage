@@ -1,0 +1,2 @@
+update INFRA_INTERFACE_MODULE set UPDATER_ID = '1', DELETED = 0, NAME = 'system', COMMENT = '系统管理', PARENT_ID = '5aa5cea6-8dbe-47b3-8cfa-02c10c39bc12', TYPE = '0', SORT = '2' where ID = 'd6f6f5fc-0c97-4623-97c5-2cb2d3dad0ca';
+update INFRA_INTERFACE_MODULE set UPDATER_ID = '1', DELETED = 0, NAME = 'infra', COMMENT = '基础设施', PARENT_ID = '5aa5cea6-8dbe-47b3-8cfa-02c10c39bc12', TYPE = '0', SORT = '1' where ID = 'f2453ed8-4697-45e7-a5fd-ed87ca78f11b';

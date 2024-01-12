@@ -991,9 +991,7 @@ public class CodegenEngine {
                     int count = fileContent.toString().split("// ==========").length - 1;
                     content = content.replace("${moduleIndex}", String.format("%03d", count));
                     fileContent.insert(index, content);
-                    System.out.println(fileContent);
-                    System.out.println(filePath);
-//                    FileUtil.writeUtf8String(fileContent.toString(), newFile);
+                    FileUtil.writeUtf8String(fileContent.toString(), newFile);
                 }else {
                     // 去除字段后面多余的 , 逗号
                     content = content.replaceAll(",\n}", "\n}").replaceAll(",\n  }", "\n  }");

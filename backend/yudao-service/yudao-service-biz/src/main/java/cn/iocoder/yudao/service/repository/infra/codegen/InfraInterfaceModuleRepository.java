@@ -23,6 +23,7 @@ public interface InfraInterfaceModuleRepository extends JRepository<InfraInterfa
 
     default List<InfraInterfaceModule> selectSimpleList(){
         return sql().createQuery(infraInterfaceModuleTable)
+                .orderBy(infraInterfaceModuleTable.sort())
                 .select(infraInterfaceModuleTable)
                 .execute();
     }
