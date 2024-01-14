@@ -12,4 +12,5 @@ public interface ${classNameHump}Repository extends JRepository<${classNameHump}
 #set($Table = $classNameHump.substring(0,1).toLowerCase() + ${classNameHump.substring(1)})
     ${classNameHump}Table ${Table}Table = ${classNameHump}Table.$;
 
+
 }

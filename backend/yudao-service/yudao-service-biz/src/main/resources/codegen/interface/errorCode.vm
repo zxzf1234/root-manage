@@ -1,0 +1,2 @@
+    ErrorCode ${dupErrorCode} = new ErrorCode(${dupErrorNumber}, "${dupErrorMessage}");
+    ErrorCode ${notExistErrorCode} = new ErrorCode(${notExistErrorNumber}, "${notExistErrorMessage}");

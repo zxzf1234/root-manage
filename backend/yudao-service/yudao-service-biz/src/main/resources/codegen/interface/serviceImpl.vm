@@ -5,6 +5,6 @@
     #end
     public #if(${interface.method}=="download")void#else${interfaceOutput}#end ${interfaceNameHump}(#if(${interface.inputServlet})HttpServletResponse response#if(${interfaceInput} != ""),#end #end#if(${interfaceInput} != "")${interfaceInput} ${interfaceInputVar}#end) #if(${interface.method}=="download")throws IOException #end{
         #if(${interfaceOutput} != "void" && ${interface.method}!="download")
-        return null;
+$functionContent
         #end
     }

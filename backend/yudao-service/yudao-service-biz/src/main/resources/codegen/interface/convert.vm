@@ -3,15 +3,15 @@
     ${inputSrcExtendClass} ${interfaceNameHump}InputConvert(${interfaceInput} input);
 #elseif(${interface.inputType}=="VOClassList" && ${inputSrcExtendClass} != "")
 
-    List<${inputSrcExtendClass}> ${interfaceNameHump}ListInputConvert(${interfaceInput} input);
+    List<${inputSrcExtendClass}> ${interfaceNameHump}InputConvert(${interfaceInput} input);
 #end
 #if(${interface.outputType}=="VOClass" && ${outputSrcExtendClass} != "")
 
     ${interfaceOutput} ${interfaceNameHump}OutputConvert(${outputSrcExtendClass} output);
 #elseif(${interface.outputType}=="VOClassList" && ${outputSrcExtendClass} != "")
 
-    ${interfaceOutput} ${interfaceNameHump}ListOutputConvert(List<${outputSrcExtendClass}> output);
+    ${interfaceOutput} ${interfaceNameHump}OutputConvert(List<${outputSrcExtendClass}> output);
 #elseif(${interface.outputType}=="VOClassPage" && ${outputSrcExtendClass} != "")
 
-    ${interfaceOutput.replace("PageResult","List")} ${interfaceNameHump}PageOutputConvert(Page<${outputSrcExtendClass}> output);
+    ${interfaceOutput.replace("PageResult","List")} ${interfaceNameHump}OutputConvert(Page<${outputSrcExtendClass}> output);
 #end

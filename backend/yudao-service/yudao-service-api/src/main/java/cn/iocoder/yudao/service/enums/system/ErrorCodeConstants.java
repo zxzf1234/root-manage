@@ -61,6 +61,6 @@ public interface ErrorCodeConstants {
 
     // ========== 通知公告 1002006000 ==========
     ErrorCode NOTICE_NOT_FOUND = new ErrorCode(1002006001, "当前通知公告不存在");
-    
+
 
 }

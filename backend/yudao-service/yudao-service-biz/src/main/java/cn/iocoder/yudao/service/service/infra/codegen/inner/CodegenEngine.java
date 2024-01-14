@@ -25,13 +25,17 @@ import cn.iocoder.yudao.framework.mybatis.core.query.LambdaQueryWrapperX;
 import cn.iocoder.yudao.framework.operatelog.core.annotations.OperateLog;
 import cn.iocoder.yudao.framework.operatelog.core.enums.OperateTypeEnum;
 import cn.iocoder.yudao.service.convert.infra.codegen.CodegenConvert;
+import cn.iocoder.yudao.service.convert.infra.data.DictNoConvert;
 import cn.iocoder.yudao.service.enums.infra.codegen.CodegenSceneEnum;
 import cn.iocoder.yudao.service.framework.codegen.config.CodegenProperties;
 import cn.iocoder.yudao.service.framework.codegen.config.SchemaHistory;
 import cn.iocoder.yudao.service.model.infra.codegen.*;
+import cn.iocoder.yudao.service.model.infra.data.InfraDictNo;
 import cn.iocoder.yudao.service.model.infra.data.InfraDictType;
 import cn.iocoder.yudao.service.repository.infra.codegen.*;
+import cn.iocoder.yudao.service.vo.infra.data.dictNo.DictNoQueryOutput;
 import org.jsoup.internal.StringUtil;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -102,6 +106,7 @@ public class CodegenEngine {
             .put(templatePath("interface/voInput"), templatePath("interface/voInputPath"))
             .put(templatePath("interface/voOutput"), templatePath("interface/voOutputPath"))
             .put(templatePath("interface/repository"), templatePath("interface/repositoryPath"))
+            .put(templatePath("interface/errorCode"), templatePath("interface/errorCodePath"))
             .put(templatePath("interface/vueApi"), templatePath("interface/vueApiPath"))
             .build();
 
@@ -223,14 +228,8 @@ public class CodegenEngine {
             InfraDatabaseTable table = infraDatabaseTableRepository.findById(UUID.fromString(opVoClass.get().parentId())).get();
             extendClassImport = new StringBuilder("import " +
                     getStr(bindingMap, "basePackage").replaceAll("\\.", ".") +
-                    ".service.vo." +
-                    table.firstModule() +
-                    "." +
-                    table.secondModule() +
-                    ".baseVO." +
-                    upperFirst(toCamelCase((table.name()))) +
-                    "Base"+
-                    ";");
+                    ".service.vo." + table.firstModule() + "." + table.secondModule() + ".baseVO." +
+                    upperFirst(toCamelCase((table.name()))) + "Base"+ ";");
         }else{
             InfraInterface infraInterface = infraInterfaceRepository.findById(UUID.fromString(opVoClass.get().parentId())).get();
             List<String> parentNames = getParentName(Objects.requireNonNull(infraInterface.module()).id());
@@ -246,66 +245,282 @@ public class CodegenEngine {
         }
         return extendClassImport.toString();
     }
-
-    private String generateInterfaceRepositoryFunction(Map<String, Object> bindingMap){
+    private void generateInterfaceErrorCode(Map<String, Object> bindingMap){
         InfraInterface infraInterface = (InfraInterface) bindingMap.get("interface");
-        InfraDatabaseTable table = (InfraDatabaseTable) bindingMap.get("table");
+        InfraDatabaseTable inputTable = (InfraDatabaseTable) bindingMap.get("inputTable");
+        if(infraInterface.name().toLowerCase().contains("update")
+                || infraInterface.name().toLowerCase().contains("create")){
+            List<InfraDatabaseIndex> indexList = inputTable.indexes().stream().filter(
+                    index-> index.indexType().equals("UNIQUE INDEX")).collect(Collectors.toList()
+            );
+            if(indexList.isEmpty())
+                return;
+            InfraDatabaseIndex uniqueIndex = indexList.get(0);
+            String uniqueIndexName = uniqueIndex.indexName().substring(uniqueIndex.indexName().indexOf("_") + 1);
+            bindingMap.put("dupErrorCode", uniqueIndexName.toUpperCase() + "_DUPLICATE");
+            StringBuilder dupErrorMessage = new StringBuilder("");
+            List<String> uniqueColumnName = uniqueIndex.columnNames();
+            for(String columnName : uniqueColumnName){
+                List<InfraDatabaseColumn> columnList = inputTable.columns().stream().filter(
+                        column -> column.columnName().equals(columnName)).collect(Collectors.toList());
+                if(!columnList.isEmpty() && !Objects.equals(columnList.get(0).javaType(), "Long")){
+                    if(dupErrorMessage.toString().isEmpty()) {
+                        dupErrorMessage.append(columnList.get(0).columnComment());
+                    }else{
+                        dupErrorMessage.append("、").append(columnList.get(0).columnComment());
+                    }
+                }
+            }
+            dupErrorMessage.insert(0, "已经存在相同").append("的").append(inputTable.comment());
+            bindingMap.put("dupErrorMessage", dupErrorMessage.toString());
+        }else{
+            bindingMap.put("dupErrorCode", "");
+            bindingMap.put("dupErrorMessage", "");
+        }
+        if(infraInterface.name().toLowerCase().contains("delete")
+                || infraInterface.name().toLowerCase().contains("update")){
+
+            bindingMap.put("notExistErrorCode", inputTable.name().toUpperCase() + "_NOT_EXIST");
+            bindingMap.put("notExistErrorMessage", inputTable.comment() + "不存在");
+        }else{
+            bindingMap.put("notExistErrorCode", "");
+            bindingMap.put("notExistErrorMessage", "");
+        }
+
+    }
+
+    private void generateInterfaceFunctionContent(Map<String, Object> bindingMap){
+        StringBuilder functionContent = new StringBuilder();
+        InfraInterface infraInterface = (InfraInterface) bindingMap.get("interface");
+        InfraDatabaseTable inputTable = (InfraDatabaseTable) bindingMap.get("inputTable");
+        InfraDatabaseColumn inputTableIdColumn = null;
+        String inputTableName = null, inputRepositoryName = null;
+        if(infraInterface.name().toLowerCase().contains("create")
+                || infraInterface.name().toLowerCase().contains("update")
+                ||infraInterface.name().toLowerCase().contains("delete")){
+            inputTableIdColumn = inputTable.columns().stream().filter(column -> column.columnName().equals("id"))
+                    .collect(Collectors.toList()).get(0);
+            inputTableName = upperFirst(toCamelCase(inputTable.name()));
+            inputRepositoryName = toCamelCase(inputTable.name()) + "Repository";
+        }
+
+        InfraDatabaseTable outputTable = (InfraDatabaseTable) bindingMap.get("outputTable");
+        String outputTableName = null, outputRepositoryName = null;
+        if(infraInterface.name().toLowerCase().contains("query")){
+             outputTableName = upperFirst(toCamelCase(outputTable.name()));
+             outputRepositoryName = toCamelCase(outputTable.name()) + "Repository";
+        }
+
+        String convertClass = bindingMap.get("moduleNameHumpUp") + "Convert";
+
+        String convertName = bindingMap.get("interfaceNameHump").toString();
+        if(infraInterface.name().toLowerCase().contains("create")){
+            String dupErrorCode = bindingMap.get("dupErrorCode").toString();
+            String repositoryDuplicateFunctionName = bindingMap.get("repositoryDuplicateFunctionName").toString();
+            String repositoryDuplicateFunctionParams = bindingMap.get("repositoryDuplicateFunctionParams").toString();
+            convertName = convertName + "InputConvert";
+            if(!repositoryDuplicateFunctionName.isEmpty()) {
+                //生成代码 Optional<InfraDictNo> optionalDuplicateInfraDictNo = infraDictNoRepository.findDictNo(inputVO.getDictNo());
+                functionContent.append("        Optional<").append(inputTableName).append(">").append(" optionalDuplicate")
+                        .append(inputTableName).append(" = ").append(inputRepositoryName).append(".")
+                        .append(repositoryDuplicateFunctionName).append("(").append(repositoryDuplicateFunctionParams).append(");\r\n");
+                //生成代码 if(!optionalDuplicateInfraDictNo.isPresent())
+                functionContent.append("        if(!optionalDuplicate").append(inputTableName).append(".isPresent()){\r\n");
+                //生成代码 throw exception(DICT_NO_DUPLICATE);
+                functionContent.append("            throw exception(").append(dupErrorCode).append(");\r\n");
+                //生成代码 }
+                functionContent.append("        }\r\n");
+            }
+            //生成代码 InfraDictNo newInfraDictNo = DictNoConvert.INSTANCE.createInputConvert(inputVO);
+            functionContent.append("        ").append(inputTableName).append(" new").append(inputTableName).append(" = ")
+                    .append(convertClass).append(".INSTANCE.").append(convertName).append("(inputVO);\r\n");
+            //生成代码 InfraDictNo newInfraDictNo = InfraDictNoRepository.insert(newInfraDictNo);
+            functionContent.append("        ").append(" new").append(inputTableName).append(" = ")
+                    .append(inputRepositoryName).append(".insert(new").append(inputTableName).append(");\r\n");
+            if(infraInterface.outputType().equals("param")){
+                InfraInterfaceParam firstOutputParam = infraInterface.outputParams().get(0);
+                if(Objects.equals(inputTableIdColumn.javaType(), firstOutputParam.variableType())){
+                    //生成代码 return newInfraDictNo.id();
+                    functionContent.append("        return new").append(inputTableName).append(".id();\r\n");
+                }else if(firstOutputParam.variableType().equals("Boolean")){
+                    //生成代码 return true;
+                    functionContent.append("        return true;");
+                }else{
+                    //生成代码 return null;
+                    functionContent.append("        return null;");
+                }
+            }else {
+                //生成代码 return null;
+                functionContent.append("        return null;");
+            }
+
+        }else if(infraInterface.name().toLowerCase().contains("update")){
+            convertName = convertName + "InputConvert";
+            String dupErrorCode = bindingMap.get("dupErrorCode").toString();
+            String notExistErrorCode = bindingMap.get("notExistErrorCode").toString();
+            String repositoryDuplicateFunctionName = bindingMap.get("repositoryDuplicateFunctionName").toString();
+            String repositoryDuplicateFunctionParams = bindingMap.get("repositoryDuplicateFunctionParams").toString();
+            if(!repositoryDuplicateFunctionName.isEmpty()) {
+                //生成代码 Optional<InfraDictNo> optionalDuplicateInfraDictNo =
+                // infraDictNoRepository.findDictNoAndIdNot(inputVO.getDictNo(), inputVO.getId());
+                functionContent.append("        Optional<").append(inputTableName).append(">").append(" optionalDuplicate")
+                        .append(inputTableName).append(" = ").append(inputRepositoryName).append(".")
+                        .append(repositoryDuplicateFunctionName).append("(").append(repositoryDuplicateFunctionParams).append(");\r\n");
+                //生成代码 if(!opDuplicateInfraDictNo.isPresent())
+                functionContent.append("        if(!optionalDuplicate").append(inputTableName).append(".isPresent()){\r\n");
+                //生成代码 throw exception(DICT_NO_DUPLICATE);
+                functionContent.append("            throw exception(").append(dupErrorCode).append(");\r\n");
+                //生成代码 }
+                functionContent.append("        }\r\n");
+            }
+            //生成代码 Optional<InfraDictNo> optionalOldInfraDictNo = infraDictNoRepository.findById(inputVO.getId());
+            functionContent.append("        Optional<").append(inputTableName).append(">").append(" optionalOld")
+                    .append(inputTableName).append(" = ").append(inputRepositoryName).append(".findById(inputVO.getId());\r\n");
+            //生成代码 if(!optionalOldInfraDictNo.isPresent())
+            functionContent.append("        if(!optionalOld").append(inputTableName).append(".isPresent()){\r\n");
+            //生成代码 throw exception(DICT_NO_EXIST);
+            functionContent.append("            throw exception(").append(notExistErrorCode).append(");\r\n");
+            //生成代码 }
+            functionContent.append("        }\r\n");
+            //生成代码 InfraDictNo updateInfraDictNo = DictNoConvert.INSTANCE.createInputConvert(inputVO);
+            functionContent.append("        ").append(inputTableName).append(" update").append(inputTableName).append(" = ")
+                    .append(convertClass).append(".INSTANCE.").append(convertName).append("(inputVO);\r\n");
+            //生成代码  InfraDictNoRepository.insert(newInfraDictNo);
+            functionContent.append("        ").append(inputRepositoryName) .append(".update(update").append(inputTableName).append(");\n");
+            InfraInterfaceParam firstOutputParam = infraInterface.outputParams().get(0);
+            if(firstOutputParam.variableType().equals("Boolean")){
+                //生成代码 return true;
+                functionContent.append("        return true;");
+            }else{
+                //生成代码 return null;
+                functionContent.append("        return null;");
+            }
+
+        }else if(infraInterface.name().toLowerCase().contains("delete")){
+            String notExistErrorCode = bindingMap.get("notExistErrorCode").toString();
+            //生成代码 Optional<InfraDictNo> optionalDeleteInfraDictNo = infraDictNoRepository.findById(id);
+            functionContent.append("        Optional<").append(inputTableName).append(">").append(" optionalDelete").append(inputTableName)
+                    .append(" = ").append(inputRepositoryName).append(".findById(id);\r\n");
+            //生成代码 if(!optionalOldInfraDictNo.isPresent())
+            functionContent.append("        if(!optionalDelete").append(inputTableName).append(".isPresent()){\r\n");
+            //生成代码 throw exception(DICT_NO_EXIST);
+            functionContent.append("            throw exception(").append(notExistErrorCode).append(");\r\n");
+            //生成代码 }
+            functionContent.append("        }\r\n");
+            InfraInterfaceParam firstOutputParam = infraInterface.outputParams().get(0);
+            if(firstOutputParam.variableType().equals("Boolean")){
+                //生成代码 return true;
+                functionContent.append("        return true;");
+            }else{
+                //生成代码 return null;
+                functionContent.append("        return null;");
+            }
+        }else if(infraInterface.name().toLowerCase().contains("listquery")){
+            convertName = convertName + "OutputConvert";
+            //生成代码 List<InfraDictNo> listInfraDictNo = infraDictNoRepository.listQuery(inputVO);
+            functionContent.append("        List<").append(outputTableName).append("> list").append(outputTableName)
+                    .append(" = ").append(outputRepositoryName).append(".").append(infraInterface.name()).append("(inputVO);\n");
+            //生成代码 return DictNoConvert.INSTANCE.createInputConvert(listInfraDictNo);
+            functionContent.append("        return ").append(convertClass).append(".INSTANCE.").append(convertName)
+                    .append("(list").append(outputTableName).append(");\n");
+        }else if(infraInterface.name().toLowerCase().contains("pagequery")){
+            convertName = convertName + "OutputConvert";
+            String moduleNameHumpUp = (String) bindingMap.get("moduleNameHumpUp");
+            String interfaceNameHump = (String) bindingMap.get("interfaceNameHump");
+            String interfaceOutput = moduleNameHumpUp + upperFirst(interfaceNameHump) + "Output";
+
+            //生成代码 Page<InfraDictNo> pageNo = infraDictNoRepository.query(inputVO);
+            functionContent.append("        Page<").append(outputTableName).append("> page").append(outputTableName)
+                    .append(" = ").append(outputRepositoryName).append(".").append(infraInterface.name()).append("(inputVO);\r\n");
+            //生成代码 List<DictNoQueryOutput> listNo = DictNoConvert.INSTANCE.queryPageOutputConvert(pageNo);
+            functionContent.append("        List<").append(interfaceOutput).append("> list").append(outputTableName)
+                    .append(" = ").append(convertClass).append(".INSTANCE.").append(convertName)
+                    .append("(page").append(outputTableName).append(");\r\n");
+            //生成代码 return new PageResult<>(listNo, pageNo.getTotalElements());
+            functionContent.append("        return new PageResult<>(list").append(outputTableName).append(", page")
+                    .append(outputTableName).append(".getTotalElements());");
+        }
+        if(!functionContent.toString().isEmpty()) {
+            bindingMap.put("functionContent", functionContent.toString());
+        }
+    }
+
+    private void generateInterfaceRepositoryFunction(Map<String, Object> bindingMap){
+        InfraInterface infraInterface = (InfraInterface) bindingMap.get("interface");
+        InfraDatabaseTable inputTable = (InfraDatabaseTable) bindingMap.get("inputTable");
+        InfraDatabaseTable outputTable = (InfraDatabaseTable) bindingMap.get("outputTable");
         String moduleNameHumpUp = (String) bindingMap.get("moduleNameHumpUp");
         String interfaceNameHump = (String) bindingMap.get("interfaceNameHump");
         String inputClass = moduleNameHumpUp + upperFirst(interfaceNameHump) + "Input";
+        bindingMap.put("repositoryDuplicateFunctionName", "");
+        bindingMap.put("repositoryDuplicateFunctionParams", "");
         StringBuilder function = new StringBuilder();
-        List<InfraDatabaseIndex> indexList = table.indexes().stream().filter(index-> index.indexType().equals("UNIQUE INDEX")).collect(Collectors.toList());
-        if(indexList.isEmpty())
-            return "";
-        InfraDatabaseIndex uniqueIndex = indexList.get(0);
-        List<String> uniqueColumnName = uniqueIndex.columnNames();
-        StringBuilder columnFunction = new StringBuilder();
-        StringBuilder columnParam =new StringBuilder();
-        for(String columnName : uniqueColumnName){
-            if(columnFunction.toString().isEmpty()){
-                columnFunction.append(upperFirst(toCamelCase(columnName)));
+        if(infraInterface.name().toLowerCase().contains("update")
+            || infraInterface.name().toLowerCase().contains("create")) {
+            List<InfraDatabaseIndex> inputIndexList = inputTable.indexes().stream()
+                    .filter(index -> index.indexType().equals("UNIQUE INDEX")).collect(Collectors.toList());
+            if (inputIndexList.isEmpty())
+                return;
+            InfraDatabaseIndex uniqueIndex = inputIndexList.get(0);
+            List<String> uniqueColumnName = uniqueIndex.columnNames();
+            StringBuilder columnFunction = new StringBuilder();
+            StringBuilder columnParam = new StringBuilder();
+            StringBuilder functionParam = new StringBuilder();
+            for (String columnName : uniqueColumnName) {
+                if (columnFunction.toString().isEmpty()) {
+                    columnFunction.append(upperFirst(toCamelCase(columnName)));
+                } else {
+                    columnFunction.append("And").append(upperFirst(toCamelCase(columnName)));
+                }
+                List<InfraDatabaseColumn> columnList = inputTable.columns().stream().filter(
+                        column -> column.columnName().equals(columnName)).collect(Collectors.toList());
+                if (columnParam.toString().isEmpty()) {
+                    columnParam.append(columnList.get(0).javaType()).append(" ").append(toCamelCase(columnName));
+                    functionParam.append("inputVO.get").append(upperFirst(toCamelCase(columnName))).append("()");
+                } else {
+                    columnParam.append(", ").append(columnList.get(0).javaType()).append(" ").append(toCamelCase(columnName));
+                    functionParam.append(", ").append("inputVO.get").append(upperFirst(toCamelCase(columnName))).append("()");
+                }
             }
-            else{
-                columnFunction.append("And").append(upperFirst(toCamelCase(columnName)));
+
+            if(infraInterface.name().toLowerCase().contains("update")){
+                function.append("    Optional<").append(upperFirst(toCamelCase(inputTable.name()))).append("> findFirstBy")
+                        .append(columnFunction).append("AndIdNot(") .append(columnParam) .append(", Long id") .append(");\r\n");
+                String repositoryDuplicateFunctionName = "findFirstBy" + columnFunction + "AndIdNot";
+                bindingMap.put("repositoryDuplicateFunctionName", repositoryDuplicateFunctionName);
+                bindingMap.put("repositoryDuplicateFunctionParams", functionParam.append(", inputVO.getId()"));
             }
-            List<InfraDatabaseColumn> columnList = table.columns().stream().filter(column -> column.columnName().equals(columnName)).collect(Collectors.toList());
-            if(columnParam.toString().isEmpty()){
-                columnParam.append(columnList.get(0).javaType()).append(" ").append(toCamelCase(columnName));
-            }else {
-                columnParam.append(", ").append(columnList.get(0).javaType()).append(" ").append(toCamelCase(columnName));
+            if(infraInterface.name().toLowerCase().contains("create")){
+                function.append("    Optional<").append(upperFirst(toCamelCase(inputTable.name()))).append("> findFirstBy")
+                        .append(columnFunction) .append("(") .append(columnParam) .append(");\r\n");
+                String repositoryDuplicateFunctionName = "findFirstBy" + columnFunction;
+                bindingMap.put("repositoryDuplicateFunctionName", repositoryDuplicateFunctionName);
+                bindingMap.put("repositoryDuplicateFunctionParams", functionParam);
             }
+            bindingMap.put("repositoryFunction", function.toString());
+            return;
         }
-        if(infraInterface.name().toLowerCase().contains("update")){
-            function.append("    Optional<").append(upperFirst(toCamelCase(table.name()))).append("> findFirstBy")
-                    .append(columnFunction).append("AndIdNot(")
-                    .append(columnParam)
-                    .append(", Long id")
-                    .append(");\r\n");
-        }
-        if(infraInterface.name().toLowerCase().contains("create")){
-            function.append("    Optional<").append(upperFirst(toCamelCase(table.name()))).append("> findFirstBy")
-                    .append(columnFunction)
-                    .append("(")
-                    .append(columnParam)
-                    .append(");\r\n");
-        }
-        String tableTable = toCamelCase(table.name()) + "Table";
+        String outputTableTable = toCamelCase(outputTable.name()) + "Table";
         StringBuilder where = new StringBuilder();
         if(infraInterface.name().toLowerCase().contains("query")){
             for(InfraInterfaceParam param : infraInterface.inputParams()) {
-                List<InfraDatabaseColumn> columnList = table.columns().stream().filter(column -> column.id().toString().equals(param.relatedId())).collect(Collectors.toList());
+                List<InfraDatabaseColumn> columnList = outputTable.columns().stream()
+                        .filter(column -> column.id().toString().equals(param.relatedId())).collect(Collectors.toList());
                 if(!columnList.isEmpty()){
                     where.append("                .whereIf(");
                     if(param.variableType().equals("String")){
                         where.append("StringUtils.hasText(inputVO.get").append(upperFirst(param.name())).append("()), ")
-                                .append(tableTable).append(".").append(param.name()).append("().like(inputVO.get").append(upperFirst(param.name())).append("()))");
+                                .append(outputTableTable).append(".").append(param.name()).append("().like(inputVO.get")
+                                .append(upperFirst(param.name())).append("()))");
                     }else {
                         where.append("inputVO.get").append(upperFirst(param.name())).append("() != null, ");
                         if(param.variableType().contains("[]")){
-                            where.append("() -> ").append(tableTable).append(".").append(param.name()).append("()")
-                                    .append(".between(inputVO.get").append(upperFirst(param.name())).append("()[0], inputVO.get").append(upperFirst(param.name())).append("()[1]))");
+                            where.append("() -> ").append(outputTableTable).append(".").append(param.name()).append("()")
+                                    .append(".between(inputVO.get").append(upperFirst(param.name())).append("()[0], inputVO.get")
+                                    .append(upperFirst(param.name())).append("()[1]))");
                         }else{
-                            where.append(tableTable).append(".").append(param.name()).append("().eq(inputVO.get").append(upperFirst(param.name())).append("()))");
+                            where.append(outputTableTable).append(".").append(param.name()).append("().eq(inputVO.get")
+                                    .append(upperFirst(param.name())).append("()))");
                         }
                     }
                     where.append("\r\n");
@@ -313,25 +528,25 @@ public class CodegenEngine {
             }
         }
         if(infraInterface.name().toLowerCase().contains("pagequery")){
-            function.append("    default Page<").append(upperFirst(toCamelCase(table.name()))).append("> ")
+            function.append("    default Page<").append(upperFirst(toCamelCase(outputTable.name()))).append("> ")
                     .append(infraInterface.name())
                     .append("(") .append(inputClass)
                     .append((" inputVO){\r\n        return pager(inputVO.getPageNo() - 1, inputVO.getPageSize()).execute(sql().createQuery("))
-                    .append(tableTable).append(")\r\n")
+                    .append(outputTableTable).append(")\r\n")
                     .append(where)
-                    .append("                .orderBy(").append(tableTable).append(".id())\r\n")
-                    .append("                .select(").append(tableTable).append(")\r\n        );\r\n    }\r\n");
+                    .append("                .orderBy(").append(outputTableTable).append(".id())\r\n")
+                    .append("                .select(").append(outputTableTable).append(")\r\n        );\r\n    }\r\n");
         }
         if(infraInterface.name().toLowerCase().contains("listquery")){
-            function.append("    default List<").append(upperFirst(toCamelCase(table.name()))).append("> ")
+            function.append("    default List<").append(upperFirst(toCamelCase(outputTable.name()))).append("> ")
                     .append(infraInterface.name()).append("(") .append(inputClass)
-                    .append((" inputVO){\r\n        return sql().createQuery(")).append(tableTable).append(")\r\n")
+                    .append((" inputVO){\r\n        return sql().createQuery(")).append(outputTableTable).append(")\r\n")
                     .append(where)
-                    .append("                .orderBy(").append(tableTable).append(".id())\r\n")
-                    .append("                .select(").append(tableTable).append(").execute();\r\n    }\r\n");
+                    .append("                .orderBy(").append(outputTableTable).append(".id())\r\n")
+                    .append("                .select(").append(outputTableTable).append(").execute();\r\n    }\r\n");
 
         }
-        return function.toString();
+        bindingMap.put("repositoryFunction", function.toString());
     }
 
     private Map<String, Object> getInterfaceBindingMap(InfraInterface infraInterface){
@@ -365,6 +580,10 @@ public class CodegenEngine {
         parentNames.remove(0);
         Collections.reverse(parentNames);
         bindingMap.put("parentNames", parentNames);
+        String moduleRootName = parentNames.get(0);
+        bindingMap.put("moduleRootName", moduleRootName);
+        Optional<InfraInterfaceModule> moduleRoot = infraInterfaceModuleRepository.findFirstByName(moduleRootName);
+        moduleRoot.ifPresent(module -> bindingMap.put("moduleRootIndex", String.format("%03d", module.sort())));
         // 接口模块名驼峰 首字母小写
         bindingMap.put("moduleNameHump", moduleNameHump);
         // 接口名模块驼峰 首字母大写
@@ -388,10 +607,12 @@ public class CodegenEngine {
         bindingMap.put("outputParams", outputParams);
 
         List<String> controllerImportList = new ArrayList<>();
+        List<String> serviceImplImportList = new ArrayList<>();
         List<String> convertImportList = new ArrayList<>();
         List<String> inputImportList = new ArrayList<>();
         List<String> outputImportList = new ArrayList<>();
         List<String> repositoryList = new ArrayList<>();
+        List<String> serviceImplList = new ArrayList<>();
 
         List<CodegenInterfaceSubclass> inputSubclasses = CodegenConvert.INSTANCE.convertList20(infraInterface.inputSubclasses());
         for(CodegenInterfaceSubclass inputSubclass : inputSubclasses){
@@ -416,6 +637,8 @@ public class CodegenEngine {
         bindingMap.put("outputSubclasses", outputSubclasses);
         // src_extend_class
         bindingMap.put("isGenerateRepository", false);
+        bindingMap.put("isGenerateErrorCode", false);
+        bindingMap.put("functionContent", "        return null;");
         String inputSrcExtendClass = "";
         String inputSrcExtendTableImport = "";
         String inputExtendClassImport = "";
@@ -429,28 +652,50 @@ public class CodegenEngine {
                 InfraDatabaseTable table = infraDatabaseTableRepository.findByName(inputSrcExtendClass).get();
                 inputSrcExtendTableImport = "import " +
                         getStr(bindingMap, "basePackage").replaceAll("\\.", ".") +
-                        ".service.model." +
-                        table.firstModule() +
-                        "." +
-                        table.secondModule() +
-                        "." +
-                        upperFirst(toCamelCase(inputSrcExtendClass))
-                        + ";";
+                        ".service.model." + table.firstModule() + "." + table.secondModule() + "." +
+                        upperFirst(toCamelCase(inputSrcExtendClass)) + ";";
                 inputSrcExtendClass = upperFirst(toCamelCase(inputSrcExtendClass));
                 inputExtendClassImport = getExtendClassImport(infraInterface.inputExtendClass(), bindingMap);
                 if((infraInterface.name().toLowerCase().contains("update") || infraInterface.name().toLowerCase().contains("create"))
                     && table.indexes().stream().anyMatch(index -> index.indexType().equals("UNIQUE INDEX"))){
-                    bindingMap.put("table", table);
+                    bindingMap.put("inputTable", table);
+                    bindingMap.put("tableFirstModule", table.firstModule());
+                    bindingMap.put("tableSecondModule", table.secondModule());
                     bindingMap.put("classNameHump", upperFirst(toCamelCase(table.name())));
-                    bindingMap.put("repositoryFunction", generateInterfaceRepositoryFunction(bindingMap));
+                    generateInterfaceRepositoryFunction(bindingMap);
                     bindingMap.put("isGenerateRepository", true);
+                    generateInterfaceErrorCode(bindingMap);
+                    bindingMap.put("isGenerateErrorCode", true);
+                    generateInterfaceFunctionContent(bindingMap);
+                    serviceImplList.add("    @Resource\r\n" + "    private " + upperFirst(toCamelCase(table.name()))
+                        + "Repository " + toCamelCase(table.name()) + "Repository;");
+                    serviceImplImportList.add("import " +
+                            getStr(bindingMap, "basePackage").replaceAll("\\.", ".") +
+                            ".service.repository." + table.firstModule() +  "." + table.secondModule() + "." +
+                            upperFirst(toCamelCase(inputSrcExtendClass)) + "Repository;");
+                    serviceImplImportList.add(inputSrcExtendTableImport);
+                }
+                if(infraInterface.name().toLowerCase().contains("delete")){
+                    bindingMap.put("inputTable", table);
+                    bindingMap.put("tableFirstModule", table.firstModule());
+                    bindingMap.put("tableSecondModule", table.secondModule());
+                    bindingMap.put("classNameHump", upperFirst(toCamelCase(table.name())));
+                    generateInterfaceErrorCode(bindingMap);
+                    bindingMap.put("isGenerateErrorCode", true);
+                    generateInterfaceFunctionContent(bindingMap);
+                    serviceImplList.add("    @Resource\r\n" + "    private " + upperFirst(toCamelCase(table.name()))
+                            + "Repository " + toCamelCase(table.name()) + "Repository;");
+                    serviceImplImportList.add("import " +
+                            getStr(bindingMap, "basePackage").replaceAll("\\.", ".") +
+                            ".service.repository." + table.firstModule() + "." + table.secondModule() + "." +
+                            upperFirst(toCamelCase(inputSrcExtendClass)) + "Repository;");
+                    serviceImplImportList.add(inputSrcExtendTableImport);
                 }
             }
             convertImportList.add(inputSrcExtendTableImport);
             inputImportList.add(inputExtendClassImport);
         }
         bindingMap.put("inputSrcExtendClass", inputSrcExtendClass);
-
 
         String outputSrcExtendClass = "";
         String outputSrcExtendTableImport = "";
@@ -462,22 +707,26 @@ public class CodegenEngine {
             InfraDatabaseTable table = infraDatabaseTableRepository.findByName(outputSrcExtendClass).get();
             outputSrcExtendTableImport = "import " +
                     getStr(bindingMap, "basePackage").replaceAll("\\.", ".") +
-                    ".service.model." +
-                    table.firstModule()+
-                    "."+
-                    table.secondModule()+
-                    "."+
-                    upperFirst(toCamelCase(outputSrcExtendClass)) +
-                    ";";
+                    ".service.model." + table.firstModule()+ "."+ table.secondModule()+ "."+
+                    upperFirst(toCamelCase(outputSrcExtendClass)) + ";";
             outputSrcExtendClass = upperFirst(toCamelCase(outputSrcExtendClass));
             outputExtendClassImport = getExtendClassImport(infraInterface.outputExtendClass(), bindingMap);
             convertImportList.add(outputSrcExtendTableImport);
             outputImportList.add(outputExtendClassImport);
             if(infraInterface.name().toLowerCase().contains("pagequery") || infraInterface.name().toLowerCase().contains("listquery")){
-                bindingMap.put("table", table);
+                bindingMap.put("outputTable", table);
+                bindingMap.put("tableFirstModule", table.firstModule());
+                bindingMap.put("tableSecondModule", table.secondModule());
                 bindingMap.put("classNameHump", upperFirst(toCamelCase(table.name())));
-                bindingMap.put("repositoryFunction", generateInterfaceRepositoryFunction(bindingMap));
+                generateInterfaceRepositoryFunction(bindingMap);
                 bindingMap.put("isGenerateRepository", true);
+                generateInterfaceFunctionContent(bindingMap);
+                serviceImplList.add("    @Resource\r\n" + "    private " + upperFirst(toCamelCase(table.name()))
+                        + "Repository " + toCamelCase(table.name()) + "Repository;");
+                serviceImplImportList.add("import " +
+                        getStr(bindingMap, "basePackage").replaceAll("\\.", ".") +
+                        ".service.repository." + table.firstModule() + "." + table.secondModule() + "." +
+                        upperFirst(toCamelCase(outputSrcExtendClass)) + "Repository;");
             }
         }
         bindingMap.put("outputSrcExtendClass", outputSrcExtendClass);
@@ -573,10 +822,12 @@ public class CodegenEngine {
         bindingMap.put("interfaceOutput", output);
 
         bindingMap.put("controllerImportList", controllerImportList);
+        bindingMap.put("serviceImplImportList", serviceImplImportList);
         bindingMap.put("convertImportList", convertImportList);
         bindingMap.put("inputImportList", inputImportList);
         bindingMap.put("outputImportList", outputImportList);
         bindingMap.put("repositoryList", repositoryList);
+        bindingMap.put("serviceImplList", serviceImplList);
 
         return bindingMap;
     }
@@ -586,6 +837,15 @@ public class CodegenEngine {
         for(String strImport : importList) {
             if(fileContent.indexOf(strImport) < 0)
                 fileContent.insert(importIndex, strImport + "\r\n");
+        }
+    }
+    private void fileInsert(StringBuilder fileContent, List<String> insertList, Map<String, Object> bindingMap) {
+        String moduleNameHumpUp = bindingMap.get("moduleNameHumpUp").toString();
+        int importIndex = fileContent.indexOf(moduleNameHumpUp + "ServiceImpl");
+        importIndex = fileContent.indexOf("{", importIndex) + 4;
+        for(String strInsert : insertList) {
+            if(fileContent.indexOf(strInsert) < 0)
+                fileContent.insert(importIndex, strInsert + "\r\n");
         }
     }
 
@@ -598,7 +858,8 @@ public class CodegenEngine {
         List<String> inputImportList = Convert.toList(String.class, bindingMap.get("inputImportList"));
         List<String> outputImportList = Convert.toList(String.class, bindingMap.get("outputImportList"));
         List<String> repositoryList = Convert.toList(String.class, bindingMap.get("repositoryList"));
-
+        List<String> serviceImplImportList = Convert.toList(String.class, bindingMap.get("serviceImplImportList"));
+        List<String> serviceImplList = Convert.toList(String.class, bindingMap.get("serviceImplList"));
 
         Map<String, String> templates = new LinkedHashMap<>(INTERFACE_INSERT_TEMPLATES);
         for(Map.Entry<String, String> entry : templates.entrySet()){
@@ -631,17 +892,32 @@ public class CodegenEngine {
                 StringBuilder fileContent = new StringBuilder(FileUtil.readUtf8String(newFile));
                 int index = fileContent.lastIndexOf("\r\n}");
                 // vue前端代码直接追加 java代码要放到最后一个}前
-                if(index > 0 && !vmPath.contains("vueApi")) {
-                    fileContent.insert(index, interfaceContent);
-                }else {
+                if(vmPath.contains("vueApi")){
                     fileContent.append(interfaceContent);
+                }else if(vmPath.contains("errorCode")){
+                    errorCodeFileInsert(fileContent, interfaceContent, bindingMap);
+                }else if(vmPath.contains("repository")){
+                    if(fileContent.indexOf(interfaceContent) < 0){
+                        fileContent.insert(index, interfaceContent);
+                    }
                 }
+                else {
+                    if(index > 0) {
+                        fileContent.insert(index, interfaceContent);
+                    }else {
+                        fileContent.append(interfaceContent);
+                    }
+                }
+
                 if(vmPath.contains("convert") && !convertImportList.isEmpty())
                     fileInsertImport(fileContent, convertImportList);
 
                 if((vmPath.contains("serviceImpl") || vmPath.contains("service") || vmPath.contains("controller"))
                         && !controllerImportList.isEmpty())
                     fileInsertImport(fileContent, controllerImportList);
+
+                if(vmPath.contains("serviceImpl") && !serviceImplImportList.isEmpty())
+                    fileInsertImport(fileContent, serviceImplImportList);
 
                 if(vmPath.contains("voInput") && !inputImportList.isEmpty())
                     fileInsertImport(fileContent, inputImportList);
@@ -652,11 +928,52 @@ public class CodegenEngine {
                 if(vmPath.contains("repository") && !repositoryList.isEmpty())
                     fileInsertImport(fileContent, repositoryList);
 
+                if(vmPath.contains("serviceImpl") && !serviceImplList.isEmpty())
+                    fileInsert(fileContent, serviceImplList, bindingMap);
                 FileUtil.writeUtf8String(fileContent.toString(), newFile);
 
             }
         }
     }
+
+    private void errorCodeFileInsert(StringBuilder fileContent, String interfaceContent, Map<String, Object> bindingMap){
+
+        InfraInterfaceModule module = (InfraInterfaceModule) bindingMap.get("module");
+        if(fileContent.indexOf(module.comment()) == -1)
+            return;
+        if(bindingMap.get("dupErrorCode") == null && bindingMap.get("notExistErrorCode") == null)
+            return;
+        String moduleCode = fileContent.substring(fileContent.indexOf(module.comment()) + module.comment().length() +1,
+                fileContent.indexOf(module.comment()) + module.comment().length() + 8);
+        String dupErrorCode = bindingMap.get("dupErrorCode") == null? "": bindingMap.get("dupErrorCode").toString();
+        String notExistErrorCode = bindingMap.get("notExistErrorCode") == null? "": bindingMap.get("notExistErrorCode").toString();
+        if(dupErrorCode.isEmpty() && notExistErrorCode.isEmpty())
+            return;
+        // 查找插入位置
+        int insertIndex = fileContent.lastIndexOf(moduleCode);
+        insertIndex = fileContent.indexOf("\r\n", insertIndex) + 2;
+        String[] errorCodes = interfaceContent.split("\r\n");
+        int count = fileContent.toString().split(moduleCode).length - 2;
+        if((!dupErrorCode.isEmpty() && fileContent.indexOf(dupErrorCode) == -1)){
+            errorCodes[0] = errorCodes[0].replace("${dupErrorNumber}",
+                    moduleCode + String.format("%03d",count++));
+            if(fileContent.indexOf(errorCodes[0]) < 0) {
+                fileContent.insert(insertIndex, errorCodes[0] + "\r\n");
+                insertIndex = insertIndex + errorCodes[0].length() + 2;
+            }
+        }
+
+        if(!notExistErrorCode.isEmpty() && fileContent.indexOf(notExistErrorCode) == -1){
+            errorCodes[1] = errorCodes[1].replace("${notExistErrorNumber}",
+                    moduleCode + String.format("%03d",count++));
+            if(fileContent.indexOf(errorCodes[1]) < 0) {
+                fileContent.insert(insertIndex, errorCodes[1] + "\r\n");
+                insertIndex = insertIndex + errorCodes[1].length() + 2;
+            }
+        }
+
+    }
+
     public void interfaceUpdate(UUID newInterfaceId, InfraInterface oldInterface){
         InfraInterface newInterface = infraInterfaceRepository.findDetailById(newInterfaceId).get();
 
@@ -680,19 +997,21 @@ public class CodegenEngine {
             String filePath = entry.getValue();
             // 删除旧的传入传出参数类
             if (vmPath.contains("voInput")) {
-                filePath = templateEngine.getTemplate(filePath).render(oldBindingMap);
-                if(FileUtil.exist(filePath)) {
-                    RuntimeUtil.execForStr("git rm -f " + filePath);
+                String oldVoInputFilePath = templateEngine.getTemplate(filePath).render(oldBindingMap);
+                if(FileUtil.exist(oldVoInputFilePath)) {
+                    RuntimeUtil.execForStr("git rm -f " + oldVoInputFilePath);
                 }
-                if (Objects.equals(newInterface.inputType(), "void") || Objects.equals(newInterface.inputType(), "param"))
+                if (Objects.equals(newInterface.inputType(), "void")
+                        || Objects.equals(newInterface.inputType(), "param"))
                     continue;
             }
             if (vmPath.contains("voOutput")) {
-                filePath = templateEngine.getTemplate(filePath).render(oldBindingMap);
-                if(FileUtil.exist(filePath)) {
-                    RuntimeUtil.execForStr("git rm -f " + filePath);
+                String oldVoOutputfilePath = templateEngine.getTemplate(filePath).render(oldBindingMap);
+                if(FileUtil.exist(oldVoOutputfilePath)) {
+                    RuntimeUtil.execForStr("git rm -f " + oldVoOutputfilePath);
                 }
-                if(Objects.equals(newInterface.outputType(), "void") || Objects.equals(newInterface.outputType(), "param"))
+                if(Objects.equals(newInterface.outputType(), "void")
+                        || Objects.equals(newInterface.outputType(), "param"))
                     continue;
             }
             filePath = templateEngine.getTemplate(filePath).render(newBindingMap);
