@@ -66,16 +66,16 @@ public class CodegenEngine {
      * value：生成的路径
      */
     private static final Map<String, String> TABLE_INSERT_TEMPLATES = MapUtil.<String, String>builder(new LinkedHashMap<>()) // 有序
-            .put(templatePath("model/baseVO"), javaBaseVOFilePath("Base"))
-            .put(templatePath("model/repository"), javaTableFilePath("repository","${classNameHump}Repository"))
-            .put(templatePath("model/javaModel"), javaTableFilePath("model","${classNameHump}"))
-            .put(templatePath("model/vueModel"), vueFilePath("model/${table.firstModule}/${table.secondModule}/${classNameHump}.ts"))
+            .put(templatePath("model/baseVO"), templatePath("model/baseVOPath"))
+            .put(templatePath("model/repository"), templatePath("model/repositoryPath"))
+            .put(templatePath("model/javaModel"), templatePath("model/javaModelPath"))
+            .put(templatePath("model/vueModel"), templatePath("model/vueModelPath"))
             .build();
 
     private static final Map<String, String> TABLE_UPDATE_TEMPLATES = MapUtil.<String, String>builder(new LinkedHashMap<>()) // 有序
-            .put(templatePath("model/baseVO"), javaBaseVOFilePath("Base"))
-            .put(templatePath("model/javaModel"), javaTableFilePath("model","${classNameHump}"))
-            .put(templatePath("model/vueModel"), vueFilePath("model/${table.firstModule}/${table.secondModule}/${classNameHump}.ts"))
+            .put(templatePath("model/baseVO"), templatePath("model/baseVOPath"))
+            .put(templatePath("model/javaModel"), templatePath("model/javaModelPath"))
+            .put(templatePath("model/vueModel"), templatePath("model/vueModelPath"))
             .build();
 
     private static final Map<String, String> MODULE_TEMPLATES = MapUtil.<String, String>builder(new LinkedHashMap<>()) // 有序
@@ -1295,7 +1295,7 @@ public class CodegenEngine {
     {
         Map<String, String> templates = new LinkedHashMap<>(TABLE_INSERT_TEMPLATES);
         templates.forEach((vmPath, filePath) -> {
-            filePath = formatTableFilePath(filePath, bindingMap);
+            filePath = templateEngine.getTemplate(filePath).render(bindingMap);
             String content = templateEngine.getTemplate(vmPath).render(bindingMap);
             File newFile;
             if(!FileUtil.exist(filePath)) {
@@ -1319,7 +1319,7 @@ public class CodegenEngine {
 
     public void generateNewTable(Map<String, Object> bindingMap){
         // 生成table
-        String vmPath = "codegen/model/newTable.vm";
+        String vmPath = templatePath("model/newTable");
         String filePath = tableFilePath();
         String content = templateEngine.getTemplate(vmPath).render(bindingMap);
         File newFile;
@@ -1330,23 +1330,14 @@ public class CodegenEngine {
             newFile = FileUtil.file(filePath);
         }
         FileUtil.appendUtf8String(content, newFile);
-        // 生成repository
-        vmPath = templatePath("model/repository");
-        filePath = javaTableFilePath("repository","${classNameHump}Repository");
-        filePath = formatTableFilePath(filePath, bindingMap);
-        content = templateEngine.getTemplate(vmPath).render(bindingMap);
-        if(!FileUtil.exist(filePath)) {
-            newFile = FileUtil.touch(filePath);
-            RuntimeUtil.execForStr("git add " + filePath);
-            FileUtil.writeUtf8String(content, newFile);
-        }
+
     }
 
     public void generateUpdateTable(Map<String, Object> bindingMap)
     {
         Map<String, String> templates = new LinkedHashMap<>(TABLE_UPDATE_TEMPLATES);
         templates.forEach((vmPath, filePath) -> {
-            filePath = formatTableFilePath(filePath, bindingMap);
+            filePath = templateEngine.getTemplate(filePath).render(bindingMap);
             String content = templateEngine.getTemplate(vmPath).render(bindingMap);
             File newFile;
             if(!FileUtil.exist(filePath)) {
@@ -1394,7 +1385,7 @@ public class CodegenEngine {
     {
         Map<String, String> templates = new LinkedHashMap<>(TABLE_UPDATE_TEMPLATES);
         templates.forEach((vmPath, filePath) -> {
-            filePath = formatTableFilePath(filePath, bindingMap);
+            filePath = templateEngine.getTemplate(filePath).render(bindingMap);
 
             if(FileUtil.exist(filePath)) {
                 RuntimeUtil.execForStr("git rm -f " + filePath);
@@ -1446,29 +1437,11 @@ public class CodegenEngine {
         bindingMap.put("mappings", codegenMappings);
         bindingMap.put("sceneEnum", CodegenSceneEnum.valueOf("ADMIN"));
 
-
         // 全程类名 驼峰命名 例子SystemConfigSetting
         bindingMap.put("classNameHump", upperFirst(toCamelCase(table.name())));
         return bindingMap;
     }
 
-    private String formatTableFilePath(String filePath, Map<String, Object> bindingMap) {
-        filePath = StrUtil.replace(filePath, "${basePackage}",
-                getStr(bindingMap, "basePackage").replaceAll("\\.", "/"));
-        filePath = StrUtil.replace(filePath, "${classNameVar}",
-                getStr(bindingMap, "classNameVar"));
-        // sceneEnum 包含的字段
-        CodegenSceneEnum sceneEnum = (CodegenSceneEnum) bindingMap.get("sceneEnum");
-        filePath = StrUtil.replace(filePath, "${sceneEnum.prefixClass}", sceneEnum.getPrefixClass());
-        filePath = StrUtil.replace(filePath, "${sceneEnum.basePackage}", sceneEnum.getBasePackage());
-        // table 包含的字段
-        InfraDatabaseTable table = (InfraDatabaseTable) bindingMap.get("table");
-        filePath = StrUtil.replace(filePath, "${table.firstModule}", table.firstModule());
-        filePath = StrUtil.replace(filePath, "${table.secondModule}", table.secondModule());
-        filePath = StrUtil.replace(filePath, "${simpleLowerClassNameHump}", getStr(bindingMap, "simpleLowerClassNameHump"));
-        filePath = StrUtil.replace(filePath, "${classNameHump}", getStr(bindingMap, "classNameHump"));
-        return filePath;
-    }
 
     public void dictUpdateExecute(InfraDictType oldType, InfraDictType newType){
         Map<String, Object> oldBindingMap = getDictBindingMap(oldType);
@@ -1645,29 +1618,5 @@ public class CodegenEngine {
         return "codegen/" + path + ".vm";
     }
 
-    private static String javaBaseVOFilePath(String path) {
-        return javaFilePath("vo/${table.firstModule}/${table.secondModule}/${sceneEnum.prefixClass}baseVO/${classNameHump}" + path) + ".java";
-    }
-
-    private static String javaTableFilePath(String path, String file) {
-        return javaFilePath(path) +  "/${table.firstModule}/${table.secondModule}/" + file + ".java";
-    }
-
-    private static String javaModuleFilePath(String path, String file) {
-        return javaFilePath(path) +  "/${modulePath}/" + file + ".java";
-    }
-
-
-    private static String javaFilePath(String path) {
-        return FileUtil.getParent(FileUtil.getAbsolutePath(""), 3) + "/yudao-service/yudao-service-biz/src/main/java/${basePackage}/service/" + path;
-    }
-
-    private static String javaApiFilePath(String path) {
-        return FileUtil.getParent(FileUtil.getAbsolutePath(""), 3) + "/yudao-service/yudao-service-api/src/main/java/${basePackage}/service/" + path;
-    }
-
-    private static String vueFilePath(String path) {
-        return FileUtil.getParent(FileUtil.getAbsolutePath(""), 4) + "/frontend/src/"  + path;
-    }
 
 }
