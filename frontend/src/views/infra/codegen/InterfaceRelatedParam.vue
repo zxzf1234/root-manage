@@ -223,10 +223,12 @@ const handleTableDblclick = () => {
 const handleColumnDblclick = (row, scope) => {
   if (isBatchAdd == 1) {
     row.tableName = scope.row.name
+    if (row.columnName == 'id') row.columnComment = scope.row.comment + row.columnComment
     if (dbSelectdColumnList.value.indexOf(row) == -1) dbSelectdColumnList.value.push(row)
   } else {
     row.relatedColumn = scope.row.name + '.' + row.columnName
     row.relatedType = queryParams.variableType
+    if (row.columnName == 'id') row.columnComment = scope.row.comment + row.columnComment
     emit('rowDblclick', row)
     close()
   }
