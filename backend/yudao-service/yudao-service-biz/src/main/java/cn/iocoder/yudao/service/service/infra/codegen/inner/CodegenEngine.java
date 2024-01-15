@@ -324,8 +324,8 @@ public class CodegenEngine {
                 functionContent.append("        Optional<").append(inputTableName).append(">").append(" optionalDuplicate")
                         .append(inputTableName).append(" = ").append(inputRepositoryName).append(".")
                         .append(repositoryDuplicateFunctionName).append("(").append(repositoryDuplicateFunctionParams).append(");\r\n");
-                //生成代码 if(!optionalDuplicateInfraDictNo.isPresent())
-                functionContent.append("        if(!optionalDuplicate").append(inputTableName).append(".isPresent()){\r\n");
+                //生成代码 if(optionalDuplicateInfraDictNo.isPresent())
+                functionContent.append("        if(optionalDuplicate").append(inputTableName).append(".isPresent()){\r\n");
                 //生成代码 throw exception(DICT_NO_DUPLICATE);
                 functionContent.append("            throw exception(").append(dupErrorCode).append(");\r\n");
                 //生成代码 }
@@ -335,7 +335,7 @@ public class CodegenEngine {
             functionContent.append("        ").append(inputTableName).append(" new").append(inputTableName).append(" = ")
                     .append(convertClass).append(".INSTANCE.").append(convertName).append("(inputVO);\r\n");
             //生成代码 InfraDictNo newInfraDictNo = InfraDictNoRepository.insert(newInfraDictNo);
-            functionContent.append("        ").append(" new").append(inputTableName).append(" = ")
+            functionContent.append("        ").append("new").append(inputTableName).append(" = ")
                     .append(inputRepositoryName).append(".insert(new").append(inputTableName).append(");\r\n");
             if(infraInterface.outputType().equals("param")){
                 InfraInterfaceParam firstOutputParam = infraInterface.outputParams().get(0);
@@ -362,12 +362,13 @@ public class CodegenEngine {
             String repositoryDuplicateFunctionParams = bindingMap.get("repositoryDuplicateFunctionParams").toString();
             if(!repositoryDuplicateFunctionName.isEmpty()) {
                 //生成代码 Optional<InfraDictNo> optionalDuplicateInfraDictNo =
-                // infraDictNoRepository.findDictNoAndIdNot(inputVO.getDictNo(), inputVO.getId());
+                // infraDictNoRepository.findDictNo(inputVO.getDictNo(), inputVO.getId());
                 functionContent.append("        Optional<").append(inputTableName).append(">").append(" optionalDuplicate")
                         .append(inputTableName).append(" = ").append(inputRepositoryName).append(".")
                         .append(repositoryDuplicateFunctionName).append("(").append(repositoryDuplicateFunctionParams).append(");\r\n");
-                //生成代码 if(!opDuplicateInfraDictNo.isPresent())
-                functionContent.append("        if(!optionalDuplicate").append(inputTableName).append(".isPresent()){\r\n");
+                //生成代码 if(opDuplicateInfraDictNo.isPresent() && opDuplicateInfraDictNo.get().id().equals(inputVO.getId()))
+                functionContent.append("        if(optionalDuplicate").append(inputTableName)
+                        .append(".isPresent() && !optionalDuplicate").append(inputTableName).append(".get().id().equals(inputVO.getId())){\r\n");
                 //生成代码 throw exception(DICT_NO_DUPLICATE);
                 functionContent.append("            throw exception(").append(dupErrorCode).append(");\r\n");
                 //生成代码 }
@@ -483,14 +484,7 @@ public class CodegenEngine {
                 }
             }
 
-            if(infraInterface.name().toLowerCase().contains("update")){
-                function.append("    Optional<").append(upperFirst(toCamelCase(inputTable.name()))).append("> findFirstBy")
-                        .append(columnFunction).append("AndIdNot(") .append(columnParam) .append(", Long id") .append(");\r\n");
-                String repositoryDuplicateFunctionName = "findFirstBy" + columnFunction + "AndIdNot";
-                bindingMap.put("repositoryDuplicateFunctionName", repositoryDuplicateFunctionName);
-                bindingMap.put("repositoryDuplicateFunctionParams", functionParam.append(", inputVO.getId()"));
-            }
-            if(infraInterface.name().toLowerCase().contains("create")){
+            if(infraInterface.name().toLowerCase().contains("create") || infraInterface.name().toLowerCase().contains("update")){
                 function.append("    Optional<").append(upperFirst(toCamelCase(inputTable.name()))).append("> findFirstBy")
                         .append(columnFunction) .append("(") .append(columnParam) .append(");\r\n");
                 String repositoryDuplicateFunctionName = "findFirstBy" + columnFunction;
