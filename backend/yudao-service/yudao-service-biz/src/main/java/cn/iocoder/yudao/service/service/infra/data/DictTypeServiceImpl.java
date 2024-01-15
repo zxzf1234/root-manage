@@ -177,7 +177,6 @@ public class DictTypeServiceImpl implements DictTypeService {
         return DictTypeConvert.INSTANCE.listAllSimpleListOutputConvert(infraDictTypeRepository.findAll());
     }
 
-
     @Override
     public void export(HttpServletResponse response, DictTypeExportInput inputVO) {
         List<InfraDictType> list = infraDictTypeRepository.selectList(inputVO);

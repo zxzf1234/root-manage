@@ -163,25 +163,13 @@ public class CodegenEngine {
     private void initGlobalBindingMap() {
         // 全局配置
         globalBindingMap.put("basePackage", codegenProperties.getBasePackage());
-        globalBindingMap.put("baseFrameworkPackage", codegenProperties.getBasePackage()
-                + '.' + "framework"); // 用于后续获取测试类的 package 地址
         // 全局 Java Bean
         globalBindingMap.put("CommonResultClassName", CommonResult.class.getName());
         globalBindingMap.put("PageResultClassName", PageResult.class.getName());
-        // VO 类，独有字段
-        globalBindingMap.put("PageParamClassName", PageParam.class.getName());
-        globalBindingMap.put("DictFormatClassName", DictFormat.class.getName());
-        // DO 类，独有字段
-        globalBindingMap.put("BaseDOClassName", BaseDO.class.getName());
-        globalBindingMap.put("QueryWrapperClassName", LambdaQueryWrapperX.class.getName());
-        globalBindingMap.put("BaseMapperClassName", BaseMapperX.class.getName());
         // Util 工具类
         globalBindingMap.put("ServiceExceptionUtilClassName", ServiceExceptionUtil.class.getName());
         globalBindingMap.put("DateUtilsClassName", DateUtils.class.getName());
         globalBindingMap.put("ExcelUtilsClassName", ExcelUtils.class.getName());
-        globalBindingMap.put("LocalDateTimeUtilsClassName", LocalDateTimeUtils.class.getName());
-        globalBindingMap.put("ObjectUtilsClassName", ObjectUtils.class.getName());
-        globalBindingMap.put("DictConvertClassName", DictConvert.class.getName());
         globalBindingMap.put("OperateLogClassName", OperateLog.class.getName());
         globalBindingMap.put("OperateTypeEnumClassName", OperateTypeEnum.class.getName());
         globalBindingMap.put("javaPath", FileUtil.getParent(FileUtil.getAbsolutePath(""), 3));
@@ -366,7 +354,7 @@ public class CodegenEngine {
                 functionContent.append("        Optional<").append(inputTableName).append(">").append(" optionalDuplicate")
                         .append(inputTableName).append(" = ").append(inputRepositoryName).append(".")
                         .append(repositoryDuplicateFunctionName).append("(").append(repositoryDuplicateFunctionParams).append(");\r\n");
-                //生成代码 if(opDuplicateInfraDictNo.isPresent() && opDuplicateInfraDictNo.get().id().equals(inputVO.getId()))
+                //生成代码 if(opDuplicateInfraDictNo.isPresent() && !opDuplicateInfraDictNo.get().id().equals(inputVO.getId()))
                 functionContent.append("        if(optionalDuplicate").append(inputTableName)
                         .append(".isPresent() && !optionalDuplicate").append(inputTableName).append(".get().id().equals(inputVO.getId())){\r\n");
                 //生成代码 throw exception(DICT_NO_DUPLICATE);
