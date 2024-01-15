@@ -1591,13 +1591,15 @@ public class CodegenEngine {
                 int insertIndex = 0;
                 if (filePath.contains("DictTypeConstants.java")){
                     insertIndex = fileContent.lastIndexOf("}");
-                    content = content + "\r\n";
+                    content = content + "\r\n\r\n";
                 }
                 else if(filePath.contains("dict.ts")){
                     String dictType = fileContent.substring(0, fileContent.indexOf("}",fileContent.indexOf("export enum DICT_TYPE {")));
                     insertIndex = dictType.lastIndexOf("'") + 1;
+                    // 最后一行追加,符号
+                    fileContent.insert(insertIndex, ",");
+                    insertIndex = dictType.indexOf("\r\n", insertIndex) + 1;
                     firstModuleMatch = "\r\n\r\n" + firstModuleMatch;
-                    firstModuleMatch = "," + firstModuleMatch;
                     // 最后一行去掉,符号
                     content = content.replaceAll(",","");
                 }
