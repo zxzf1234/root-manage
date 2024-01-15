@@ -223,8 +223,7 @@ public class CodegenEngine {
             List<String> parentNames = getParentName(Objects.requireNonNull(infraInterface.module()).id());
             parentNames.remove(0);
             extendClassImport = new StringBuilder("import " +
-                    getStr(bindingMap, "basePackage").replaceAll("\\.", ".") +
-                    ".service.vo.");
+                    getStr(bindingMap, "basePackage").replaceAll("\\.", ".") + ".service.vo.");
             for(String parentName : parentNames){
                 extendClassImport.append(".").append(parentName);
             }
