@@ -92,10 +92,10 @@ public class CodegenEngine {
             .build();
 
     private static final Map<String, String> DICT_TEMPLATES = MapUtil.<String, String>builder(new LinkedHashMap<>()) // 有序
-            .put(templatePath("dict/javaEnum"), javaApiFilePath("enums/${modulePath}/${typeUpHump}Enum.java"))
-            .put(templatePath("dict/javaType"), javaApiFilePath("enums/DictTypeConstants.java"))
-            .put(templatePath("dict/vueType"), vueFilePath("utils/dict.ts"))
-            .put(templatePath("dict/vueEnum"), vueFilePath("utils/constants.ts"))
+            .put(templatePath("dict/javaEnum"), templatePath("dict/javaEnumPath"))
+            .put(templatePath("dict/javaType"), templatePath("dict/javaTypePath"))
+            .put(templatePath("dict/vueType"), templatePath("dict/vueTypePath"))
+            .put(templatePath("dict/vueEnum"), templatePath("dict/vueEnumPath"))
             .build();
 
     private static final Map<String, String> INTERFACE_INSERT_TEMPLATES = MapUtil.<String, String>builder(new LinkedHashMap<>()) // 有序
@@ -867,8 +867,6 @@ public class CodegenEngine {
             String interfaceContent = "";
             if(!vmPath.isEmpty()) {
                 interfaceContent = templateEngine.getTemplate(vmPath).render(bindingMap);
-                // 去除字段后面多余的 , 逗号
-                interfaceContent = interfaceContent.replaceAll(",\n}", "\n}").replaceAll(",\n  }", "\n  }");
 
                 StringBuilder fileContent = new StringBuilder(FileUtil.readUtf8String(newFile));
                 int index = fileContent.lastIndexOf("\r\n}");
@@ -1012,10 +1010,6 @@ public class CodegenEngine {
             if(!vmPath.isEmpty()) {
                 newInterfaceContent = templateEngine.getTemplate(vmPath).render(newBindingMap);
                 oldInterfaceContent = templateEngine.getTemplate(vmPath).render(oldBindingMap);
-                // 去除字段后面多余的 , 逗号
-                newInterfaceContent = newInterfaceContent.replaceAll(",\n}", "\n}").replaceAll(",\n  }", "\n  }");
-                // 去除字段后面多余的 , 逗号
-                oldInterfaceContent = oldInterfaceContent.replaceAll(",\n}", "\n}").replaceAll(",\n  }", "\n  }");
 
                 StringBuilder fileContent = new StringBuilder(FileUtil.readUtf8String(newFile));
                 if(vmPath.contains("controller") || vmPath.contains("serviceImpl")){
@@ -1172,8 +1166,6 @@ public class CodegenEngine {
             String content = "";
             if(!vmPath.isEmpty()) {
                 content = templateEngine.getTemplate(vmPath).render(bindingMap);
-                // 去除字段后面多余的 , 逗号
-                content = content.replaceAll(",\n}", "\n}").replaceAll(",\n  }", "\n  }");
 
                 FileUtil.writeUtf8String(content, newFile);
             }
@@ -1293,9 +1285,6 @@ public class CodegenEngine {
                     fileContent.insert(index, content);
                     FileUtil.writeUtf8String(fileContent.toString(), newFile);
                 }else {
-                    // 去除字段后面多余的 , 逗号
-                    content = content.replaceAll(",\n}", "\n}").replaceAll(",\n  }", "\n  }");
-
                     FileUtil.writeUtf8String(content, newFile);
                 }
             }
@@ -1308,8 +1297,6 @@ public class CodegenEngine {
         templates.forEach((vmPath, filePath) -> {
             filePath = formatTableFilePath(filePath, bindingMap);
             String content = templateEngine.getTemplate(vmPath).render(bindingMap);
-            // 去除字段后面多余的 , 逗号
-            content = content.replaceAll(",\n}", "\n}").replaceAll(",\n  }", "\n  }");
             File newFile;
             if(!FileUtil.exist(filePath)) {
                 newFile = FileUtil.touch(filePath);
@@ -1348,8 +1335,6 @@ public class CodegenEngine {
         filePath = javaTableFilePath("repository","${classNameHump}Repository");
         filePath = formatTableFilePath(filePath, bindingMap);
         content = templateEngine.getTemplate(vmPath).render(bindingMap);
-        // 去除字段后面多余的 , 逗号
-        content = content.replaceAll(",\n}", "\n}").replaceAll(",\n  }", "\n  }");
         if(!FileUtil.exist(filePath)) {
             newFile = FileUtil.touch(filePath);
             RuntimeUtil.execForStr("git add " + filePath);
@@ -1363,8 +1348,6 @@ public class CodegenEngine {
         templates.forEach((vmPath, filePath) -> {
             filePath = formatTableFilePath(filePath, bindingMap);
             String content = templateEngine.getTemplate(vmPath).render(bindingMap);
-            // 去除字段后面多余的 , 逗号
-            content = content.replaceAll(",\n}", "\n}").replaceAll(",\n  }", "\n  }");
             File newFile;
             if(!FileUtil.exist(filePath)) {
                 newFile = FileUtil.touch(filePath);
@@ -1492,10 +1475,9 @@ public class CodegenEngine {
         Map<String, Object> newBindingMap = getDictBindingMap(newType);
         Map<String, String> templates = new LinkedHashMap<>(DICT_TEMPLATES);
         templates.forEach((vmPath, filePath) -> {
-            String oldFilePath = formatDictFilePath(filePath, oldBindingMap);
-            String newFilePath = formatDictFilePath(filePath, newBindingMap);
-//            if(!FileUtil.exist(oldFilePath))
-//                return;
+            String oldFilePath = templateEngine.getTemplate(filePath).render(oldBindingMap);
+            String newFilePath = templateEngine.getTemplate(filePath).render(newBindingMap);
+
             String oldContent = templateEngine.getTemplate(vmPath).render(oldBindingMap);
             String newContent = templateEngine.getTemplate(vmPath).render(newBindingMap);
             if(oldContent.equals(newContent) && oldType.firstModule().equals(newType.firstModule()) && oldType.secondModule().equals(newType.secondModule()))
@@ -1606,10 +1588,8 @@ public class CodegenEngine {
     {
         Map<String, String> templates = new LinkedHashMap<>(DICT_TEMPLATES);
         templates.forEach((vmPath, filePath) -> {
-            filePath = formatDictFilePath(filePath, bindingMap);
+            filePath = templateEngine.getTemplate(filePath).render(bindingMap);
             String content = templateEngine.getTemplate(vmPath).render(bindingMap);
-            // 去除字段后面多余的 , 逗号
-            content = content.replaceAll(",\n}", "\n}").replaceAll(",\n  }", "\n  }");
             // constants文件只插入 enum文件新建
             if(!filePath.contains("Enum.java")){
                 insertNewDict(type, filePath, content);
@@ -1626,20 +1606,6 @@ public class CodegenEngine {
             }
 
         });
-    }
-
-    private String formatDictFilePath(String filePath, Map<String, Object> bindingMap) {
-        filePath = StrUtil.replace(filePath, "${basePackage}",
-                getStr(bindingMap, "basePackage").replaceAll("\\.", "/"));
-        filePath = StrUtil.replace(filePath, "${modulePath}",
-                getStr(bindingMap, "modulePath"));
-        filePath = StrUtil.replace(filePath, "${typeUpHump}",
-                getStr(bindingMap, "typeUpHump"));
-        // sceneEnum 包含的字段
-        CodegenSceneEnum sceneEnum = (CodegenSceneEnum) bindingMap.get("sceneEnum");
-        filePath = StrUtil.replace(filePath, "${sceneEnum.prefixClass}", sceneEnum.getPrefixClass());
-        filePath = StrUtil.replace(filePath, "${sceneEnum.basePackage}", sceneEnum.getBasePackage());
-        return filePath;
     }
 
     private Map<String, Object> getDictBindingMap(InfraDictType type){
