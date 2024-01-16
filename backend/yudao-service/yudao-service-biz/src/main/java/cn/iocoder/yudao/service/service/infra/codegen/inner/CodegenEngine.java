@@ -235,13 +235,17 @@ public class CodegenEngine {
     private void generateInterfaceErrorCode(Map<String, Object> bindingMap){
         InfraInterface infraInterface = (InfraInterface) bindingMap.get("interface");
         InfraDatabaseTable inputTable = (InfraDatabaseTable) bindingMap.get("inputTable");
-        if(infraInterface.name().toLowerCase().contains("update")
-                || infraInterface.name().toLowerCase().contains("create")){
-            List<InfraDatabaseIndex> indexList = inputTable.indexes().stream().filter(
-                    index-> index.indexType().equals("UNIQUE INDEX")).collect(Collectors.toList()
-            );
-            if(indexList.isEmpty())
-                return;
+        bindingMap.put("dupErrorCode", "");
+        bindingMap.put("dupErrorMessage", "");
+        bindingMap.put("notExistErrorCode", "");
+        bindingMap.put("notExistErrorMessage", "");
+        List<InfraDatabaseIndex> indexList = inputTable.indexes().stream().filter(
+                index-> index.indexType().equals("UNIQUE INDEX")).collect(Collectors.toList()
+        );
+        if((infraInterface.name().toLowerCase().contains("update")
+                || infraInterface.name().toLowerCase().contains("create"))
+            && !indexList.isEmpty()){
+
             InfraDatabaseIndex uniqueIndex = indexList.get(0);
             String uniqueIndexName = uniqueIndex.indexName().substring(uniqueIndex.indexName().indexOf("_") + 1);
             bindingMap.put("dupErrorCode", uniqueIndexName.toUpperCase() + "_DUPLICATE");
@@ -260,18 +264,12 @@ public class CodegenEngine {
             }
             dupErrorMessage.insert(0, "已经存在相同").append("的").append(inputTable.comment());
             bindingMap.put("dupErrorMessage", dupErrorMessage.toString());
-        }else{
-            bindingMap.put("dupErrorCode", "");
-            bindingMap.put("dupErrorMessage", "");
         }
         if(infraInterface.name().toLowerCase().contains("delete")
                 || infraInterface.name().toLowerCase().contains("update")){
 
             bindingMap.put("notExistErrorCode", inputTable.name().toUpperCase() + "_NOT_EXIST");
             bindingMap.put("notExistErrorMessage", inputTable.comment() + "不存在");
-        }else{
-            bindingMap.put("notExistErrorCode", "");
-            bindingMap.put("notExistErrorMessage", "");
         }
 
     }
@@ -442,13 +440,13 @@ public class CodegenEngine {
         String inputClass = moduleNameHumpUp + upperFirst(interfaceNameHump) + "Input";
         bindingMap.put("repositoryDuplicateFunctionName", "");
         bindingMap.put("repositoryDuplicateFunctionParams", "");
+        bindingMap.put("repositoryFunction", "");
+        List<InfraDatabaseIndex> inputIndexList = inputTable.indexes().stream()
+                .filter(index -> index.indexType().equals("UNIQUE INDEX")).collect(Collectors.toList());
         StringBuilder function = new StringBuilder();
-        if(infraInterface.name().toLowerCase().contains("update")
-            || infraInterface.name().toLowerCase().contains("create")) {
-            List<InfraDatabaseIndex> inputIndexList = inputTable.indexes().stream()
-                    .filter(index -> index.indexType().equals("UNIQUE INDEX")).collect(Collectors.toList());
-            if (inputIndexList.isEmpty())
-                return;
+        if((infraInterface.name().toLowerCase().contains("update")
+            || infraInterface.name().toLowerCase().contains("create")) && !inputIndexList.isEmpty()) {
+
             InfraDatabaseIndex uniqueIndex = inputIndexList.get(0);
             List<String> uniqueColumnName = uniqueIndex.columnNames();
             StringBuilder columnFunction = new StringBuilder();
@@ -481,6 +479,8 @@ public class CodegenEngine {
             bindingMap.put("repositoryFunction", function.toString());
             return;
         }
+        if(outputTable == null)
+            return;
         String outputTableTable = toCamelCase(outputTable.name()) + "Table";
         StringBuilder where = new StringBuilder();
         if(infraInterface.name().toLowerCase().contains("query")){
@@ -637,8 +637,7 @@ public class CodegenEngine {
                         upperFirst(toCamelCase(inputSrcExtendClass)) + ";";
                 inputSrcExtendClass = upperFirst(toCamelCase(inputSrcExtendClass));
                 inputExtendClassImport = getExtendClassImport(infraInterface.inputExtendClass(), bindingMap);
-                if((infraInterface.name().toLowerCase().contains("update") || infraInterface.name().toLowerCase().contains("create"))
-                    && table.indexes().stream().anyMatch(index -> index.indexType().equals("UNIQUE INDEX"))){
+                if((infraInterface.name().toLowerCase().contains("update") || infraInterface.name().toLowerCase().contains("create"))){
                     bindingMap.put("inputTable", table);
                     bindingMap.put("tableFirstModule", table.firstModule());
                     bindingMap.put("tableSecondModule", table.secondModule());
