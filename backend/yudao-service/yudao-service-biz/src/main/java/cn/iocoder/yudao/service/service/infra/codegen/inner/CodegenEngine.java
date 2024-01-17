@@ -441,8 +441,13 @@ public class CodegenEngine {
         bindingMap.put("repositoryDuplicateFunctionName", "");
         bindingMap.put("repositoryDuplicateFunctionParams", "");
         bindingMap.put("repositoryFunction", "");
-        List<InfraDatabaseIndex> inputIndexList = inputTable.indexes().stream()
-                .filter(index -> index.indexType().equals("UNIQUE INDEX")).collect(Collectors.toList());
+        List<InfraDatabaseIndex> inputIndexList;
+        if(inputTable != null) {
+            inputIndexList = inputTable.indexes().stream()
+                    .filter(index -> index.indexType().equals("UNIQUE INDEX")).collect(Collectors.toList());
+        }else{
+            inputIndexList = new ArrayList<>();
+        }
         StringBuilder function = new StringBuilder();
         if((infraInterface.name().toLowerCase().contains("update")
             || infraInterface.name().toLowerCase().contains("create")) && !inputIndexList.isEmpty()) {
@@ -488,7 +493,11 @@ public class CodegenEngine {
                 List<InfraDatabaseColumn> columnList = outputTable.columns().stream()
                         .filter(column -> column.id().toString().equals(param.relatedId())).collect(Collectors.toList());
                 if(!columnList.isEmpty()){
-                    where.append("                .whereIf(");
+                    if(infraInterface.name().toLowerCase().contains("pagequery")) {
+                        where.append("                        .whereIf(");
+                    }else{
+                        where.append("                .whereIf(");
+                    }
                     if(param.variableType().equals("String")){
                         where.append("StringUtils.hasText(inputVO.get").append(upperFirst(param.name())).append("()), ")
                                 .append(outputTableTable).append(".").append(param.name()).append("().like(inputVO.get")
@@ -512,11 +521,11 @@ public class CodegenEngine {
             function.append("    default Page<").append(upperFirst(toCamelCase(outputTable.name()))).append("> ")
                     .append(infraInterface.name())
                     .append("(") .append(inputClass)
-                    .append((" inputVO){\r\n        return pager(inputVO.getPageNo() - 1, inputVO.getPageSize()).execute(sql().createQuery("))
+                    .append((" inputVO){\r\n        return pager(inputVO.getPageNo() - 1, inputVO.getPageSize()).execute(\r\n                sql().createQuery("))
                     .append(outputTableTable).append(")\r\n")
                     .append(where)
-                    .append("                .orderBy(").append(outputTableTable).append(".id())\r\n")
-                    .append("                .select(").append(outputTableTable).append(")\r\n        );\r\n    }\r\n");
+                    .append("                        .orderBy(").append(outputTableTable).append(".id())\r\n")
+                    .append("                        .select(").append(outputTableTable).append(")\r\n        );\r\n    }\r\n");
         }
         if(infraInterface.name().toLowerCase().contains("listquery")){
             function.append("    default List<").append(upperFirst(toCamelCase(outputTable.name()))).append("> ")
@@ -707,6 +716,7 @@ public class CodegenEngine {
                         getStr(bindingMap, "basePackage").replaceAll("\\.", ".") +
                         ".service.repository." + table.firstModule() + "." + table.secondModule() + "." +
                         upperFirst(toCamelCase(outputSrcExtendClass)) + "Repository;");
+                serviceImplImportList.add(outputSrcExtendTableImport);
             }
         }
         bindingMap.put("outputSrcExtendClass", outputSrcExtendClass);

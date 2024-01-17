@@ -11,15 +11,15 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface InfraDictNoRepository extends JRepository<InfraDictNo, Long> {
-    InfraDictNoTable infraNoTable = InfraDictNoTable.$;
+    InfraDictNoTable infraDictNoTable = InfraDictNoTable.$;
 
     default Page<InfraDictNo> query(DictNoQueryInput inputVO){
-        return pager(inputVO.getPageNo() - 1, inputVO.getPageSize()).execute(sql().createQuery(infraNoTable)
-                .whereIf(StringUtils.hasText(inputVO.getKeyName()), infraNoTable.keyName().like(inputVO.getKeyName()))
-                .whereIf(StringUtils.hasText(inputVO.getPrefix()), infraNoTable.prefix().like(inputVO.getPrefix()))
-                .whereIf(StringUtils.hasText(inputVO.getRemark()), infraNoTable.remark().like(inputVO.getRemark()))
-                .orderBy(infraNoTable.createTime())
-                .select(infraNoTable)
+        return pager(inputVO.getPageNo() - 1, inputVO.getPageSize()).execute(sql().createQuery(infraDictNoTable)
+                .whereIf(StringUtils.hasText(inputVO.getKeyName()), infraDictNoTable.keyName().like(inputVO.getKeyName()))
+                .whereIf(StringUtils.hasText(inputVO.getPrefix()), infraDictNoTable.prefix().like(inputVO.getPrefix()))
+                .whereIf(StringUtils.hasText(inputVO.getRemark()), infraDictNoTable.remark().like(inputVO.getRemark()))
+                .orderBy(infraDictNoTable.createTime())
+                .select(infraDictNoTable)
         );
     }
 
@@ -28,6 +28,8 @@ public interface InfraDictNoRepository extends JRepository<InfraDictNo, Long> {
     Optional<InfraDictNo> findByKeyName(String keyName);
 
     default Optional<InfraDictNo> findByKeyNameUpdate(String keyName){
-        return sql().createQuery(infraNoTable).where(infraNoTable.keyName().eq(keyName)).select(infraNoTable).forUpdate().fetchOptional();
+        return sql().createQuery(infraDictNoTable).where(infraDictNoTable.keyName().eq(keyName)).select(infraDictNoTable).forUpdate().fetchOptional();
     }
+
+
 }

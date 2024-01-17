@@ -20,15 +20,14 @@ public interface SystemUserRepository extends JRepository<SystemUser, Long>{
     SystemUserTable systemUsersTable = SystemUserTable.$;
 
     default Page<SystemUser> getUserPage(UserPageInput reqVO){
-
         return pager(reqVO.getPageNo() - 1, reqVO.getPageSize()).execute(
-                sql()
-                .createQuery(systemUsersTable).where(systemUsersTable.deleted().eq(false))
-                .whereIf(StringUtils.hasText(reqVO.getUsername()), systemUsersTable.username().like(reqVO.getUsername()))
-                .whereIf(StringUtils.hasText(reqVO.getMobile()), systemUsersTable.mobile().like(reqVO.getMobile()))
-                .whereIf(reqVO.getStatus() != null, systemUsersTable.status().eq(reqVO.getStatus()))
-                .whereIf(reqVO.getCreateTime() != null,  () -> systemUsersTable.createTime().between(reqVO.getCreateTime()[0], reqVO.getCreateTime()[1]))
-                .select(systemUsersTable.fetch(SystemUserFetcher.$.allScalarFields().dept(SystemDeptFetcher.$.allScalarFields())))
+                sql().createQuery(systemUsersTable)
+                        .where(systemUsersTable.deleted().eq(false))
+                        .whereIf(StringUtils.hasText(reqVO.getUsername()), systemUsersTable.username().like(reqVO.getUsername()))
+                        .whereIf(StringUtils.hasText(reqVO.getMobile()), systemUsersTable.mobile().like(reqVO.getMobile()))
+                        .whereIf(reqVO.getStatus() != null, systemUsersTable.status().eq(reqVO.getStatus()))
+                        .whereIf(reqVO.getCreateTime() != null,  () -> systemUsersTable.createTime().between(reqVO.getCreateTime()[0], reqVO.getCreateTime()[1]))
+                        .select(systemUsersTable.fetch(SystemUserFetcher.$.allScalarFields().dept(SystemDeptFetcher.$.allScalarFields())))
         );
     }
 
