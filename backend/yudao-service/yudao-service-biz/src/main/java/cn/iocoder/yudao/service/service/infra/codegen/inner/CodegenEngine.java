@@ -1464,7 +1464,7 @@ public class CodegenEngine {
             String newContent = templateEngine.getTemplate(vmPath).render(newBindingMap);
             if(oldContent.equals(newContent) && oldType.firstModule().equals(newType.firstModule()) && oldType.secondModule().equals(newType.secondModule()))
                 return;
-            if(filePath.contains("Enum.java")){
+            if(filePath.contains("javaEnumPath")){
                 if(oldFilePath.equals(newFilePath)){
                     if(!FileUtil.exist(newFilePath)) {
                         FileUtil.touch(newFilePath);
@@ -1487,7 +1487,7 @@ public class CodegenEngine {
                 int deleteIndex = 0, deleteLength = 0;
                 File oldFile = FileUtil.file(oldFilePath);
                 StringBuilder oldFileContent = new StringBuilder(FileUtil.readUtf8String(oldFilePath));
-                if(filePath.contains("dict.ts")){
+                if(filePath.contains("vueTypePath")){
                     oldContent = oldContent + "\r\n";
                     if(oldFileContent.indexOf(oldContent) > 0){
                         deleteIndex = oldFileContent.indexOf(oldContent);
@@ -1528,17 +1528,17 @@ public class CodegenEngine {
                 fileContent.insert(fileContent.indexOf(firstModuleMatch) +  firstModuleMatch.length(), content + "\r\n");
             }else{
                 // 追加空格
-                if(filePath.contains("dict.ts"))
+                if(filePath.contains("vueTypePath"))
                     firstModuleMatch = "  " + firstModuleMatch;
-                if(filePath.contains("DictTypeConstants.java"))
+                if(filePath.contains("javaTypePath"))
                     firstModuleMatch = "    " + firstModuleMatch;
                 // 查找插入位置 不同的文件 插入位置不同
                 int insertIndex = 0;
-                if (filePath.contains("DictTypeConstants.java")){
+                if (filePath.contains("javaTypePath")){
                     insertIndex = fileContent.lastIndexOf("}");
                     content = content + "\r\n\r\n";
                 }
-                else if(filePath.contains("dict.ts")){
+                else if(filePath.contains("vueTypePath")){
                     String dictType = fileContent.substring(0, fileContent.indexOf("}",fileContent.indexOf("export enum DICT_TYPE {")));
                     insertIndex = dictType.lastIndexOf("'") + 1;
                     // 最后一行追加,符号
@@ -1573,7 +1573,7 @@ public class CodegenEngine {
             filePath = templateEngine.getTemplate(filePath).render(bindingMap);
             String content = templateEngine.getTemplate(vmPath).render(bindingMap);
             // constants文件只插入 enum文件新建
-            if(!filePath.contains("Enum.java")){
+            if(!filePath.contains("javaEnumPath")){
                 insertNewDict(type, filePath, content);
             }
             else{
