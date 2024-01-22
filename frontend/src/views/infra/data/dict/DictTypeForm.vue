@@ -23,7 +23,11 @@
         </el-col>
         <el-col :span="12">
           <el-form-item label="字典类型" prop="type">
-            <el-input v-model="formData.type" placeholder="请输入字典类型" />
+            <el-input
+              v-model="formData.type"
+              placeholder="请输入字典类型"
+              @keyup="formData.type = formData.type.replace(/[^a-z_]/g, '')"
+            />
           </el-form-item>
         </el-col>
       </el-row>
@@ -231,7 +235,7 @@ const handleAddData = () => {
     remark: '',
     dataEnum: '',
     operateType: 'new',
-    dictType: formData.value.id
+    typeId: formData.value.id
   }
 
   formData.value.datas.push(data)

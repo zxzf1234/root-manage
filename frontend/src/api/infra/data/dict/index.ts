@@ -10,7 +10,7 @@ export type DictDataVO = {
   cssClass: string
   dataEnum: string
   remark: string
-  dictType: string
+  typeId: string
 }
 
 export type DictTypeVO = {
