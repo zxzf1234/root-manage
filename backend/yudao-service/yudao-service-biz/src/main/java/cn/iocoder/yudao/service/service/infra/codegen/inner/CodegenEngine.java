@@ -1513,13 +1513,13 @@ public class CodegenEngine {
                 }
 
                 // 插入新dict
-                insertNewDict(newType, newFilePath, newContent);
+                insertNewDict(newType, newFilePath, filePath, newContent);
             }
         });
 
     }
 
-    private void insertNewDict(InfraDictType type, String filePath, String content){
+    private void insertNewDict(InfraDictType type, String filePath, String vmFilePath, String content){
         File file = FileUtil.file(filePath);
         String firstModuleMatch = "// ========== " + type.firstModule().toUpperCase() + " 模块 ==========\r\n";
         if(FileUtil.exist(filePath)) {
@@ -1528,17 +1528,17 @@ public class CodegenEngine {
                 fileContent.insert(fileContent.indexOf(firstModuleMatch) +  firstModuleMatch.length(), content + "\r\n");
             }else{
                 // 追加空格
-                if(filePath.contains("vueTypePath"))
+                if(vmFilePath.contains("vueTypePath"))
                     firstModuleMatch = "  " + firstModuleMatch;
-                if(filePath.contains("javaTypePath"))
+                if(vmFilePath.contains("javaTypePath"))
                     firstModuleMatch = "    " + firstModuleMatch;
                 // 查找插入位置 不同的文件 插入位置不同
                 int insertIndex = 0;
-                if (filePath.contains("javaTypePath")){
+                if (vmFilePath.contains("javaTypePath")){
                     insertIndex = fileContent.lastIndexOf("}");
                     content = content + "\r\n\r\n";
                 }
-                else if(filePath.contains("vueTypePath")){
+                else if(vmFilePath.contains("vueTypePath")){
                     String dictType = fileContent.substring(0, fileContent.indexOf("}",fileContent.indexOf("export enum DICT_TYPE {")));
                     insertIndex = dictType.lastIndexOf("'") + 1;
                     // 最后一行追加,符号
@@ -1569,12 +1569,12 @@ public class CodegenEngine {
     public void generateInsertDict(Map<String, Object> bindingMap, InfraDictType type)
     {
         Map<String, String> templates = new LinkedHashMap<>(DICT_TEMPLATES);
-        templates.forEach((vmPath, filePath) -> {
-            filePath = templateEngine.getTemplate(filePath).render(bindingMap);
+        templates.forEach((vmPath, vmFilePath) -> {
+            String filePath = templateEngine.getTemplate(vmFilePath).render(bindingMap);
             String content = templateEngine.getTemplate(vmPath).render(bindingMap);
             // constants文件只插入 enum文件新建
-            if(!filePath.contains("javaEnumPath")){
-                insertNewDict(type, filePath, content);
+            if(!vmFilePath.contains("javaEnumPath")){
+                insertNewDict(type, filePath, vmFilePath, content);
             }
             else{
                 File newFile;
