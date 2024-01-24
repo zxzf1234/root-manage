@@ -41,6 +41,7 @@
               v-model="formData.name"
               placeholder="请输入名称"
               @keyup="formData.name = formData.name.replace(/[^a-zA-Z_]/g, '')"
+              @blur="interfaceNameBlur"
             />
           </el-form-item>
         </el-col>
@@ -65,7 +66,11 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="权限" prop="authorize">
-            <el-input v-model="formData.authorize" placeholder="请输入权限" />
+            <el-input
+              v-model="formData.authorize"
+              placeholder="请输入权限"
+              @blur="formData.authorize = formData.authorize.trim()"
+            />
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -852,6 +857,21 @@ const handleDeleteSubclass = async () => {
         }
       }
     }
+  }
+}
+
+const interfaceNameBlur = () => {
+  if (formData.value.name.toLocaleLowerCase().indexOf('page') >= 0) {
+    formData.value.inputExtendClass = 'PageParam'
+    formData.value.inputType = 'VOClass'
+    formData.value.outputType = 'VOClassPage'
+    formData.value.comment = '分页查询'
+    formData.value.method = 'get'
+  }
+  if (formData.value.name.toLocaleLowerCase().indexOf('list') >= 0) {
+    formData.value.inputType = 'VOClass'
+    formData.value.outputType = 'VOClassList'
+    formData.value.method = 'get'
   }
 }
 
