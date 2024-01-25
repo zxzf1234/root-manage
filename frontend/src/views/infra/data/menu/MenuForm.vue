@@ -18,7 +18,12 @@
         />
       </el-form-item>
       <el-form-item label="菜单名称" prop="name">
-        <el-input v-model="formData.name" clearable placeholder="请输入菜单名称" />
+        <el-input
+          v-model="formData.name"
+          clearable
+          placeholder="请输入菜单名称"
+          @blur="formData.name = formData.name.trim()"
+        />
       </el-form-item>
       <el-form-item label="菜单类型" prop="type">
         <el-radio-group v-model="formData.type">

@@ -40,7 +40,7 @@
             <el-input
               v-model="formData.name"
               placeholder="请输入名称"
-              @keyup="formData.name = formData.name.replace(/[^a-zA-Z_]/g, '')"
+              @keyup="formData.name = formData.name.replace(/[^a-zA-Z]/g, '')"
               @blur="interfaceNameBlur"
             />
           </el-form-item>

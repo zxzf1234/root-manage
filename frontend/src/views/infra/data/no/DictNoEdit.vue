@@ -10,7 +10,11 @@
       <el-row>
         <el-col :span="8">
           <el-form-item label="编码名称" prop="keyName">
-            <el-input v-model="formData.keyName" placeholder="请输入编码名称" />
+            <el-input
+              v-model="formData.keyName"
+              placeholder="请输入编码名称"
+              @keyup="formData.keyName = formData.keyName.replace(/[^a-zA-Z]/g, '')"
+            />
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -24,7 +28,7 @@
               v-model="formData.prefix"
               placeholder="请输入前缀"
               @blur="formData.prefix = formData.prefix.toUpperCase()"
-              @keyup="formData.prefix = formData.prefix.replace(/[^a-zA-Z_]/g, '')"
+              @keyup="formData.prefix = formData.prefix.replace(/[^a-zA-Z]/g, '')"
             />
           </el-form-item>
         </el-col>
