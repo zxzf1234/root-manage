@@ -8,6 +8,7 @@ import org.hibernate.validator.constraints.Length;
 import javax.validation.Valid;
 import ${basePackage}.framework.common.enums.CommonStatusEnum;
 import ${basePackage}.framework.common.validation.InEnum;
+import java.math.BigDecimal;
 ## 处理 Date 字段的引入
 #foreach ($param in $inputParams)
 #if (${param.variableType} == "LocalDateTime" || ${param.variableType} == "LocalDateTime[]")## 时间类型
