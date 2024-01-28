@@ -1186,19 +1186,25 @@ public class CodegenEngine {
         generateModule(bindingMap);
     }
 
-    private String moduleUpdateContent(String content, InfraInterfaceModule oldModule, InfraInterfaceModule newModule){
+    private String moduleUpdateContent(String content, Map<String, Object> oldBindingMap, Map<String, Object> newBindingMap){
+        InfraInterfaceModule oldModule = (InfraInterfaceModule) oldBindingMap.get("module");
+        InfraInterfaceModule newModule = (InfraInterfaceModule) newBindingMap.get("module");
+        List<String> oldParentNames = Convert.toList(String.class, oldBindingMap.get("parentNames"));
+        List<String> mewParentNames = Convert.toList(String.class, newBindingMap.get("parentNames"));
         String oldName = oldModule.name();
         String oldHumpName = upperFirst(oldName);
         String oldComment = oldModule.comment();
         String newName = newModule.name();
         String newHumpName = upperFirst(newName);
         String newComment = newModule.comment();
-        content = content.replace("\\" + oldName, "\\" + newName)
+        content = content.replace("." + oldName, "." + newName)
+                .replace(toSymbolCase(oldName,'-') , toSymbolCase(newName, '-'))
                 .replace(oldName + "Service", newName + "Service")
                 .replace(oldHumpName + "Service", newHumpName + "Service")
                 .replace(oldHumpName + "Controller", newHumpName + "Controller")
                 .replace("\"" + oldComment + "\"", "\"" + newComment + "\"")
-                .replace(oldHumpName + "Convert", newHumpName + "Convert");
+                .replace(oldHumpName + "Convert", newHumpName + "Convert")
+                .replace(String.join(".", oldParentNames), String.join(".", mewParentNames));
 
         return content;
     }
@@ -1214,7 +1220,7 @@ public class CodegenEngine {
             if(!FileUtil.exist(oldFilePath))
                 return;
             String content = FileUtil.readUtf8String(oldFilePath);
-            content = moduleUpdateContent(content, oldModule, newModule);
+            content = moduleUpdateContent(content, oldBindingMap, newBindingMap);
             RuntimeUtil.execForStr("git mv " + oldFilePath + " " + newFilePath);
             File newFile = FileUtil.file(newFilePath);
             FileUtil.writeUtf8String(content, newFile);
@@ -1236,9 +1242,7 @@ public class CodegenEngine {
 
         bindingMap.put("sceneEnum", CodegenSceneEnum.valueOf("ADMIN"));
         bindingMap.put("module", module);
-        List<String> parentNames = getParentName(module.id());
-        // 去掉自身的name
-        parentNames.remove(0);
+        List<String> parentNames = getParentName(UUID.fromString(module.parentId()));
         Collections.reverse(parentNames);
         bindingMap.put("parentNames", parentNames);
         bindingMap.put("nameSymbol", toSymbolCase(module.name(),'-'));
