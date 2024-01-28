@@ -35,7 +35,6 @@
       v-loading="loading"
       :data="list"
       row-key="id"
-      :default-expand-all="isExpandAll"
       v-if="refreshTable"
       @row-dblclick="(row) => openForm('update', row.id)"
     >
