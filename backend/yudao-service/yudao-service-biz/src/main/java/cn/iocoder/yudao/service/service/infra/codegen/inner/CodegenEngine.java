@@ -1203,6 +1203,7 @@ public class CodegenEngine {
                 .replace(oldHumpName + "Service", newHumpName + "Service")
                 .replace(oldHumpName + "Controller", newHumpName + "Controller")
                 .replace("\"" + oldComment + "\"", "\"" + newComment + "\"")
+                .replace("=== " + oldComment + " ", "=== " + newComment + " ")
                 .replace(oldHumpName + "Convert", newHumpName + "Convert")
                 .replace(String.join(".", oldParentNames), String.join(".", mewParentNames));
 
