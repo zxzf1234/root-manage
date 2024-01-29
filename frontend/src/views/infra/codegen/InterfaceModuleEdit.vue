@@ -13,7 +13,6 @@
           :data="moduleTree"
           :props="defaultProps"
           check-strictly
-          default-expand-all
           placeholder="请选择上级分组"
           value-key="Id"
         />
