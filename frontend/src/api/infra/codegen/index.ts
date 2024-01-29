@@ -105,7 +105,7 @@ export type InterfaceVO = {
   comment: string
   method: string
   authorize: string
-  isTransaction: number
+  isTransaction: boolean
   moduleId: string
   moduleName: string
   inputType: string

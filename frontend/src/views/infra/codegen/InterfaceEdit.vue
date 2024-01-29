@@ -692,7 +692,7 @@ const initFormData = {
   comment: '',
   method: '',
   authorize: '',
-  isTransaction: 0,
+  isTransaction: false,
   inputType: '',
   inputExtendClass: '',
   inputServlet: 0,
@@ -861,17 +861,72 @@ const handleDeleteSubclass = async () => {
 }
 
 const interfaceNameBlur = () => {
+  if (formData.value.operateType != 'new') return
   if (formData.value.name.toLocaleLowerCase().indexOf('page') >= 0) {
     formData.value.inputExtendClass = 'PageParam'
     formData.value.inputType = 'VOClass'
     formData.value.outputType = 'VOClassPage'
     formData.value.comment = '分页查询'
     formData.value.method = 'get'
-  }
-  if (formData.value.name.toLocaleLowerCase().indexOf('list') >= 0) {
+  } else if (formData.value.name.toLocaleLowerCase().indexOf('list') >= 0) {
     formData.value.inputType = 'VOClass'
     formData.value.outputType = 'VOClassList'
     formData.value.method = 'get'
+    formData.value.comment = '查询'
+  } else if (formData.value.name.toLocaleLowerCase().indexOf('create') >= 0) {
+    formData.value.inputType = 'VOClass'
+    formData.value.outputType = 'param'
+    formData.value.method = 'post'
+    formData.value.comment = '新增'
+    formData.value.isTransaction = true
+  } else if (formData.value.name.toLocaleLowerCase().indexOf('update') >= 0) {
+    formData.value.inputType = 'VOClass'
+    formData.value.outputType = 'param'
+    formData.value.method = 'put'
+    formData.value.comment = '更新'
+    formData.value.isTransaction = true
+    const newParam = {
+      id: crypto.randomUUID(),
+      name: 'isSuccess',
+      comment: '是否成功',
+      isList: 0,
+      variableType: 'Boolean',
+      relatedColumn: '',
+      relatedType: 0,
+      relatedId: '',
+      example: '',
+      required: 0,
+      operateType: 'new',
+      parentId: formData.value.id,
+      parentType: 0,
+      inoutType: 1,
+      validations: []
+    }
+    formData.value.outputParams.push(newParam)
+  } else if (formData.value.name.toLocaleLowerCase().indexOf('delete') >= 0) {
+    formData.value.inputType = 'param'
+    formData.value.outputType = 'param'
+    formData.value.method = 'delete'
+    formData.value.comment = '删除'
+    formData.value.isTransaction = true
+    const newParam = {
+      id: crypto.randomUUID(),
+      name: 'isSuccess',
+      comment: '是否成功',
+      isList: 0,
+      variableType: 'Boolean',
+      relatedColumn: '',
+      relatedType: 0,
+      relatedId: '',
+      example: '',
+      required: 0,
+      operateType: 'new',
+      parentId: formData.value.id,
+      parentType: 0,
+      inoutType: 1,
+      validations: []
+    }
+    formData.value.outputParams.push(newParam)
   }
 }
 
