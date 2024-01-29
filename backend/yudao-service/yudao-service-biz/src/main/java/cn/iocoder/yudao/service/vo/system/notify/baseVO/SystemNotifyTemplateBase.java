@@ -1,11 +1,11 @@
 package cn.iocoder.yudao.service.vo.system.notify.baseVO;
 
-import cn.iocoder.yudao.framework.common.enums.*;
-import cn.iocoder.yudao.framework.common.validation.InEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import java.util.*;
 import javax.validation.constraints.*;
+import org.hibernate.validator.constraints.*;
+import javax.validation.constraints.NotEmpty;
 
 /**
  * 站内信模板表 Base VO，提供给添加、修改、详细的子 VO 使用
@@ -38,11 +38,12 @@ public class SystemNotifyTemplateBase {
     private List<String> params;
 
     @Schema(description = "状态", requiredMode = Schema.RequiredMode.REQUIRED)
-    @NotNull(message = "状态不能为空")
     @InEnum(value = CommonStatusEnum.class, message = "状态必须是 {value}")
+    @NotNull(message = "状态不能为空")
     private Integer status;
 
     @Schema(description = "备注", example = "我是备注")
+    @Size(max = 255, message = "备注长度不能超过255")
     private String remark;
 
 }

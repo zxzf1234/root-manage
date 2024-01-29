@@ -145,8 +145,11 @@
           </el-table-column>
           <el-table-column label="物理类型" min-width="10%">
             <template #default="scope">
-              <el-input
+              <el-select
                 v-model="scope.row.dataType"
+                allow-create
+                filterable
+                default-first-option
                 :disabled="
                   scope.row.columnName == 'create_time' ||
                   scope.row.columnName == 'update_time' ||
@@ -154,8 +157,18 @@
                   scope.row.columnName == 'updater_id' ||
                   scope.row.columnName == 'deleted'
                 "
-                @blur="dataTypeBlur(scope)"
-              />
+                @change="dataTypeBlur(scope)"
+              >
+                <el-option value="BIGINT" leable="BIGINT" />
+                <el-option value="INT" leable="INT" />
+                <el-option value="TINYINT" leable="TINYINT" />
+                <el-option value="VARCHAR(50)" leable="VARCHAR(50)" />
+                <el-option value="VARCHAR(255)" leable="VARCHAR(255)" />
+                <el-option value="VARCHAR(1024)" leable="VARCHAR(1024)" />
+                <el-option value="DECIMAL(19,4)" leable="DECIMAL(19,4)" />
+                <el-option value="DATETIME" leable="DATETIME" />
+                <el-option value="TIMESTAMP" leable="TIMESTAMP" />
+              </el-select>
             </template>
           </el-table-column>
           <el-table-column label="Java类型" min-width="11%">
