@@ -351,7 +351,7 @@ public class CodegenEngine {
                 functionContent.append("        Optional<").append(inputTableName).append(">").append(" optionalDuplicate")
                         .append(inputTableName).append(" = ").append(inputRepositoryName).append(".")
                         .append(repositoryDuplicateFunctionName).append("(").append(repositoryDuplicateFunctionParams).append(");\r\n");
-                //生成代码 if(opDuplicateInfraDictNo.isPresent() && !opDuplicateInfraDictNo.get().id().equals(inputVO.getId()))
+                //生成代码 if(opDuplicateInfraDictNo.isPresent() && !inputVO.getId().equals(opDuplicateInfraDictNo.get().id()))
                 functionContent.append("        if(optionalDuplicate").append(inputTableName)
                         .append(".isPresent() && !optionalDuplicate").append(inputTableName).append(".get().id().equals(inputVO.getId())){\r\n");
                 //生成代码 throw exception(DICT_NO_DUPLICATE);
