@@ -393,6 +393,8 @@ public class CodegenEngine {
             functionContent.append("            throw exception(").append(notExistErrorCode).append(");\r\n");
             //生成代码 }
             functionContent.append("        }\r\n");
+            // infraDictNoRepository.deleteById(id);
+            functionContent.append("        ").append(inputRepositoryName).append(".deleteById(id);\r\n");;
             InfraInterfaceParam firstOutputParam = infraInterface.outputParams().get(0);
             if(firstOutputParam.variableType().equals("Boolean")){
                 //生成代码 return true;
