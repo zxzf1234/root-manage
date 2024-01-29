@@ -208,6 +208,9 @@ public class DatabaseTableServiceImpl implements DatabaseTableService {
     }
 
     private String deleteColumn(DatabaseUpdateReq.Column reqVoColumn){
+        Optional<InfraDatabaseColumn> optionalColumn = infraDatabaseColumnRepository.findById(reqVoColumn.getId());
+        if(!optionalColumn.isPresent())
+            return "";
         // 删除校验
         List<InfraInterfaceValidation> validationList = infraInterfaceValidationRepository.findByParentId(reqVoColumn.getId());
         for(InfraInterfaceValidation validation : validationList)
