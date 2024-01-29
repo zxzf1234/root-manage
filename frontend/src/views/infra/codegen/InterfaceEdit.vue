@@ -927,6 +927,11 @@ const interfaceNameBlur = () => {
       validations: []
     }
     formData.value.outputParams.push(newParam)
+  } else if (formData.value.name.indexOf('singleGet') >= 0) {
+    formData.value.inputType = 'param'
+    formData.value.outputType = 'VOClass'
+    formData.value.method = 'get'
+    formData.value.comment = '获取单个'
   }
 }
 

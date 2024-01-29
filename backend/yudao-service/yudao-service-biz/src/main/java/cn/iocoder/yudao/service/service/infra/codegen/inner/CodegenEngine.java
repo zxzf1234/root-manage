@@ -427,6 +427,25 @@ public class CodegenEngine {
             //生成代码 return new PageResult<>(listNo, pageNo.getTotalElements());
             functionContent.append("        return new PageResult<>(list").append(outputTableName).append(", page")
                     .append(outputTableName).append(".getTotalElements());");
+        }else if(infraInterface.name().toLowerCase().contains("singleget")){
+            convertName = convertName + "OutputConvert";
+            String notExistErrorCode = bindingMap.get("notExistErrorCode").toString();
+            String moduleNameHumpUp = (String) bindingMap.get("moduleNameHumpUp");
+            String interfaceNameHump = (String) bindingMap.get("interfaceNameHump");
+            String interfaceOutput = moduleNameHumpUp + upperFirst(interfaceNameHump) + "Output";
+
+            //生成代码 Optional<InfraDictData> optionalDictData = infraDictDataRepository.findById(id);
+            functionContent.append("        Optional<").append(outputTableName).append("> option").append(outputTableName)
+                    .append(" = ").append(outputRepositoryName).append(".findById(id);\r\n");
+            //生成代码 if(!optionalOldInfraDictNo.isPresent())
+            functionContent.append("        if(!option").append(outputTableName).append(".isPresent())\r\n");
+            //生成代码 throw exception(DICT_NO_EXIST);
+            functionContent.append("            throw exception(").append(notExistErrorCode).append(");\r\n");
+            //生成代码 }
+            functionContent.append("        }\r\n");
+            //生成代码 return DictDataConvert.INSTANCE.singleGetOutputConvert(optionalDictData.get());
+            functionContent.append("        return ").append(convertClass).append(".INSTANCE.").append(convertName)
+                    .append("(option").append(outputTableName).append(".get());\r\n");
         }
         if(!functionContent.toString().isEmpty()) {
             bindingMap.put("functionContent", functionContent.toString());
