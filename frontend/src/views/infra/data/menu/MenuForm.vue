@@ -61,7 +61,12 @@
             titel="权限标识"
           />
         </template>
-        <el-input v-model="formData.permission" clearable placeholder="请输入权限标识" />
+        <el-input
+          v-model="formData.permission"
+          clearable
+          placeholder="请输入权限标识"
+          @blur="formData.permission = formData.permission.trim()"
+        />
       </el-form-item>
       <el-form-item label="显示排序" prop="sort">
         <el-input-number v-model="formData.sort" :min="0" clearable controls-position="right" />
