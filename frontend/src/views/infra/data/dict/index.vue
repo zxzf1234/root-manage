@@ -141,13 +141,13 @@ const typeData = ref()
 const tabActiveName = ref('dictData')
 const typeColumns: TableColumnList = [
   {
+    label: '字典类型',
+    prop: 'type'
+  },
+  {
     label: '字典名称',
     prop: 'name',
     showOverflowTooltip: true
-  },
-  {
-    label: '字典类型',
-    prop: 'type'
   },
   {
     label: '一级模块',

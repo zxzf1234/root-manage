@@ -17,11 +17,6 @@
     >
       <el-row>
         <el-col :span="12">
-          <el-form-item label="字典名称" prop="name">
-            <el-input v-model="formData.name" placeholder="请输入字典名称" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
           <el-form-item label="字典类型" prop="type">
             <el-input
               v-model="formData.type"
@@ -29,6 +24,11 @@
               @keyup="formData.type = formData.type.replace(/[^a-z_]/g, '')"
             />
           </el-form-item>
+          <el-col :span="12">
+            <el-form-item label="字典名称" prop="name">
+              <el-input v-model="formData.name" placeholder="请输入字典名称" />
+            </el-form-item>
+          </el-col>
         </el-col>
       </el-row>
       <el-row>
