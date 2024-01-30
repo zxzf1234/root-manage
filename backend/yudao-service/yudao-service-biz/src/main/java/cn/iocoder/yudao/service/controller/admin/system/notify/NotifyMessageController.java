@@ -31,7 +31,7 @@ import static cn.iocoder.yudao.framework.operatelog.core.enums.OperateTypeEnum.*
 import cn.iocoder.yudao.service.service.system.notify.NotifyMessageService;
 import cn.iocoder.yudao.service.vo.system.notify.notifyMessage.*;
 
-@Tag(name = "站内信-消息记录")
+@Tag(name = "消息记录")
 @RestController
 @RequestMapping("/system/notify/notify-message")
 @Validated

@@ -139,15 +139,13 @@ public interface ErrorCodeConstants {
     ErrorCode MAIL_SEND_TEMPLATE_PARAM_MISS = new ErrorCode(1001022000, "模板参数({})缺失");
     ErrorCode MAIL_SEND_MAIL_NOT_EXISTS = new ErrorCode(1001022000, "邮箱不存在");
 
-    // ========== 站内信模版 1001024000 ==========
-    ErrorCode NOTIFY_TEMPLATE_NOT_EXISTS = new ErrorCode(1001024000, "站内信模版不存在");
-    ErrorCode NOTIFY_TEMPLATE_CODE_DUPLICATE = new ErrorCode(1001024001, "已经存在编码为【{}】的站内信模板");
-
-    // ========== 站内信信息 1001025000 ==========
-    ErrorCode NOTIFY_MESSAGE_NOT_EXISTS = new ErrorCode(1001025000, "站内信消息不存在");
-
-    // ========== 站内信发送 1001026000 ==========
-    ErrorCode NOTIFY_SEND_TEMPLATE_PARAM_MISS = new ErrorCode(1001026000, "模板参数({})缺失");
+    // ========== 菜单模块 1001027000 ==========
+    ErrorCode MENU_NAME_DUPLICATE = new ErrorCode(1001027000, "已经存在该名字的菜单");
+    ErrorCode MENU_PARENT_NOT_EXISTS = new ErrorCode(1001027001, "父菜单不存在");
+    ErrorCode MENU_PARENT_ERROR = new ErrorCode(1001027002, "不能设置自己为父菜单");
+    ErrorCode MENU_NOT_EXISTS = new ErrorCode(1001027003, "菜单不存在");
+    ErrorCode MENU_EXISTS_CHILDREN = new ErrorCode(1001027004, "存在子菜单，无法删除");
+    ErrorCode MENU_PARENT_NOT_DIR_OR_MENU = new ErrorCode(1001027005, "父菜单的类型必须是目录或者菜单");
 
 
 }

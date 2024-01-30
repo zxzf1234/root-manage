@@ -30,7 +30,7 @@ import static cn.iocoder.yudao.framework.operatelog.core.enums.OperateTypeEnum.*
 import cn.iocoder.yudao.service.service.system.notice.NoticeService;
 import cn.iocoder.yudao.service.vo.system.notice.notice.*;
 
-@Tag(name = "通知公告管理")
+@Tag(name = "通知公告")
 @RestController
 @RequestMapping("/system/notice")
 @Validated

@@ -33,7 +33,7 @@ import static cn.iocoder.yudao.framework.operatelog.core.enums.OperateTypeEnum.*
 import cn.iocoder.yudao.service.service.system.notify.NotifyTemplateService;
 import cn.iocoder.yudao.service.vo.system.notify.notifyTemplate.*;
 
-@Tag(name = "站内信模板")
+@Tag(name = "模板管理")
 @RestController
 @RequestMapping("/system/notify/notify-template")
 @Validated

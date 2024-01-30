@@ -235,13 +235,13 @@ public class CodegenEngine {
     private void generateInterfaceErrorCode(Map<String, Object> bindingMap){
         InfraInterface infraInterface = (InfraInterface) bindingMap.get("interface");
         InfraDatabaseTable inputTable = (InfraDatabaseTable) bindingMap.get("inputTable");
+        InfraDatabaseTable outputTable = (InfraDatabaseTable) bindingMap.get("outputTable");
         bindingMap.put("dupErrorCode", "");
         bindingMap.put("dupErrorMessage", "");
         bindingMap.put("notExistErrorCode", "");
         bindingMap.put("notExistErrorMessage", "");
-        List<InfraDatabaseIndex> indexList = inputTable.indexes().stream().filter(
-                index-> index.indexType().equals("UNIQUE INDEX")).collect(Collectors.toList()
-        );
+        List<InfraDatabaseIndex> indexList = inputTable == null ? new ArrayList<>() :
+                inputTable.indexes().stream().filter(index-> index.indexType().equals("UNIQUE INDEX")).collect(Collectors.toList());
         if((infraInterface.name().toLowerCase().contains("update")
                 || infraInterface.name().toLowerCase().contains("create"))
             && !indexList.isEmpty()){
@@ -271,6 +271,11 @@ public class CodegenEngine {
             bindingMap.put("notExistErrorCode", inputTable.name().toUpperCase() + "_NOT_EXIST");
             bindingMap.put("notExistErrorMessage", inputTable.comment() + "不存在");
         }
+        if(infraInterface.name().toLowerCase().contains("singleget")){
+
+            bindingMap.put("notExistErrorCode", outputTable.name().toUpperCase() + "_NOT_EXIST");
+            bindingMap.put("notExistErrorMessage", outputTable.comment() + "不存在");
+        }
 
     }
 
@@ -291,7 +296,7 @@ public class CodegenEngine {
 
         InfraDatabaseTable outputTable = (InfraDatabaseTable) bindingMap.get("outputTable");
         String outputTableName = null, outputRepositoryName = null;
-        if(infraInterface.name().toLowerCase().contains("query")){
+        if(infraInterface.name().toLowerCase().contains("query") || infraInterface.name().toLowerCase().contains("singleget")){
              outputTableName = upperFirst(toCamelCase(outputTable.name()));
              outputRepositoryName = toCamelCase(outputTable.name()) + "Repository";
         }
@@ -430,15 +435,12 @@ public class CodegenEngine {
         }else if(infraInterface.name().toLowerCase().contains("singleget")){
             convertName = convertName + "OutputConvert";
             String notExistErrorCode = bindingMap.get("notExistErrorCode").toString();
-            String moduleNameHumpUp = (String) bindingMap.get("moduleNameHumpUp");
-            String interfaceNameHump = (String) bindingMap.get("interfaceNameHump");
-            String interfaceOutput = moduleNameHumpUp + upperFirst(interfaceNameHump) + "Output";
 
             //生成代码 Optional<InfraDictData> optionalDictData = infraDictDataRepository.findById(id);
             functionContent.append("        Optional<").append(outputTableName).append("> option").append(outputTableName)
                     .append(" = ").append(outputRepositoryName).append(".findById(id);\r\n");
             //生成代码 if(!optionalOldInfraDictNo.isPresent())
-            functionContent.append("        if(!option").append(outputTableName).append(".isPresent())\r\n");
+            functionContent.append("        if(!option").append(outputTableName).append(".isPresent()){\r\n");
             //生成代码 throw exception(DICT_NO_EXIST);
             functionContent.append("            throw exception(").append(notExistErrorCode).append(");\r\n");
             //生成代码 }
@@ -723,13 +725,18 @@ public class CodegenEngine {
             outputExtendClassImport = getExtendClassImport(infraInterface.outputExtendClass(), bindingMap);
             convertImportList.add(outputSrcExtendTableImport);
             outputImportList.add(outputExtendClassImport);
-            if(infraInterface.name().toLowerCase().contains("pagequery") || infraInterface.name().toLowerCase().contains("listquery")){
+            if(infraInterface.name().toLowerCase().contains("pagequery") || infraInterface.name().toLowerCase().contains("listquery")
+                    || infraInterface.name().toLowerCase().contains("singleget")){
                 bindingMap.put("outputTable", table);
                 bindingMap.put("tableFirstModule", table.firstModule());
                 bindingMap.put("tableSecondModule", table.secondModule());
                 bindingMap.put("classNameHump", upperFirst(toCamelCase(table.name())));
                 generateInterfaceRepositoryFunction(bindingMap);
-                bindingMap.put("isGenerateRepository", true);
+                if(infraInterface.name().toLowerCase().contains("pagequery") || infraInterface.name().toLowerCase().contains("listquery")){
+                    bindingMap.put("isGenerateRepository", true);
+                }else{
+                    generateInterfaceErrorCode(bindingMap);
+                }
                 generateInterfaceFunctionContent(bindingMap);
                 serviceImplList.add("    @Resource\r\n" + "    private " + upperFirst(toCamelCase(table.name()))
                         + "Repository " + toCamelCase(table.name()) + "Repository;");

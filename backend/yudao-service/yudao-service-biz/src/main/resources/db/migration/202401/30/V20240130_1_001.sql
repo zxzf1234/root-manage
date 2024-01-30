@@ -1,0 +1,4 @@
+update INFRA_INTERFACE_MODULE set UPDATER_ID = '1', DELETED = 0, NAME = 'post', COMMENT = '岗位管理', PARENT_ID = '775f45b3-424a-4e58-9d0e-035c8a9f28d0', TYPE = '1', SORT = '1' where ID = '2b2d6ae3-66ec-4355-9081-b0c43238b477';
+update INFRA_INTERFACE_MODULE set UPDATER_ID = '1', DELETED = 0, NAME = 'notifyMessage', COMMENT = '消息记录', PARENT_ID = '49ab7267-a94b-4f8c-87d8-bbd7cf1caa24', TYPE = '1', SORT = '2' where ID = 'f9b21435-7240-454c-a0ad-60d7b2b88dd7';
+update INFRA_INTERFACE_MODULE set UPDATER_ID = '1', DELETED = 0, NAME = 'notifyTemplate', COMMENT = '模板管理', PARENT_ID = '49ab7267-a94b-4f8c-87d8-bbd7cf1caa24', TYPE = '1', SORT = '1' where ID = 'fdca78de-395e-4c60-aa04-41e61d82db70';
+update INFRA_INTERFACE_MODULE set UPDATER_ID = '1', DELETED = 0, NAME = 'notice', COMMENT = '通知公告', PARENT_ID = '37e6c8fe-8d9c-4adb-8e46-ba32d21c7459', TYPE = '1', SORT = '5' where ID = '81bb6a54-79a4-426c-8b54-a06f6c97a25e';
