@@ -916,6 +916,12 @@ const handleSaveTable = async () => {
   if (!formRef) return
   const valid = await formRef.value.validate()
   if (!valid) return
+  for (let i = 0; i < formData.value.columns.length; i++) {
+    if (formData.value.columns[i].dataType == '') {
+      message.alertError(formData.value.columns[i].columnName + '没有选择物理类型')
+      return
+    }
+  }
   if (formType.value === 'create') {
     const databaseData = formData.value as unknown as CodegenApi.DatabaseTableVO
     await CodegenApi.createDatabaseTable(databaseData)
