@@ -51,15 +51,16 @@ public interface ErrorCodeConstants {
     ErrorCode POST_NAME_DUPLICATE = new ErrorCode(1002004002, "已经存在该名字的岗位");
     ErrorCode POST_CODE_DUPLICATE = new ErrorCode(1002004003, "已经存在该标识的岗位");
 
-    // ========== 通知公告 1002006000 ==========
-    ErrorCode NOTICE_NOT_FOUND = new ErrorCode(1002006001, "当前通知公告不存在");
+    // ========== 通知公告 1002005000 ==========
+    ErrorCode NOTICE_NOT_FOUND = new ErrorCode(1002005001, "当前通知公告不存在");
 
-    // ========== 站内信模版管理 1001024000 ==========
-    ErrorCode NOTIFY_TEMPLATE_NOT_EXISTS = new ErrorCode(1001024000, "站内信模版不存在");
-    ErrorCode NOTIFY_TEMPLATE_CODE_DUPLICATE = new ErrorCode(1001024001, "已经存在编码为【{}】的站内信模板");
+    // ========== 站内信模版管理 1001006000 ==========
+    ErrorCode NOTIFY_TEMPLATE_NOT_EXISTS = new ErrorCode(1001006000, "站内信模版不存在");
+    ErrorCode NOTIFY_TEMPLATE_CODE_DUPLICATE = new ErrorCode(1001006001, "已经存在编码为【{}】的站内信模板");
 
-    // ========== 站内信消息记录 1001025000 ==========
-    ErrorCode NOTIFY_MESSAGE_NOT_EXISTS = new ErrorCode(1001025000, "站内信消息不存在");
-    ErrorCode NOTIFY_SEND_TEMPLATE_PARAM_MISS = new ErrorCode(1001025001, "模板参数({})缺失");
+    // ========== 站内信消息记录 1001007000 ==========
+    ErrorCode NOTIFY_MESSAGE_NOT_EXISTS = new ErrorCode(1001007000, "站内信消息不存在");
+    ErrorCode NOTIFY_SEND_TEMPLATE_PARAM_MISS = new ErrorCode(1001007001, "模板参数({})缺失");
+
 
 }
