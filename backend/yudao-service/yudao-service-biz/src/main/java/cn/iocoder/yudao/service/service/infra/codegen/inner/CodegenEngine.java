@@ -358,7 +358,7 @@ public class CodegenEngine {
                         .append(repositoryDuplicateFunctionName).append("(").append(repositoryDuplicateFunctionParams).append(");\r\n");
                 //生成代码 if(opDuplicateInfraDictNo.isPresent() && !inputVO.getId().equals(opDuplicateInfraDictNo.get().id()))
                 functionContent.append("        if(optionalDuplicate").append(inputTableName)
-                        .append(".isPresent() && !optionalDuplicate").append(inputTableName).append(".get().id().equals(inputVO.getId())){\r\n");
+                        .append(".isPresent() && !inputVO.getId().equals(optionalDuplicate").append(inputTableName).append(".get().id())){\r\n");
                 //生成代码 throw exception(DICT_NO_DUPLICATE);
                 functionContent.append("            throw exception(").append(dupErrorCode).append(");\r\n");
                 //生成代码 }
