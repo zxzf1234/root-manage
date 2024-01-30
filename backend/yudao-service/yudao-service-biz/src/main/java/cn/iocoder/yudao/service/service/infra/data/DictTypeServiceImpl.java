@@ -123,17 +123,26 @@ public class DictTypeServiceImpl implements DictTypeService {
             throw exception(DICT_TYPE_NOT_EXISTS);
         for(DictTypeUpdateInput.data data : inputVO.getDatas()){
             if(Objects.equals(data.getOperateType(), "delete")){
+                Optional<InfraDictData> optionalDeleteInfraDictData = infraDictDataRepository.findById(data.getId());
+                if(!optionalDeleteInfraDictData.isPresent()){
+                    throw exception(DICT_DATA_NOT_EXISTS);
+                }
                 infraDictDataRepository.deleteById(data.getId());
             }else if(Objects.equals(data.getOperateType(), "new")){
+                Optional<InfraDictData> optionalDuplicateInfraDictData = infraDictDataRepository.findByTypeIdAndValue(data.getTypeId(), data.getValue());
+                if(optionalDuplicateInfraDictData.isPresent()){
+                    throw exception(DICT_DATA_VALUE_DUPLICATE);
+                }
                 InfraDictData newData = DictTypeConvert.INSTANCE.updateInputDataConvert(data);
                 infraDictDataRepository.insert(newData);
             }else {
-                InfraDictData updateData = DictTypeConvert.INSTANCE.updateInputDataConvert(data);
-                Optional<InfraDictData> opOldData = infraDictDataRepository.findById(updateData.id());
-                if(!opOldData.isPresent())
+                Optional<InfraDictData> optionalOldInfraDictData = infraDictDataRepository.findById(data.getId());
+                if(!optionalOldInfraDictData.isPresent()) {
                     throw exception(DICT_DATA_NOT_EXISTS);
-                if (!EntityUtils.isEquals(opOldData.get(), updateData))
-                    infraDictDataRepository.update(updateData);
+                }
+                InfraDictData updateInfraDictData = DictTypeConvert.INSTANCE.updateInputDataConvert(data);
+                if (!EntityUtils.isEquals(optionalOldInfraDictData.get(), updateInfraDictData))
+                    infraDictDataRepository.update(updateInfraDictData);
             }
         }
 
