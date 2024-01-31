@@ -66,4 +66,6 @@ public interface InfraDictDataRepository extends JRepository<InfraDictData, Long
                 .select(infraDictDataTable)
                 .execute();
     }
+
+
 }

@@ -32,12 +32,11 @@ import cn.iocoder.yudao.service.enums.infra.codegen.CodegenSceneEnum;
 import cn.iocoder.yudao.service.framework.codegen.config.CodegenProperties;
 import cn.iocoder.yudao.service.framework.codegen.config.SchemaHistory;
 import cn.iocoder.yudao.service.model.infra.codegen.*;
-import cn.iocoder.yudao.service.model.infra.data.InfraDictData;
-import cn.iocoder.yudao.service.model.infra.data.InfraDictNo;
-import cn.iocoder.yudao.service.model.infra.data.InfraDictType;
+import cn.iocoder.yudao.service.model.infra.data.*;
 import cn.iocoder.yudao.service.repository.infra.codegen.*;
 import cn.iocoder.yudao.service.vo.infra.data.dictNo.DictNoQueryOutput;
 import cn.iocoder.yudao.service.vo.infra.data.dictType.DictTypeUpdateInput;
+import org.babyfish.jimmer.DraftObjects;
 import org.jsoup.internal.StringUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
@@ -113,6 +112,7 @@ public class CodegenEngine {
             .put(templatePath("interface/voInput"), templatePath("interface/voInputPath"))
             .put(templatePath("interface/voOutput"), templatePath("interface/voOutputPath"))
             .put(templatePath("interface/repository"), templatePath("interface/repositoryPath"))
+            .put(templatePath("interface/repositorySub"), templatePath("interface/repositorySubPath"))
             .put(templatePath("interface/errorCode"), templatePath("interface/errorCodePath"))
             .put(templatePath("interface/vueApi"), templatePath("interface/vueApiPath"))
             .build();
@@ -453,7 +453,7 @@ public class CodegenEngine {
                         .append(" = ").append(convertClass).append(".INSTANCE.").append(convertName).append("(")
                         .append(inputSubClassName).append(");\r\n");
 //                        infraDictDataRepository.insert(newData);
-                functionContent.append("                ").append(inputSubRepositoryName).append("insert.(new").append(interfaceInput)
+                functionContent.append("                ").append(inputSubRepositoryName).append(".insert(new").append(inputSubTableName)
                         .append(");\r\n");
 //                    }else {
                 functionContent.append("            }else{\r\n");
@@ -473,8 +473,10 @@ public class CodegenEngine {
                             .append(inputSubTableName).append(" = ").append(inputSubRepositoryName)
                             .append(".").append(subRepositoryDuplicateFunctionName)
                             .append("(").append(subRepositoryDuplicateFunctionParams).append(");\r\n");
-//                        if(optionalDuplicateInfraDictData.isPresent()){
-                    functionContent.append("                if(optionalDuplicate").append(inputSubTableName).append(".isPresent()){\r\n");
+//                        if(optionalDuplicateInfraDictData.isPresent() && !data.getId().equals(optionalDuplicateInfraDictData.get().id()))
+                    functionContent.append("                if(optionalDuplicate").append(inputSubTableName).append(".isPresent() && !")
+                            .append(inputSubClassName).append(".getId().equals(optionalDuplicate")
+                            .append(inputSubTableName).append(".get().id())){\r\n");
 //                            throw exception(DICT_DATA_VALUE_DUPLICATE);
                     functionContent.append("                    throw exception(").append(subDuplicateErrorCode).append(");\r\n");
 //                        }
@@ -499,8 +501,23 @@ public class CodegenEngine {
             //生成代码 InfraDictNo updateInfraDictNo = DictNoConvert.INSTANCE.updateInputConvert(inputVO);
             functionContent.append("        ").append(inputTableName).append(" update").append(inputTableName).append(" = ")
                     .append(convertClass).append(".INSTANCE.").append(convertName).append("(inputVO);\r\n");
+            if(inputSubTable != null){
+                String upperInputSubClassName = bindingMap.get("inputSubClassName").toString().toUpperCase();
+//            updateInfraDictType = InfraDictTypeDraft.$.produce(updateInfraDictType, draft -> {
+                functionContent.append("        update").append(inputTableName).append(" = ").append(inputTableName)
+                        .append("Draft.$.produce(update").append(inputTableName).append(", draft -> {\r\n");
+//                DraftObjects.unload(draft, InfraDictTypeProps.DATAS);
+                functionContent.append("            DraftObjects.unload(draft, ").append(inputTableName).append("Props.")
+                        .append(upperInputSubClassName).append("S);\r\n");
+//            });
+                functionContent.append("        });\r\n");
+            }
+
+            //if (!EntityUtils.isEquals(optionalOldInfraDictType.get(), updateInfraDictType))
+            functionContent.append("        if (!EntityUtils.isEquals(optionalOld").append(inputTableName).append(".get(), update")
+                    .append(inputTableName).append("))\r\n");
             //生成代码  InfraDictNoRepository.insert(newInfraDictNo);
-            functionContent.append("        ").append(inputRepositoryName) .append(".update(update").append(inputTableName).append(");\n");
+            functionContent.append("            ").append(inputRepositoryName) .append(".update(update").append(inputTableName).append(");\n");
             InfraInterfaceParam firstOutputParam = infraInterface.outputParams().get(0);
             if(firstOutputParam.variableType().equals("Boolean")){
                 //生成代码 return true;
@@ -801,7 +818,8 @@ public class CodegenEngine {
 
         bindingMap.put("isGenerateRepository", false);
         bindingMap.put("isGenerateErrorCode", false);
-        bindingMap.put("isSubGenerateRepository", false);
+        bindingMap.put("isGenerateSubRepository", false);
+        bindingMap.put("inputSubTableName", "");
 
         List<CodegenInterfaceSubclass> inputSubclasses = CodegenConvert.INSTANCE.convertList20(infraInterface.inputSubclasses());
         for(CodegenInterfaceSubclass inputSubclass : inputSubclasses){
@@ -835,7 +853,7 @@ public class CodegenEngine {
                     bindingMap.put("subTableFirstModule", subTable.firstModule());
                     bindingMap.put("subTableSecondModule", subTable.secondModule());
                     bindingMap.put("subClassNameHump", upperFirst(toCamelCase(subTable.name())));
-                    bindingMap.put("isSubGenerateRepository", true);
+                    bindingMap.put("isGenerateSubRepository", true);
                 }
             }
         }
