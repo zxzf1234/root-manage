@@ -236,47 +236,67 @@ public class CodegenEngine {
         InfraInterface infraInterface = (InfraInterface) bindingMap.get("interface");
         InfraDatabaseTable inputTable = (InfraDatabaseTable) bindingMap.get("inputTable");
         InfraDatabaseTable outputTable = (InfraDatabaseTable) bindingMap.get("outputTable");
-        bindingMap.put("dupErrorCode", "");
-        bindingMap.put("dupErrorMessage", "");
+        bindingMap.put("duplicateErrorCode", "");
+        bindingMap.put("duplicateErrorMessage", "");
         bindingMap.put("notExistErrorCode", "");
         bindingMap.put("notExistErrorMessage", "");
-        List<InfraDatabaseIndex> indexList = inputTable == null ? new ArrayList<>() :
-                inputTable.indexes().stream().filter(index-> index.indexType().equals("UNIQUE INDEX")).collect(Collectors.toList());
-        if((infraInterface.name().toLowerCase().contains("update")
-                || infraInterface.name().toLowerCase().contains("create"))
-            && !indexList.isEmpty()){
 
-            InfraDatabaseIndex uniqueIndex = indexList.get(0);
-            String uniqueIndexName = uniqueIndex.indexName().substring(uniqueIndex.indexName().indexOf("_") + 1);
-            bindingMap.put("dupErrorCode", uniqueIndexName.toUpperCase() + "_DUPLICATE");
-            StringBuilder dupErrorMessage = new StringBuilder("");
-            List<String> uniqueColumnName = uniqueIndex.columnNames();
-            for(String columnName : uniqueColumnName){
-                List<InfraDatabaseColumn> columnList = inputTable.columns().stream().filter(
-                        column -> column.columnName().equals(columnName)).collect(Collectors.toList());
-                if(!columnList.isEmpty() && !Objects.equals(columnList.get(0).javaType(), "Long")){
-                    if(dupErrorMessage.toString().isEmpty()) {
-                        dupErrorMessage.append(columnList.get(0).columnComment());
-                    }else{
-                        dupErrorMessage.append("、").append(columnList.get(0).columnComment());
-                    }
-                }
-            }
-            dupErrorMessage.insert(0, "已经存在相同").append("的").append(inputTable.comment());
-            bindingMap.put("dupErrorMessage", dupErrorMessage.toString());
+        if(infraInterface.name().toLowerCase().contains("update")
+                || infraInterface.name().toLowerCase().contains("create")){
+            errorCodeDuplicate(bindingMap, inputTable, "duplicateErrorCode", "duplicateErrorMessage");
+        }
+        if(infraInterface.name().toLowerCase().contains("update")
+            && !infraInterface.inputSubclasses().isEmpty()){
+            InfraInterfaceSubclass subclass = infraInterface.inputSubclasses().get(0);
+            InfraInterfaceVoClass voClass = infraInterfaceVoClassRepository.findByName(subclass.inheritClass()).get();
+            String inputSrcExtendClass = srcExtendClass(voClass.id());
+            InfraDatabaseTable subTable = infraDatabaseTableRepository.findByName(inputSrcExtendClass).get();
+            errorCodeDuplicate(bindingMap, subTable, "subDuplicateErrorCode", "subDuplicateErrorMessage");
+            errorCodeNotExists(bindingMap, subTable, "subNotExitsErrorCode", "subNotExitsErrorMessage");
         }
         if(infraInterface.name().toLowerCase().contains("delete")
                 || infraInterface.name().toLowerCase().contains("update")){
-
-            bindingMap.put("notExistErrorCode", inputTable.name().toUpperCase() + "_NOT_EXIST");
-            bindingMap.put("notExistErrorMessage", inputTable.comment() + "不存在");
+            errorCodeNotExists(bindingMap, inputTable, "notExitsErrorCode", "notExitsErrorMessage");
         }
         if(infraInterface.name().toLowerCase().contains("singleget")){
-
-            bindingMap.put("notExistErrorCode", outputTable.name().toUpperCase() + "_NOT_EXIST");
-            bindingMap.put("notExistErrorMessage", outputTable.comment() + "不存在");
+            errorCodeNotExists(bindingMap, outputTable, "notExitsErrorCode", "notExitsErrorMessage");
         }
 
+    }
+
+    private void errorCodeDuplicate(Map<String, Object> bindingMap, InfraDatabaseTable table, String codeKey, String messageKey){
+        if(table == null)
+            return;
+        List<InfraDatabaseIndex> indexList = table.indexes().stream()
+                .filter(index-> index.indexType().equals("UNIQUE INDEX")).collect(Collectors.toList());
+        if(indexList.isEmpty())
+            return;
+
+        InfraDatabaseIndex uniqueIndex = indexList.get(0);
+        String uniqueIndexName = uniqueIndex.indexName().substring(uniqueIndex.indexName().indexOf("_") + 1);
+        bindingMap.put(codeKey, uniqueIndexName.toUpperCase() + "_DUPLICATE");
+        StringBuilder duplicateErrorMessage = new StringBuilder("");
+        List<String> uniqueColumnName = uniqueIndex.columnNames();
+        for(String columnName : uniqueColumnName){
+            List<InfraDatabaseColumn> columnList = table.columns().stream().filter(
+                    column -> column.table().equals(columnName)).collect(Collectors.toList());
+            if(!columnList.isEmpty() && !Objects.equals(columnList.get(0).javaType(), "Long")){
+                if(duplicateErrorMessage.toString().isEmpty()) {
+                    duplicateErrorMessage.append(columnList.get(0).columnComment());
+                }else{
+                    duplicateErrorMessage.append("、").append(columnList.get(0).columnComment());
+                }
+            }
+        }
+        duplicateErrorMessage.insert(0, "已经存在相同").append("的").append(table.comment());
+        bindingMap.put(messageKey, duplicateErrorMessage.toString());
+    }
+
+    private void errorCodeNotExists(Map<String, Object> bindingMap, InfraDatabaseTable table, String codeKey, String messageKey){
+        if(table == null)
+            return;
+        bindingMap.put(codeKey, table.name().toUpperCase() + "_NOT_EXIST");
+        bindingMap.put(messageKey, table.comment() + "不存在");
     }
 
     private void generateInterfaceFunctionContent(Map<String, Object> bindingMap){
@@ -305,7 +325,7 @@ public class CodegenEngine {
 
         String convertName = bindingMap.get("interfaceNameHump").toString();
         if(infraInterface.name().toLowerCase().contains("create")){
-            String dupErrorCode = bindingMap.get("dupErrorCode").toString();
+            String duplicateErrorCode = bindingMap.get("duplicateErrorCode").toString();
             String repositoryDuplicateFunctionName = bindingMap.get("repositoryDuplicateFunctionName").toString();
             String repositoryDuplicateFunctionParams = bindingMap.get("repositoryDuplicateFunctionParams").toString();
             convertName = convertName + "InputConvert";
@@ -317,7 +337,7 @@ public class CodegenEngine {
                 //生成代码 if(optionalDuplicateInfraDictNo.isPresent())
                 functionContent.append("        if(optionalDuplicate").append(inputTableName).append(".isPresent()){\r\n");
                 //生成代码 throw exception(DICT_NO_DUPLICATE);
-                functionContent.append("            throw exception(").append(dupErrorCode).append(");\r\n");
+                functionContent.append("            throw exception(").append(duplicateErrorCode).append(");\r\n");
                 //生成代码 }
                 functionContent.append("        }\r\n");
             }
@@ -346,7 +366,7 @@ public class CodegenEngine {
 
         }else if(infraInterface.name().toLowerCase().contains("update")){
             convertName = convertName + "InputConvert";
-            String dupErrorCode = bindingMap.get("dupErrorCode").toString();
+            String duplicateErrorCode = bindingMap.get("duplicateErrorCode").toString();
             String notExistErrorCode = bindingMap.get("notExistErrorCode").toString();
             String repositoryDuplicateFunctionName = bindingMap.get("repositoryDuplicateFunctionName").toString();
             String repositoryDuplicateFunctionParams = bindingMap.get("repositoryDuplicateFunctionParams").toString();
@@ -360,7 +380,7 @@ public class CodegenEngine {
                 functionContent.append("        if(optionalDuplicate").append(inputTableName)
                         .append(".isPresent() && !inputVO.getId().equals(optionalDuplicate").append(inputTableName).append(".get().id())){\r\n");
                 //生成代码 throw exception(DICT_NO_DUPLICATE);
-                functionContent.append("            throw exception(").append(dupErrorCode).append(");\r\n");
+                functionContent.append("            throw exception(").append(duplicateErrorCode).append(");\r\n");
                 //生成代码 }
                 functionContent.append("        }\r\n");
             }
@@ -634,6 +654,23 @@ public class CodegenEngine {
                 String inputSubExtendClassImport = getExtendClassImport(inputSubclass.getInheritClass(), bindingMap);
                 if(!inputSubExtendClassImport.isEmpty())
                     inputImportList.add(inputSubExtendClassImport);
+
+                if(infraInterface.name().toLowerCase().contains("update")) {
+                    InfraInterfaceVoClass voClass = infraInterfaceVoClassRepository.findByName(inputSubclass.getInheritClass()).get();
+                    String inputSrcExtendClass = srcExtendClass(voClass.id());
+                    InfraDatabaseTable table = infraDatabaseTableRepository.findByName(inputSrcExtendClass).get();
+                    String inputSrcExtendTableImport = "import " +
+                            getStr(bindingMap, "basePackage").replaceAll("\\.", ".") +
+                            ".service.model." + table.firstModule() + "." + table.secondModule() + "." +
+                            upperFirst(toCamelCase(inputSrcExtendClass)) + ";";
+                    serviceImplList.add("    @Resource\r\n" + "    private " + upperFirst(toCamelCase(table.name()))
+                            + "Repository " + toCamelCase(table.name()) + "Repository;");
+                    serviceImplImportList.add("import " +
+                            getStr(bindingMap, "basePackage").replaceAll("\\.", ".") +
+                            ".service.repository." + table.firstModule() + "." + table.secondModule() + "." +
+                            upperFirst(toCamelCase(inputSrcExtendClass)) + "Repository;");
+                    serviceImplImportList.add(inputSrcExtendTableImport);
+                }
             }
         }
         bindingMap.put("inputSubclasses", inputSubclasses);
@@ -669,7 +706,8 @@ public class CodegenEngine {
                         upperFirst(toCamelCase(inputSrcExtendClass)) + ";";
                 inputSrcExtendClass = upperFirst(toCamelCase(inputSrcExtendClass));
                 inputExtendClassImport = getExtendClassImport(infraInterface.inputExtendClass(), bindingMap);
-                if((infraInterface.name().toLowerCase().contains("update") || infraInterface.name().toLowerCase().contains("create"))){
+
+                if(infraInterface.name().toLowerCase().contains("update") || infraInterface.name().toLowerCase().contains("create")){
                     bindingMap.put("inputTable", table);
                     bindingMap.put("tableFirstModule", table.firstModule());
                     bindingMap.put("tableSecondModule", table.secondModule());
@@ -687,6 +725,7 @@ public class CodegenEngine {
                             upperFirst(toCamelCase(inputSrcExtendClass)) + "Repository;");
                     serviceImplImportList.add(inputSrcExtendTableImport);
                 }
+
                 if(infraInterface.name().toLowerCase().contains("delete")){
                     bindingMap.put("inputTable", table);
                     bindingMap.put("tableFirstModule", table.firstModule());
@@ -957,21 +996,24 @@ public class CodegenEngine {
         InfraInterfaceModule module = (InfraInterfaceModule) bindingMap.get("module");
         if(fileContent.indexOf(module.comment()) == -1)
             return;
-        if(bindingMap.get("dupErrorCode") == null && bindingMap.get("notExistErrorCode") == null)
+        if(bindingMap.get("duplicateErrorCode") == null && bindingMap.get("notExistErrorCode") == null
+            && bindingMap.get("subDuplicateErrorCode") == null && bindingMap.get("subNotExistErrorCode") == null)
             return;
         String moduleCode = fileContent.substring(fileContent.indexOf(module.comment()) + module.comment().length() +1,
                 fileContent.indexOf(module.comment()) + module.comment().length() + 8);
-        String dupErrorCode = bindingMap.get("dupErrorCode") == null? "": bindingMap.get("dupErrorCode").toString();
+        String duplicateErrorCode = bindingMap.get("duplicateErrorCode") == null? "": bindingMap.get("duplicateErrorCode").toString();
         String notExistErrorCode = bindingMap.get("notExistErrorCode") == null? "": bindingMap.get("notExistErrorCode").toString();
-        if(dupErrorCode.isEmpty() && notExistErrorCode.isEmpty())
+        String subDuplicateErrorCode = bindingMap.get("subDuplicateErrorCode") == null? "": bindingMap.get("subDuplicateErrorCode").toString();
+        String subDotExistErrorCode = bindingMap.get("subNotExistErrorCode") == null? "": bindingMap.get("subNotExistErrorCode").toString();
+        if(duplicateErrorCode.isEmpty() && notExistErrorCode.isEmpty())
             return;
         // 查找插入位置
         int insertIndex = fileContent.lastIndexOf(moduleCode);
         insertIndex = fileContent.indexOf("\r\n", insertIndex) + 2;
         String[] errorCodes = interfaceContent.split("\r\n");
         int count = fileContent.toString().split(moduleCode).length - 2;
-        if((!dupErrorCode.isEmpty() && fileContent.indexOf(dupErrorCode) == -1)){
-            errorCodes[0] = errorCodes[0].replace("${dupErrorNumber}",
+        if((!duplicateErrorCode.isEmpty() && fileContent.indexOf(duplicateErrorCode) == -1)){
+            errorCodes[0] = errorCodes[0].replace("${duplicateErrorNumber}",
                     moduleCode + String.format("%03d",count++));
             if(fileContent.indexOf(errorCodes[0]) < 0) {
                 fileContent.insert(insertIndex, errorCodes[0] + "\r\n");
@@ -985,6 +1027,24 @@ public class CodegenEngine {
             if(fileContent.indexOf(errorCodes[1]) < 0) {
                 fileContent.insert(insertIndex, errorCodes[1] + "\r\n");
                 insertIndex = insertIndex + errorCodes[1].length() + 2;
+            }
+        }
+
+        if((!subDuplicateErrorCode.isEmpty() && fileContent.indexOf(subDuplicateErrorCode) == -1)){
+            errorCodes[2] = errorCodes[2].replace("${subDuplicateErrorNumber}",
+                    moduleCode + String.format("%03d",count++));
+            if(fileContent.indexOf(errorCodes[2]) < 0) {
+                fileContent.insert(insertIndex, errorCodes[2] + "\r\n");
+                insertIndex = insertIndex + errorCodes[2].length() + 2;
+            }
+        }
+
+        if(!notExistErrorCode.isEmpty() && fileContent.indexOf(notExistErrorCode) == -1){
+            errorCodes[3] = errorCodes[3].replace("${subNotExistErrorNumber}",
+                    moduleCode + String.format("%03d",count++));
+            if(fileContent.indexOf(errorCodes[3]) < 0) {
+                fileContent.insert(insertIndex, errorCodes[3] + "\r\n");
+                insertIndex = insertIndex + errorCodes[3].length() + 2;
             }
         }
 

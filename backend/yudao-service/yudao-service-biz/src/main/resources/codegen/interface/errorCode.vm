@@ -1,2 +1,4 @@
-    ErrorCode ${dupErrorCode} = new ErrorCode(${dupErrorNumber}, "${dupErrorMessage}");
+    ErrorCode ${duplicateErrorCode} = new ErrorCode(${duplicateErrorNumber}, "${duplicateErrorMessage}");
     ErrorCode ${notExistErrorCode} = new ErrorCode(${notExistErrorNumber}, "${notExistErrorMessage}");
+    ErrorCode ${subDuplicateErrorCode} = new ErrorCode(${subDuplicateErrorNumber}, "${subDuplicateErrorMessage}");
+    ErrorCode ${subNotExistErrorCode} = new ErrorCode(${subNotExistErrorNumber}, "${subNotExistErrorMessage}");

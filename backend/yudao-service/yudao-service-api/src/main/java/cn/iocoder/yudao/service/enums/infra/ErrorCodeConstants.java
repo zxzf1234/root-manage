@@ -54,7 +54,7 @@ public interface ErrorCodeConstants {
     ErrorCode DICT_TYPE_EXPORT_EXCEPTION = new ErrorCode(1001005005, "无法删除，该字典类型还有字典数据");
     ErrorCode DICT_DATA_NOT_EXISTS = new ErrorCode(1001005101, "当前字典数据不存在");
     ErrorCode DICT_DATA_NOT_ENABLE = new ErrorCode(1001005102, "字典数据({})不处于开启状态，不允许选择");
-    ErrorCode  DICT_DATA_VALUE_DUPLICATE= new ErrorCode(1001005203, "已经存在该值的字典数据");
+    ErrorCode DICT_DATA_VALUE_DUPLICATE= new ErrorCode(1001005203, "已经存在该值的字典数据");
     ErrorCode DICT_DATA_EXPORT_EXCEPTION = new ErrorCode(1001005204, "字段导出异常");
     
     // ========== 文件配置 1001006000 ==========
