@@ -252,14 +252,14 @@ public class CodegenEngine {
             String inputSrcExtendClass = srcExtendClass(voClass.id());
             InfraDatabaseTable subTable = infraDatabaseTableRepository.findByName(inputSrcExtendClass).get();
             errorCodeDuplicate(bindingMap, subTable, "subDuplicateErrorCode", "subDuplicateErrorMessage");
-            errorCodeNotExists(bindingMap, subTable, "subNotExitsErrorCode", "subNotExitsErrorMessage");
+            errorCodeNotExist(bindingMap, subTable, "subNotExistErrorCode", "subNotExistErrorMessage");
         }
         if(infraInterface.name().toLowerCase().contains("delete")
                 || infraInterface.name().toLowerCase().contains("update")){
-            errorCodeNotExists(bindingMap, inputTable, "notExitsErrorCode", "notExitsErrorMessage");
+            errorCodeNotExist(bindingMap, inputTable, "notExistErrorCode", "notExistErrorMessage");
         }
         if(infraInterface.name().toLowerCase().contains("singleget")){
-            errorCodeNotExists(bindingMap, outputTable, "notExitsErrorCode", "notExitsErrorMessage");
+            errorCodeNotExist(bindingMap, outputTable, "notExistErrorCode", "notExistErrorMessage");
         }
 
     }
@@ -292,7 +292,7 @@ public class CodegenEngine {
         bindingMap.put(messageKey, duplicateErrorMessage.toString());
     }
 
-    private void errorCodeNotExists(Map<String, Object> bindingMap, InfraDatabaseTable table, String codeKey, String messageKey){
+    private void errorCodeNotExist(Map<String, Object> bindingMap, InfraDatabaseTable table, String codeKey, String messageKey){
         if(table == null)
             return;
         bindingMap.put(codeKey, table.name().toUpperCase() + "_NOT_EXIST");
@@ -1004,9 +1004,7 @@ public class CodegenEngine {
         String duplicateErrorCode = bindingMap.get("duplicateErrorCode") == null? "": bindingMap.get("duplicateErrorCode").toString();
         String notExistErrorCode = bindingMap.get("notExistErrorCode") == null? "": bindingMap.get("notExistErrorCode").toString();
         String subDuplicateErrorCode = bindingMap.get("subDuplicateErrorCode") == null? "": bindingMap.get("subDuplicateErrorCode").toString();
-        String subDotExistErrorCode = bindingMap.get("subNotExistErrorCode") == null? "": bindingMap.get("subNotExistErrorCode").toString();
-        if(duplicateErrorCode.isEmpty() && notExistErrorCode.isEmpty())
-            return;
+        String subNotExistErrorCode = bindingMap.get("subNotExistErrorCode") == null? "": bindingMap.get("subNotExistErrorCode").toString();
         // 查找插入位置
         int insertIndex = fileContent.lastIndexOf(moduleCode);
         insertIndex = fileContent.indexOf("\r\n", insertIndex) + 2;
@@ -1039,7 +1037,7 @@ public class CodegenEngine {
             }
         }
 
-        if(!notExistErrorCode.isEmpty() && fileContent.indexOf(notExistErrorCode) == -1){
+        if(!subNotExistErrorCode.isEmpty() && fileContent.indexOf(subNotExistErrorCode) == -1){
             errorCodes[3] = errorCodes[3].replace("${subNotExistErrorNumber}",
                     moduleCode + String.format("%03d",count++));
             if(fileContent.indexOf(errorCodes[3]) < 0) {

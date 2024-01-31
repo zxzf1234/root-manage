@@ -52,10 +52,10 @@ public interface ErrorCodeConstants {
     ErrorCode DICT_TYPE_TYPE_DUPLICATE = new ErrorCode(1001005003, "已经存在该类型的字典类型");
     ErrorCode DICT_TYPE_HAS_CHILDREN = new ErrorCode(1001005004, "无法删除，该字典类型还有字典数据");
     ErrorCode DICT_TYPE_EXPORT_EXCEPTION = new ErrorCode(1001005005, "无法删除，该字典类型还有字典数据");
-    ErrorCode DICT_DATA_NOT_EXISTS = new ErrorCode(1001005101, "当前字典数据不存在");
-    ErrorCode DICT_DATA_NOT_ENABLE = new ErrorCode(1001005102, "字典数据({})不处于开启状态，不允许选择");
-    ErrorCode DICT_DATA_VALUE_DUPLICATE= new ErrorCode(1001005203, "已经存在该值的字典数据");
-    ErrorCode DICT_DATA_EXPORT_EXCEPTION = new ErrorCode(1001005204, "字段导出异常");
+    ErrorCode DICT_DATA_NOT_EXISTS = new ErrorCode(1001005006, "当前字典数据不存在");
+    ErrorCode DICT_DATA_NOT_ENABLE = new ErrorCode(1001005007, "字典数据({})不处于开启状态，不允许选择");
+    ErrorCode DICT_DATA_VALUE_DUPLICATE= new ErrorCode(1001005008, "已经存在该值的字典数据");
+    ErrorCode DICT_DATA_EXPORT_EXCEPTION = new ErrorCode(1001005009, "字段导出异常");
     
     // ========== 文件配置 1001006000 ==========
     ErrorCode FILE_CONFIG_NOT_EXISTS = new ErrorCode(1001006000, "文件配置不存在");
