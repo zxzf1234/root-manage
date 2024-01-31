@@ -41,10 +41,10 @@ import static cn.iocoder.yudao.service.enums.infra.ErrorCodeConstants.*;
 public class DictTypeServiceImpl implements DictTypeService {
 
     @Resource
-    InfraDictTypeRepository infraDictTypeRepository;
+    private InfraDictTypeRepository infraDictTypeRepository;
 
     @Resource
-    InfraDictDataRepository infraDictDataRepository;
+    private InfraDictDataRepository infraDictDataRepository;
 
     @Resource
     private CodegenEngine codegenEngine;

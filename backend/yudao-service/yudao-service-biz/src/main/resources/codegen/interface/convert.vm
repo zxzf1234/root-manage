@@ -5,9 +5,9 @@
 
     List<${inputSrcExtendClass}> ${interfaceNameHump}InputConvert(${interfaceInput} input);
 #end
-#if(${inputSubTable} != "")
+#if(${inputSubTableName} != "")
 
-    ${inputSubTable} ${interfaceNameHump}InputConvert(${interfaceInput}.${inputSubClassName} input);
+    ${inputSubTableName} ${interfaceNameHump}InputConvert(${interfaceInput}.${inputSubClassName} input);
 #end
 #if(${interface.outputType}=="VOClass" && ${outputSrcExtendClass} != "")
 
