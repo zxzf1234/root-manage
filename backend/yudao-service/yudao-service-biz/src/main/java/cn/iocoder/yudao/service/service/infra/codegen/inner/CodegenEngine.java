@@ -15,6 +15,7 @@ import cn.iocoder.yudao.framework.common.pojo.PageParam;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.common.util.date.DateUtils;
 import cn.iocoder.yudao.framework.common.util.date.LocalDateTimeUtils;
+import cn.iocoder.yudao.framework.common.util.entity.EntityUtils;
 import cn.iocoder.yudao.framework.common.util.object.ObjectUtils;
 import cn.iocoder.yudao.framework.excel.core.annotations.DictFormat;
 import cn.iocoder.yudao.framework.excel.core.convert.DictConvert;
@@ -26,14 +27,17 @@ import cn.iocoder.yudao.framework.operatelog.core.annotations.OperateLog;
 import cn.iocoder.yudao.framework.operatelog.core.enums.OperateTypeEnum;
 import cn.iocoder.yudao.service.convert.infra.codegen.CodegenConvert;
 import cn.iocoder.yudao.service.convert.infra.data.DictNoConvert;
+import cn.iocoder.yudao.service.convert.infra.data.DictTypeConvert;
 import cn.iocoder.yudao.service.enums.infra.codegen.CodegenSceneEnum;
 import cn.iocoder.yudao.service.framework.codegen.config.CodegenProperties;
 import cn.iocoder.yudao.service.framework.codegen.config.SchemaHistory;
 import cn.iocoder.yudao.service.model.infra.codegen.*;
+import cn.iocoder.yudao.service.model.infra.data.InfraDictData;
 import cn.iocoder.yudao.service.model.infra.data.InfraDictNo;
 import cn.iocoder.yudao.service.model.infra.data.InfraDictType;
 import cn.iocoder.yudao.service.repository.infra.codegen.*;
 import cn.iocoder.yudao.service.vo.infra.data.dictNo.DictNoQueryOutput;
+import cn.iocoder.yudao.service.vo.infra.data.dictType.DictTypeUpdateInput;
 import org.jsoup.internal.StringUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
@@ -47,6 +51,9 @@ import java.util.stream.Collectors;
 
 import static cn.hutool.core.map.MapUtil.getStr;
 import static cn.hutool.core.text.CharSequenceUtil.*;
+import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
+import static cn.iocoder.yudao.service.enums.infra.ErrorCodeConstants.DICT_DATA_NOT_EXISTS;
+import static cn.iocoder.yudao.service.enums.infra.ErrorCodeConstants.DICT_DATA_VALUE_DUPLICATE;
 
 /**
  * 代码生成的引擎，用于具体生成代码
@@ -370,6 +377,7 @@ public class CodegenEngine {
             String notExistErrorCode = bindingMap.get("notExistErrorCode").toString();
             String repositoryDuplicateFunctionName = bindingMap.get("repositoryDuplicateFunctionName").toString();
             String repositoryDuplicateFunctionParams = bindingMap.get("repositoryDuplicateFunctionParams").toString();
+            String inputSubTable = bindingMap.get("inputSubTable").toString();
             if(!repositoryDuplicateFunctionName.isEmpty()) {
                 //生成代码 Optional<InfraDictNo> optionalDuplicateInfraDictNo =
                 // infraDictNoRepository.findDictNo(inputVO.getDictNo(), inputVO.getId());
@@ -393,7 +401,97 @@ public class CodegenEngine {
             functionContent.append("            throw exception(").append(notExistErrorCode).append(");\r\n");
             //生成代码 }
             functionContent.append("        }\r\n");
-            //生成代码 InfraDictNo updateInfraDictNo = DictNoConvert.INSTANCE.createInputConvert(inputVO);
+
+            //子类更新
+            if(!inputSubTable.isEmpty()){
+                String interfaceInput = bindingMap.get("interfaceInput").toString();
+                String inputSubClassName = bindingMap.get("inputSubClassName").toString();
+                String inputSubRepositoryName = toCamelCase(lowerFirst(inputSubTable)) + "Repository";
+                String subNotExistErrorCode = bindingMap.get("subNotExistErrorCode").toString();
+                String subDuplicateErrorCode = bindingMap.get("subDuplicateErrorCode").toString();
+                String subRepositoryDuplicateFunctionName = bindingMap.get("subRepositoryDuplicateFunctionName").toString();
+                String subRepositoryDuplicateFunctionParams = bindingMap.get("subRepositoryDuplicateFunctionParams").toString();
+//                for(DictTypeUpdateInput.data data : inputVO.getDatas()){
+                functionContent.append("        for(").append(interfaceInput).append(".").append(inputSubClassName)
+                        .append(" ").append(inputSubClassName).append(" : ").append("inputVO.get").append(upperFirst(inputSubClassName))
+                        .append("s()){\r\n");
+//                    if(Objects.equals(data.getOperateType(), "delete")){
+                functionContent.append("            if(Objects.equals(").append(inputSubClassName).append(".getOperateType(), \"delete\")){\r\n");
+//                        Optional<InfraDictData> optionalDeleteInfraDictData = infraDictDataRepository.findById(data.getId());
+                functionContent.append("                Optional<").append(inputSubTable).append("> optionalDelete").append(inputSubTable)
+                        .append(" = ").append(inputSubRepositoryName).append(".findById(").append(interfaceInput).append(".getId());\r\n");
+//                        if(!optionalDeleteInfraDictData.isPresent()){
+                functionContent.append("                if(!optionalDelete").append(inputSubTable).append(".isPresent()){\r\n");
+//                            throw exception(DICT_DATA_NOT_EXISTS);
+                functionContent.append("                    throw exception(").append(subNotExistErrorCode).append(");\r\n");
+//                        }
+                functionContent.append("                }\r\n");
+//                        infraDictDataRepository.deleteById(data.getId());
+                functionContent.append("                ").append(inputSubRepositoryName).append(".deleteById(").append(inputSubClassName)
+                        .append(".getId());\r\n");
+//                    }else if(Objects.equals(data.getOperateType(), "new")){
+                functionContent.append("            ").append("}else if(Objects.equals(").append(inputSubClassName)
+                        .append(".getOperateType(), \"new\")){\r\n");
+                if(!subDuplicateErrorCode.isEmpty()) {
+//                        Optional<InfraDictData> optionalDuplicateInfraDictData = infraDictDataRepository.findByTypeIdAndValue(data.getTypeId(), data.getValue());
+                    functionContent.append("                Optional<").append(inputSubTable).append("> optionalDuplicate")
+                            .append(inputSubTable).append(" = ").append(inputSubRepositoryName).append(subRepositoryDuplicateFunctionName)
+                            .append("(").append(subRepositoryDuplicateFunctionParams).append(");\r\n");
+//                        if(optionalDuplicateInfraDictData.isPresent()){
+                    functionContent.append("                if(optionalDuplicate").append(inputSubTable).append(".isPresent()){\r\n");
+//                            throw exception(DICT_DATA_VALUE_DUPLICATE);
+                    functionContent.append("                    throw exception(").append(subDuplicateErrorCode).append(");\r\n");
+//                        }
+                    functionContent.append("                }\r\n");
+                }
+//                        InfraDictData newData = DictTypeConvert.INSTANCE.updateInputDataConvert(data);
+                functionContent.append("                ").append(inputSubTable).append(" new").append(inputSubTable)
+                        .append(" = ").append(convertClass).append(".INSTANCE.").append(convertName).append("(")
+                        .append(interfaceInput).append(");\r\n");
+//                        infraDictDataRepository.insert(newData);
+                functionContent.append("                ").append(inputSubRepositoryName).append("insert(new").append(interfaceInput)
+                        .append(");\r\n");
+//                    }else {
+                functionContent.append("            }else{\r\n");
+//                        Optional<InfraDictData> optionalOldInfraDictData = infraDictDataRepository.findById(data.getId());
+                functionContent.append("                Optional<").append(inputSubTable).append("> optionalOld").append(inputSubTable)
+                        .append(" = ").append(inputSubRepositoryName).append(".findById(").append(interfaceInput)
+                        .append(".getId());\r\n");
+//                        if(!optionalOldInfraDictData.isPresent()) {
+                functionContent.append("                if(!optionalOld").append(inputSubTable).append(".isPresent()) {\r\n");
+//                            throw exception(DICT_DATA_NOT_EXISTS);
+                functionContent.append("                    ").append("throw exception(").append(subNotExistErrorCode).append(");\r\n");
+//                        }
+                functionContent.append("                }\r\n");
+                if(!subDuplicateErrorCode.isEmpty()) {
+//                        Optional<InfraDictData> optionalDuplicateInfraDictData = infraDictDataRepository.findByTypeIdAndValue(data.getTypeId(), data.getValue());
+                    functionContent.append("                Optional<").append(inputSubTable).append("> optionalDuplicate")
+                            .append(inputSubTable).append(" = ").append(inputSubRepositoryName).append(subRepositoryDuplicateFunctionName)
+                            .append("(").append(subRepositoryDuplicateFunctionParams).append(");\r\n");
+//                        if(optionalDuplicateInfraDictData.isPresent()){
+                    functionContent.append("                if(optionalDuplicate").append(inputSubTable).append(".isPresent()){\r\n");
+//                            throw exception(DICT_DATA_VALUE_DUPLICATE);
+                    functionContent.append("                    throw exception(").append(subDuplicateErrorCode).append(");\r\n");
+//                        }
+                    functionContent.append("                }\r\n");
+                }
+//                        InfraDictData updateInfraDictData = DictTypeConvert.INSTANCE.updateInputDataConvert(data);
+                functionContent.append("                ").append(inputSubTable).append(" update").append(inputSubTable)
+                        .append(" = ").append(convertClass).append(".INSTANCE.").append(convertName).append("(")
+                        .append(interfaceInput).append(");\r\n");
+//                        if (!EntityUtils.isEquals(optionalOldInfraDictData.get(), updateInfraDictData))
+                functionContent.append("                if (!EntityUtils.isEquals((optionalOld").append(inputSubTable)
+                        .append(".get(), update").append(inputSubTable).append("))\r\n");
+//                            infraDictDataRepository.update(updateInfraDictData);
+                functionContent.append("                    ").append(inputSubRepositoryName).append(".update(update")
+                        .append(inputSubTable).append(");\r\n");
+//                    }
+                functionContent.append("            }\r\n");
+//                }
+                functionContent.append("        }\r\n");
+            }
+
+            //生成代码 InfraDictNo updateInfraDictNo = DictNoConvert.INSTANCE.updateInputConvert(inputVO);
             functionContent.append("        ").append(inputTableName).append(" update").append(inputTableName).append(" = ")
                     .append(convertClass).append(".INSTANCE.").append(convertName).append("(inputVO);\r\n");
             //生成代码  InfraDictNoRepository.insert(newInfraDictNo);
@@ -480,7 +578,56 @@ public class CodegenEngine {
         InfraDatabaseTable outputTable = (InfraDatabaseTable) bindingMap.get("outputTable");
         String moduleNameHumpUp = (String) bindingMap.get("moduleNameHumpUp");
         String interfaceNameHump = (String) bindingMap.get("interfaceNameHump");
+        String inputSubTable = (String) bindingMap.get("inputSubTable");
         String inputClass = moduleNameHumpUp + upperFirst(interfaceNameHump) + "Input";
+
+        bindingMap.put("subRepositoryDuplicateFunctionName", "");
+        bindingMap.put("subRepositoryDuplicateFunctionParams", "");
+        bindingMap.put("subRepositoryFunction", "");
+        if(infraInterface.name().toLowerCase().contains("update") && inputSubTable.isEmpty()){
+            InfraDatabaseTable subInputTable = (InfraDatabaseTable) bindingMap.get("subInputTable");
+            String inputSubClassName = bindingMap.get("inputSubClassName").toString();
+            List<InfraDatabaseIndex> subInputIndexList;
+            if(inputTable != null) {
+                subInputIndexList = subInputTable.indexes().stream()
+                        .filter(index -> index.indexType().equals("UNIQUE INDEX")).collect(Collectors.toList());
+            }else{
+                subInputIndexList = new ArrayList<>();
+            }
+
+            InfraDatabaseIndex subUniqueIndex = subInputIndexList.get(0);
+            List<String> subUniqueColumnName = subUniqueIndex.columnNames();
+            StringBuilder columnFunction = new StringBuilder();
+            StringBuilder columnParam = new StringBuilder();
+            StringBuilder functionParam = new StringBuilder();
+            StringBuilder function = new StringBuilder();
+            for (String columnName : subUniqueColumnName) {
+                if (columnFunction.toString().isEmpty()) {
+                    columnFunction.append(upperFirst(toCamelCase(columnName)));
+                } else {
+                    columnFunction.append("And").append(upperFirst(toCamelCase(columnName)));
+                }
+                List<InfraDatabaseColumn> columnList = inputTable.columns().stream().filter(
+                        column -> column.columnName().equals(columnName)).collect(Collectors.toList());
+                if (columnParam.toString().isEmpty()) {
+                    columnParam.append(columnList.get(0).javaType()).append(" ").append(toCamelCase(columnName));
+                    functionParam.append(inputSubClassName).append(".get").append(upperFirst(toCamelCase(columnName))).append("()");
+                } else {
+                    columnParam.append(", ").append(columnList.get(0).javaType()).append(" ").append(toCamelCase(columnName));
+                    functionParam.append(", ").append(inputSubClassName).append(".get").append(upperFirst(toCamelCase(columnName))).append("()");
+                }
+            }
+
+            if(infraInterface.name().toLowerCase().contains("create") || infraInterface.name().toLowerCase().contains("update")){
+                function.append("    Optional<").append(upperFirst(toCamelCase(inputTable.name()))).append("> findFirstBy")
+                        .append(columnFunction) .append("(") .append(columnParam) .append(");\r\n");
+                String repositoryDuplicateFunctionName = "findFirstBy" + columnFunction;
+                bindingMap.put("subRepositoryDuplicateFunctionName", repositoryDuplicateFunctionName);
+                bindingMap.put("subRepositoryDuplicateFunctionParams", functionParam);
+            }
+            bindingMap.put("subRepositoryFunction", function.toString());
+        }
+
         bindingMap.put("repositoryDuplicateFunctionName", "");
         bindingMap.put("repositoryDuplicateFunctionParams", "");
         bindingMap.put("repositoryFunction", "");
@@ -527,6 +674,8 @@ public class CodegenEngine {
             bindingMap.put("repositoryFunction", function.toString());
             return;
         }
+
+
         if(outputTable == null)
             return;
         String outputTableTable = toCamelCase(outputTable.name()) + "Table";
@@ -647,6 +796,10 @@ public class CodegenEngine {
         List<String> repositoryList = new ArrayList<>();
         List<String> serviceImplList = new ArrayList<>();
 
+        bindingMap.put("isGenerateRepository", false);
+        bindingMap.put("isGenerateErrorCode", false);
+        bindingMap.put("isSubGenerateRepository", false);
+
         List<CodegenInterfaceSubclass> inputSubclasses = CodegenConvert.INSTANCE.convertList20(infraInterface.inputSubclasses());
         for(CodegenInterfaceSubclass inputSubclass : inputSubclasses){
             convertParams(inputSubclass.getSubclassParams());
@@ -655,21 +808,30 @@ public class CodegenEngine {
                 if(!inputSubExtendClassImport.isEmpty())
                     inputImportList.add(inputSubExtendClassImport);
 
+                InfraInterfaceVoClass voClass = infraInterfaceVoClassRepository.findByName(inputSubclass.getInheritClass()).get();
+                String inputSrcExtendClass = srcExtendClass(voClass.id());
+                InfraDatabaseTable subTable = infraDatabaseTableRepository.findByName(inputSrcExtendClass).get();
+                String inputSrcExtendTableImport = "import " +
+                        getStr(bindingMap, "basePackage").replaceAll("\\.", ".") +
+                        ".service.model." + subTable.firstModule() + "." + subTable.secondModule() + "." +
+                        upperFirst(toCamelCase(inputSrcExtendClass)) + ";";
+                convertImportList.add(inputSrcExtendTableImport);
+                bindingMap.put("inputSubTable", upperFirst(toCamelCase(inputSrcExtendClass)));
+                bindingMap.put("inputSubClassName", inputSubclass.getName());
+
                 if(infraInterface.name().toLowerCase().contains("update")) {
-                    InfraInterfaceVoClass voClass = infraInterfaceVoClassRepository.findByName(inputSubclass.getInheritClass()).get();
-                    String inputSrcExtendClass = srcExtendClass(voClass.id());
-                    InfraDatabaseTable table = infraDatabaseTableRepository.findByName(inputSrcExtendClass).get();
-                    String inputSrcExtendTableImport = "import " +
-                            getStr(bindingMap, "basePackage").replaceAll("\\.", ".") +
-                            ".service.model." + table.firstModule() + "." + table.secondModule() + "." +
-                            upperFirst(toCamelCase(inputSrcExtendClass)) + ";";
-                    serviceImplList.add("    @Resource\r\n" + "    private " + upperFirst(toCamelCase(table.name()))
-                            + "Repository " + toCamelCase(table.name()) + "Repository;");
+                    serviceImplList.add("    @Resource\r\n" + "    private " + upperFirst(toCamelCase(subTable.name()))
+                            + "Repository " + toCamelCase(subTable.name()) + "Repository;");
                     serviceImplImportList.add("import " +
                             getStr(bindingMap, "basePackage").replaceAll("\\.", ".") +
-                            ".service.repository." + table.firstModule() + "." + table.secondModule() + "." +
+                            ".service.repository." + subTable.firstModule() + "." + subTable.secondModule() + "." +
                             upperFirst(toCamelCase(inputSrcExtendClass)) + "Repository;");
                     serviceImplImportList.add(inputSrcExtendTableImport);
+
+                    bindingMap.put("subTableFirstModule", subTable.firstModule());
+                    bindingMap.put("subTableSecondModule", subTable.secondModule());
+                    bindingMap.put("subClassNameHump", upperFirst(toCamelCase(subTable.name())));
+                    bindingMap.put("isSubGenerateRepository", true);
                 }
             }
         }
@@ -686,8 +848,6 @@ public class CodegenEngine {
         }
         bindingMap.put("outputSubclasses", outputSubclasses);
         // src_extend_class
-        bindingMap.put("isGenerateRepository", false);
-        bindingMap.put("isGenerateErrorCode", false);
         bindingMap.put("functionContent", "        return null;");
         String inputSrcExtendClass = "";
         String inputSrcExtendTableImport = "";
@@ -922,11 +1082,13 @@ public class CodegenEngine {
         for(Map.Entry<String, String> entry : templates.entrySet()){
             String vmPath = entry.getKey();
             String filePath = entry.getValue();
-            if (vmPath.contains("voInput") && bindingMap.get("isGenerateVoInput").equals(false))
+            if (vmPath.contains("voInput.vm") && bindingMap.get("isGenerateVoInput").equals(false))
                 continue;
-            if (vmPath.contains("voOutput") && bindingMap.get("isGenerateVoOutput").equals(false))
+            if (vmPath.contains("voOutput.vm") && bindingMap.get("isGenerateVoOutput").equals(false))
                 continue;
-            if (vmPath.contains("repository") && bindingMap.get("isGenerateRepository").equals(false))
+            if (vmPath.contains("repository.vm") && bindingMap.get("isGenerateRepository").equals(false))
+                continue;
+            if (vmPath.contains("repositorySub.vm") && bindingMap.get("isGenerateSubRepository").equals(false))
                 continue;
             filePath = templateEngine.getTemplate(filePath).render(bindingMap);
             File newFile;

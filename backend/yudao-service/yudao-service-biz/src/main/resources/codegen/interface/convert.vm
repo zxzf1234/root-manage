@@ -5,6 +5,10 @@
 
     List<${inputSrcExtendClass}> ${interfaceNameHump}InputConvert(${interfaceInput} input);
 #end
+#if(${inputSubTable} != "")
+
+    ${inputSubTable} ${interfaceNameHump}InputConvert(${interfaceInput}.${inputSubClassName} input);
+#end
 #if(${interface.outputType}=="VOClass" && ${outputSrcExtendClass} != "")
 
     ${interfaceOutput} ${interfaceNameHump}OutputConvert(${outputSrcExtendClass} output);
