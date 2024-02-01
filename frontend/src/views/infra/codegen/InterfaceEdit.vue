@@ -885,48 +885,66 @@ const interfaceNameBlur = () => {
     formData.value.method = 'put'
     formData.value.comment = '更新'
     formData.value.isTransaction = true
-    const newParam = {
-      id: crypto.randomUUID(),
-      name: 'isSuccess',
-      comment: '是否成功',
-      isList: 0,
-      variableType: 'Boolean',
-      relatedColumn: '',
-      relatedType: 0,
-      relatedId: '',
-      example: '',
-      required: 0,
-      operateType: 'new',
-      parentId: formData.value.id,
-      parentType: 0,
-      inoutType: 1,
-      validations: []
+    let isExist = false
+    for (let i = 0; formData.value.outputParams.length; i++) {
+      if (formData.value.outputParams[i].name == 'isSuccess') {
+        isExist = true
+        break
+      }
     }
-    formData.value.outputParams.push(newParam)
+    if (!isExist) {
+      const newParam = {
+        id: crypto.randomUUID(),
+        name: 'isSuccess',
+        comment: '是否成功',
+        isList: 0,
+        variableType: 'Boolean',
+        relatedColumn: '',
+        relatedType: 0,
+        relatedId: '',
+        example: '',
+        required: 0,
+        operateType: 'new',
+        parentId: formData.value.id,
+        parentType: 0,
+        inoutType: 1,
+        validations: []
+      }
+      formData.value.outputParams.push(newParam)
+    }
   } else if (formData.value.name.toLocaleLowerCase().indexOf('delete') >= 0) {
     formData.value.inputType = 'param'
     formData.value.outputType = 'param'
     formData.value.method = 'delete'
     formData.value.comment = '删除'
     formData.value.isTransaction = true
-    const newParam = {
-      id: crypto.randomUUID(),
-      name: 'isSuccess',
-      comment: '是否成功',
-      isList: 0,
-      variableType: 'Boolean',
-      relatedColumn: '',
-      relatedType: 0,
-      relatedId: '',
-      example: '',
-      required: 0,
-      operateType: 'new',
-      parentId: formData.value.id,
-      parentType: 0,
-      inoutType: 1,
-      validations: []
+    let isExist = false
+    for (let i = 0; formData.value.outputParams.length; i++) {
+      if (formData.value.outputParams[i].name == 'isSuccess') {
+        isExist = true
+        break
+      }
     }
-    formData.value.outputParams.push(newParam)
+    if (!isExist) {
+      const newParam = {
+        id: crypto.randomUUID(),
+        name: 'isSuccess',
+        comment: '是否成功',
+        isList: 0,
+        variableType: 'Boolean',
+        relatedColumn: '',
+        relatedType: 0,
+        relatedId: '',
+        example: '',
+        required: 0,
+        operateType: 'new',
+        parentId: formData.value.id,
+        parentType: 0,
+        inoutType: 1,
+        validations: []
+      }
+      formData.value.outputParams.push(newParam)
+    }
   } else if (formData.value.name.indexOf('singleGet') >= 0) {
     formData.value.inputType = 'param'
     formData.value.outputType = 'VOClass'
