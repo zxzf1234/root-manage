@@ -170,7 +170,7 @@ const initFormData = {
   comment: '',
   method: '',
   authorize: '',
-  isTransaction: 0,
+  isTransaction: false,
   inputType: '',
   inputExtendClass: '',
   inputServlet: 0,
