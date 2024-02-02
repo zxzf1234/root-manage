@@ -1276,6 +1276,25 @@ const handleSaveInterface = async () => {
     message.alertError('出参类型不是参数 必须添加出参参数')
     return
   }
+  if (
+    formData.value.name.toLocaleLowerCase().indexOf('query') >= 0 &&
+    formData.value.outputExtendClass == ''
+  ) {
+    await message.confirm('查询接口没有添加出参继承类，确定保存吗？')
+  }
+  if (
+    formData.value.name.toLocaleLowerCase().indexOf('create') >= 0 &&
+    formData.value.inputExtendClass == ''
+  ) {
+    await message.confirm('新增接口没有添加入参继承类，确定保存吗？')
+  }
+  if (
+    formData.value.name.toLocaleLowerCase().indexOf('update') >= 0 &&
+    formData.value.inputExtendClass == ''
+  ) {
+    await message.confirm('更新接口没有添加入参继承类，确定保存吗？')
+  }
+
   // 提交请求
   formLoading.value = true
   try {
