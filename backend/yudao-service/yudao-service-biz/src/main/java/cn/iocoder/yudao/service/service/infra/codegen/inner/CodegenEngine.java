@@ -253,7 +253,7 @@ public class CodegenEngine {
             errorCodeDuplicate(bindingMap, inputTable, "duplicateErrorCode", "duplicateErrorMessage");
         }
         if(infraInterface.name().toLowerCase().contains("update")
-            && !infraInterface.inputSubclasses().isEmpty()){
+                && !infraInterface.inputSubclasses().isEmpty()){
             InfraInterfaceSubclass subclass = infraInterface.inputSubclasses().get(0);
             InfraInterfaceVoClass voClass = infraInterfaceVoClassRepository.findByName(subclass.inheritClass()).get();
             String inputSrcExtendClass = srcExtendClass(voClass.id());
@@ -324,8 +324,8 @@ public class CodegenEngine {
         InfraDatabaseTable outputTable = (InfraDatabaseTable) bindingMap.get("outputTable");
         String outputTableName = null, outputRepositoryName = null;
         if(infraInterface.name().toLowerCase().contains("query") || infraInterface.name().toLowerCase().contains("singleget")){
-             outputTableName = upperFirst(toCamelCase(outputTable.name()));
-             outputRepositoryName = toCamelCase(outputTable.name()) + "Repository";
+            outputTableName = upperFirst(toCamelCase(outputTable.name()));
+            outputRepositoryName = toCamelCase(outputTable.name()) + "Repository";
         }
 
         String convertClass = bindingMap.get("moduleNameHumpUp") + "Convert";
@@ -411,90 +411,90 @@ public class CodegenEngine {
                 String inputSubClassName = bindingMap.get("inputSubClassName").toString();
                 String inputSubRepositoryName = toCamelCase(inputSubTable.name()) + "Repository";
                 String subNotExistErrorCode = bindingMap.get("subNotExistErrorCode").toString();
-                String subDuplicateErrorCode = bindingMap.get("subDuplicateErrorCode").toString();
+                String subDuplicateErrorCode = bindingMap.get("subDuplicateErrorCode") == null ? "" : bindingMap.get("subDuplicateErrorCode").toString();
                 String subRepositoryDuplicateFunctionName = bindingMap.get("subRepositoryDuplicateFunctionName").toString();
                 String subRepositoryDuplicateFunctionParams = bindingMap.get("subRepositoryDuplicateFunctionParams").toString();
-//                for(DictTypeUpdateInput.data data : inputVO.getDatas()){
+                //生成代码  for(DictTypeUpdateInput.data data : inputVO.getDatas()){
                 functionContent.append("        for(").append(interfaceInput).append(".").append(inputSubClassName)
                         .append(" ").append(inputSubClassName).append(" : ").append("inputVO.get").append(upperFirst(inputSubClassName))
                         .append("s()){\r\n");
-//                    if(Objects.equals(data.getOperateType(), "delete")){
+                //生成代码 if(Objects.equals(data.getOperateType(), "delete")){
                 functionContent.append("            if(Objects.equals(").append(inputSubClassName).append(".getOperateType(), \"delete\")){\r\n");
-//                        Optional<InfraDictData> optionalDeleteInfraDictData = infraDictDataRepository.findById(data.getId());
+                //生成代码 Optional<InfraDictData> optionalDeleteInfraDictData = infraDictDataRepository.findById(data.getId());
                 functionContent.append("                Optional<").append(inputSubTableName).append("> optionalDelete").append(inputSubTableName)
                         .append(" = ").append(inputSubRepositoryName).append(".findById(").append(inputSubClassName).append(".getId());\r\n");
-//                        if(!optionalDeleteInfraDictData.isPresent()){
+                //生成代码 if(!optionalDeleteInfraDictData.isPresent()){
                 functionContent.append("                if(!optionalDelete").append(inputSubTableName).append(".isPresent()){\r\n");
-//                            throw exception(DICT_DATA_NOT_EXISTS);
+                //生成代码 throw exception(DICT_DATA_NOT_EXISTS);
                 functionContent.append("                    throw exception(").append(subNotExistErrorCode).append(");\r\n");
-//                        }
+                //生成代码          }
                 functionContent.append("                }\r\n");
-//                        infraDictDataRepository.deleteById(data.getId());
+                //生成代码 infraDictDataRepository.deleteById(data.getId());
                 functionContent.append("                ").append(inputSubRepositoryName).append(".deleteById(").append(inputSubClassName)
                         .append(".getId());\r\n");
-//                    }else if(Objects.equals(data.getOperateType(), "new")){
+                //生成代码 }else if(Objects.equals(data.getOperateType(), "new")){
                 functionContent.append("            ").append("}else if(Objects.equals(").append(inputSubClassName)
                         .append(".getOperateType(), \"new\")){\r\n");
                 if(!subDuplicateErrorCode.isEmpty()) {
-//                        Optional<InfraDictData> optionalDuplicateInfraDictData = infraDictDataRepository.findByTypeIdAndValue(data.getTypeId(), data.getValue());
+                //生成代码 Optional<InfraDictData> optionalDuplicateInfraDictData = infraDictDataRepository.findByTypeIdAndValue(data.getTypeId(), data.getValue());
                     functionContent.append("                Optional<").append(inputSubTableName).append("> optionalDuplicate")
                             .append(inputSubTableName).append(" = ").append(inputSubRepositoryName)
                             .append(".").append(subRepositoryDuplicateFunctionName)
                             .append("(").append(subRepositoryDuplicateFunctionParams).append(");\r\n");
-//                        if(optionalDuplicateInfraDictData.isPresent()){
+                    //生成代码 if(optionalDuplicateInfraDictData.isPresent()){
                     functionContent.append("                if(optionalDuplicate").append(inputSubTableName).append(".isPresent()){\r\n");
-//                            throw exception(DICT_DATA_VALUE_DUPLICATE);
+                    //生成代码 throw exception(DICT_DATA_VALUE_DUPLICATE);
                     functionContent.append("                    throw exception(").append(subDuplicateErrorCode).append(");\r\n");
-//                        }
+                    //生成代码      }
                     functionContent.append("                }\r\n");
                 }
-//                        InfraDictData newData = DictTypeConvert.INSTANCE.updateInputDataConvert(data);
+                //生成代码 InfraDictData newData = DictTypeConvert.INSTANCE.updateInputDataConvert(data);
                 functionContent.append("                ").append(inputSubTableName).append(" new").append(inputSubTableName)
                         .append(" = ").append(convertClass).append(".INSTANCE.").append(convertName).append("(")
                         .append(inputSubClassName).append(");\r\n");
-//                        infraDictDataRepository.insert(newData);
+                //生成代码 infraDictDataRepository.insert(newData);
                 functionContent.append("                ").append(inputSubRepositoryName).append(".insert(new").append(inputSubTableName)
                         .append(");\r\n");
-//                    }else {
+                //生成代码 }else {
                 functionContent.append("            }else{\r\n");
-//                        Optional<InfraDictData> optionalOldInfraDictData = infraDictDataRepository.findById(data.getId());
+                //生成代码 Optional<InfraDictData> optionalOldInfraDictData = infraDictDataRepository.findById(data.getId());
                 functionContent.append("                Optional<").append(inputSubTableName).append("> optionalOld").append(inputSubTableName)
                         .append(" = ").append(inputSubRepositoryName).append(".findById(").append(inputSubClassName)
                         .append(".getId());\r\n");
-//                        if(!optionalOldInfraDictData.isPresent()) {
+                //生成代码 if(!optionalOldInfraDictData.isPresent()) {
                 functionContent.append("                if(!optionalOld").append(inputSubTableName).append(".isPresent()) {\r\n");
-//                            throw exception(DICT_DATA_NOT_EXISTS);
+                //生成代码 throw exception(DICT_DATA_NOT_EXISTS);
                 functionContent.append("                    ").append("throw exception(").append(subNotExistErrorCode).append(");\r\n");
-//                        }
+                //生成代码          }
                 functionContent.append("                }\r\n");
                 if(!subDuplicateErrorCode.isEmpty()) {
-//                        Optional<InfraDictData> optionalDuplicateInfraDictData = infraDictDataRepository.findByTypeIdAndValue(data.getTypeId(), data.getValue());
+                  //生成代码 Optional<InfraDictData> optionalDuplicateInfraDictData = infraDictDataRepository.findByTypeIdAndValue(data.getTypeId(), data.getValue());
                     functionContent.append("                Optional<").append(inputSubTableName).append("> optionalDuplicate")
                             .append(inputSubTableName).append(" = ").append(inputSubRepositoryName)
                             .append(".").append(subRepositoryDuplicateFunctionName)
                             .append("(").append(subRepositoryDuplicateFunctionParams).append(");\r\n");
-//                        if(optionalDuplicateInfraDictData.isPresent() && !data.getId().equals(optionalDuplicateInfraDictData.get().id()))
+                    //生成代码 if(optionalDuplicateInfraDictData.isPresent() && !data.getId().equals(optionalDuplicateInfraDictData.get().id()))
                     functionContent.append("                if(optionalDuplicate").append(inputSubTableName).append(".isPresent() && !")
                             .append(inputSubClassName).append(".getId().equals(optionalDuplicate")
                             .append(inputSubTableName).append(".get().id())){\r\n");
-//                            throw exception(DICT_DATA_VALUE_DUPLICATE);
+                    //生成代码 throw exception(DICT_DATA_VALUE_DUPLICATE);
                     functionContent.append("                    throw exception(").append(subDuplicateErrorCode).append(");\r\n");
-//                        }
+                    //生成代码      }
                     functionContent.append("                }\r\n");
                 }
-//                        InfraDictData updateInfraDictData = DictTypeConvert.INSTANCE.updateInputDataConvert(data);
+                //生成代码 InfraDictData updateInfraDictData = DictTypeConvert.INSTANCE.updateInputDataConvert(data);
                 functionContent.append("                ").append(inputSubTableName).append(" update").append(inputSubTableName)
                         .append(" = ").append(convertClass).append(".INSTANCE.").append(convertName).append("(")
                         .append(inputSubClassName).append(");\r\n");
-//                        if (!EntityUtils.isEquals(optionalOldInfraDictData.get(), updateInfraDictData))
+                //生成代码 if (!EntityUtils.isEquals(optionalOldInfraDictData.get(), updateInfraDictData))
                 functionContent.append("                if (!EntityUtils.isEquals(optionalOld").append(inputSubTableName)
                         .append(".get(), update").append(inputSubTableName).append("))\r\n");
-//                            infraDictDataRepository.update(updateInfraDictData);
+                //生成代码 infraDictDataRepository.update(updateInfraDictData);
                 functionContent.append("                    ").append(inputSubRepositoryName).append(".update(update")
                         .append(inputSubTableName).append(");\r\n");
-//                    }
+                //生成代码      }
                 functionContent.append("            }\r\n");
-//                }
+                //生成代码  }
                 functionContent.append("        }\r\n");
             }
 
@@ -503,13 +503,13 @@ public class CodegenEngine {
                     .append(convertClass).append(".INSTANCE.").append(convertName).append("(inputVO);\r\n");
             if(inputSubTable != null){
                 String upperInputSubClassName = bindingMap.get("inputSubClassName").toString().toUpperCase();
-//            updateInfraDictType = InfraDictTypeDraft.$.produce(updateInfraDictType, draft -> {
+            //生成代码 updateInfraDictType = InfraDictTypeDraft.$.produce(updateInfraDictType, draft -> {
                 functionContent.append("        update").append(inputTableName).append(" = ").append(inputTableName)
                         .append("Draft.$.produce(update").append(inputTableName).append(", draft -> {\r\n");
-//                DraftObjects.unload(draft, InfraDictTypeProps.DATAS);
+            //生成代码 DraftObjects.unload(draft, InfraDictTypeProps.DATAS);
                 functionContent.append("            DraftObjects.unload(draft, ").append(inputTableName).append("Props.")
                         .append(upperInputSubClassName).append("S);\r\n");
-//            });
+            //生成代码 });
                 functionContent.append("        });\r\n");
             }
 
@@ -606,14 +606,15 @@ public class CodegenEngine {
         bindingMap.put("subRepositoryDuplicateFunctionName", "");
         bindingMap.put("subRepositoryDuplicateFunctionParams", "");
         bindingMap.put("subRepositoryFunction", "");
-        if(infraInterface.name().toLowerCase().contains("update") && inputSubTable != null){
+        List<InfraDatabaseIndex> subInputIndexList = new ArrayList<>();
 
-            String inputSubClassName = bindingMap.get("inputSubClassName").toString();
-            List<InfraDatabaseIndex> subInputIndexList;
-
+        if(inputSubTable != null) {
             subInputIndexList = inputSubTable.indexes().stream()
                     .filter(index -> index.indexType().equals("UNIQUE INDEX")).collect(Collectors.toList());
+        }
+        if(infraInterface.name().toLowerCase().contains("update") && inputSubTable != null && !subInputIndexList.isEmpty()){
 
+            String inputSubClassName = bindingMap.get("inputSubClassName").toString();
 
             InfraDatabaseIndex subUniqueIndex = subInputIndexList.get(0);
             List<String> subUniqueColumnName = subUniqueIndex.columnNames();
@@ -638,13 +639,12 @@ public class CodegenEngine {
                 }
             }
 
-            if(infraInterface.name().toLowerCase().contains("create") || infraInterface.name().toLowerCase().contains("update")){
-                function.append("    Optional<").append(upperFirst(toCamelCase(inputSubTable.name()))).append("> findFirstBy")
-                        .append(columnFunction) .append("(") .append(columnParam) .append(");\r\n");
-                String repositoryDuplicateFunctionName = "findFirstBy" + columnFunction;
-                bindingMap.put("subRepositoryDuplicateFunctionName", repositoryDuplicateFunctionName);
-                bindingMap.put("subRepositoryDuplicateFunctionParams", functionParam);
-            }
+            function.append("    Optional<").append(upperFirst(toCamelCase(inputSubTable.name()))).append("> findFirstBy")
+                    .append(columnFunction) .append("(") .append(columnParam) .append(");\r\n");
+            String repositoryDuplicateFunctionName = "findFirstBy" + columnFunction;
+            bindingMap.put("subRepositoryDuplicateFunctionName", repositoryDuplicateFunctionName);
+            bindingMap.put("subRepositoryDuplicateFunctionParams", functionParam);
+
             bindingMap.put("subRepositoryFunction", function.toString());
         }
 
@@ -660,7 +660,7 @@ public class CodegenEngine {
         }
         StringBuilder function = new StringBuilder();
         if((infraInterface.name().toLowerCase().contains("update")
-            || infraInterface.name().toLowerCase().contains("create")) && !inputIndexList.isEmpty()) {
+                || infraInterface.name().toLowerCase().contains("create")) && !inputIndexList.isEmpty()) {
 
             InfraDatabaseIndex uniqueIndex = inputIndexList.get(0);
             List<String> uniqueColumnName = uniqueIndex.columnNames();
@@ -900,12 +900,22 @@ public class CodegenEngine {
                     bindingMap.put("isGenerateErrorCode", true);
                     generateInterfaceFunctionContent(bindingMap);
                     serviceImplList.add("    @Resource\r\n" + "    private " + upperFirst(toCamelCase(table.name()))
-                        + "Repository " + toCamelCase(table.name()) + "Repository;\r\n");
+                            + "Repository " + toCamelCase(table.name()) + "Repository;\r\n");
                     serviceImplImportList.add("import " +
                             getStr(bindingMap, "basePackage").replaceAll("\\.", ".") +
                             ".service.repository." + table.firstModule() +  "." + table.secondModule() + "." +
                             upperFirst(toCamelCase(inputSrcExtendClass)) + "Repository;");
                     serviceImplImportList.add(inputSrcExtendTableImport);
+                    String inputSrcExtendDraftTableImport = "import " +
+                            getStr(bindingMap, "basePackage").replaceAll("\\.", ".") +
+                            ".service.model." + table.firstModule() + "." + table.secondModule() + "." +
+                            upperFirst(toCamelCase(inputSrcExtendClass)) + "Draft;";
+                    serviceImplImportList.add(inputSrcExtendDraftTableImport);
+                    String inputSrcExtendPropsTableImport = "import " +
+                            getStr(bindingMap, "basePackage").replaceAll("\\.", ".") +
+                            ".service.model." + table.firstModule() + "." + table.secondModule() + "." +
+                            upperFirst(toCamelCase(inputSrcExtendClass)) + "Props;";
+                    serviceImplImportList.add(inputSrcExtendPropsTableImport);
                 }
 
                 if(infraInterface.name().toLowerCase().contains("delete")){
@@ -1181,7 +1191,7 @@ public class CodegenEngine {
         if(fileContent.indexOf(module.comment()) == -1)
             return;
         if(bindingMap.get("duplicateErrorCode") == null && bindingMap.get("notExistErrorCode") == null
-            && bindingMap.get("subDuplicateErrorCode") == null && bindingMap.get("subNotExistErrorCode") == null)
+                && bindingMap.get("subDuplicateErrorCode") == null && bindingMap.get("subNotExistErrorCode") == null)
             return;
         String moduleCode = fileContent.substring(fileContent.indexOf(module.comment()) + module.comment().length() +1,
                 fileContent.indexOf(module.comment()) + module.comment().length() + 8);
