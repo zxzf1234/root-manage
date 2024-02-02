@@ -275,7 +275,9 @@ public class CodegenEngine {
         if(table == null)
             return;
         List<InfraDatabaseIndex> indexList = table.indexes().stream()
-                .filter(index-> index.indexType().equals("UNIQUE INDEX")).collect(Collectors.toList());
+                .filter(index-> index.indexType().equals("UNIQUE INDEX"))
+                .filter(index -> index.columnNames().stream().noneMatch(name -> name.contains("no")))
+                .collect(Collectors.toList());
         if(indexList.isEmpty())
             return;
 
@@ -654,7 +656,9 @@ public class CodegenEngine {
         List<InfraDatabaseIndex> inputIndexList;
         if(inputTable != null) {
             inputIndexList = inputTable.indexes().stream()
-                    .filter(index -> index.indexType().equals("UNIQUE INDEX")).collect(Collectors.toList());
+                    .filter(index -> index.indexType().equals("UNIQUE INDEX"))
+                    .filter(index -> index.columnNames().stream().noneMatch(name -> name.contains("no")))
+                    .collect(Collectors.toList());
         }else{
             inputIndexList = new ArrayList<>();
         }

@@ -917,7 +917,10 @@ const handleSaveTable = async () => {
   const valid = await formRef.value.validate()
   if (!valid) return
   for (let i = 0; i < formData.value.columns.length; i++) {
-    if (formData.value.columns[i].dataType == '') {
+    if (
+      formData.value.columns[i].dataType == '' &&
+      formData.value.columns[i].operateType != 'delete'
+    ) {
       message.alertError(formData.value.columns[i].columnName + '没有选择物理类型')
       return
     }
