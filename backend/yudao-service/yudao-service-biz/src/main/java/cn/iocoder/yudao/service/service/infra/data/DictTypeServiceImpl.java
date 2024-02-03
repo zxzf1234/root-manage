@@ -141,7 +141,7 @@ public class DictTypeServiceImpl implements DictTypeService {
                     throw exception(DICT_DATA_NOT_EXISTS);
                 }
                 Optional<InfraDictData> optionalDuplicateInfraDictData = infraDictDataRepository.findByTypeIdAndValue(data.getTypeId(), data.getValue());
-                if(optionalDuplicateInfraDictData.isPresent()){
+                if(optionalDuplicateInfraDictData.isPresent() && !data.getId().equals(optionalDuplicateInfraDictData.get().id())){
                     throw exception(DICT_DATA_VALUE_DUPLICATE);
                 }
                 InfraDictData updateInfraDictData = DictTypeConvert.INSTANCE.updateInputDataConvert(data);
