@@ -14,7 +14,7 @@
                 <avatar class="avatar" />
                 <Motion>
                   <h2 class="outline-none">
-                    <TypeIt :cursor="false" :speed="150" />
+                    <ReTpeit :cursor="false" :speed="150" :values="['管理系统']" />
                   </h2>
                 </Motion>
                 <Transition appear enter-active-class="animate__animated animate__bounceInRight">
@@ -42,7 +42,7 @@
   </div>
 </template>
 <script lang="ts" name="Login" setup>
-import TypeIt from '@/components/ReTpeit'
+import { ReTpeit } from '@/components/ReTpeit'
 import { LoginForm, MobileForm, QrCodeForm, RegisterForm, SSOLoginVue } from './components'
 import { toRaw } from 'vue'
 import { bg, avatar, illustration } from './utils/static'
