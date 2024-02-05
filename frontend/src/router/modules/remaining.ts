@@ -84,19 +84,19 @@ const remainingRouter: AppRouteRecordRaw[] = [
       hidden: true
     },
     children: [
-      {
-        path: 'type/data/:dictType',
-        component: () => import('@/views/infra/dict/data/index.vue'),
-        name: 'InfraDictData',
-        meta: {
-          title: '字典数据',
-          noCache: true,
-          hidden: true,
-          canTo: true,
-          icon: '',
-          activeMenu: '/infra/dict'
-        }
-      }
+      // {
+      //   path: 'type/data/:dictType',
+      //   component: () => import('@/views/infra/dict/data/index.vue'),
+      //   name: 'InfraDictData',
+      //   meta: {
+      //     title: '字典数据',
+      //     noCache: true,
+      //     hidden: true,
+      //     canTo: true,
+      //     icon: '',
+      //     activeMenu: '/infra/dict'
+      //   }
+      // }
     ]
   },
 
@@ -131,19 +131,19 @@ const remainingRouter: AppRouteRecordRaw[] = [
       hidden: true
     },
     children: [
-      {
-        path: 'job-log',
-        component: () => import('@/views/infra/job/logger/index.vue'),
-        name: 'InfraJobLog',
-        meta: {
-          noCache: true,
-          hidden: true,
-          canTo: true,
-          icon: 'ep:edit',
-          title: '调度日志',
-          activeMenu: 'infra/job/index'
-        }
-      }
+      // {
+      //   path: 'job-log',
+      //   component: () => import('@/views/infra/job/logger/index.vue'),
+      //   name: 'InfraJobLog',
+      //   meta: {
+      //     noCache: true,
+      //     hidden: true,
+      //     canTo: true,
+      //     icon: 'ep:edit',
+      //     title: '调度日志',
+      //     activeMenu: 'infra/job/index'
+      //   }
+      // }
     ]
   },
   {
