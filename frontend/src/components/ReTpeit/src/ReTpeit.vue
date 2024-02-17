@@ -8,7 +8,7 @@ const props = defineProps({
     default: 200
   },
   values: {
-    type: Array,
+    type: Array<string>,
     defalut: []
   },
   className: {
@@ -20,7 +20,7 @@ const props = defineProps({
     default: true
   }
 })
-const text = ref(null)
+const text = ref('')
 onMounted(() => {
   new TypeIt(text.value, {
     strings: props.values,
