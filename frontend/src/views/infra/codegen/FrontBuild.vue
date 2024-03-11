@@ -5,11 +5,12 @@
         <div class="mb-2 float-right">
           <el-button size="small" @click="setJson"> 导入JSON</el-button>
           <el-button size="small" type="primary" @click="showJson">生成 JSON</el-button>
+          <el-button size="small" type="primary" @click="showCode">生成 代码</el-button>
         </div>
       </el-col>
       <!-- 表单设计器 -->
       <el-col>
-        <FcDesigner ref="designer" height="780px" />
+        <designerForm ref="designer" height="780px" />
       </el-col>
     </el-row>
   </ContentWrap>
@@ -17,7 +18,7 @@
   <Dialog :title="dialogTitle" v-model="dialogVisible" max-height="600">
     <div ref="editor" v-if="dialogVisible">
       <el-scrollbar height="580">
-        <div v-if="formType == 0">
+        <div v-if="formType == 0 || formType == 2">
           <el-button style="float: right" @click="copy(formData)">
             {{ t('common.copy') }}
           </el-button>
@@ -33,9 +34,10 @@
   </Dialog>
 </template>
 <script setup lang="ts" name="InfraBuild">
-import FcDesigner from '@form-create/designer'
 import { useClipboard } from '@vueuse/core'
 import { isString } from '@/utils/is'
+import designerForm from '@/components/FcDesigner/index.es.js'
+import { jsonParseCode } from '@/utils/frontBuild'
 const { t } = useI18n() // 国际化
 
 const formType = ref(-1) // 表单的类型：0 - 生成 JSON；1 - 生成 Options；2 - 生成组件
@@ -95,6 +97,7 @@ const checkbox = {
     ]
   }
 }
+
 /** 初始化 **/
 onMounted(async () => {
   console.log(designer.value)
@@ -117,6 +120,14 @@ const openModel = (title: string) => {
 const showJson = () => {
   openModel('生成 JSON')
   formType.value = 0
+  formData.value = designer.value.getRule()
+}
+
+/** 生成 代码 */
+const showCode = () => {
+  openModel('生成 代码')
+  formType.value = 2
+  jsonParseCode(designer.value.getRule())
   formData.value = designer.value.getRule()
 }
 

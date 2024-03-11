@@ -39,25 +39,24 @@
       </el-form-item>
     </el-form>
     <!-- 列表 -->
-    <el-row>
-      <Table
-        :columns="interfaceColumns"
-        :page-param="queryParams"
-        :page-data="interfaceData"
-        @row-click="handleRowClick"
-        @page-change="getList"
-        adaptive
-        @row-dblclick="(row) => openForm('update', row.id)"
-        save-key="interface"
-      >
-        <template #menu="{ row }">
-          <context-menu-item label="修改" @click="openForm('update', row.id)" />
-        </template>
-        <template #isTransaction="{ row }">
-          <dict-tag :type="DICT_TYPE.COMMON_STATUS" :value="row.isTransaction ? 0 : 1" />
-        </template>
-      </Table>
-    </el-row>
+
+    <Table
+      :columns="interfaceColumns"
+      :page-param="queryParams"
+      :page-data="interfaceData"
+      @row-click="handleRowClick"
+      @page-change="getList"
+      adaptive
+      @row-dblclick="(row) => openForm('update', row.id)"
+      save-key="interface"
+    >
+      <template #menu="{ row }">
+        <context-menu-item label="修改" @click="openForm('update', row.id)" />
+      </template>
+      <template #isTransaction="{ row }">
+        <dict-tag :type="DICT_TYPE.COMMON_STATUS" :value="row.isTransaction ? 0 : 1" />
+      </template>
+    </Table>
   </ContentWrap>
   <ContentWrap class="h-[35%]">
     <el-tabs v-model="tabActiveName" type="card" height="700">

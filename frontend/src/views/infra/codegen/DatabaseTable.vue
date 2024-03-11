@@ -5,34 +5,33 @@
       <el-form-item label="表名称" prop="name">
         <el-input
           v-model="queryParams.name"
-          class="!w-240px"
           clearable
           placeholder="请输入表名称"
           @keyup.enter="getList"
         />
       </el-form-item>
+
       <el-form-item label="表描述" prop="comment">
         <el-input
           v-model="queryParams.comment"
-          class="!w-240px"
           clearable
           placeholder="请输入表描述"
           @keyup.enter="getList"
         />
       </el-form-item>
+
       <el-form-item label="一级模块" prop="firstModule">
         <el-input
           v-model="queryParams.firstModule"
-          class="!w-240px"
           clearable
           placeholder="请输入一级模块"
           @keyup.enter="getList"
         />
       </el-form-item>
+
       <el-form-item label="二级模块" prop="secondModule">
         <el-input
           v-model="queryParams.secondModule"
-          class="!w-240px"
           clearable
           placeholder="请输入二级模块"
           @keyup.enter="getList"
@@ -54,22 +53,21 @@
       </el-form-item>
     </el-form>
     <!-- 列表 -->
-    <el-row>
-      <Table
-        :columns="databaseTableColumns"
-        :page-param="queryParams"
-        :page-data="databaseTableData"
-        @row-click="handleRowClick"
-        @page-change="getList"
-        adaptive
-        save-key="databaseTable"
-        @row-dblclick="(row) => handleUpdate(row)"
-      >
-        <template #menu="{ row }">
-          <context-menu-item label="修改" @click="handleUpdate(row)" />
-        </template>
-      </Table>
-    </el-row>
+
+    <Table
+      :columns="databaseTableColumns"
+      :page-param="queryParams"
+      :page-data="databaseTableData"
+      @row-click="handleRowClick"
+      @page-change="getList"
+      adaptive
+      save-key="databaseTable"
+      @row-dblclick="(row) => handleUpdate(row)"
+    >
+      <template #menu="{ row }">
+        <context-menu-item label="修改" @click="handleUpdate(row)" />
+      </template>
+    </Table>
   </ContentWrap>
   <ContentWrap class="h-[35%]">
     <el-tabs v-model="activeName" type="card">

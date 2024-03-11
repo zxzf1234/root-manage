@@ -19,71 +19,55 @@
       :inline="true"
       :model="formData"
       :rules="formRules"
-      label-width="90px"
+      label-width="auto"
     >
-      <el-row>
-        <el-col :span="8">
-          <el-form-item label="模块" prop="moduleId">
-            <el-tree-select
-              v-model="formData.moduleId"
-              :data="moduleTree"
-              :props="defaultProps"
-              check-strictly
-              default-expand-all
-              placeholder="请选择模块"
-              value-key="Id"
-            />
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="接口名" prop="name">
-            <el-input
-              v-model="formData.name"
-              placeholder="请输入名称"
-              @keyup="formData.name = formData.name.replace(/[^a-zA-Z]/g, '')"
-              @blur="interfaceNameBlur"
-            />
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="描述" prop="comment">
-            <el-input v-model="formData.comment" placeholder="请输入描述" />
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="8">
-          <el-form-item label="调用方法" prop="method">
-            <el-select v-model="formData.method">
-              <el-option label="post" value="post" />
-              <el-option label="get" value="get" />
-              <el-option label="delete" value="delete" />
-              <el-option label="put" value="put" />
-              <el-option label="download" value="download" />
-              <el-option label="upload" value="upload" />
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="权限" prop="authorize">
-            <el-input
-              v-model="formData.authorize"
-              placeholder="请输入权限"
-              @blur="formData.authorize = formData.authorize.trim()"
-            />
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item prop="isTransaction">
-            <el-checkbox
-              v-model="formData.isTransaction"
-              label="是否开启事务"
-              false-label="false"
-              true-label="true"
-            />
-          </el-form-item>
-        </el-col>
-      </el-row>
+      <el-form-item label="模块" prop="moduleId">
+        <el-tree-select
+          v-model="formData.moduleId"
+          :data="moduleTree"
+          :props="defaultProps"
+          check-strictly
+          default-expand-all
+          placeholder="请选择模块"
+          value-key="Id"
+        />
+      </el-form-item>
+
+      <el-form-item label="接口名" prop="name">
+        <el-input
+          v-model="formData.name"
+          placeholder="请输入名称"
+          @keyup="formData.name = formData.name.replace(/[^a-zA-Z]/g, '')"
+          @blur="interfaceNameBlur"
+        />
+      </el-form-item>
+
+      <el-form-item label="描述" prop="comment">
+        <el-input v-model="formData.comment" placeholder="请输入描述" />
+      </el-form-item>
+
+      <el-form-item label="调用方法" prop="method">
+        <el-select v-model="formData.method">
+          <el-option label="post" value="post" />
+          <el-option label="get" value="get" />
+          <el-option label="delete" value="delete" />
+          <el-option label="put" value="put" />
+          <el-option label="download" value="download" />
+          <el-option label="upload" value="upload" />
+        </el-select>
+      </el-form-item>
+
+      <el-form-item label="权限" prop="authorize">
+        <el-input
+          v-model="formData.authorize"
+          placeholder="请输入权限"
+          @blur="formData.authorize = formData.authorize.trim()"
+        />
+      </el-form-item>
+
+      <el-form-item prop="isTransaction" label="是否开启事务">
+        <el-checkbox v-model="formData.isTransaction" false-label="false" true-label="true" />
+      </el-form-item>
     </el-form>
     <el-tabs v-model="tabActiveName" type="card">
       <el-tab-pane label="入参" name="inputParam">
