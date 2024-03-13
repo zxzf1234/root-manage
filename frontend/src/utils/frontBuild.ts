@@ -1,4 +1,21 @@
 import { camelCase } from 'lodash-es'
+const mainComponent = [
+  'input',
+  'inputNumber',
+  'radio',
+  'checkbox',
+  'select',
+  'switch',
+  'timePicker',
+  'datePicker',
+  'slider',
+  'rate',
+  'colorPicker',
+  'cascader',
+  'upload',
+  'transfer',
+  'tree'
+]
 /**
  * @param {string} jsonRule 需要转换的json
  */
@@ -6,9 +23,9 @@ export const jsonParseCode = (objectRule: object) => {
   if (objectRule === undefined) return ''
   if (!objectRule) return ''
   else {
-    let code = ''
-    code = objectParseCode(objectRule, 1)
-    console.log(code)
+    let code = '<template>\r'
+    code = code + objectParseCode(objectRule, 1)
+    code = code + '</template>'
     return code
   }
 }
@@ -18,11 +35,16 @@ const objectParseCode = (objectRule: object, deepIndex: number) => {
   if (Object.keys(objectRule).length < 1) return ''
   for (const key in objectRule) {
     if (typeof objectRule[key] === 'object' && '_fc_drag_tag' in objectRule[key]) {
-      const func = frontComponent[camelCase(objectRule[key]['_fc_drag_tag'])]
-      if (typeof func === 'function') {
-        code = code + func(objectRule[key], deepIndex, '')
+      console.log(mainComponent.indexOf(camelCase(objectRule[key]['_fc_drag_tag'])))
+      if (mainComponent.indexOf(camelCase(objectRule[key]['_fc_drag_tag'])) > -1) {
+        code = code + frontComponent.mainComponet(objectRule[key], deepIndex, '')
       } else {
-        console.log(camelCase(objectRule[key]['_fc_drag_tag']) + ' not eixts')
+        const func = frontComponent[camelCase(objectRule[key]['_fc_drag_tag'])]
+        if (typeof func === 'function') {
+          code = code + func(objectRule[key], deepIndex, '')
+        } else {
+          console.log(camelCase(objectRule[key]['_fc_drag_tag']) + ' not eixts')
+        }
       }
     }
   }
@@ -37,9 +59,18 @@ const generateTab = (deepIndex: number) => {
   return code
 }
 
+const addProps = (propObject: object) => {
+  let code = ''
+  for (const key in propObject) {
+    code = code + ' ' + key + '="' + propObject[key] + '"'
+  }
+  return code
+}
+
 const frontComponent = {
-  input: (componentObject: object, deepIndex: number, formModel: String) => {
+  mainComponet: (componentObject: object, deepIndex: number, formModel: String) => {
     let code = ''
+    let componentDeepIndex = deepIndex
     if (formModel != '') {
       code = code + generateTab(deepIndex) + '<el-form-item'
       if ('title' in componentObject) {
@@ -48,17 +79,23 @@ const frontComponent = {
       if ('field' in componentObject) {
         code = code + ' prop="' + componentObject['field'] + '"'
       }
-      // 添加属性
+
       code = code + '>\r'
+      componentDeepIndex++
     }
-    code = code + generateTab(deepIndex + 1) + '<el-input/>'
+    code = code + generateTab(componentDeepIndex) + '<el-' + componentObject['_fc_drag_tag']
+    // 添加属性
+    if ('props' in componentObject && typeof componentObject['props'] === 'object') {
+      code = code + addProps(componentObject['props'])
+    }
+    code = code + ' />\r'
     if (formModel != '') {
-      code = code + generateTab(deepIndex) + '</el-form-item>'
+      code = code + generateTab(deepIndex) + '</el-form-item>\r'
     }
     return code
   },
+
   button: (componentObject: object, deepIndex: number, formModel: String) => {
-    console.log('button function is called')
     console.log(formModel)
     for (const key in componentObject) {
       if (typeof componentObject[key] === 'object') {
@@ -67,6 +104,7 @@ const frontComponent = {
       }
     }
   },
+
   // eslint-disable-next-line
   form: (componentObject: object, deepIndex: number, formModel: String) => {
     let code = ''
@@ -77,9 +115,23 @@ const frontComponent = {
     if ('children' in componentObject) {
       const childrenObject = componentObject['children'] as object
       const childernIndex = deepIndex + 1
-      code = code + objectParseCode(childrenObject, childernIndex)
+      if (Object.keys(childrenObject).length < 1) return ''
+      for (const key in childrenObject) {
+        if (typeof childrenObject[key] === 'object' && '_fc_drag_tag' in childrenObject[key]) {
+          if (mainComponent.indexOf(camelCase(objectRule[key]['_fc_drag_tag'])) > -1) {
+            code = code + frontComponent.mainComponet(objectRule[key], deepIndex, '')
+          } else {
+            const func = frontComponent[camelCase(childrenObject[key]['_fc_drag_tag'])]
+            if (typeof func === 'function') {
+              code = code + func(childrenObject[key], childernIndex, 'queryParams')
+            } else {
+              console.log(camelCase(childrenObject[key]['_fc_drag_tag']) + ' not eixts')
+            }
+          }
+        }
+      }
     }
-    code = code + generateTab(deepIndex) + '</el-form>'
+    code = code + generateTab(deepIndex) + '</el-form>\r'
     return code
   }
 }

@@ -1,7 +1,7 @@
 <template>
   <ContentWrap class="h-[55%]">
     <!-- 搜索栏 -->
-    <el-form ref="queryFormRef" :inline="true" :model="queryParams" label-width="68px">
+    <el-form ref="queryFormRef" inline :model="queryParams" label-width="68px">
       <el-form-item label="表名称" prop="name">
         <el-input
           v-model="queryParams.name"

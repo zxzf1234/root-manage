@@ -18,11 +18,17 @@
   <Dialog :title="dialogTitle" v-model="dialogVisible" max-height="600">
     <div ref="editor" v-if="dialogVisible">
       <el-scrollbar height="580">
-        <div v-if="formType == 0 || formType == 2">
+        <div v-if="formType == 0">
           <el-button style="float: right" @click="copy(formData)">
             {{ t('common.copy') }}
           </el-button>
           <pre><code class="hljs" v-html="highlightedCode(formData)"></code></pre>
+        </div>
+        <div v-else-if="formType == 2">
+          <el-button style="float: right" @click="copy(formData)">
+            {{ t('common.copy') }}
+          </el-button>
+          <el-input v-model="formData" :rows="20" type="textarea" />
         </div>
         <div v-else>
           <el-input v-model="formData" :rows="20" type="textarea" />
@@ -100,7 +106,6 @@ const checkbox = {
 
 /** 初始化 **/
 onMounted(async () => {
-  console.log(designer.value)
   designer.value.addComponent(checkbox)
   //插入拖拽按钮到`main`分类下
   designer.value.appendMenuItem('layout', {
@@ -127,8 +132,8 @@ const showJson = () => {
 const showCode = () => {
   openModel('生成 代码')
   formType.value = 2
-  jsonParseCode(designer.value.getRule())
-  formData.value = designer.value.getRule()
+
+  formData.value = jsonParseCode(designer.value.getRule())
 }
 
 /** 导入 JSON */
