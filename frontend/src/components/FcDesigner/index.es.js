@@ -2126,8 +2126,9 @@ const sp = (f) => (A, l) => up(A, l, ld(f)), up = (f, A, l) => lp(l, f, "").repl
       },
       {
         type: "input",
-        field: "model",
-        title: "\u8868\u5355\u6570\u636E\u5BF9\u8C61"
+        field: ":model",
+        title: "\u8868\u5355\u6570\u636E\u5BF9\u8C61",
+        value: ""
       }
     ]);
   }

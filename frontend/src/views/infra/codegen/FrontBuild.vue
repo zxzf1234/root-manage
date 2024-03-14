@@ -53,67 +53,8 @@ const dialogVisible = ref(false) // 弹窗的是否展示
 const dialogTitle = ref('') // 弹窗的标题
 const message = useMessage() // 消息
 
-const label = ' 内容块'
-const name = 'ContentWrap'
-// let i = 1
-// const uniqueId = () => `uni${i++}`
-const checkbox = {
-  //拖拽组件的图标
-  icon: 'icon-checkbox',
-  //拖拽组件的名称
-  label,
-  name,
-  inside: true,
-  drag: true,
-  dragBtn: false,
-  mask: false,
-  //拖拽组件的生成规则
-  rule() {
-    //如果在 props 方法中需要修改 rule 的属性,需要提前在 rule 上定义对应的属性
-    return {
-      //生成组件的名称
-      type: name,
-      children: []
-    }
-  },
-  //拖拽组件配置项(props)的生成规则
-  props() {
-    return [
-      //生成`checkbox`组件的`options`配置规则
-
-      {
-        type: 'switch',
-        field: 'type',
-        title: '按钮类型',
-        props: { activeValue: 'button', inactiveValue: 'default' }
-      },
-      { type: 'switch', field: 'disabled', title: '是否禁用' },
-      {
-        type: 'inputNumber',
-        field: 'min',
-        title: '可被勾选的 checkbox 的最小数量'
-      },
-      { type: 'inputNumber', field: 'max', title: '可被勾选的 checkbox 的最大数量' },
-      {
-        type: 'input',
-        field: 'textColor',
-        title: '按钮形式的 Checkbox 激活时的文本颜色'
-      },
-      { type: 'input', field: 'fill', title: '按钮形式的 Checkbox 激活时的填充色和边框色' }
-    ]
-  }
-}
-
 /** 初始化 **/
-onMounted(async () => {
-  designer.value.addComponent(checkbox)
-  //插入拖拽按钮到`main`分类下
-  designer.value.appendMenuItem('layout', {
-    icon: checkbox.icon,
-    name: checkbox.name,
-    label: checkbox.label
-  })
-})
+onMounted(async () => {})
 
 /** 打开弹窗 */
 const openModel = (title: string) => {
