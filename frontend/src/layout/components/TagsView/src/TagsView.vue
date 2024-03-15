@@ -359,7 +359,6 @@ watch(
                     "
                     :icon="item?.matched[1]?.meta?.icon"
                     :size="12"
-                    class="mr-5px"
                   />
                   {{ t(item?.meta?.title as string) }}
                   <Icon

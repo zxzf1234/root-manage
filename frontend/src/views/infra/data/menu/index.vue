@@ -37,11 +37,11 @@
       </el-form-item>
       <el-form-item>
         <el-button @click="handleQuery">
-          <Icon class="mr-5px" icon="ep:search" />
+          <Icon icon="ep:search" />
           搜索
         </el-button>
         <el-button @click="resetQuery">
-          <Icon class="mr-5px" icon="ep:refresh" />
+          <Icon icon="ep:refresh" />
           重置
         </el-button>
         <el-button
@@ -50,15 +50,15 @@
           type="primary"
           @click="openForm('create')"
         >
-          <Icon class="mr-5px" icon="ep:plus" />
+          <Icon icon="ep:plus" />
           新增
         </el-button>
         <el-button plain type="danger" @click="toggleExpandAll">
-          <Icon class="mr-5px" icon="ep:sort" />
+          <Icon icon="ep:sort" />
           展开/折叠
         </el-button>
         <el-button plain @click="refreshMenu">
-          <Icon class="mr-5px" icon="ep:refresh" />
+          <Icon icon="ep:refresh" />
           刷新菜单缓存
         </el-button>
       </el-form-item>

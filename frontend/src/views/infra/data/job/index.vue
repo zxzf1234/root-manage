@@ -46,15 +46,15 @@
         />
       </el-form-item>
       <el-form-item>
-        <el-button @click="handleQuery"><Icon icon="ep:search" class="mr-5px" /> 搜索</el-button>
-        <el-button @click="resetQuery"><Icon icon="ep:refresh" class="mr-5px" /> 重置</el-button>
+        <el-button @click="handleQuery"><Icon icon="ep:search" /> 搜索</el-button>
+        <el-button @click="resetQuery"><Icon icon="ep:refresh" /> 重置</el-button>
         <el-button
           type="primary"
           plain
           @click="openForm('create')"
           v-hasPermi="['infra:data:job:create']"
         >
-          <Icon icon="ep:plus" class="mr-5px" /> 新增
+          <Icon icon="ep:plus" /> 新增
         </el-button>
         <el-button
           type="success"
@@ -63,10 +63,10 @@
           :loading="exportLoading"
           v-hasPermi="['infra:data:job:export']"
         >
-          <Icon icon="ep:download" class="mr-5px" /> 导出
+          <Icon icon="ep:download" /> 导出
         </el-button>
         <el-button type="info" plain @click="handleJobLog" v-hasPermi="['infra:data:job:query']">
-          <Icon icon="ep:zoom-in" class="mr-5px" /> 执行日志
+          <Icon icon="ep:zoom-in" /> 执行日志
         </el-button>
       </el-form-item>
     </el-form>

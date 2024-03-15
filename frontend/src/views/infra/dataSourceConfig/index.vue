@@ -9,7 +9,7 @@
           @click="openForm('create')"
           v-hasPermi="['infra:data-source-config:create']"
         >
-          <Icon icon="ep:plus" class="mr-5px" /> 新增
+          <Icon icon="ep:plus" /> 新增
         </el-button>
       </el-form-item>
     </el-form>

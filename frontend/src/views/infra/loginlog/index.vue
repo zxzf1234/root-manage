@@ -40,8 +40,8 @@
         />
       </el-form-item>
       <el-form-item>
-        <el-button @click="handleQuery"><Icon icon="ep:search" class="mr-5px" /> 搜索</el-button>
-        <el-button @click="resetQuery"><Icon icon="ep:refresh" class="mr-5px" /> 重置</el-button>
+        <el-button @click="handleQuery"><Icon icon="ep:search" /> 搜索</el-button>
+        <el-button @click="resetQuery"><Icon icon="ep:refresh" /> 重置</el-button>
         <el-button
           type="success"
           plain
@@ -49,7 +49,7 @@
           :loading="exportLoading"
           v-hasPermi="['infra:config:export']"
         >
-          <Icon icon="ep:download" class="mr-5px" /> 导出
+          <Icon icon="ep:download" /> 导出
         </el-button>
       </el-form-item>
     </el-form>

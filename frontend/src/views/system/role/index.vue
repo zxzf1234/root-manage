@@ -57,11 +57,11 @@
         </el-form-item>
         <el-form-item>
           <el-button @click="handleQuery">
-            <Icon class="mr-5px" icon="ep:search" />
+            <Icon icon="ep:search" />
             搜索
           </el-button>
           <el-button @click="resetQuery">
-            <Icon class="mr-5px" icon="ep:refresh" />
+            <Icon icon="ep:refresh" />
             重置
           </el-button>
           <el-button
@@ -70,7 +70,7 @@
             @click="openForm('create')"
             v-hasPermi="['system:role:create']"
           >
-            <Icon class="mr-5px" icon="ep:plus" />
+            <Icon icon="ep:plus" />
             新建
           </el-button>
           <el-button
@@ -80,7 +80,7 @@
             type="success"
             @click="handleExport"
           >
-            <Icon class="mr-5px" icon="ep:download" />
+            <Icon icon="ep:download" />
             导出
           </el-button>
         </el-form-item>

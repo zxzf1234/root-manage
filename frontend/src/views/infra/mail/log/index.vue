@@ -69,11 +69,11 @@
       </el-form-item>
       <el-form-item>
         <el-button @click="getList">
-          <Icon class="mr-5px" icon="ep:search" />
+          <Icon icon="ep:search" />
           搜索
         </el-button>
         <el-button @click="resetQuery">
-          <Icon class="mr-5px" icon="ep:refresh" />
+          <Icon icon="ep:refresh" />
           重置
         </el-button>
       </el-form-item>

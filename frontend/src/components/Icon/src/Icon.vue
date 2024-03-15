@@ -72,7 +72,7 @@ watch(
 </script>
 
 <template>
-  <ElIcon :class="prefixCls" :color="color" :size="size">
+  <ElIcon :class="prefixCls" :color="color" :size="size" class="mr-5px">
     <svg v-if="isLocal" :class="getSvgClass" aria-hidden="true">
       <use :xlink:href="symbolId" />
     </svg>

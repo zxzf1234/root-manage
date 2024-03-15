@@ -30,15 +30,15 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button @click="handleQuery"><Icon icon="ep:search" class="mr-5px" /> 搜索</el-button>
-        <el-button @click="resetQuery"><Icon icon="ep:refresh" class="mr-5px" /> 重置</el-button>
+        <el-button @click="handleQuery"><Icon icon="ep:search" /> 搜索</el-button>
+        <el-button @click="resetQuery"><Icon icon="ep:refresh" /> 重置</el-button>
         <el-button
           plain
           type="primary"
           @click="openForm('create')"
           v-hasPermi="['infra:oauth2-client:create']"
         >
-          <Icon icon="ep:plus" class="mr-5px" /> 新增
+          <Icon icon="ep:plus" /> 新增
         </el-button>
       </el-form-item>
     </el-form>

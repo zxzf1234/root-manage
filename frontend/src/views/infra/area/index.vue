@@ -4,7 +4,7 @@
   <!-- 操作栏 -->
   <ContentWrap>
     <el-button type="primary" plain @click="openForm()">
-      <Icon icon="ep:plus" class="mr-5px" /> IP 查询
+      <Icon icon="ep:plus" /> IP 查询
     </el-button>
   </ContentWrap>
 

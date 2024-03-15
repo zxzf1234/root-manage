@@ -124,11 +124,11 @@ const frontComponent = {
       code + generateTab(componentDeepIndex) + '<el-' + snakeCase(componentObject['_fc_drag_tag'])
 
     // 添加属性
+    if (formModel != '' && componentObject['field'] !== undefined) {
+      code = code + ' v-model="' + formModel + '.' + componentObject['field'] + '"'
+    }
+
     if (componentObject['props'] !== undefined && typeof componentObject['props'] === 'object') {
-      console.log('this is fromModel' + formModel)
-      if (formModel != '' && componentObject['props']['field'] !== undefined) {
-        code = code + ' v-model="' + formModel + '.' + componentObject['props']['field'] + '"'
-      }
       code = code + addProps(componentObject['props'] as object)
     }
     code = code + ' />\r'
@@ -159,8 +159,7 @@ const frontComponent = {
     code = code + '>'
     if (icon !== undefined) {
       const iconDeepIndex = deepIndex + 1
-      code =
-        code + '\r' + generateTab(iconDeepIndex) + '<Icon class="mr-5px" icon="' + icon + '" />\r'
+      code = code + '\r' + generateTab(iconDeepIndex) + '<Icon icon="' + icon + '" />\r'
     }
     if (
       componentObject['children'] !== undefined &&
@@ -182,7 +181,7 @@ const frontComponent = {
     code = code + generateTab(deepIndex) + '<el-form'
     let formModel = ''
     // 添加属性
-    if ('props' in componentObject && typeof componentObject['props'] === 'object') {
+    if (componentObject['props'] !== undefined && typeof componentObject['props'] === 'object') {
       code = code + addProps(componentObject['props'] as object)
       formModel =
         componentObject['props'][':model'] !== undefined ? componentObject['props'][':model'] : ''
@@ -196,7 +195,8 @@ const frontComponent = {
       for (const key in childrenObject) {
         if (typeof childrenObject[key] === 'object' && '_fc_drag_tag' in childrenObject[key]) {
           if (mainComponent.indexOf(camelCase(childrenObject[key]['_fc_drag_tag'])) > -1) {
-            code = code + frontComponent.mainComponet(childrenObject[key], deepIndex, formModel)
+            code =
+              code + frontComponent.mainComponet(childrenObject[key], childernDeepIndex, formModel)
           } else {
             const func = frontComponent[camelCase(childrenObject[key]['_fc_drag_tag'])]
             if (typeof func === 'function') {

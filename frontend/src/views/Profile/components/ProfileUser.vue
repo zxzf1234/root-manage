@@ -5,41 +5,41 @@
     </div>
     <ul class="list-group list-group-striped">
       <li class="list-group-item">
-        <Icon class="mr-5px" icon="ep:user" />
+        <Icon icon="ep:user" />
         {{ t('profile.user.username') }}
         <div class="pull-right">{{ userInfo?.username }}</div>
       </li>
       <li class="list-group-item">
-        <Icon class="mr-5px" icon="ep:phone" />
+        <Icon icon="ep:phone" />
         {{ t('profile.user.mobile') }}
         <div class="pull-right">{{ userInfo?.mobile }}</div>
       </li>
       <li class="list-group-item">
-        <Icon class="mr-5px" icon="fontisto:email" />
+        <Icon icon="fontisto:email" />
         {{ t('profile.user.email') }}
         <div class="pull-right">{{ userInfo?.email }}</div>
       </li>
       <li class="list-group-item">
-        <Icon class="mr-5px" icon="carbon:tree-view-alt" />
+        <Icon icon="carbon:tree-view-alt" />
         {{ t('profile.user.dept') }}
         <div v-if="userInfo?.dept" class="pull-right">{{ userInfo?.dept.name }}</div>
       </li>
       <li class="list-group-item">
-        <Icon class="mr-5px" icon="ep:suitcase" />
+        <Icon icon="ep:suitcase" />
         {{ t('profile.user.posts') }}
         <div v-if="userInfo?.posts" class="pull-right">
           {{ userInfo?.posts.map((post) => post.name).join(',') }}
         </div>
       </li>
       <li class="list-group-item">
-        <Icon class="mr-5px" icon="icon-park-outline:peoples" />
+        <Icon icon="icon-park-outline:peoples" />
         {{ t('profile.user.roles') }}
         <div v-if="userInfo?.roles" class="pull-right">
           {{ userInfo?.roles.map((role) => role.name).join(',') }}
         </div>
       </li>
       <li class="list-group-item">
-        <Icon class="mr-5px" icon="ep:calendar" />
+        <Icon icon="ep:calendar" />
         {{ t('profile.user.createTime') }}
         <div class="pull-right">{{ formatDate(userInfo?.createTime) }}</div>
       </li>
