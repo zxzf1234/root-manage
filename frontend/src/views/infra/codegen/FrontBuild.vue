@@ -19,7 +19,7 @@
     <div ref="editor" v-if="dialogVisible">
       <el-scrollbar height="580">
         <div v-if="formType == 0">
-          <el-button style="float: right" @click="copy(formData)">
+          <el-button style="float: right" @click="copy(JSON.stringify(formData, null, 2))">
             {{ t('common.copy') }}
           </el-button>
           <pre><code class="hljs" v-html="highlightedCode(formData)"></code></pre>
