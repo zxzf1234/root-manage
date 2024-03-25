@@ -24,51 +24,66 @@
             @current-change="currentChangeButton"
           >
             <template #buttonName="{ row }">
-              <el-input :value="row.buttonName" />
+              <el-input v-model="row.buttonName" />
             </template>
             <template #buttonFunction="{ row }">
-              <el-input :value="row.buttonFunction" />
+              <el-input
+                v-model="row.buttonFunction"
+                @keyup="row.buttonFunction = row.buttonFunction.replace(/[^a-zA-Z_]/g, '')"
+              />
             </template>
             <template #buttonIcon="{ row }">
-              <el-input :value="row.buttonIcon" />
+              <el-input v-model="row.buttonIcon" />
             </template>
           </Table>
         </el-tab-pane>
         <el-tab-pane label="搜索条件" name="searchConditionParam">
           <el-button @click="clickAddSearchCondition">添加搜索条件</el-button>
+          <el-button @click="clickAddDatabaseColumn">添加数据库表字段</el-button>
           <el-button @click="clickDeleteSearchCondition">删除搜索条件</el-button>
           <Table
             :columns="searchConditionColumns"
             :data="formData.searchConditions"
             @current-change="currentChangeSearchCondition"
           >
-            <template #buttonName="{ row }">
-              <el-input :value="row.buttonName" />
+            <template #searchName="{ row }">
+              <el-input v-model="row.searchName" />
             </template>
-            <template #buttonFunction="{ row }">
-              <el-input :value="row.buttonFunction" />
+            <template #searchValue="{ row }">
+              <el-input
+                v-model="row.searchValue"
+                @keyup="row.searchValue = row.searchValue.replace(/[^a-zA-Z_]/g, '')"
+              />
             </template>
-            <template #buttonIcon="{ row }">
-              <el-input :value="row.buttonIcon" />
+            <template #type="{ row }">
+              <el-select v-model="row.buttonIcon">
+                <el-option label="input" value="input" />
+                <el-option label="select" value="select" />
+                <el-option label="checkbox" value="checkbox" />
+              </el-select>
             </template>
           </Table>
         </el-tab-pane>
         <el-tab-pane label="表字段" name="tableParam">
           <el-button @click="clickAddTableColumn">添加表字段</el-button>
+          <el-button @click="clickAddDatabaseColumn">添加数据库表字段</el-button>
           <el-button @click="clickDeleteTableColumn">删除表字段</el-button>
           <Table
             :columns="tableColumns"
             :data="formData.tableColumns"
             @current-change="currentChangeTableColumn"
           >
-            <template #buttonName="{ row }">
-              <el-input :value="row.buttonName" />
+            <template #columnName="{ row }">
+              <el-input v-model="row.columnName" />
             </template>
-            <template #buttonFunction="{ row }">
-              <el-input :value="row.buttonFunction" />
+            <template #columnValue="{ row }">
+              <el-input
+                v-model="row.columnValue"
+                @keyup="row.columnValue = row.columnValue.replace(/[^a-zA-Z_]/g, '')"
+              />
             </template>
-            <template #buttonIcon="{ row }">
-              <el-input :value="row.buttonIcon" />
+            <template #isSlot="{ row }">
+              <el-checkbox v-model="row.isSlot" />
             </template>
           </Table>
         </el-tab-pane>
@@ -79,8 +94,11 @@
       <el-button @click="dialogVisible = false">取 消</el-button>
     </template>
   </Dialog>
+  <InterfaceRelatedParam ref="relatedParamRef" @save-param="handleBatchRelatedParam" />
 </template>
 <script lang="ts" name="FrontBuildManage" setup>
+import * as CodegenApi from '@/api/infra/codegen'
+import InterfaceRelatedParam from './InterfaceRelatedParam.vue'
 const dialogVisible = ref(false) // 弹窗的是否展示
 const dialogTitle = ref('') // 弹窗的标题
 const formLoading = ref(false) // 表单的加载中：1）修改时的数据加载；2）提交的按钮禁用
@@ -95,6 +113,7 @@ const buttonCurrentRow = ref()
 const searchConditionCurrentRow = ref()
 const tableColumnCurrentRow = ref()
 const message = useMessage() // 消息弹窗
+const relatedParamRef = ref()
 
 const buttonColumns = [
   {
@@ -116,37 +135,37 @@ const buttonColumns = [
 
 const searchConditionColumns = [
   {
-    label: '按钮名称',
-    prop: 'buttonName',
-    slot: 'buttonName'
+    label: '搜索名称',
+    prop: 'searchName',
+    slot: 'searchName'
   },
   {
-    label: '响应函数',
-    prop: 'buttonFunction',
-    slot: 'buttonFunction'
+    label: '搜索值',
+    prop: 'searchValue',
+    slot: 'searchValue'
   },
   {
-    label: '按钮图片',
-    prop: 'buttonIcon',
-    slot: 'buttonIcon'
+    label: '组件类型',
+    prop: 'type',
+    slot: 'type'
   }
 ]
 
 const tableColumns = [
   {
-    label: '按钮名称',
-    prop: 'buttonName',
-    slot: 'buttonName'
+    label: '字段名称',
+    prop: 'columnName',
+    slot: 'columnName'
   },
   {
-    label: '响应函数',
-    prop: 'buttonFunction',
-    slot: 'buttonFunction'
+    label: '字段值',
+    prop: 'columnValue',
+    slot: 'columnValue'
   },
   {
-    label: '按钮图片',
-    prop: 'buttonIcon',
-    slot: 'buttonIcon'
+    label: '是否插槽',
+    prop: 'isSlot',
+    slot: 'isSlot'
   }
 ]
 const formRules = reactive({
@@ -169,12 +188,16 @@ const submitForm = async () => {
   if (!formRef) return
   const valid = await formRef.value.validate()
   if (!valid) return
+  if (formData.value.tableColumns.length < 1) {
+    message.alertError('表字段至少有一个')
+    return
+  }
   // 提交请求
   formLoading.value = true
   try {
     dialogVisible.value = false
     // 发送操作成功的事件
-    emit('success')
+    emit('success', formData.value)
   } finally {
     formLoading.value = false
   }
@@ -217,9 +240,9 @@ const currentChangeButton = (val) => {
 const clickAddSearchCondition = () => {
   const newSearchCondition = {
     id: crypto.randomUUID(),
-    buttonName: '',
-    buttonFunction: '',
-    buttonIcon: ''
+    searchName: '',
+    searchValue: '',
+    type: 'input'
   }
   formData.value.searchConditions.push(newSearchCondition)
 }
@@ -240,9 +263,9 @@ const currentChangeSearchCondition = (val) => {
 const clickAddTableColumn = () => {
   const newTableColumn = {
     id: crypto.randomUUID(),
-    buttonName: '',
-    buttonFunction: '',
-    buttonIcon: ''
+    columnName: '',
+    columnValue: '',
+    isSlot: false
   }
   formData.value.tableColumns.push(newTableColumn)
 }
@@ -258,5 +281,40 @@ const clickDeleteTableColumn = () => {
 
 const currentChangeTableColumn = (val) => {
   tableColumnCurrentRow.value = val
+}
+
+const handleBatchRelatedParam = (dbSelectdColumnList) => {
+  if (tabActiveName.value === 'searchConditionParam') {
+    dbSelectdColumnList.forEach((element) => {
+      const newSearchCondition = {
+        id: crypto.randomUUID(),
+        searchName: element.columnName,
+        searchValue: element.columnComment,
+        type: 'input'
+      }
+      formData.value.searchConditions.push(newSearchCondition)
+    })
+  }
+  if (tabActiveName.value === 'tableParam') {
+    dbSelectdColumnList.forEach((element) => {
+      const newTableColumn = {
+        id: crypto.randomUUID(),
+        columnName: element.columnName,
+        columnValue: element.columnComment,
+        isSlot: false
+      }
+      formData.value.tableColumns.push(newTableColumn)
+    })
+  }
+}
+
+const clickAddDatabaseColumn = () => {
+  let variableType = 1 << 1
+  let params = {
+    Subclasses: new Array<CodegenApi.InterfaceSubclassVO>(),
+    variableType: variableType,
+    isBatchAdd: 1
+  }
+  relatedParamRef.value.open(params)
 }
 </script>
