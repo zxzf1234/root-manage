@@ -59,6 +59,7 @@ const dialogTitle = ref('') // 弹窗的标题
 const message = useMessage() // 消息
 const buildManageRef = ref()
 const buildEditRef = ref()
+let formAttr = { name: '', isDialag: false }
 
 /** 初始化 **/
 onMounted(async () => {})
@@ -93,6 +94,7 @@ const setJson = () => {
 /** 确定 */
 const onOk = () => {
   dialogVisible.value = false
+  console.log(JSON.parse(formData.value))
   designer.value.setRule(JSON.parse(formData.value))
 }
 
@@ -109,8 +111,61 @@ const copy = async (text: string) => {
   }
 }
 
-const showBuildManage = () => {
-  console.log(2)
+const showBuildManage = (manageObject: object) => {
+  formAttr.name = manageObject.name
+  // 添加代码
+  let formManageCard = {
+    type: 'el-card',
+    style: { width: '100%' },
+    fullWidth: true,
+    children: [
+      {
+        type: 'el-form',
+        style: {
+          width: '100%'
+        },
+        class: 'el-form--inline',
+        fullWidth: true,
+        _fc_drag_tag: 'form',
+        hidden: false,
+        display: true
+      }
+    ],
+    _fc_drag_tag: 'ContentWrap',
+    hidden: false,
+    display: true
+  }
+
+  if (manageObject.searchConditions.length > 0) {
+    formManageCard.children[0]['children'] = []
+    manageObject.searchConditions.forEach((element) => {
+      console.log(element.searchValue)
+      formManageCard.children[0]['children'].push({
+        type: element.type,
+        field: element.searchValue,
+        title: element.searchName,
+        info: '',
+        $required: false,
+        _fc_drag_tag: element.type,
+        hidden: false,
+        display: true
+      })
+    })
+  }
+  let formManageTable = {
+    type: 'el-table',
+    field: 'Fw5r1onudcn02n',
+    style: {
+      width: '100%'
+    },
+    fullWidth: true,
+    _fc_drag_tag: 'table',
+    hidden: false,
+    display: true
+  }
+  const fromMange = [formManageCard, formManageTable]
+  console.log(JSON.stringify(fromMange, null, 2))
+  designer.value.setRule(fromMange)
 }
 
 const showBuildEdit = () => {
