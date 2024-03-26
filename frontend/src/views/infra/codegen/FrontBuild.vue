@@ -112,6 +112,7 @@ const copy = async (text: string) => {
 }
 
 const showBuildManage = (manageObject: object) => {
+  console.log(manageObject)
   formAttr.name = manageObject.name
   // 添加代码
   let formManageCard = {
@@ -137,9 +138,9 @@ const showBuildManage = (manageObject: object) => {
   }
 
   if (manageObject.searchConditions.length > 0) {
-    formManageCard.children[0]['children'] = []
+    if (formManageCard.children[0]['children'] === undefined)
+      formManageCard.children[0]['children'] = []
     manageObject.searchConditions.forEach((element) => {
-      console.log(element.searchValue)
       formManageCard.children[0]['children'].push({
         type: element.type,
         field: element.searchValue,
@@ -147,6 +148,25 @@ const showBuildManage = (manageObject: object) => {
         info: '',
         $required: false,
         _fc_drag_tag: element.type,
+        hidden: false,
+        display: true
+      })
+    })
+  }
+
+  if (manageObject.buttons.length > 0) {
+    if (formManageCard.children[0]['children'] === undefined)
+      formManageCard.children[0]['children'] = []
+    manageObject.buttons.forEach((element) => {
+      formManageCard.children[0]['children'].push({
+        type: 'button',
+        props: {
+          hasPermi: element.hasPermi,
+          click: element.buttonFunction,
+          icon: element.buttonIcon
+        },
+        children: [element.buttonName],
+        _fc_drag_tag: 'button',
         hidden: false,
         display: true
       })

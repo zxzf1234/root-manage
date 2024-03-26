@@ -2010,29 +2010,50 @@ const up = (u) => (y, l) => fp(y, l, dd(u)), fp = (u, y, l) => sp(l, u, "").repl
       },
       {
         type: "input",
-        field: "v-hasPermi",
+        field: "hasPermi",
         title: "\u6743\u9650"
+      },
+      {
+        type: "input",
+        field: "click",
+        title: "\u70B9\u51FB\u4E8B\u4EF6\u51FD\u6570"
+      },
+      { type: "switch", field: "disabled", title: "\u662F\u5426\u7981\u7528\u72B6\u6001" },
+      {
+        type: "input",
+        field: "icon",
+        title: "\u56FE\u6807\u7C7B\u540D"
       },
       {
         type: "select",
         field: "size",
         title: "\u5C3A\u5BF8",
-        options: [{ label: "large", value: "large" }, { label: "default", value: "default" }, {
-          label: "small",
-          value: "small"
-        }]
+        options: [
+          { label: "large", value: "large" },
+          { label: "default", value: "default" },
+          {
+            label: "small",
+            value: "small"
+          }
+        ]
       },
       {
         type: "select",
         field: "type",
         title: "\u7C7B\u578B",
-        options: [{ label: "primary", value: "primary" }, {
-          label: "success",
-          value: "success"
-        }, { label: "warning", value: "warning" }, { label: "danger", value: "danger" }, {
-          label: "info",
-          value: "info"
-        }]
+        options: [
+          { label: "primary", value: "primary" },
+          {
+            label: "success",
+            value: "success"
+          },
+          { label: "warning", value: "warning" },
+          { label: "danger", value: "danger" },
+          {
+            label: "info",
+            value: "info"
+          }
+        ]
       },
       { type: "switch", field: "plain", title: "\u662F\u5426\u6734\u7D20\u6309\u94AE" },
       {
@@ -2045,12 +2066,6 @@ const up = (u) => (y, l) => fp(y, l, dd(u)), fp = (u, y, l) => sp(l, u, "").repl
         type: "switch",
         field: "loading",
         title: "\u662F\u5426\u52A0\u8F7D\u4E2D\u72B6\u6001"
-      },
-      { type: "switch", field: "disabled", title: "\u662F\u5426\u7981\u7528\u72B6\u6001" },
-      {
-        type: "input",
-        field: "icon",
-        title: "\u56FE\u6807\u7C7B\u540D"
       }
     ]);
   }

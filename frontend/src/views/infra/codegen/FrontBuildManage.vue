@@ -15,8 +15,9 @@
         />
       </el-form-item>
       <el-tabs v-model="tabActiveName" type="card">
-        <el-tab-pane label="按钮" name="buttonParam">
+        <el-tab-pane label="按钮" name="button">
           <el-button @click="clickAddButton">添加按钮</el-button>
+          <el-button @click="clickAddMenuPermi">按菜单权限添加</el-button>
           <el-button @click="clickDeleteButton">删除按钮</el-button>
           <Table
             :columns="buttonColumns"
@@ -35,9 +36,12 @@
             <template #buttonIcon="{ row }">
               <el-input v-model="row.buttonIcon" />
             </template>
+            <template #hasPermi="{ row }">
+              <el-input v-model="row.hasPermi" />
+            </template>
           </Table>
         </el-tab-pane>
-        <el-tab-pane label="搜索条件" name="searchConditionParam">
+        <el-tab-pane label="搜索条件" name="searchCondition">
           <el-button @click="clickAddSearchCondition">添加搜索条件</el-button>
           <el-button @click="clickAddDatabaseColumn">添加数据库表字段</el-button>
           <el-button @click="clickDeleteSearchCondition">删除搜索条件</el-button>
@@ -64,7 +68,7 @@
             </template>
           </Table>
         </el-tab-pane>
-        <el-tab-pane label="表字段" name="tableParam">
+        <el-tab-pane label="表字段" name="tableColumn">
           <el-button @click="clickAddTableColumn">添加表字段</el-button>
           <el-button @click="clickAddDatabaseColumn">添加数据库表字段</el-button>
           <el-button @click="clickDeleteTableColumn">删除表字段</el-button>
@@ -87,6 +91,29 @@
             </template>
           </Table>
         </el-tab-pane>
+        <el-tab-pane label="表右键菜单" name="tableMenuItem">
+          <el-button @click="clickAddTableMenuItem">添加右键菜单</el-button>
+          <el-button @click="clickAddMenuPermi">按菜单权限添加</el-button>
+          <el-button @click="clickDeleteTableMenuItem">删除表字段</el-button>
+          <Table
+            :columns="tableMenuItems"
+            :data="formData.tableMenuItems"
+            @current-change="currentChangeTableMenuItem"
+          >
+            <template #itemName="{ row }">
+              <el-input v-model="row.itemName" />
+            </template>
+            <template #itemFunction="{ row }">
+              <el-input
+                v-model="row.itemFunction"
+                @keyup="row.itemFunction = row.itemFunction.replace(/[^a-zA-Z_]/g, '')"
+              />
+            </template>
+            <template #hasPermi="{ row }">
+              <el-input v-model="row.hasPermi" />
+            </template>
+          </Table>
+        </el-tab-pane>
       </el-tabs>
     </el-form>
     <template #footer>
@@ -95,27 +122,34 @@
     </template>
   </Dialog>
   <InterfaceRelatedParam ref="relatedParamRef" @save-param="handleBatchRelatedParam" />
+  <MenuSelect ref="MenuSelectRef" @save-select="handleBatchMenuSelect" />
 </template>
 <script lang="ts" name="FrontBuildManage" setup>
 import * as CodegenApi from '@/api/infra/codegen'
 import InterfaceRelatedParam from './InterfaceRelatedParam.vue'
+import MenuSelect from '../data/menu/MenuSelect.vue'
+import { FrontBuildManage } from '@/model/infra/codegen/FrontBuildManage'
+import { upperFirst } from 'lodash-es'
 const dialogVisible = ref(false) // 弹窗的是否展示
 const dialogTitle = ref('') // 弹窗的标题
 const formLoading = ref(false) // 表单的加载中：1）修改时的数据加载；2）提交的按钮禁用
-const formData = ref({
+const formData = ref<FrontBuildManage>({
   name: '',
   buttons: [],
   searchConditions: [],
-  tableColumns: []
+  tableColumns: [],
+  tableMenuItems: []
 })
-const tabActiveName = ref('buttonParam')
+const tabActiveName = ref('button')
 const buttonCurrentRow = ref()
 const searchConditionCurrentRow = ref()
 const tableColumnCurrentRow = ref()
+const tableMenuItemCurrentRow = ref()
 const message = useMessage() // 消息弹窗
 const relatedParamRef = ref()
+const MenuSelectRef = ref()
 
-const buttonColumns = [
+const buttonColumns: TableColumnList = [
   {
     label: '按钮名称',
     prop: 'buttonName',
@@ -130,6 +164,11 @@ const buttonColumns = [
     label: '按钮图片',
     prop: 'buttonIcon',
     slot: 'buttonIcon'
+  },
+  {
+    label: '权限',
+    prop: 'hasPermi',
+    slot: 'hasPermi'
   }
 ]
 
@@ -166,6 +205,24 @@ const tableColumns = [
     label: '是否插槽',
     prop: 'isSlot',
     slot: 'isSlot'
+  }
+]
+
+const tableMenuItems = [
+  {
+    label: '菜单名称',
+    prop: 'itemName',
+    slot: 'itemName'
+  },
+  {
+    label: '响应函数',
+    prop: 'itemFunction',
+    slot: 'itemFunction'
+  },
+  {
+    label: '权限',
+    prop: 'hasPermi',
+    slot: 'hasPermi'
   }
 ]
 const formRules = reactive({
@@ -209,7 +266,8 @@ const resetForm = () => {
     name: '',
     buttons: [],
     searchConditions: [],
-    tableColumns: []
+    tableColumns: [],
+    tableMenuItems: []
   }
   formRef.value?.resetFields()
 }
@@ -219,7 +277,8 @@ const clickAddButton = () => {
     id: crypto.randomUUID(),
     buttonName: '',
     buttonFunction: '',
-    buttonIcon: ''
+    buttonIcon: '',
+    hasPermi: ''
   }
   formData.value.buttons.push(newButton)
 }
@@ -283,8 +342,31 @@ const currentChangeTableColumn = (val) => {
   tableColumnCurrentRow.value = val
 }
 
+const clickAddTableMenuItem = () => {
+  const newTableMenuItem = {
+    id: crypto.randomUUID(),
+    itemName: '',
+    itemFunction: '',
+    hasPermi: ''
+  }
+  formData.value.tableMenuItems.push(newTableMenuItem)
+}
+
+const clickDeleteTableMenuItem = () => {
+  if (tableMenuItemCurrentRow.value === undefined) {
+    message.alertError('请选择要删除的表右键菜单')
+    return
+  }
+  const index = formData.value.tableMenuItems.indexOf(tableMenuItemCurrentRow.value)
+  formData.value.tableMenuItems.splice(index, 1)
+}
+
+const currentChangeTableMenuItem = (val) => {
+  tableMenuItemCurrentRow.value = val
+}
+
 const handleBatchRelatedParam = (dbSelectdColumnList) => {
-  if (tabActiveName.value === 'searchConditionParam') {
+  if (tabActiveName.value === 'searchCondition') {
     dbSelectdColumnList.forEach((element) => {
       const newSearchCondition = {
         id: crypto.randomUUID(),
@@ -295,7 +377,7 @@ const handleBatchRelatedParam = (dbSelectdColumnList) => {
       formData.value.searchConditions.push(newSearchCondition)
     })
   }
-  if (tabActiveName.value === 'tableParam') {
+  if (tabActiveName.value === 'tableColumn') {
     dbSelectdColumnList.forEach((element) => {
       const newTableColumn = {
         id: crypto.randomUUID(),
@@ -308,6 +390,48 @@ const handleBatchRelatedParam = (dbSelectdColumnList) => {
   }
 }
 
+const handleBatchMenuSelect = (dbSelectdMenuList) => {
+  if (tabActiveName.value === 'button') {
+    dbSelectdMenuList.forEach((element) => {
+      const newSearchCondition = {
+        id: crypto.randomUUID(),
+        buttonName: element.name,
+        buttonFunction:
+          'handleClick' +
+          upperFirst(
+            element.permission.substring(
+              element.permission.lastIndexOf(':') + 1,
+              element.permission.length
+            )
+          ) +
+          '()',
+        buttonIcon: element.icon,
+        hasPermi: element.permission
+      }
+      formData.value.buttons.push(newSearchCondition)
+    })
+  }
+  if (tabActiveName.value === 'tableMenuItem') {
+    dbSelectdMenuList.forEach((element) => {
+      const newTableMenuItem = {
+        id: crypto.randomUUID(),
+        itemName: element.name,
+        itemFunction:
+          'handleMenu' +
+          upperFirst(
+            element.permission.substring(
+              element.permission.lastIndexOf(':') + 1,
+              element.permission.length
+            )
+          ) +
+          '()',
+        hasPermi: element.permission
+      }
+      formData.value.tableMenuItems.push(newTableMenuItem)
+    })
+  }
+}
+
 const clickAddDatabaseColumn = () => {
   let variableType = 1 << 1
   let params = {
@@ -316,5 +440,9 @@ const clickAddDatabaseColumn = () => {
     isBatchAdd: 1
   }
   relatedParamRef.value.open(params)
+}
+
+const clickAddMenuPermi = () => {
+  MenuSelectRef.value.open(3)
 }
 </script>

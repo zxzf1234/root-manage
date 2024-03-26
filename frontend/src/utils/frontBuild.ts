@@ -24,7 +24,7 @@ export const jsonParseCode = (objectRule: object) => {
   if (!objectRule) return ''
   else {
     const code = { vue: '', script: { import: {}, function: [], variable: [] } }
-    objectParseCode(code, objectRule, 1)
+    objectParseCode(code, objectRule, 1, '')
     let codeContext = '<template>\r' + code['vue'] + '</template>\r<script setup lang="ts">\r'
 
     ;['import', 'variable', 'function'].forEach((key) => {
@@ -37,16 +37,24 @@ export const jsonParseCode = (objectRule: object) => {
   }
 }
 
-const objectParseCode = (code: object, objectRule: object, deepIndex: number) => {
+const objectParseCode = (
+  code: object,
+  objectRule: object,
+  deepIndex: number,
+  formModel: string
+) => {
   if (Object.keys(objectRule).length < 1) return ''
   for (const key in objectRule) {
     if (typeof objectRule[key] === 'object' && '_fc_drag_tag' in objectRule[key]) {
       if (mainComponent.indexOf(camelCase(objectRule[key]['_fc_drag_tag'])) > -1) {
-        frontComponent.mainComponet(code, objectRule[key], deepIndex, '')
+        frontComponent.mainComponet(code, objectRule[key], deepIndex, formModel)
+      } else if (objectRule[key]['_fc_drag_tag'] == 'button') {
+        const buttionFunc = frontComponent[camelCase(objectRule[key]['_fc_drag_tag'])]
+        buttionFunc(code, objectRule[key], deepIndex, formModel)
       } else {
         const func = frontComponent[camelCase(objectRule[key]['_fc_drag_tag'])]
         if (typeof func === 'function') {
-          code += func(code, objectRule[key], deepIndex)
+          func(code, objectRule[key], deepIndex)
         } else {
           console.log(camelCase(objectRule[key]['_fc_drag_tag']) + ' not eixts')
         }
@@ -66,16 +74,19 @@ const generateTab = (deepIndex: number) => {
 const addProps = (code: object, propObject: object) => {
   for (const key in propObject) {
     if (key.at(0) == '_') continue
+    let propKey = key
+    if (key === 'click') propKey = '@click'
+    if (key === 'hasPermi') propKey = 'v-hasPermi'
     if (typeof propObject[key] === 'number') {
-      code['vue'] += ' :' + key + '="' + propObject[key] + '"'
+      code['vue'] += ' :' + propKey + '="' + propObject[key] + '"'
     } else if (typeof propObject[key] === 'boolean') {
       if (propObject[key] === true) {
-        code['vue'] += +' ' + key
+        code['vue'] += +' ' + propKey
       } else {
-        code['vue'] += ' :' + key + '="' + propObject[key] + '"'
+        code['vue'] += ' :' + propKey + '="' + propObject[key] + '"'
       }
     } else {
-      if (propObject[key] !== '') code['vue'] += ' ' + key + '="' + propObject[key] + '"'
+      if (propObject[key] !== '') code['vue'] += ' ' + propKey + '="' + propObject[key] + '"'
     }
   }
   return code
@@ -294,8 +305,26 @@ const frontComponent = {
     }
   },
 
-  button: (code: object, componentObject: object, deepIndex: number) => {
-    code['vue'] += generateTab(deepIndex) + '<el-button'
+  button: (code: object, componentObject: object, deepIndex: number, formModel: string) => {
+    const itemDeepIndex = deepIndex
+    let buttonDeepIndex = deepIndex
+
+    if (formModel != '') {
+      buttonDeepIndex++
+      const lastItemIndex = code['vue'].lastIndexOf('<el-form-item')
+      if (
+        lastItemIndex > -1 &&
+        code['vue'].substring(lastItemIndex, code['vue'].lenght).indexOf('button') > -1
+      ) {
+        code['vue'] = code['vue'].substring(
+          0,
+          code['vue'].lastIndexOf(generateTab(itemDeepIndex) + '</el-form-item>\r')
+        )
+      } else {
+        code['vue'] += generateTab(itemDeepIndex) + '<el-form-item>\r'
+      }
+    }
+    code['vue'] += generateTab(buttonDeepIndex) + '<el-button'
     let icon = undefined
     // 添加属性
     if ('props' in componentObject && typeof componentObject['props'] === 'object') {
@@ -309,7 +338,7 @@ const frontComponent = {
 
     code['vue'] += '>'
     if (icon !== undefined) {
-      const iconDeepIndex = deepIndex + 1
+      const iconDeepIndex = buttonDeepIndex + 1
       code['vue'] += '\r' + generateTab(iconDeepIndex) + '<Icon icon="' + icon + '" />\r'
     }
     if (
@@ -317,13 +346,16 @@ const frontComponent = {
       typeof componentObject['children'] === 'object'
     ) {
       if (icon !== undefined) {
-        const childrenDeepIndex = deepIndex + 1
+        const childrenDeepIndex = buttonDeepIndex + 1
         code['vue'] += generateTab(childrenDeepIndex) + componentObject['children'][0] + '\r'
       } else {
         code['vue'] += componentObject['children'][0]
       }
     }
-    code['vue'] += generateTab(deepIndex) + '</el-button>\r'
+    code['vue'] += (icon !== undefined ? generateTab(buttonDeepIndex) : '') + '</el-button>\r'
+    if (formModel != '') {
+      code['vue'] += generateTab(itemDeepIndex) + '</el-form-item>\r'
+    }
   },
 
   form: (code: object, componentObject: object, deepIndex: number) => {
@@ -382,21 +414,7 @@ const frontComponent = {
     if ('children' in componentObject) {
       const childrenObject = componentObject['children'] as object
       const childernDeepIndex = deepIndex + 1
-      if (Object.keys(childrenObject).length < 1) return ''
-      for (const key in childrenObject) {
-        if (typeof childrenObject[key] === 'object' && '_fc_drag_tag' in childrenObject[key]) {
-          if (mainComponent.indexOf(camelCase(childrenObject[key]['_fc_drag_tag'])) > -1) {
-            frontComponent.mainComponet(code, childrenObject[key], childernDeepIndex, formModel)
-          } else {
-            const func = frontComponent[camelCase(childrenObject[key]['_fc_drag_tag'])]
-            if (typeof func === 'function') {
-              func(code, childrenObject[key], childernDeepIndex)
-            } else {
-              console.log(camelCase(childrenObject[key]['_fc_drag_tag']) + ' not eixts')
-            }
-          }
-        }
-      }
+      objectParseCode(code, childrenObject, childernDeepIndex, formModel)
     }
     code['vue'] += generateTab(deepIndex) + '</el-form>\r'
   },
@@ -413,7 +431,7 @@ const frontComponent = {
     ) {
       const childernDeepIndex = deepIndex + 1
       const childrenObject = componentObject['children'] as object
-      objectParseCode(code, childrenObject, childernDeepIndex)
+      objectParseCode(code, childrenObject, childernDeepIndex, '')
     }
     code['vue'] += generateTab(deepIndex) + '</ContentWrap>\r'
   },
@@ -445,7 +463,7 @@ const frontComponent = {
         ) {
           const childernDeepIndex = colDeepIndex + 1
           const childrenObject = colObject[key]['children'] as object
-          objectParseCode(code, childrenObject, childernDeepIndex)
+          objectParseCode(code, childrenObject, childernDeepIndex, '')
         }
 
         code['vue'] += generateTab(deepIndex) + '</el-col>\r'
