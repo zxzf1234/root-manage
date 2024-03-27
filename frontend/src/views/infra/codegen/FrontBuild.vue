@@ -1,7 +1,17 @@
 <template>
   <ContentWrap>
     <el-row>
-      <el-col>
+      <el-col :span="3">
+        <el-form-item label="页面名称" prop="searchModel">
+          <el-input
+            v-model="formAttr.name"
+            placeholder="请输入页面名称"
+            width="60px"
+            @keyup="formAttr.name = formAttr.name?.replace(/[^a-zA-Z_]/g, '')"
+          />
+        </el-form-item>
+      </el-col>
+      <el-col :span="12">
         <div class="mb-2 float-right">
           <el-button size="small" @click="setJson"> 导入JSON</el-button>
           <el-button size="small" type="primary" @click="showJson">生成 JSON</el-button>
@@ -48,6 +58,7 @@ import { useClipboard } from '@vueuse/core'
 import designerForm from '@/components/FcDesigner/index.es.js'
 import { jsonParseCode } from '@/utils/frontBuild'
 import FrontBuildManage from './FrontBuildManage.vue'
+import { TypeFrontBuildManage } from '@/model/infra/codegen/FrontBuildManage'
 import FrontBuildEdit from './FrontBuildEdit.vue'
 const { t } = useI18n() // 国际化
 
@@ -59,7 +70,7 @@ const dialogTitle = ref('') // 弹窗的标题
 const message = useMessage() // 消息
 const buildManageRef = ref()
 const buildEditRef = ref()
-let formAttr = { name: '', isDialag: false }
+let formAttr = ref({ name: '', isDialag: false })
 
 /** 初始化 **/
 onMounted(async () => {})
@@ -82,7 +93,7 @@ const showCode = () => {
   openModel('生成 代码')
   formType.value = 2
 
-  formData.value = jsonParseCode(designer.value.getRule())
+  formData.value = jsonParseCode(designer.value.getRule(), formAttr.value)
 }
 
 /** 导入 JSON */
@@ -111,9 +122,8 @@ const copy = async (text: string) => {
   }
 }
 
-const showBuildManage = (manageObject: object) => {
-  console.log(manageObject)
-  formAttr.name = manageObject.name
+const showBuildManage = (manageObject: TypeFrontBuildManage) => {
+  formAttr.value.name = manageObject.name
   // 添加代码
   let formManageCard = {
     type: 'el-card',
@@ -129,22 +139,26 @@ const showBuildManage = (manageObject: object) => {
         fullWidth: true,
         _fc_drag_tag: 'form',
         hidden: false,
-        display: true
+        display: true,
+        props: {
+          ':model': manageObject.searchModel,
+          ref: manageObject.searchRef,
+          ':rules': manageObject.searchRule
+        }
       }
     ],
     _fc_drag_tag: 'ContentWrap',
     hidden: false,
     display: true
   }
-
   if (manageObject.searchConditions.length > 0) {
     if (formManageCard.children[0]['children'] === undefined)
       formManageCard.children[0]['children'] = []
     manageObject.searchConditions.forEach((element) => {
       formManageCard.children[0]['children'].push({
         type: element.type,
-        field: element.searchValue,
-        title: element.searchName,
+        field: element.searchName,
+        title: element.searchValue,
         info: '',
         $required: false,
         _fc_drag_tag: element.type,
@@ -181,7 +195,44 @@ const showBuildManage = (manageObject: object) => {
     fullWidth: true,
     _fc_drag_tag: 'table',
     hidden: false,
-    display: true
+    display: true,
+    props: {
+      ':columns': manageObject.tableColumnName,
+      ':page-param': manageObject.searchModel,
+      adaptive: true,
+      ':page-data': manageObject.tablePageData,
+      'save-key': manageObject.name
+    }
+  }
+  if (manageObject.tablePageChange != '') {
+    formManageTable['event'] = [
+      {
+        eventName: 'page-change',
+        function: manageObject.tablePageChange
+      }
+    ]
+  }
+  if (manageObject.tableColumns.length > 0) {
+    if (formManageTable['column'] === undefined) formManageTable['column'] = []
+    manageObject.tableColumns.forEach((element) => {
+      formManageTable['column'].push({
+        label: element.columnName,
+        prop: element.columnValue,
+        slot: element.isSlot
+      })
+    })
+  }
+
+  if (manageObject.tableMenuItems.length > 0) {
+    if (formManageTable['menu'] === undefined) formManageTable['menu'] = []
+
+    manageObject.tableMenuItems.forEach((element) => {
+      formManageTable['menu'].push({
+        label: element.itemName,
+        function: element.itemFunction,
+        hasPermi: element.hasPermi
+      })
+    })
   }
   const fromMange = [formManageCard, formManageTable]
   console.log(JSON.stringify(fromMange, null, 2))

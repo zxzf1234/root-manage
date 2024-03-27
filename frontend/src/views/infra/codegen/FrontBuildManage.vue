@@ -5,7 +5,8 @@
       v-loading="formLoading"
       :model="formData"
       :rules="formRules"
-      label-width="80px"
+      :inline="true"
+      label-width="auto"
     >
       <el-form-item label="页面名称" prop="name">
         <el-input
@@ -14,6 +15,7 @@
           @keyup="formData.name = formData.name?.replace(/[^a-zA-Z_]/g, '')"
         />
       </el-form-item>
+
       <el-tabs v-model="tabActiveName" type="card">
         <el-tab-pane label="按钮" name="button">
           <el-button @click="clickAddButton">添加按钮</el-button>
@@ -42,9 +44,33 @@
           </Table>
         </el-tab-pane>
         <el-tab-pane label="搜索条件" name="searchCondition">
-          <el-button @click="clickAddSearchCondition">添加搜索条件</el-button>
-          <el-button @click="clickAddDatabaseColumn">添加数据库表字段</el-button>
-          <el-button @click="clickDeleteSearchCondition">删除搜索条件</el-button>
+          <el-form-item label="搜索条件数据对象" prop="searchModel">
+            <el-input
+              v-model="formData.searchModel"
+              placeholder="请输入搜索条件数据对象"
+              @keyup="formData.searchModel = formData.searchModel?.replace(/[^a-zA-Z_]/g, '')"
+            />
+          </el-form-item>
+          <el-form-item label="搜索条件ref对象" prop="searchRef">
+            <el-input
+              v-model="formData.searchRef"
+              placeholder="请输入搜索条件ref对象"
+              @keyup="formData.searchRef = formData.searchRef?.replace(/[^a-zA-Z_]/g, '')"
+            />
+          </el-form-item>
+          <el-form-item label="搜索条件验证规则对象" prop="searchRule">
+            <el-input
+              v-model="formData.searchRule"
+              placeholder="请输入搜索条件验证规则对象"
+              @keyup="formData.searchRule = formData.searchRule?.replace(/[^a-zA-Z_]/g, '')"
+            />
+          </el-form-item>
+          <el-form-item>
+            <el-button @click="clickAddSearchCondition">添加搜索条件</el-button>
+            <el-button @click="clickAddDatabaseColumn">添加数据库表字段</el-button>
+            <el-button @click="clickDeleteSearchCondition">删除搜索条件</el-button>
+          </el-form-item>
+
           <Table
             :columns="searchConditionColumns"
             :data="formData.searchConditions"
@@ -69,9 +95,37 @@
           </Table>
         </el-tab-pane>
         <el-tab-pane label="表字段" name="tableColumn">
-          <el-button @click="clickAddTableColumn">添加表字段</el-button>
-          <el-button @click="clickAddDatabaseColumn">添加数据库表字段</el-button>
-          <el-button @click="clickDeleteTableColumn">删除表字段</el-button>
+          <el-form-item label="表绑定字段变量名" prop="tableColumnName">
+            <el-input
+              v-model="formData.tableColumnName"
+              placeholder="请输入表绑定字段变量名"
+              @keyup="
+                formData.tableColumnName = formData.tableColumnName?.replace(/[^a-zA-Z_]/g, '')
+              "
+            />
+          </el-form-item>
+          <el-form-item label="表绑定数据分页变量" prop="tablePageData">
+            <el-input
+              v-model="formData.tablePageData"
+              placeholder="请输入表绑定字段变量名"
+              @keyup="formData.tablePageData = formData.tablePageData?.replace(/[^a-zA-Z_]/g, '')"
+            />
+          </el-form-item>
+          <el-form-item label="分页变化响应函数" prop="tablePageChange">
+            <el-input
+              v-model="formData.tablePageChange"
+              placeholder="请输入表绑定字段变量名"
+              @keyup="
+                formData.tablePageChange = formData.tablePageChange?.replace(/[^a-zA-Z_]/g, '')
+              "
+            />
+          </el-form-item>
+          <el-form-item>
+            <el-button @click="clickAddTableColumn">添加表字段</el-button>
+            <el-button @click="clickAddDatabaseColumn">添加数据库表字段</el-button>
+            <el-button @click="clickDeleteTableColumn">删除表字段</el-button>
+          </el-form-item>
+
           <Table
             :columns="tableColumns"
             :data="formData.tableColumns"
@@ -128,13 +182,19 @@
 import * as CodegenApi from '@/api/infra/codegen'
 import InterfaceRelatedParam from './InterfaceRelatedParam.vue'
 import MenuSelect from '../data/menu/MenuSelect.vue'
-import { FrontBuildManage } from '@/model/infra/codegen/FrontBuildManage'
+import { TypeFrontBuildManage } from '@/model/infra/codegen/FrontBuildManage'
 import { upperFirst } from 'lodash-es'
 const dialogVisible = ref(false) // 弹窗的是否展示
 const dialogTitle = ref('') // 弹窗的标题
 const formLoading = ref(false) // 表单的加载中：1）修改时的数据加载；2）提交的按钮禁用
-const formData = ref<FrontBuildManage>({
+const formData = ref<TypeFrontBuildManage>({
   name: '',
+  searchModel: 'queryParams',
+  searchRef: 'queryFormRef',
+  searchRule: '',
+  tableColumnName: 'columns',
+  tablePageData: 'tableData',
+  tablePageChange: 'getPage',
   buttons: [],
   searchConditions: [],
   tableColumns: [],
@@ -245,10 +305,44 @@ const submitForm = async () => {
   if (!formRef) return
   const valid = await formRef.value.validate()
   if (!valid) return
+  if (formData.value.buttons.length < 1) {
+    message.alertError('按钮至少有一个')
+    return
+  }
+  let isEmpty = false
+  formData.value.buttons.forEach((element) => {
+    if (element.buttonFunction == '' || element.buttonName == '') isEmpty = true
+  })
+  if (isEmpty) {
+    message.alertError('按钮的名称或响应函数不能为空')
+    return
+  }
+  formData.value.searchConditions.forEach((element) => {
+    if (element.searchName == '' || element.searchValue == '' || element.type == '') isEmpty = true
+  })
+  if (isEmpty) {
+    message.alertError('搜索条件的搜索名称、搜索值、组件类型不能为空')
+    return
+  }
   if (formData.value.tableColumns.length < 1) {
     message.alertError('表字段至少有一个')
     return
   }
+  formData.value.tableColumns.forEach((element) => {
+    if (element.columnName == '' || element.columnValue == '') isEmpty = true
+  })
+  if (isEmpty) {
+    message.alertError('表字段的字段名称、字段值不能为空')
+    return
+  }
+  formData.value.tableMenuItems.forEach((element) => {
+    if (element.itemName == '' || element.itemFunction == '') isEmpty = true
+  })
+  if (isEmpty) {
+    message.alertError('表右键菜单的菜单名称、响应函数不能为空')
+    return
+  }
+
   // 提交请求
   formLoading.value = true
   try {
@@ -264,7 +358,21 @@ const submitForm = async () => {
 const resetForm = () => {
   formData.value = {
     name: '',
-    buttons: [],
+    searchModel: 'queryParams',
+    searchRef: 'queryFormRef',
+    searchRule: '',
+    tableColumnName: 'columns',
+    tablePageData: 'queryParams',
+    tablePageChange: 'getPage',
+    buttons: [
+      {
+        id: crypto.randomUUID(),
+        buttonName: '搜索',
+        buttonFunction: 'getPage',
+        buttonIcon: 'ep:search',
+        hasPermi: ''
+      }
+    ],
     searchConditions: [],
     tableColumns: [],
     tableMenuItems: []
@@ -381,8 +489,8 @@ const handleBatchRelatedParam = (dbSelectdColumnList) => {
     dbSelectdColumnList.forEach((element) => {
       const newTableColumn = {
         id: crypto.randomUUID(),
-        columnName: element.columnName,
-        columnValue: element.columnComment,
+        columnName: element.columnComment,
+        columnValue: element.columnName,
         isSlot: false
       }
       formData.value.tableColumns.push(newTableColumn)
@@ -423,8 +531,7 @@ const handleBatchMenuSelect = (dbSelectdMenuList) => {
               element.permission.lastIndexOf(':') + 1,
               element.permission.length
             )
-          ) +
-          '()',
+          ),
         hasPermi: element.permission
       }
       formData.value.tableMenuItems.push(newTableMenuItem)

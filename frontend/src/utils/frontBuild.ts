@@ -19,13 +19,18 @@ const mainComponent = [
 /**
  * @param {string} jsonRule 需要转换的json
  */
-export const jsonParseCode = (objectRule: object) => {
+export const jsonParseCode = (objectRule: object, formAttr: object) => {
   if (objectRule === undefined) return ''
   if (!objectRule) return ''
   else {
     const code = { vue: '', script: { import: {}, function: [], variable: [] } }
     objectParseCode(code, objectRule, 1, '')
-    let codeContext = '<template>\r' + code['vue'] + '</template>\r<script setup lang="ts">\r'
+    let codeContext =
+      '<template>\r' +
+      code['vue'] +
+      '</template>\r<script setup name="' +
+      formAttr['name'] +
+      '" lang="ts">\r'
 
     ;['import', 'variable', 'function'].forEach((key) => {
       if (Object.keys(code['script'][key]).length > 0) {
@@ -75,13 +80,19 @@ const addProps = (code: object, propObject: object) => {
   for (const key in propObject) {
     if (key.at(0) == '_') continue
     let propKey = key
-    if (key === 'click') propKey = '@click'
+    if (key === 'click') {
+      propKey = '@click'
+      const functionCode = 'const ' + propObject['click'] + ' = () => {}\r'
+      if (!code['script']['function'].includes(functionCode))
+        code['script']['function'].push(functionCode)
+    }
+
     if (key === 'hasPermi') propKey = 'v-hasPermi'
     if (typeof propObject[key] === 'number') {
       code['vue'] += ' :' + propKey + '="' + propObject[key] + '"'
     } else if (typeof propObject[key] === 'boolean') {
       if (propObject[key] === true) {
-        code['vue'] += +' ' + propKey
+        code['vue'] += ' ' + propKey
       } else {
         code['vue'] += ' :' + propKey + '="' + propObject[key] + '"'
       }
@@ -181,12 +192,12 @@ const generateTableSlot = (code: object, componentObject: object, deepIndex: num
   let slotCode = ''
   componentObject['column'].forEach((element: object) => {
     columnVariable +=
-      '  {\r' + "    label: '" + element['label'] + "',\r    prop: '" + element['value'] + "'"
+      '  {\r' + "    label: '" + element['label'] + "',\r    prop: '" + element['prop'] + "'"
     if (element['slot'] !== undefined && element['slot'] === true) {
-      columnVariable += ",\r    slot: '" + element['value'] + "'\r"
-      slotCode += generateTab(deepIndex) + '<template #' + element['value'] + '="{ row }">\r'
+      columnVariable += ",\r    slot: '" + element['prop'] + "'\r"
+      slotCode += generateTab(deepIndex) + '<template #' + element['prop'] + '="{ row }">\r'
       slotCode +=
-        generateTab(deepIndex + 1) + '<el-input v-model="row.' + element['value'] + '" />\r'
+        generateTab(deepIndex + 1) + '<el-input v-model="row.' + element['prop'] + '" />\r'
       slotCode += generateTab(deepIndex) + '</template>\r'
     } else {
       columnVariable += '\r'
@@ -214,8 +225,8 @@ const addTableMenu = (code: object, menuObject: object, deepIndex: number) => {
       '" @click="' +
       menuObject[key]['function'] +
       '(row)"'
-    if (menuObject[key]['label']['hasPermi'] !== undefined) {
-      code['vue'] += ' v-hasPermi="[\'' + menuObject[key]['label']['hasPermi'] + '\']"\r'
+    if (menuObject[key]['hasPermi'] !== undefined) {
+      code['vue'] += ' v-hasPermi="[\'' + menuObject[key]['hasPermi'] + '\']"'
     }
     const functionCode =
       'const ' + menuObject[key]['function'] + ' = (row) => {\r  console.log(row)\r}\r'
@@ -282,6 +293,12 @@ const frontComponent = {
     if (componentObject['props'] !== undefined && typeof componentObject['props'] === 'object') {
       addProps(code, componentObject['props'] as object)
     }
+
+    // 添加function
+    if (componentObject['event'] !== undefined && typeof componentObject['event'] === 'object') {
+      addEvent(code, componentObject['event'] as object)
+    }
+
     const childrenIndex = deepIndex + 1
     const slotCode = generateTableSlot(code, componentObject, childrenIndex)
 
@@ -387,7 +404,7 @@ const frontComponent = {
           'const ' + props[':model'] + ' = reactive({\r' + childrenModel + '})\r'
         )
       }
-      if (':rules' in props) {
+      if (':rules' in props && props[':rules'] != '') {
         let childrenRule = ''
         if ('children' in componentObject) {
           const childrenObject = componentObject['children'] as object
