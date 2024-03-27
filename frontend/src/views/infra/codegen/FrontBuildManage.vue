@@ -86,10 +86,11 @@
               />
             </template>
             <template #type="{ row }">
-              <el-select v-model="row.buttonIcon">
+              <el-select v-model="row.type">
                 <el-option label="input" value="input" />
                 <el-option label="select" value="select" />
                 <el-option label="checkbox" value="checkbox" />
+                <el-option label="datePicker" value="datePicker" />
               </el-select>
             </template>
           </Table>
@@ -476,11 +477,22 @@ const currentChangeTableMenuItem = (val) => {
 const handleBatchRelatedParam = (dbSelectdColumnList) => {
   if (tabActiveName.value === 'searchCondition') {
     dbSelectdColumnList.forEach((element) => {
+      let dataType = 'input'
+      if (element.javaType == 'Long' || element.javaType == 'Integer') {
+        dataType = 'select'
+      }
+      if (element.javaType == 'LocalDateTime') {
+        dataType = 'datePicker'
+      }
+      if (element.javaType == 'boolean') {
+        dataType = 'checkbox'
+      }
+      console.log(dataType)
       const newSearchCondition = {
         id: crypto.randomUUID(),
         searchName: element.columnName,
         searchValue: element.columnComment,
-        type: 'input'
+        type: dataType
       }
       formData.value.searchConditions.push(newSearchCondition)
     })
