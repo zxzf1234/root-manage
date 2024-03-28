@@ -487,7 +487,6 @@ const handleBatchRelatedParam = (dbSelectdColumnList) => {
       if (element.javaType == 'boolean') {
         dataType = 'checkbox'
       }
-      console.log(dataType)
       const newSearchCondition = {
         id: crypto.randomUUID(),
         searchName: element.columnName,
