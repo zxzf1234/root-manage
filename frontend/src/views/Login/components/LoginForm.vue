@@ -9,7 +9,7 @@
     label-width="120px"
     size="large"
   >
-    <el-row style="maring-left: -10px; maring-right: -10px">
+    <el-row style="margin-left: -10px; margin-right: -10px">
       <el-col :span="24" style="padding-left: 10px; padding-right: 10px">
         <el-form-item>
           <LoginFormTitle style="width: 100%" />
@@ -270,12 +270,6 @@ const doSocialLogin = async (type: number) => {
     message.error('此方式未配置')
   } else {
     loginLoading.value = true
-    if (loginData.tenantEnable === 'true') {
-      await message.prompt('请输入租户名称', t('common.reminder')).then(async ({ value }) => {
-        const res = await LoginApi.getTenantIdByName(value)
-        authUtil.setTenantId(res)
-      })
-    }
     // 计算 redirectUri
     const redirectUri =
       location.origin + '/social-login?type=' + type + '&redirect=' + (redirect.value || '/')
