@@ -36,7 +36,7 @@
           <el-radio
             v-for="dict in getIntDictOptions(DICT_TYPE.COMMON_STATUS)"
             :key="dict.value"
-            :label="dict.value as string"
+            :value="dict.value as string"
           >
             {{ dict.label }}
           </el-radio>

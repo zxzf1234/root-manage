@@ -32,8 +32,8 @@
       </el-form-item>
       <el-form-item label="菜单类型" prop="type">
         <el-radio-group v-model="formData.type">
-          <el-radio-button label="0">分组</el-radio-button>>
-          <el-radio-button label="1">模块</el-radio-button>>
+          <el-radio-button value="0">分组</el-radio-button>>
+          <el-radio-button value="1">模块</el-radio-button>>
         </el-radio-group>
       </el-form-item>
     </el-form>

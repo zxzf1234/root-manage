@@ -44,7 +44,7 @@
           <el-radio
             v-for="dict in getIntDictOptions(DICT_TYPE.COMMON_STATUS)"
             :key="dict.value"
-            :label="parseInt(dict.value as string)"
+            :value="parseInt(dict.value as string)"
           >
             {{ dict.label }}
           </el-radio>

@@ -2,8 +2,8 @@
   <Form ref="formRef" :labelWidth="80" :rules="rules" :schema="schema">
     <template #sex="form">
       <el-radio-group v-model="form['sex']">
-        <el-radio :label="1">{{ t('profile.user.man') }}</el-radio>
-        <el-radio :label="2">{{ t('profile.user.woman') }}</el-radio>
+        <el-radio :value="1">{{ t('profile.user.man') }}</el-radio>
+        <el-radio :value="2">{{ t('profile.user.woman') }}</el-radio>
       </el-radio-group>
     </template>
   </Form>
