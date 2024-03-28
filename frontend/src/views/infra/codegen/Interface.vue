@@ -83,8 +83,8 @@
               <el-checkbox
                 label="入参传入HttpServlet"
                 v-model="rowDetail.inputServlet"
-                false-label="false"
-                true-label="true"
+                false-value="false"
+                true-value="true"
               />
             </el-col>
           </el-row>

@@ -13,7 +13,7 @@ export const useRenderCheckbox = () => {
     return item?.componentProps?.options?.map((option) => {
       const { ...other } = option
       return (
-        <Com {...other} label={option[valueAlias || 'value']}>
+        <Com {...other} value={option[valueAlias || 'value']}>
           {option[labelAlias || 'label']}
         </Com>
       )

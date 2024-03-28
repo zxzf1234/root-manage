@@ -209,8 +209,8 @@
                   scope.row.columnName == 'updater_id' ||
                   scope.row.columnName == 'deleted'
                 "
-                false-label="false"
-                true-label="true"
+                false-value="false"
+                true-value="true"
               />
             </template>
           </el-table-column>
@@ -300,8 +300,8 @@
             <template #default="scope">
               <el-checkbox
                 v-model="scope.row.required"
-                false-label="false"
-                true-label="true"
+                false-value="false"
+                true-value="true"
                 @change="clickRequired(scope)"
                 :disabled="
                   scope.row.columnName == 'id' ||
@@ -371,7 +371,7 @@
           </el-table-column>
           <el-table-column label="是否是list" min-width="6%">
             <template #default="scope">
-              <el-checkbox v-model="scope.row.isList" false-label="false" true-label="true" />
+              <el-checkbox v-model="scope.row.isList" false-value="false" true-value="true" />
             </template>
           </el-table-column>
           <el-table-column label="映射表" min-width="20%">

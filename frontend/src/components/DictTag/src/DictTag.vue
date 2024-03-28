@@ -43,7 +43,7 @@ export default defineComponent({
       return (
         <ElTag
           style={dictData.value?.cssClass ? 'color: #fff' : ''}
-          type={dictData.value?.colorType}
+          type={dictData.value?.colorType == '' ? 'primary' : dictData.value?.colorType}
           color={
             dictData.value?.cssClass && isHexColor(dictData.value?.cssClass)
               ? dictData.value?.cssClass

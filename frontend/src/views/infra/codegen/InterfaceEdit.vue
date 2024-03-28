@@ -66,7 +66,7 @@
       </el-form-item>
 
       <el-form-item prop="isTransaction" label="是否开启事务">
-        <el-checkbox v-model="formData.isTransaction" false-label="false" true-label="true" />
+        <el-checkbox v-model="formData.isTransaction" false-value="false" true-value="true" />
       </el-form-item>
     </el-form>
     <el-tabs v-model="tabActiveName" type="card">
@@ -103,8 +103,8 @@
               <el-checkbox
                 label="入参传入HttpServlet"
                 v-model="formData.inputServlet"
-                false-label="false"
-                true-label="true"
+                false-value="false"
+                true-value="true"
               />
             </el-col>
           </el-row>
@@ -176,7 +176,7 @@
           </el-table-column>
           <el-table-column label="是否是List" min-width="6%">
             <template #default="scope">
-              <el-checkbox v-model="scope.row.isList" false-label="false" true-label="true" />
+              <el-checkbox v-model="scope.row.isList" false-value="false" true-value="true" />
             </template>
           </el-table-column>
           <el-table-column label="参数类型" min-width="11%">
@@ -211,7 +211,7 @@
           </el-table-column>
           <el-table-column label="前端必传" min-width="6%">
             <template #default="scope">
-              <el-checkbox v-model="scope.row.required" false-label="false" true-label="true" />
+              <el-checkbox v-model="scope.row.required" false-value="false" true-value="true" />
             </template>
           </el-table-column>
         </el-table>
@@ -315,7 +315,7 @@
           </el-table-column>
           <el-table-column label="是否是List" min-width="6%">
             <template #default="scope">
-              <el-checkbox v-model="scope.row.isList" false-label="false" true-label="true" />
+              <el-checkbox v-model="scope.row.isList" false-value="false" true-value="true" />
             </template>
           </el-table-column>
           <el-table-column label="参数类型" min-width="11%">
@@ -349,7 +349,7 @@
           </el-table-column>
           <el-table-column label="前端必传" min-width="6%">
             <template #default="scope">
-              <el-checkbox v-model="scope.row.required" false-label="false" true-label="true" />
+              <el-checkbox v-model="scope.row.required" false-value="false" true-value="true" />
             </template>
           </el-table-column>
         </el-table>
@@ -437,7 +437,7 @@
                 </el-table-column>
                 <el-table-column label="是否是List" min-width="8%">
                   <template #default="scope">
-                    <el-checkbox v-model="scope.row.isList" false-label="false" true-label="true" />
+                    <el-checkbox v-model="scope.row.isList" false-value="false" true-value="true" />
                   </template>
                 </el-table-column>
                 <el-table-column label="参数类型" min-width="11%">
@@ -473,8 +473,8 @@
                   <template #default="scope">
                     <el-checkbox
                       v-model="scope.row.required"
-                      false-label="false"
-                      true-label="true"
+                      false-value="false"
+                      true-value="true"
                     />
                   </template>
                 </el-table-column>
@@ -586,7 +586,7 @@
                 </el-table-column>
                 <el-table-column label="是否是List" min-width="8%">
                   <template #default="scope">
-                    <el-checkbox v-model="scope.row.isList" false-label="false" true-label="true" />
+                    <el-checkbox v-model="scope.row.isList" false-value="false" true-value="true" />
                   </template>
                 </el-table-column>
                 <el-table-column label="参数类型" min-width="11%">
@@ -622,8 +622,8 @@
                   <template #default="scope">
                     <el-checkbox
                       v-model="scope.row.required"
-                      false-label="false"
-                      true-label="true"
+                      false-value="false"
+                      true-value="true"
                     />
                   </template>
                 </el-table-column>
