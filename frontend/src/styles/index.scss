@@ -4,6 +4,10 @@
   margin-left: 2px !important;
 }
 
+.el-button .el-icon {
+  margin-right: 5px;
+}
+
 // 解决抽屉弹出时，body宽度变化的问题
 .el-popup-parent--hidden {
   width: 100% !important;
