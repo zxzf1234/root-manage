@@ -30,6 +30,7 @@
           default-expand-all
           placeholder="请选择模块"
           value-key="Id"
+          class="!w-240px"
         />
       </el-form-item>
 

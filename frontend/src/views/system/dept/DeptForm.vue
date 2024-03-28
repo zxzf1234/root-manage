@@ -16,6 +16,7 @@
           default-expand-all
           placeholder="请选择上级部门"
           value-key="deptId"
+          class="!w-240px"
         />
       </el-form-item>
       <el-form-item label="部门名称" prop="name">

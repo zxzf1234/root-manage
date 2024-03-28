@@ -12,6 +12,7 @@
           placeholder="请选择模块"
           value-key="Id"
           @keyup.enter="getList"
+          class="!w-240px"
         />
       </el-form-item>
       <el-form-item label="接口名" prop="name">

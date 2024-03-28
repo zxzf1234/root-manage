@@ -4,6 +4,8 @@ import '@/plugins/windi.css'
 // 导入全局的svg图标
 import '@/plugins/svgIcon'
 
+import 'element-plus/dist/index.css'
+
 // 初始化多语言
 import { setupI18n } from '@/plugins/vueI18n'
 

@@ -22,6 +22,7 @@
               check-strictly
               node-key="id"
               placeholder="请选择归属部门"
+              class="!w-240px"
             />
           </el-form-item>
         </el-col>
@@ -165,7 +166,7 @@ const open = async (type: string, id?: number) => {
   // 加载部门树
   deptList.value = handleTree(await DeptApi.listAllSimple())
   // 加载岗位列表
-  postList.value = await PostApi.getSimplePostList()
+  postList.value = await PostApi.listAllSimple()
 }
 defineExpose({ open }) // 提供 open 方法，用于打开弹窗
 
