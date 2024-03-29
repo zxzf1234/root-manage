@@ -16,16 +16,10 @@
           placeholder="请输入用户编号"
           clearable
           @keyup.enter="handleQuery"
-          class="!w-240px"
         />
       </el-form-item>
       <el-form-item label="用户类型" prop="userType">
-        <el-select
-          v-model="queryParams.userType"
-          placeholder="请选择用户类型"
-          clearable
-          class="!w-240px"
-        >
+        <el-select v-model="queryParams.userType" placeholder="请选择用户类型" clearable>
           <el-option
             v-for="dict in getIntDictOptions(DICT_TYPE.USER_TYPE)"
             :key="dict.value"
@@ -40,16 +34,10 @@
           placeholder="请输入模板编码"
           clearable
           @keyup.enter="handleQuery"
-          class="!w-240px"
         />
       </el-form-item>
       <el-form-item label="模版类型" prop="templateType">
-        <el-select
-          v-model="queryParams.templateType"
-          placeholder="请选择模版类型"
-          clearable
-          class="!w-240px"
-        >
+        <el-select v-model="queryParams.templateType" placeholder="请选择模版类型" clearable>
           <el-option
             v-for="dict in getIntDictOptions(DICT_TYPE.SYSTEM_NOTIFY_TEMPLATE_TYPE)"
             :key="dict.value"
@@ -66,7 +54,6 @@
           start-placeholder="开始日期"
           end-placeholder="结束日期"
           :default-time="[new Date('1 00:00:00'), new Date('1 23:59:59')]"
-          class="!w-240px"
         />
       </el-form-item>
       <el-form-item>

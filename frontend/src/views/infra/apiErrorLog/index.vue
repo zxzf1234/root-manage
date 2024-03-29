@@ -16,16 +16,10 @@
           placeholder="请输入用户编号"
           clearable
           @keyup.enter="handleQuery"
-          class="!w-240px"
         />
       </el-form-item>
       <el-form-item label="用户类型" prop="userType">
-        <el-select
-          v-model="queryParams.userType"
-          placeholder="请选择用户类型"
-          clearable
-          class="!w-240px"
-        >
+        <el-select v-model="queryParams.userType" placeholder="请选择用户类型" clearable>
           <el-option
             v-for="dict in getIntDictOptions(DICT_TYPE.USER_TYPE)"
             :key="dict.value"
@@ -40,7 +34,6 @@
           placeholder="请输入应用名"
           clearable
           @keyup.enter="handleQuery"
-          class="!w-240px"
         />
       </el-form-item>
       <el-form-item label="异常时间" prop="exceptionTime">
@@ -51,16 +44,10 @@
           start-placeholder="开始日期"
           end-placeholder="结束日期"
           :default-time="[new Date('1 00:00:00'), new Date('1 23:59:59')]"
-          class="!w-240px"
         />
       </el-form-item>
       <el-form-item label="处理状态" prop="processStatus">
-        <el-select
-          v-model="queryParams.processStatus"
-          placeholder="请选择处理状态"
-          clearable
-          class="!w-240px"
-        >
+        <el-select v-model="queryParams.processStatus" placeholder="请选择处理状态" clearable>
           <el-option
             v-for="dict in getIntDictOptions(DICT_TYPE.INFRA_API_ERROR_LOG_PROCESS_STATUS)"
             :key="dict.value"

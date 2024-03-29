@@ -14,19 +14,13 @@
       <el-form-item label="菜单名称" prop="name">
         <el-input
           v-model="queryParams.name"
-          class="!w-240px"
           clearable
           placeholder="请输入菜单名称"
           @keyup.enter="handleQuery"
         />
       </el-form-item>
       <el-form-item label="状态" prop="status">
-        <el-select
-          v-model="queryParams.status"
-          class="!w-240px"
-          clearable
-          placeholder="请选择菜单状态"
-        >
+        <el-select v-model="queryParams.status" clearable placeholder="请选择菜单状态">
           <el-option
             v-for="dict in getIntDictOptions(DICT_TYPE.COMMON_STATUS)"
             :key="dict.value"

@@ -22,7 +22,6 @@
               check-strictly
               node-key="id"
               placeholder="请选择归属部门"
-              class="!w-240px"
             />
           </el-form-item>
         </el-col>

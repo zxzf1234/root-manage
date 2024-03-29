@@ -15,7 +15,6 @@
           <el-form-item label="表名称" prop="name">
             <el-input
               v-model="queryParams.name"
-              class="!w-240px"
               clearable
               placeholder="请输入表名称"
               @keyup.enter="getList"
@@ -24,7 +23,6 @@
           <el-form-item label="表描述" prop="comment">
             <el-input
               v-model="queryParams.comment"
-              class="!w-240px"
               clearable
               placeholder="请输入表描述"
               @keyup.enter="getList"
@@ -35,7 +33,6 @@
           <el-form-item label="接口名" prop="name">
             <el-input
               v-model="queryParams.name"
-              class="!w-240px"
               clearable
               placeholder="请输入名称"
               @keyup.enter="getList"

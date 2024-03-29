@@ -15,7 +15,6 @@
           check-strictly
           placeholder="请选择上级分组"
           value-key="Id"
-          class="!w-240px"
         />
       </el-form-item>
       <el-form-item label="名称" prop="name">

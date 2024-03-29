@@ -15,7 +15,6 @@
           :props="defaultProps"
           check-strictly
           node-key="id"
-          class="!w-240px"
         />
       </el-form-item>
       <el-form-item label="菜单名称" prop="name">

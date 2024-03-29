@@ -26,7 +26,6 @@
               placeholder="请输入用户名称"
               clearable
               @keyup.enter="handleQuery"
-              class="!w-240px"
             />
           </el-form-item>
           <el-form-item label="手机号码" prop="mobile">
@@ -35,16 +34,10 @@
               placeholder="请输入手机号码"
               clearable
               @keyup.enter="handleQuery"
-              class="!w-240px"
             />
           </el-form-item>
           <el-form-item label="状态" prop="status">
-            <el-select
-              v-model="queryParams.status"
-              placeholder="用户状态"
-              clearable
-              class="!w-240px"
-            >
+            <el-select v-model="queryParams.status" placeholder="用户状态" clearable>
               <el-option
                 v-for="dict in getIntDictOptions(DICT_TYPE.COMMON_STATUS)"
                 :key="dict.value"
@@ -60,7 +53,6 @@
               type="datetimerange"
               start-placeholder="开始日期"
               end-placeholder="结束日期"
-              class="!w-240px"
             />
           </el-form-item>
           <el-form-item>

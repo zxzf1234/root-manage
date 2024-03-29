@@ -7,7 +7,6 @@
       <el-form-item label="模板编码" prop="code">
         <el-input
           v-model="queryParams.code"
-          class="!w-240px"
           clearable
           placeholder="请输入模板编码"
           @keyup.enter="getList"
@@ -16,19 +15,13 @@
       <el-form-item label="模板名称" prop="name">
         <el-input
           v-model="queryParams.name"
-          class="!w-240px"
           clearable
           placeholder="请输入模板名称"
           @keyup.enter="getList"
         />
       </el-form-item>
       <el-form-item label="开启状态" prop="status">
-        <el-select
-          v-model="queryParams.status"
-          class="!w-240px"
-          clearable
-          placeholder="请选择发送状态"
-        >
+        <el-select v-model="queryParams.status" clearable placeholder="请选择发送状态">
           <el-option
             v-for="dict in getIntDictOptions(DICT_TYPE.COMMON_STATUS)"
             :key="dict.value"
@@ -40,7 +33,6 @@
           <el-date-picker
             v-model="queryParams.createTime"
             :default-time="[new Date('1 00:00:00'), new Date('1 23:59:59')]"
-            class="!w-240px"
             end-placeholder="结束日期"
             start-placeholder="开始日期"
             type="daterange"
@@ -49,12 +41,7 @@
         </el-form-item>
       </el-form-item>
       <el-form-item label="邮箱账号" prop="accountId">
-        <el-select
-          v-model="queryParams.accountId"
-          class="!w-240px"
-          clearable
-          placeholder="请选择邮箱账号"
-        >
+        <el-select v-model="queryParams.accountId" clearable placeholder="请选择邮箱账号">
           <el-option
             v-for="account in accountList"
             :key="account.id"

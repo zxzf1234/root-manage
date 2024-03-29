@@ -12,13 +12,11 @@
           placeholder="请选择模块"
           value-key="Id"
           @keyup.enter="getList"
-          class="!w-240px"
         />
       </el-form-item>
       <el-form-item label="接口名" prop="name">
         <el-input
           v-model="queryParams.name"
-          class="!w-240px"
           clearable
           placeholder="请输入名称"
           @keyup.enter="getList"

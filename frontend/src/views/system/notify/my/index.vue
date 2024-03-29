@@ -11,12 +11,7 @@
       label-width="68px"
     >
       <el-form-item label="是否已读" prop="readStatus">
-        <el-select
-          v-model="queryParams.readStatus"
-          placeholder="请选择状态"
-          clearable
-          class="!w-240px"
-        >
+        <el-select v-model="queryParams.readStatus" placeholder="请选择状态" clearable>
           <el-option
             v-for="dict in getBoolDictOptions(DICT_TYPE.INFRA_BOOLEAN_STRING)"
             :key="dict.value"
@@ -33,7 +28,6 @@
           start-placeholder="开始日期"
           end-placeholder="结束日期"
           :default-time="[new Date('1 00:00:00'), new Date('1 23:59:59')]"
-          class="!w-240px"
         />
       </el-form-item>
       <el-form-item>

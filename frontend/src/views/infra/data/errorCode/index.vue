@@ -17,7 +17,6 @@
             :key="dict.value"
             :label="dict.label"
             :value="dict.value"
-            class="!w-240px"
           />
         </el-select>
       </el-form-item>
@@ -27,7 +26,6 @@
           placeholder="请输入应用名"
           clearable
           @keyup.enter="handleQuery"
-          class="!w-240px"
         />
       </el-form-item>
       <el-form-item label="错误码编码" prop="code">
@@ -36,7 +34,6 @@
           placeholder="请输入错误码编码"
           clearable
           @keyup.enter="handleQuery"
-          class="!w-240px"
         />
       </el-form-item>
       <el-form-item label="错误码提示" prop="message">
@@ -45,7 +42,6 @@
           placeholder="请输入错误码提示"
           clearable
           @keyup.enter="handleQuery"
-          class="!w-240px"
         />
       </el-form-item>
       <el-form-item label="创建时间" prop="createTime">
@@ -56,7 +52,6 @@
           start-placeholder="开始日期"
           end-placeholder="结束日期"
           :default-time="[new Date('1 00:00:00'), new Date('1 23:59:59')]"
-          class="!w-240px"
         />
       </el-form-item>
       <el-form-item>

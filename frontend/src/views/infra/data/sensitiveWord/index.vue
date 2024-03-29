@@ -11,7 +11,6 @@
       <el-form-item label="敏感词" prop="name">
         <el-input
           v-model="queryParams.name"
-          class="!w-240px"
           clearable
           placeholder="请输入敏感词"
           @keyup.enter="handleQuery"
@@ -20,7 +19,6 @@
       <el-form-item label="标签" prop="tag">
         <el-select
           v-model="queryParams.tag"
-          class="!w-240px"
           clearable
           placeholder="请选择标签"
           @keyup.enter="handleQuery"
@@ -35,7 +33,6 @@
             :key="dict.value"
             :label="dict.label"
             :value="dict.value"
-            class="!w-240px"
           />
         </el-select>
       </el-form-item>
@@ -43,7 +40,6 @@
         <el-date-picker
           v-model="queryParams.createTime"
           :default-time="[new Date('1 00:00:00'), new Date('1 23:59:59')]"
-          class="!w-240px"
           end-placeholder="结束日期"
           start-placeholder="开始日期"
           type="daterange"

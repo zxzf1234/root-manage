@@ -1,5 +1,5 @@
 <template>
-  <Dialog v-model="dialogVisible" :title="dialogTitle">
+  <Dialog v-model="dialogVisible" :title="dialogTitle" width="1000px">
     <el-form>
       <el-form-item>
         <el-button @click="clickAddComponent">添加组件</el-button>
@@ -160,7 +160,10 @@ const clickAddComponent = () => {
     id: crypto.randomUUID(),
     componentName: '',
     componentValue: '',
-    type: 'input'
+    type: 'input',
+    span: '',
+    push: '',
+    pull: ''
   }
   formData.value.components.push(newComponent)
 }
@@ -207,7 +210,10 @@ const handleBatchRelatedParam = (dbSelectdColumnList) => {
       id: crypto.randomUUID(),
       componentName: element.columnName,
       componentValue: element.columnComment,
-      type: dataType
+      type: dataType,
+      span: '',
+      push: '',
+      pull: ''
     }
     formData.value.components.push(newComponentCondition)
   })

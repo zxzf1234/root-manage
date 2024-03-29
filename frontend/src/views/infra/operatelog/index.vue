@@ -16,7 +16,6 @@
           placeholder="请输入系统模块"
           clearable
           @keyup.enter="handleQuery"
-          class="!w-240px"
         />
       </el-form-item>
       <el-form-item label="操作人员" prop="userNickname">
@@ -25,16 +24,10 @@
           placeholder="请输入操作人员"
           clearable
           @keyup.enter="handleQuery"
-          class="!w-240px"
         />
       </el-form-item>
       <el-form-item label="操作类型" prop="type">
-        <el-select
-          v-model="queryParams.type"
-          placeholder="请选择操作类型"
-          clearable
-          class="!w-240px"
-        >
+        <el-select v-model="queryParams.type" placeholder="请选择操作类型" clearable>
           <el-option
             v-for="dict in getIntDictOptions(DICT_TYPE.SYSTEM_OPERATE_TYPE)"
             :key="dict.value"
@@ -44,12 +37,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="操作状态" prop="success">
-        <el-select
-          v-model="queryParams.success"
-          placeholder="请选择操作状态"
-          clearable
-          class="!w-240px"
-        >
+        <el-select v-model="queryParams.success" placeholder="请选择操作状态" clearable>
           <el-option :key="true" label="成功" :value="true" />
           <el-option :key="false" label="失败" :value="false" />
         </el-select>
@@ -62,7 +50,6 @@
           start-placeholder="开始日期"
           end-placeholder="结束日期"
           :default-time="[new Date('1 00:00:00'), new Date('1 23:59:59')]"
-          class="!w-240px"
         />
       </el-form-item>
       <el-form-item>

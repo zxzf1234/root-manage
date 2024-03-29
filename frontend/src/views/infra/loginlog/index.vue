@@ -16,7 +16,6 @@
           placeholder="请输入用户名称"
           clearable
           @keyup.enter="handleQuery"
-          class="!w-240px"
         />
       </el-form-item>
       <el-form-item label="登录地址" prop="userIp">
@@ -25,7 +24,6 @@
           placeholder="请输入登录地址"
           clearable
           @keyup.enter="handleQuery"
-          class="!w-240px"
         />
       </el-form-item>
       <el-form-item label="登录日期" prop="createTime">
@@ -36,7 +34,6 @@
           start-placeholder="开始日期"
           end-placeholder="结束日期"
           :default-time="[new Date('1 00:00:00'), new Date('1 23:59:59')]"
-          class="!w-240px"
         />
       </el-form-item>
       <el-form-item>

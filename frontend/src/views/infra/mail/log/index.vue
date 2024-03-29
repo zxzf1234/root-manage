@@ -7,19 +7,13 @@
       <el-form-item label="用户编号" prop="mail">
         <el-input
           v-model="queryParams.userId"
-          class="!w-240px"
           clearable
           placeholder="请输入名称"
           @keyup.enter="getList"
         />
       </el-form-item>
       <el-form-item label="用户类型" prop="status">
-        <el-select
-          v-model="queryParams.userType"
-          class="!w-240px"
-          clearable
-          placeholder="请选择用户类型"
-        >
+        <el-select v-model="queryParams.userType" clearable placeholder="请选择用户类型">
           <el-option
             v-for="dict in getIntDictOptions(DICT_TYPE.USER_TYPE)"
             :key="dict.value"
@@ -29,12 +23,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="发送状态" prop="status">
-        <el-select
-          v-model="queryParams.sendStatus"
-          class="!w-240px"
-          clearable
-          placeholder="请选择发送状态"
-        >
+        <el-select v-model="queryParams.sendStatus" clearable placeholder="请选择发送状态">
           <el-option
             v-for="dict in getIntDictOptions(DICT_TYPE.SYSTEM_MAIL_SEND_STATUS)"
             :key="dict.value"
@@ -44,12 +33,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="邮箱账号" prop="accountId">
-        <el-select
-          v-model="queryParams.accountId"
-          class="!w-240px"
-          clearable
-          placeholder="请选择邮箱账号"
-        >
+        <el-select v-model="queryParams.accountId" clearable placeholder="请选择邮箱账号">
           <el-option
             v-for="account in accountList"
             :key="account.id"
@@ -61,7 +45,6 @@
       <el-form-item label="模板编号" prop="templateId">
         <el-input
           v-model="queryParams.templateId"
-          class="!w-240px"
           clearable
           placeholder="请输入模板编号"
           @keyup.enter="getList"

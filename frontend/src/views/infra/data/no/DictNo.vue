@@ -12,7 +12,6 @@
       <el-form-item label="编码名称" prop="name">
         <el-input
           v-model="queryParams.keyName"
-          class="!w-240px"
           clearable
           placeholder="请输入编号类别"
           @keyup.enter="handleQuery"
@@ -21,7 +20,6 @@
       <el-form-item label="前缀" prop="type">
         <el-input
           v-model="queryParams.prefix"
-          class="!w-240px"
           clearable
           placeholder="请输入前缀"
           @keyup.enter="handleQuery"
@@ -30,7 +28,6 @@
       <el-form-item label="前缀" prop="remark">
         <el-input
           v-model="queryParams.remark"
-          class="!w-240px"
           clearable
           placeholder="请输入前缀"
           @keyup.enter="handleQuery"
@@ -40,7 +37,6 @@
         <el-date-picker
           v-model="queryParams.createTime"
           :default-time="[new Date('1 00:00:00'), new Date('1 23:59:59')]"
-          class="!w-240px"
           end-placeholder="结束日期"
           start-placeholder="开始日期"
           type="daterange"

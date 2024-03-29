@@ -7,7 +7,6 @@
       <el-form-item label="邮箱" prop="mail">
         <el-input
           v-model="queryParams.mail"
-          class="!w-240px"
           clearable
           placeholder="请输入名称"
           @keyup.enter="getList"
@@ -16,7 +15,6 @@
       <el-form-item label="用户名" prop="username">
         <el-input
           v-model="queryParams.username"
-          class="!w-240px"
           clearable
           placeholder="请输入名称"
           @keyup.enter="getList"

@@ -9,7 +9,7 @@
       label-width="68px"
     >
       <el-form-item label="名称" prop="title">
-        <el-input v-model="queryParams.name" placeholder="请输入名称" clearable class="!w-240px" />
+        <el-input v-model="queryParams.name" placeholder="请输入名称" clearable />
       </el-form-item>
       <el-form-item>
         <el-button @click="handleQuery"><Icon icon="ep:search" /> 搜索</el-button>
