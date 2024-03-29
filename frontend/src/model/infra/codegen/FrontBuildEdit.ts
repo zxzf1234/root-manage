@@ -2,9 +2,9 @@ export interface InterfaceFrontBuildEditComponents {
   componentName: string
   componentValue: string
   type: string
-  span: string
-  push: string
-  pull: string
+  span: number
+  push: number
+  pull: number
 }
 export interface InterfaceFrontBuildEdit {
   name: string

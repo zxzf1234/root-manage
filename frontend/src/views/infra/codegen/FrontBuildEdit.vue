@@ -68,13 +68,13 @@
           </el-select>
         </template>
         <template #span="{ row }">
-          <el-input-number v-model="row.span" :min="1" :max="24" />
+          <el-input-number v-model="row.span" :min="0" :max="24" />
         </template>
         <template #push="{ row }">
-          <el-input-number v-model="row.push" :min="1" :max="24" />
+          <el-input-number v-model="row.push" :min="0" :max="24" />
         </template>
         <template #pull="{ row }">
-          <el-input-number v-model="row.pull" :min="1" :max="24" />
+          <el-input-number v-model="row.pull" :min="0" :max="24" />
         </template>
       </Table>
     </el-form>
@@ -161,9 +161,9 @@ const clickAddComponent = () => {
     componentName: '',
     componentValue: '',
     type: 'input',
-    span: '',
-    push: '',
-    pull: ''
+    span: 0,
+    push: 0,
+    pull: 0
   }
   formData.value.components.push(newComponent)
 }
@@ -184,12 +184,22 @@ const submitForm = async () => {
   if (!formRef) return
   const valid = await formRef.value.validate()
   if (!valid) return
+
+  let isEmpty = false
+  formData.value.components.forEach((element) => {
+    if (element.componentName == '' || element.componentValue == '' || element.type == '')
+      isEmpty = true
+  })
+  if (isEmpty) {
+    message.alertError('组件的名称、值、类型不能为空')
+    return
+  }
   // 提交请求
   formLoading.value = true
   try {
     dialogVisible.value = false
     // 发送操作成功的事件
-    emit('success')
+    emit('success', formData.value)
   } finally {
     formLoading.value = false
   }
@@ -211,9 +221,9 @@ const handleBatchRelatedParam = (dbSelectdColumnList) => {
       componentName: element.columnName,
       componentValue: element.columnComment,
       type: dataType,
-      span: '',
-      push: '',
-      pull: ''
+      span: 0,
+      push: 0,
+      pull: 0
     }
     formData.value.components.push(newComponentCondition)
   })

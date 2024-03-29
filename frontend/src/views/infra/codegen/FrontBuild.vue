@@ -59,6 +59,7 @@ import designerForm from '@/components/FcDesigner/index.es.js'
 import { jsonParseCode } from '@/utils/frontBuild'
 import FrontBuildManage from './FrontBuildManage.vue'
 import { TypeFrontBuildManage } from '@/model/infra/codegen/FrontBuildManage'
+import { InterfaceFrontBuildEdit } from '@/model/infra/codegen/FrontBuildEdit'
 import FrontBuildEdit from './FrontBuildEdit.vue'
 const { t } = useI18n() // 国际化
 
@@ -105,7 +106,6 @@ const setJson = () => {
 /** 确定 */
 const onOk = () => {
   dialogVisible.value = false
-  console.log(JSON.parse(formData.value))
   designer.value.setRule(JSON.parse(formData.value))
 }
 
@@ -235,12 +235,87 @@ const showBuildManage = (manageObject: TypeFrontBuildManage) => {
     })
   }
   const fromMange = [formManageCard, formManageTable]
-  console.log(JSON.stringify(fromMange, null, 2))
   designer.value.setRule(fromMange)
 }
 
-const showBuildEdit = () => {
-  console.log(3)
+const showBuildEdit = (editObject: InterfaceFrontBuildEdit) => {
+  formAttr.value.name = editObject.name
+  let formEdit = {
+    type: 'el-form',
+    style: {
+      width: '100%'
+    },
+    class: 'el-form--inline',
+    fullWidth: true,
+    _fc_drag_tag: 'form',
+    hidden: false,
+    display: true,
+    props: {
+      ':model': editObject.model,
+      ref: editObject.ref,
+      ':rules': editObject.rule
+    }
+  }
+
+  if (editObject.components.length > 0) {
+    if (formEdit['children'] === undefined) formEdit['children'] = []
+    let currentSumSpan = 0
+    editObject.components.forEach((element) => {
+      const component = {
+        type: element.type,
+        field: element.componentName,
+        title: element.componentValue,
+        info: '',
+        $required: false,
+        _fc_drag_tag: element.type,
+        hidden: false,
+        display: true
+      }
+      if (element.span != 0) {
+        const col = {
+          type: 'col',
+          props: {
+            span: element.span
+          },
+          fullWidth: true,
+          children: [component],
+          _fc_drag_tag: 'col',
+          hidden: false,
+          display: true
+        }
+        if (element.pull != 0) {
+          col['props']['pull'] = element.pull
+        }
+        if (element.push != 0) {
+          col['props']['push'] = element.push
+        }
+        console.log(currentSumSpan)
+        console.log(element.span)
+        if (element.span + currentSumSpan <= 24 && currentSumSpan > 0) {
+          const editChildrenLength = formEdit['children'].length
+          const row = formEdit['children'][editChildrenLength - 1]
+          if (row['children'] === undefined) row['children'] = []
+          row['children'].push(col)
+          currentSumSpan += element.span
+        } else {
+          formEdit['children'].push({
+            type: 'FcRow',
+            fullWidth: true,
+            children: [col],
+            _fc_drag_tag: 'row',
+            hidden: false,
+            display: true
+          })
+          currentSumSpan = element.span
+        }
+      } else {
+        formEdit['children'].push(component)
+        currentSumSpan = 0
+      }
+    })
+  }
+  console.log(formEdit)
+  designer.value.setRule([formEdit])
 }
 
 const buildManage = () => {
