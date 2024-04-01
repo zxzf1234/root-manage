@@ -21,6 +21,7 @@
             v-model="loginData.loginForm.username"
             :placeholder="t('login.usernamePlaceholder')"
             :prefix-icon="iconAvatar"
+            class="!w-320px"
           />
         </el-form-item>
       </el-col>
@@ -33,6 +34,7 @@
             show-password
             type="password"
             @keyup.enter="getCode()"
+            class="!w-320px"
           />
         </el-form-item>
       </el-col>

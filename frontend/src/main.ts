@@ -21,9 +21,6 @@ import { setupElementPlus } from '@/plugins/elementPlus'
 // 引入 context-menu
 import { setupContextMenu } from '@/plugins/contextMenu'
 
-// 引入 form-create
-import { setupFormCreate } from '@/plugins/formCreate'
-
 // 引入全局样式
 import '@/styles/index.scss'
 
@@ -57,8 +54,6 @@ const setupAll = async () => {
   setupElementPlus(app)
 
   setupContextMenu(app)
-
-  setupFormCreate(app)
 
   setupRouter(app)
 
