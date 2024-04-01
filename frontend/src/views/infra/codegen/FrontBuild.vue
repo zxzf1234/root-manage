@@ -157,8 +157,8 @@ const showBuildManage = (manageObject: TypeFrontBuildManage) => {
     manageObject.searchConditions.forEach((element) => {
       formManageCard.children[0]['children'].push({
         type: element.type,
-        field: element.searchName,
-        title: element.searchValue,
+        field: element.searchValue,
+        title: element.searchName,
         info: '',
         $required: false,
         _fc_drag_tag: element.type,
@@ -263,8 +263,8 @@ const showBuildEdit = (editObject: InterfaceFrontBuildEdit) => {
     editObject.components.forEach((element) => {
       const component = {
         type: element.type,
-        field: element.componentName,
-        title: element.componentValue,
+        field: element.componentValue,
+        title: element.componentName,
         info: '',
         $required: false,
         _fc_drag_tag: element.type,
@@ -289,8 +289,6 @@ const showBuildEdit = (editObject: InterfaceFrontBuildEdit) => {
         if (element.push != 0) {
           col['props']['push'] = element.push
         }
-        console.log(currentSumSpan)
-        console.log(element.span)
         if (element.span + currentSumSpan <= 24 && currentSumSpan > 0) {
           const editChildrenLength = formEdit['children'].length
           const row = formEdit['children'][editChildrenLength - 1]
@@ -314,7 +312,6 @@ const showBuildEdit = (editObject: InterfaceFrontBuildEdit) => {
       }
     })
   }
-  console.log(formEdit)
   designer.value.setRule([formEdit])
 }
 

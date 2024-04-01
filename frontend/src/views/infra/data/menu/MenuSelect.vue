@@ -52,6 +52,8 @@
         :default-expand-all="isExpandAll"
         row-key="id"
         @row-dblclick="handleMenuDblclick"
+        height="450"
+        scrollbar-always-on="true"
       >
         <el-table-column :show-overflow-tooltip="true" label="菜单名称" prop="name" width="250" />
         <el-table-column align="center" label="图标" prop="icon" width="100">
@@ -123,6 +125,7 @@ const emit = defineEmits(['saveSelect'])
 const open = async (params) => {
   dialogVisible.value = true
   type = params
+  dbSelectdMenuList.value = []
   await getList()
 }
 defineExpose({ open }) // 提供 open 方法，用于打开弹窗

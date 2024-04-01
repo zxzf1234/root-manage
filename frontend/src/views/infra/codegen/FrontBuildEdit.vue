@@ -85,6 +85,7 @@
 import { InterfaceFrontBuildEdit } from '@/model/infra/codegen/FrontBuildEdit'
 import InterfaceRelatedParam from './InterfaceRelatedParam.vue'
 import * as CodegenApi from '@/api/infra/codegen'
+import { camelCase } from 'lodash-es'
 const message = useMessage() // 消息弹窗
 const dialogVisible = ref(false) // 弹窗的是否展示
 const dialogTitle = ref('') // 弹窗的标题
@@ -218,8 +219,8 @@ const handleBatchRelatedParam = (dbSelectdColumnList) => {
     }
     const newComponentCondition = {
       id: crypto.randomUUID(),
-      componentName: element.columnName,
-      componentValue: element.columnComment,
+      componentName: element.columnComment,
+      componentValue: camelCase(element.columnName),
       type: dataType,
       span: 0,
       push: 0,

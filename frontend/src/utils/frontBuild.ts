@@ -82,12 +82,20 @@ const addProps = (code: object, propObject: object) => {
     let propKey = key
     if (key === 'click') {
       propKey = '@click'
-      const functionCode = 'const ' + propObject['click'] + ' = () => {}\r'
+      let functionCodeContext = ''
+      if (propObject['click'] == 'handleClickReset') {
+        functionCodeContext = '\r  queryFormRef.value?.resetFields()\r  handleClickSearch()\r'
+      }
+      const functionCode =
+        'const ' + propObject['click'] + ' = () => {' + functionCodeContext + '}\r'
       if (!code['script']['function'].includes(functionCode))
         code['script']['function'].push(functionCode)
     }
 
-    if (key === 'hasPermi') propKey = 'v-hasPermi'
+    if (key === 'hasPermi' && propObject[key] != '') {
+      propKey = 'v-hasPermi'
+      propObject[key] = "['" + propObject[key] + "']"
+    }
     if (typeof propObject[key] === 'number') {
       code['vue'] += ' :' + propKey + '="' + propObject[key] + '"'
     } else if (typeof propObject[key] === 'boolean') {
@@ -106,7 +114,12 @@ const addProps = (code: object, propObject: object) => {
 const addEvent = (code: object, eventObject: object) => {
   for (const key in eventObject) {
     code['vue'] += ' @' + eventObject[key]['eventName'] + '="' + eventObject[key]['function'] + '"'
-    const functionCode = 'const ' + eventObject[key]['function'] + ' = () => {}\r'
+    let functionCodeContext = ''
+    if (eventObject[key]['function'] == 'handleClickReset') {
+      functionCodeContext = '\r  queryFormRef.value?.resetFields()\r  handleClickSearch()\r'
+    }
+    const functionCode =
+      'const ' + eventObject[key]['function'] + ' = () => {' + functionCodeContext + '}\r'
     if (!code['script']['function'].includes(functionCode))
       code['script']['function'].push(functionCode)
   }
@@ -354,7 +367,7 @@ const frontComponent = {
     }
 
     code['vue'] += '>'
-    if (icon !== undefined) {
+    if (icon !== undefined && icon != '') {
       const iconDeepIndex = buttonDeepIndex + 1
       code['vue'] += '\r' + generateTab(iconDeepIndex) + '<Icon icon="' + icon + '" />\r'
     }
@@ -386,7 +399,7 @@ const frontComponent = {
 
       const props = componentObject['props'] as object
       if ('ref' in props) {
-        code['script']['variable'].push('const ' + props['ref'] + ' = ref\r')
+        code['script']['variable'].push('const ' + props['ref'] + ' = ref()\r')
       }
       if (':model' in props) {
         let childrenModel = ''

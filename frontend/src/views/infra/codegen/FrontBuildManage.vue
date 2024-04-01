@@ -184,7 +184,7 @@ import * as CodegenApi from '@/api/infra/codegen'
 import InterfaceRelatedParam from './InterfaceRelatedParam.vue'
 import MenuSelect from '../data/menu/MenuSelect.vue'
 import { TypeFrontBuildManage } from '@/model/infra/codegen/FrontBuildManage'
-import { upperFirst } from 'lodash-es'
+import { upperFirst, camelCase } from 'lodash-es'
 const dialogVisible = ref(false) // 弹窗的是否展示
 const dialogTitle = ref('') // 弹窗的标题
 const formLoading = ref(false) // 表单的加载中：1）修改时的数据加载；2）提交的按钮禁用
@@ -369,8 +369,15 @@ const resetForm = () => {
       {
         id: crypto.randomUUID(),
         buttonName: '搜索',
-        buttonFunction: 'getPage',
+        buttonFunction: 'handleClickSearch',
         buttonIcon: 'ep:search',
+        hasPermi: ''
+      },
+      {
+        id: crypto.randomUUID(),
+        buttonName: '重置',
+        buttonFunction: 'handleClickReset',
+        buttonIcon: 'ep:refresh',
         hasPermi: ''
       }
     ],
@@ -489,8 +496,8 @@ const handleBatchRelatedParam = (dbSelectdColumnList) => {
       }
       const newSearchCondition = {
         id: crypto.randomUUID(),
-        searchName: element.columnName,
-        searchValue: element.columnComment,
+        searchName: element.columnComment,
+        searchValue: camelCase(element.columnName),
         type: dataType
       }
       formData.value.searchConditions.push(newSearchCondition)
@@ -512,22 +519,35 @@ const handleBatchRelatedParam = (dbSelectdColumnList) => {
 const handleBatchMenuSelect = (dbSelectdMenuList) => {
   if (tabActiveName.value === 'button') {
     dbSelectdMenuList.forEach((element) => {
-      const newSearchCondition = {
-        id: crypto.randomUUID(),
-        buttonName: element.name,
-        buttonFunction:
-          'handleClick' +
-          upperFirst(
-            element.permission.substring(
-              element.permission.lastIndexOf(':') + 1,
-              element.permission.length
-            )
-          ) +
-          '()',
-        buttonIcon: element.icon,
-        hasPermi: element.permission
+      let iconName = ''
+      if (element.permission.indexOf(':query') > -1) iconName = 'ep:search'
+      if (element.permission.indexOf(':create') > -1) iconName = 'ep:plus'
+      if (element.permission.indexOf(':update') > -1) iconName = 'ep:edit'
+      if (element.permission.indexOf(':delete') > -1) iconName = 'ep:delete'
+      if (element.permission.indexOf(':import') > -1) iconName = 'ep:upload'
+      if (element.permission.indexOf(':export') > -1) iconName = 'ep:download'
+      if (element.name == '查询' && element.permission.indexOf(':query') > -1) {
+        formData.value.buttons.forEach((button) => {
+          if (button.buttonName == '搜索' && button.hasPermi == '')
+            button.hasPermi = element.permission
+        })
+      } else {
+        const newSearchCondition = {
+          id: crypto.randomUUID(),
+          buttonName: element.name,
+          buttonFunction:
+            'handleClick' +
+            upperFirst(
+              element.permission.substring(
+                element.permission.lastIndexOf(':') + 1,
+                element.permission.length
+              )
+            ),
+          buttonIcon: iconName,
+          hasPermi: element.permission
+        }
+        formData.value.buttons.push(newSearchCondition)
       }
-      formData.value.buttons.push(newSearchCondition)
     })
   }
   if (tabActiveName.value === 'tableMenuItem') {
