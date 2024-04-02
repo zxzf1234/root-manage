@@ -24,25 +24,42 @@
           @keyup="formData.name = formData.name?.replace(/[^a-zA-Z_]/g, '')"
         />
       </el-form-item>
-      <el-form-item label="表单数据对象" prop="searchModel">
+      <el-form-item label="是否弹窗" prop="isDialog">
+        <el-checkbox v-model="formData.isDialog" />
+      </el-form-item>
+      <el-form-item label="弹窗标题对象" prop="dialogTitle">
+        <el-input
+          v-model="formData.dialogTitle"
+          placeholder="请输入弹窗标题对象"
+          @keyup="formData.name = formData.name?.replace(/[^a-zA-Z_]/g, '')"
+        />
+      </el-form-item>
+      <el-form-item label="表单数据对象" prop="model">
         <el-input
           v-model="formData.model"
           placeholder="请输入搜索条件数据对象"
           @keyup="formData.model = formData.model?.replace(/[^a-zA-Z_]/g, '')"
         />
       </el-form-item>
-      <el-form-item label="表单ref对象" prop="searchRef">
+      <el-form-item label="表单ref对象" prop="ref">
         <el-input
           v-model="formData.ref"
           placeholder="请输入表单ref对象"
           @keyup="formData.ref = formData.ref?.replace(/[^a-zA-Z_]/g, '')"
         />
       </el-form-item>
-      <el-form-item label="表单验证规则对象" prop="searchRule">
+      <el-form-item label="表单验证规则对象" prop="rule">
         <el-input
           v-model="formData.rule"
           placeholder="请输入搜索条件验证规则对象"
           @keyup="formData.rule = formData.rule?.replace(/[^a-zA-Z_]/g, '')"
+        />
+      </el-form-item>
+      <el-form-item label="表单加载中对象" prop="loading">
+        <el-input
+          v-model="formData.loading"
+          placeholder="请输入表单加载中对象"
+          @keyup="formData.ref = formData.ref?.replace(/[^a-zA-Z_]/g, '')"
         />
       </el-form-item>
       <Table
@@ -51,7 +68,15 @@
         @current-change="currentChangeComponents"
       >
         <template #componentName="{ row }">
-          <el-input v-model="row.componentName" />
+          <div class="flex items-center">
+            <Icon
+              icon="icon-park-outline:drag"
+              data-inline="false"
+              class="drag-column cursor-grab"
+              @mouseenter="rowDrop()"
+            />
+            <el-input class="ml-[16px]" v-model="row.componentName" />
+          </div>
         </template>
         <template #componentValue="{ row }">
           <el-input
@@ -86,6 +111,7 @@ import { InterfaceFrontBuildEdit } from '@/model/infra/codegen/FrontBuildEdit'
 import InterfaceRelatedParam from './InterfaceRelatedParam.vue'
 import * as CodegenApi from '@/api/infra/codegen'
 import { camelCase } from 'lodash-es'
+import Sortable from 'sortablejs'
 const message = useMessage() // 消息弹窗
 const dialogVisible = ref(false) // 弹窗的是否展示
 const dialogTitle = ref('') // 弹窗的标题
@@ -97,14 +123,32 @@ const formData = ref<InterfaceFrontBuildEdit>({
   model: '',
   ref: '',
   rule: '',
+  loading: '',
+  isDialog: true,
+  dialogTitle: '',
   components: []
 })
+const rowDrop = () => {
+  nextTick(() => {
+    const wrapper: HTMLElement | null = document.querySelector('.el-table__body-wrapper tbody')
+    Sortable.create(wrapper, {
+      animation: 300,
+      handle: '.drag-column',
+      onEnd: ({ newIndex, oldIndex }) => {
+        const currentRow = formData.value.components.splice(oldIndex, 1)[0]
+        formData.value.components.splice(newIndex, 0, currentRow)
+      }
+    })
+  })
+}
+
 const formComponentColumns = [
   {
     label: '组件名称',
     prop: 'componentName',
     slot: 'componentName'
   },
+
   {
     label: '组件值',
     prop: 'componentValue',
@@ -132,7 +176,11 @@ const formComponentColumns = [
   }
 ]
 const formRules = reactive({
-  name: [{ required: true, message: '页面名称不能为空', trigger: 'blur' }]
+  name: [{ required: true, message: '页面名称不能为空', trigger: 'blur' }],
+  model: [{ required: true, message: '表单数据对象不能为空', trigger: 'blur' }],
+  ref: [{ required: true, message: '表单ref对象不能为空', trigger: 'blur' }],
+  rruleef: [{ required: true, message: '表单验证规则对象不能为空', trigger: 'blur' }],
+  loading: [{ required: true, message: '表单加载中对象不能为空', trigger: 'blur' }]
 })
 const formRef = ref() // 表单 Ref
 /** 打开弹窗 */
@@ -187,6 +235,10 @@ const submitForm = async () => {
   if (!valid) return
 
   let isEmpty = false
+  if (formData.value.components.length < 1) {
+    message.alertError('组件至少有一个')
+    return
+  }
   formData.value.components.forEach((element) => {
     if (element.componentName == '' || element.componentValue == '' || element.type == '')
       isEmpty = true
@@ -234,9 +286,12 @@ const handleBatchRelatedParam = (dbSelectdColumnList) => {
 const resetForm = () => {
   formData.value = {
     name: '',
-    model: '',
-    ref: '',
-    rule: '',
+    model: 'formData',
+    ref: 'formRef',
+    rule: 'formRules',
+    loading: 'formLoading',
+    isDialog: true,
+    dialogTitle: 'dialogTitle',
     components: []
   }
   formRef.value?.resetFields()

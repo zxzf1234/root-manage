@@ -11,5 +11,8 @@ export interface InterfaceFrontBuildEdit {
   model: string
   ref: string
   rule: string
+  loading: string
+  isDialog: boolean
+  dialogTitle: string
   components: Array<InterfaceFrontBuildEditComponents>
 }

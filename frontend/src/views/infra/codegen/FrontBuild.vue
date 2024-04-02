@@ -11,6 +11,20 @@
           />
         </el-form-item>
       </el-col>
+      <el-col :span="2">
+        <el-form-item label="是否弹窗" prop="isDialog">
+          <el-checkbox v-model="formAttr.isDialog" />
+        </el-form-item>
+      </el-col>
+      <el-col :span="3">
+        <el-form-item label="弹窗标题对象" prop="dialogTitle">
+          <el-input
+            v-model="formAttr.dialogTitle"
+            placeholder="请输入弹窗标题对象"
+            @keyup="formAttr.name = formAttr.name?.replace(/[^a-zA-Z_]/g, '')"
+          />
+        </el-form-item>
+      </el-col>
       <el-col :span="12">
         <div class="mb-2 float-right">
           <el-button size="small" @click="setJson"> 导入JSON</el-button>
@@ -58,7 +72,7 @@ import { useClipboard } from '@vueuse/core'
 import designerForm from '@/components/FcDesigner/index.es.js'
 import { jsonParseCode } from '@/utils/frontBuild'
 import FrontBuildManage from './FrontBuildManage.vue'
-import { TypeFrontBuildManage } from '@/model/infra/codegen/FrontBuildManage'
+import { InterfaceFrontBuildManage } from '@/model/infra/codegen/FrontBuildManage'
 import { InterfaceFrontBuildEdit } from '@/model/infra/codegen/FrontBuildEdit'
 import FrontBuildEdit from './FrontBuildEdit.vue'
 const { t } = useI18n() // 国际化
@@ -71,7 +85,7 @@ const dialogTitle = ref('') // 弹窗的标题
 const message = useMessage() // 消息
 const buildManageRef = ref()
 const buildEditRef = ref()
-let formAttr = ref({ name: '', isDialag: false })
+let formAttr = ref({ name: '', isDialog: false, dialogTitle: '' })
 
 /** 初始化 **/
 onMounted(async () => {})
@@ -93,7 +107,6 @@ const showJson = () => {
 const showCode = () => {
   openModel('生成 代码')
   formType.value = 2
-
   formData.value = jsonParseCode(designer.value.getRule(), formAttr.value)
 }
 
@@ -122,8 +135,10 @@ const copy = async (text: string) => {
   }
 }
 
-const showBuildManage = (manageObject: TypeFrontBuildManage) => {
+const showBuildManage = (manageObject: InterfaceFrontBuildManage) => {
   formAttr.value.name = manageObject.name
+  formAttr.value.isDialog = manageObject.isDialog
+  formAttr.value.dialogTitle = manageObject.dialogTitle
   // 添加代码
   let formManageCard = {
     type: 'el-card',
@@ -144,6 +159,25 @@ const showBuildManage = (manageObject: TypeFrontBuildManage) => {
           ':model': manageObject.searchModel,
           ref: manageObject.searchRef,
           ':rules': manageObject.searchRule
+        }
+      },
+      {
+        type: 'el-table',
+        field: 'Fw5r1onudcn02n',
+        style: {
+          width: '100%'
+        },
+        fullWidth: true,
+        _fc_drag_tag: 'table',
+        hidden: false,
+        display: true,
+        props: {
+          ':columns': manageObject.tableColumnName,
+          ':page-param': manageObject.searchModel,
+          adaptive: true,
+          ':page-data': manageObject.tablePageData,
+          'save-key': manageObject.name,
+          'v-loading': manageObject.tableLoading
         }
       }
     ],
@@ -186,24 +220,7 @@ const showBuildManage = (manageObject: TypeFrontBuildManage) => {
       })
     })
   }
-  let formManageTable = {
-    type: 'el-table',
-    field: 'Fw5r1onudcn02n',
-    style: {
-      width: '100%'
-    },
-    fullWidth: true,
-    _fc_drag_tag: 'table',
-    hidden: false,
-    display: true,
-    props: {
-      ':columns': manageObject.tableColumnName,
-      ':page-param': manageObject.searchModel,
-      adaptive: true,
-      ':page-data': manageObject.tablePageData,
-      'save-key': manageObject.name
-    }
-  }
+  let formManageTable = formManageCard.children[1]
   if (manageObject.tablePageChange != '') {
     formManageTable['event'] = [
       {
@@ -234,12 +251,14 @@ const showBuildManage = (manageObject: TypeFrontBuildManage) => {
       })
     })
   }
-  const fromMange = [formManageCard, formManageTable]
-  designer.value.setRule(fromMange)
+
+  designer.value.setRule([formManageCard])
 }
 
 const showBuildEdit = (editObject: InterfaceFrontBuildEdit) => {
   formAttr.value.name = editObject.name
+  formAttr.value.isDialog = editObject.isDialog
+  formAttr.value.dialogTitle = editObject.dialogTitle
   let formEdit = {
     type: 'el-form',
     style: {
@@ -253,7 +272,8 @@ const showBuildEdit = (editObject: InterfaceFrontBuildEdit) => {
     props: {
       ':model': editObject.model,
       ref: editObject.ref,
-      ':rules': editObject.rule
+      ':rules': editObject.rule,
+      'v-loading': editObject.loading
     }
   }
 

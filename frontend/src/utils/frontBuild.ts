@@ -23,15 +23,23 @@ export const jsonParseCode = (objectRule: object, formAttr: object) => {
   if (objectRule === undefined) return ''
   if (!objectRule) return ''
   else {
-    const code = { vue: '', script: { import: {}, function: [], variable: [] } }
-    objectParseCode(code, objectRule, 1, '')
+    const code = { vue: '', script: { import: {}, function: [], variable: <string[]>[] } }
+    let deepIndex = 1
+    if (formAttr['isDialog']) {
+      deepIndex = 2
+      code['script']['variable'].push('const ' + formAttr['dialogTitle'] + " = ref('')\r")
+    }
+    objectParseCode(code, objectRule, deepIndex, '')
     let codeContext =
       '<template>\r' +
+      (formAttr['isDialog']
+        ? '  <Dialog v-model="dialogVisible" :title="' + formAttr['isDialog'] + '">\r'
+        : '') +
       code['vue'] +
+      (formAttr['isDialog'] ? '  </Dialog>\r' : '') +
       '</template>\r<script setup name="' +
       formAttr['name'] +
       '" lang="ts">\r'
-
     ;['import', 'variable', 'function'].forEach((key) => {
       if (Object.keys(code['script'][key]).length > 0) {
         for (const n in code['script'][key]) codeContext += code['script'][key][n]
@@ -53,9 +61,12 @@ const objectParseCode = (
     if (typeof objectRule[key] === 'object' && '_fc_drag_tag' in objectRule[key]) {
       if (mainComponent.indexOf(camelCase(objectRule[key]['_fc_drag_tag'])) > -1) {
         frontComponent.mainComponet(code, objectRule[key], deepIndex, formModel)
-      } else if (objectRule[key]['_fc_drag_tag'] == 'button') {
-        const buttionFunc = frontComponent[camelCase(objectRule[key]['_fc_drag_tag'])]
-        buttionFunc(code, objectRule[key], deepIndex, formModel)
+      } else if (
+        objectRule[key]['_fc_drag_tag'] == 'button' ||
+        objectRule[key]['_fc_drag_tag'] == 'row'
+      ) {
+        const func = frontComponent[camelCase(objectRule[key]['_fc_drag_tag'])]
+        func(code, objectRule[key], deepIndex, formModel)
       } else {
         const func = frontComponent[camelCase(objectRule[key]['_fc_drag_tag'])]
         if (typeof func === 'function') {
@@ -312,6 +323,18 @@ const frontComponent = {
       addEvent(code, componentObject['event'] as object)
     }
 
+    if ('v-loading' in componentObject['props']) {
+      code['script']['variable'].push(
+        'const ' + componentObject['props']['v-loading'] + ' = ref(true)\r'
+      )
+    }
+
+    if (':page-data' in componentObject['props']) {
+      code['script']['variable'].push(
+        'const ' + componentObject['props'][':page-data'] + ' = ref()\r'
+      )
+    }
+
     const childrenIndex = deepIndex + 1
     const slotCode = generateTableSlot(code, componentObject, childrenIndex)
 
@@ -401,6 +424,9 @@ const frontComponent = {
       if ('ref' in props) {
         code['script']['variable'].push('const ' + props['ref'] + ' = ref()\r')
       }
+      if ('v-loading' in props) {
+        code['script']['variable'].push('const ' + props['v-loading'] + ' = ref(true)\r')
+      }
       if (':model' in props) {
         let childrenModel = ''
         if ('children' in componentObject) {
@@ -448,6 +474,7 @@ const frontComponent = {
     }
     code['vue'] += generateTab(deepIndex) + '</el-form>\r'
   },
+
   contentWrap: (code: object, componentObject: object, deepIndex: number) => {
     code['vue'] += generateTab(deepIndex) + '<ContentWrap'
     // 添加属性
@@ -466,7 +493,7 @@ const frontComponent = {
     code['vue'] += generateTab(deepIndex) + '</ContentWrap>\r'
   },
 
-  row: (code: object, componentObject: object, deepIndex: number) => {
+  row: (code: object, componentObject: object, deepIndex: number, formModel: string) => {
     code['vue'] += generateTab(deepIndex) + '<el-row'
     // 添加属性
     if ('props' in componentObject && typeof componentObject['props'] === 'object') {
@@ -493,12 +520,12 @@ const frontComponent = {
         ) {
           const childernDeepIndex = colDeepIndex + 1
           const childrenObject = colObject[key]['children'] as object
-          objectParseCode(code, childrenObject, childernDeepIndex, '')
+          objectParseCode(code, childrenObject, childernDeepIndex, formModel)
         }
 
         code['vue'] += generateTab(deepIndex) + '</el-col>\r'
       }
     }
-    code['vue'] += generateTab(deepIndex) + '</el-form>\r'
+    code['vue'] += generateTab(deepIndex) + '</el-row>\r'
   }
 }

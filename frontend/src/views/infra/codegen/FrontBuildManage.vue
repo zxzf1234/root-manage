@@ -1,5 +1,5 @@
 <template>
-  <Dialog v-model="dialogVisible" :title="dialogTitle">
+  <Dialog v-model="dialogVisible" :title="dialogTitle" width="1000px">
     <el-form
       ref="formRef"
       v-loading="formLoading"
@@ -15,9 +15,18 @@
           @keyup="formData.name = formData.name?.replace(/[^a-zA-Z_]/g, '')"
         />
       </el-form-item>
-
+      <el-form-item label="是否弹窗" prop="isDialog">
+        <el-checkbox v-model="formData.isDialog" />
+      </el-form-item>
+      <el-form-item label="弹窗标题对象" prop="dialogTitle">
+        <el-input
+          v-model="formData.dialogTitle"
+          placeholder="请输入弹窗标题对象"
+          @keyup="formData.name = formData.name?.replace(/[^a-zA-Z_]/g, '')"
+        />
+      </el-form-item>
       <el-tabs v-model="tabActiveName" type="card">
-        <el-tab-pane label="按钮" name="button">
+        <el-tab-pane label="按钮" name="buttons">
           <el-button @click="clickAddButton">添加按钮</el-button>
           <el-button @click="clickAddMenuPermi">按菜单权限添加</el-button>
           <el-button @click="clickDeleteButton">删除按钮</el-button>
@@ -27,7 +36,15 @@
             @current-change="currentChangeButton"
           >
             <template #buttonName="{ row }">
-              <el-input v-model="row.buttonName" />
+              <div class="flex items-center">
+                <Icon
+                  icon="icon-park-outline:drag"
+                  data-inline="false"
+                  class="drag-buttons cursor-grab"
+                  @mouseenter="rowDrop('buttons')"
+                />
+                <el-input class="ml-[16px]" v-model="row.buttonName" />
+              </div>
             </template>
             <template #buttonFunction="{ row }">
               <el-input
@@ -43,7 +60,7 @@
             </template>
           </Table>
         </el-tab-pane>
-        <el-tab-pane label="搜索条件" name="searchCondition">
+        <el-tab-pane label="搜索条件" name="searchConditions">
           <el-form-item label="搜索条件数据对象" prop="searchModel">
             <el-input
               v-model="formData.searchModel"
@@ -77,7 +94,15 @@
             @current-change="currentChangeSearchCondition"
           >
             <template #searchName="{ row }">
-              <el-input v-model="row.searchName" />
+              <div class="flex items-center">
+                <Icon
+                  icon="icon-park-outline:drag"
+                  data-inline="false"
+                  class="drag-searchConditions cursor-grab"
+                  @mouseenter="rowDrop('searchConditions')"
+                />
+                <el-input class="ml-[16px]" v-model="row.searchName" />
+              </div>
             </template>
             <template #searchValue="{ row }">
               <el-input
@@ -95,7 +120,7 @@
             </template>
           </Table>
         </el-tab-pane>
-        <el-tab-pane label="表字段" name="tableColumn">
+        <el-tab-pane label="表字段" name="tableColumns">
           <el-form-item label="表绑定字段变量名" prop="tableColumnName">
             <el-input
               v-model="formData.tableColumnName"
@@ -108,14 +133,21 @@
           <el-form-item label="表绑定数据分页变量" prop="tablePageData">
             <el-input
               v-model="formData.tablePageData"
-              placeholder="请输入表绑定字段变量名"
+              placeholder="请输入表绑定数据分页变量"
               @keyup="formData.tablePageData = formData.tablePageData?.replace(/[^a-zA-Z_]/g, '')"
+            />
+          </el-form-item>
+          <el-form-item label="表加载中对象" prop="tableLoading">
+            <el-input
+              v-model="formData.tableLoading"
+              placeholder="请输入表表加载中对象"
+              @keyup="formData.tableLoading = formData.tableLoading?.replace(/[^a-zA-Z_]/g, '')"
             />
           </el-form-item>
           <el-form-item label="分页变化响应函数" prop="tablePageChange">
             <el-input
               v-model="formData.tablePageChange"
-              placeholder="请输入表绑定字段变量名"
+              placeholder="请输入分页变化响应函数"
               @keyup="
                 formData.tablePageChange = formData.tablePageChange?.replace(/[^a-zA-Z_]/g, '')
               "
@@ -133,7 +165,15 @@
             @current-change="currentChangeTableColumn"
           >
             <template #columnName="{ row }">
-              <el-input v-model="row.columnName" />
+              <div class="flex items-center">
+                <Icon
+                  icon="icon-park-outline:drag"
+                  data-inline="false"
+                  class="drag-tableColumns cursor-grab"
+                  @mouseenter="rowDrop('tableColumns')"
+                />
+                <el-input class="ml-[16px]" v-model="row.columnName" />
+              </div>
             </template>
             <template #columnValue="{ row }">
               <el-input
@@ -146,7 +186,7 @@
             </template>
           </Table>
         </el-tab-pane>
-        <el-tab-pane label="表右键菜单" name="tableMenuItem">
+        <el-tab-pane label="表右键菜单" name="tableMenuItems">
           <el-button @click="clickAddTableMenuItem">添加右键菜单</el-button>
           <el-button @click="clickAddMenuPermi">按菜单权限添加</el-button>
           <el-button @click="clickDeleteTableMenuItem">删除表字段</el-button>
@@ -156,7 +196,15 @@
             @current-change="currentChangeTableMenuItem"
           >
             <template #itemName="{ row }">
-              <el-input v-model="row.itemName" />
+              <div class="flex items-center">
+                <Icon
+                  icon="icon-park-outline:drag"
+                  data-inline="false"
+                  class="drag-tableMenuItems cursor-grab"
+                  @mouseenter="rowDrop('tableMenuItems')"
+                />
+                <el-input class="ml-[16px]" v-model="row.itemName" />
+              </div>
             </template>
             <template #itemFunction="{ row }">
               <el-input
@@ -183,12 +231,13 @@
 import * as CodegenApi from '@/api/infra/codegen'
 import InterfaceRelatedParam from './InterfaceRelatedParam.vue'
 import MenuSelect from '../data/menu/MenuSelect.vue'
-import { TypeFrontBuildManage } from '@/model/infra/codegen/FrontBuildManage'
+import { InterfaceFrontBuildManage } from '@/model/infra/codegen/FrontBuildManage'
 import { upperFirst, camelCase } from 'lodash-es'
+import Sortable from 'sortablejs'
 const dialogVisible = ref(false) // 弹窗的是否展示
 const dialogTitle = ref('') // 弹窗的标题
 const formLoading = ref(false) // 表单的加载中：1）修改时的数据加载；2）提交的按钮禁用
-const formData = ref<TypeFrontBuildManage>({
+const formData = ref<InterfaceFrontBuildManage>({
   name: '',
   searchModel: 'queryParams',
   searchRef: 'queryFormRef',
@@ -196,12 +245,15 @@ const formData = ref<TypeFrontBuildManage>({
   tableColumnName: 'columns',
   tablePageData: 'tableData',
   tablePageChange: 'getPage',
+  tableLoading: 'tableLoading',
+  isDialog: false,
+  dialogTitle: '',
   buttons: [],
   searchConditions: [],
   tableColumns: [],
   tableMenuItems: []
 })
-const tabActiveName = ref('button')
+const tabActiveName = ref('buttons')
 const buttonCurrentRow = ref()
 const searchConditionCurrentRow = ref()
 const tableColumnCurrentRow = ref()
@@ -287,7 +339,13 @@ const tableMenuItems = [
   }
 ]
 const formRules = reactive({
-  name: [{ required: true, message: '页面名称不能为空', trigger: 'blur' }]
+  name: [{ required: true, message: '页面名称不能为空', trigger: 'blur' }],
+  searchModel: [{ required: true, message: '搜索条件数据对象不能为空', trigger: 'blur' }],
+  searchRef: [{ required: true, message: '搜索条件ref对象不能为空', trigger: 'blur' }],
+  tableColumnName: [{ required: true, message: '表绑定字段变量名不能为空', trigger: 'blur' }],
+  tablePageData: [{ required: true, message: '页面名称不能为空', trigger: 'blur' }],
+  tableLoading: [{ required: true, message: '表加载中对象不能为空', trigger: 'blur' }],
+  tablePageChange: [{ required: true, message: '分页变化响应函数不能为空', trigger: 'blur' }]
 })
 
 const formRef = ref() // 表单 Ref
@@ -355,16 +413,38 @@ const submitForm = async () => {
   }
 }
 
+const rowDrop = (tableName: string) => {
+  nextTick(() => {
+    const wrapper: HTMLElement | null = document.querySelector(
+      '#pane-' + tableName + ' .el-table__body-wrapper tbody'
+    )
+    console.log('this is wrapper')
+    console.log(wrapper)
+    Sortable.create(wrapper, {
+      animation: 300,
+      handle: '.drag-' + tableName,
+      onEnd: ({ newIndex, oldIndex }) => {
+        console.log(tableName)
+        const currentRow = formData.value[tableName].splice(oldIndex, 1)[0]
+        formData.value[tableName].splice(newIndex, 0, currentRow)
+      }
+    })
+  })
+}
+
 /** 重置表单 */
 const resetForm = () => {
   formData.value = {
     name: '',
+    isDialog: false,
+    dialogTitle: 'dialogTitle',
     searchModel: 'queryParams',
     searchRef: 'queryFormRef',
     searchRule: '',
     tableColumnName: 'columns',
-    tablePageData: 'queryParams',
+    tablePageData: 'queryData',
     tablePageChange: 'getPage',
+    tableLoading: 'tableLoading',
     buttons: [
       {
         id: crypto.randomUUID(),
@@ -482,7 +562,7 @@ const currentChangeTableMenuItem = (val) => {
 }
 
 const handleBatchRelatedParam = (dbSelectdColumnList) => {
-  if (tabActiveName.value === 'searchCondition') {
+  if (tabActiveName.value === 'searchConditions') {
     dbSelectdColumnList.forEach((element) => {
       let dataType = 'input'
       if (element.javaType == 'Long' || element.javaType == 'Integer') {
@@ -503,12 +583,12 @@ const handleBatchRelatedParam = (dbSelectdColumnList) => {
       formData.value.searchConditions.push(newSearchCondition)
     })
   }
-  if (tabActiveName.value === 'tableColumn') {
+  if (tabActiveName.value === 'tableColumns') {
     dbSelectdColumnList.forEach((element) => {
       const newTableColumn = {
         id: crypto.randomUUID(),
         columnName: element.columnComment,
-        columnValue: element.columnName,
+        columnValue: camelCase(element.columnName),
         isSlot: false
       }
       formData.value.tableColumns.push(newTableColumn)
@@ -517,7 +597,7 @@ const handleBatchRelatedParam = (dbSelectdColumnList) => {
 }
 
 const handleBatchMenuSelect = (dbSelectdMenuList) => {
-  if (tabActiveName.value === 'button') {
+  if (tabActiveName.value === 'buttons') {
     dbSelectdMenuList.forEach((element) => {
       let iconName = ''
       if (element.permission.indexOf(':query') > -1) iconName = 'ep:search'
@@ -550,7 +630,7 @@ const handleBatchMenuSelect = (dbSelectdMenuList) => {
       }
     })
   }
-  if (tabActiveName.value === 'tableMenuItem') {
+  if (tabActiveName.value === 'tableMenuItems') {
     dbSelectdMenuList.forEach((element) => {
       const newTableMenuItem = {
         id: crypto.randomUUID(),
