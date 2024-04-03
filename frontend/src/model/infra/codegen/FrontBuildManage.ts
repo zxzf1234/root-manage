@@ -35,9 +35,9 @@ export interface InterfaceFrontBuildManage {
   isDialog: boolean
   dialogTitle: string
   tableColumnName: string
-  tablePageData: string
+  tableIsPage: boolean
+  tableData: string
   tablePageChange: string
-  tableLoading: string
   buttons: InterfaceFrontBuildManageButton[]
   searchConditions: InterfaceFrontBuildManageSearchCondition[]
   tableColumns: InterfaceFrontBuildManageTableColumn[]

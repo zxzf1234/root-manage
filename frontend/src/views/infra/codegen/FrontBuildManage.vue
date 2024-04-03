@@ -53,7 +53,21 @@
               />
             </template>
             <template #buttonIcon="{ row }">
-              <el-input v-model="row.buttonIcon" />
+              <el-select
+                v-model="row.buttonIcon"
+                filterable
+                allow-create
+                default-first-option
+                :reserve-keyword="false"
+              >
+                <el-option label="ep:search" value="ep:search" />
+                <el-option label="ep:refresh" value="ep:refresh" />
+                <el-option label="ep:plus" value="ep:plus" />
+                <el-option label="ep:edit" value="ep:edit" />
+                <el-option label="ep:delete" value="ep:delete" />
+                <el-option label="ep:upload" value="ep:upload" />
+                <el-option label="ep:download" value="ep:download" />
+              </el-select>
             </template>
             <template #hasPermi="{ row }">
               <el-input v-model="row.hasPermi" />
@@ -130,21 +144,22 @@
               "
             />
           </el-form-item>
-          <el-form-item label="表绑定数据分页变量" prop="tablePageData">
+          <el-form-item label="是否分页" prop="tableIsPage">
+            <el-checkbox v-model="formData.tableIsPage" />
+          </el-form-item>
+          <el-form-item label="表绑定数据分页变量" prop="tableData">
             <el-input
-              v-model="formData.tablePageData"
+              v-model="formData.tableData"
               placeholder="请输入表绑定数据分页变量"
-              @keyup="formData.tablePageData = formData.tablePageData?.replace(/[^a-zA-Z_]/g, '')"
+              @keyup="formData.tableData = formData.tableData?.replace(/[^a-zA-Z_]/g, '')"
             />
           </el-form-item>
-          <el-form-item label="表加载中对象" prop="tableLoading">
-            <el-input
-              v-model="formData.tableLoading"
-              placeholder="请输入表表加载中对象"
-              @keyup="formData.tableLoading = formData.tableLoading?.replace(/[^a-zA-Z_]/g, '')"
-            />
-          </el-form-item>
-          <el-form-item label="分页变化响应函数" prop="tablePageChange">
+
+          <el-form-item
+            v-show="formData.tableIsPage == true"
+            label="分页变化响应函数"
+            prop="tablePageChange"
+          >
             <el-input
               v-model="formData.tablePageChange"
               placeholder="请输入分页变化响应函数"
@@ -243,9 +258,9 @@ const formData = ref<InterfaceFrontBuildManage>({
   searchRef: 'queryFormRef',
   searchRule: '',
   tableColumnName: 'columns',
-  tablePageData: 'tableData',
+  tableIsPage: true,
+  tableData: 'tableData',
   tablePageChange: 'getPage',
-  tableLoading: 'tableLoading',
   isDialog: false,
   dialogTitle: '',
   buttons: [],
@@ -442,9 +457,9 @@ const resetForm = () => {
     searchRef: 'queryFormRef',
     searchRule: '',
     tableColumnName: 'columns',
-    tablePageData: 'queryData',
+    tableIsPage: true,
+    tableData: 'queryData',
     tablePageChange: 'getPage',
-    tableLoading: 'tableLoading',
     buttons: [
       {
         id: crypto.randomUUID(),

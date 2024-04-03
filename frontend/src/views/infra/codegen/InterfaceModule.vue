@@ -6,7 +6,7 @@
       :model="queryParams"
       ref="queryFormRef"
       :inline="true"
-      label-width="68px"
+      label-width="auto"
     >
       <el-form-item label="名称" prop="title">
         <el-input v-model="queryParams.name" placeholder="请输入名称" clearable />

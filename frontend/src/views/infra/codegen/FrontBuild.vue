@@ -158,7 +158,8 @@ const showBuildManage = (manageObject: InterfaceFrontBuildManage) => {
         props: {
           ':model': manageObject.searchModel,
           ref: manageObject.searchRef,
-          ':rules': manageObject.searchRule
+          ':rules': manageObject.searchRule,
+          'lable-width': 'auto'
         }
       },
       {
@@ -173,11 +174,10 @@ const showBuildManage = (manageObject: InterfaceFrontBuildManage) => {
         display: true,
         props: {
           ':columns': manageObject.tableColumnName,
-          ':page-param': manageObject.searchModel,
+          ':page-param': manageObject.tableIsPage ? manageObject.searchModel : '',
           adaptive: true,
-          ':page-data': manageObject.tablePageData,
-          'save-key': manageObject.name,
-          'v-loading': manageObject.tableLoading
+          [manageObject.tableIsPage ? ':page-data' : ':data']: manageObject.tableData,
+          'save-key': manageObject.name
         }
       }
     ],
@@ -189,7 +189,7 @@ const showBuildManage = (manageObject: InterfaceFrontBuildManage) => {
     if (formManageCard.children[0]['children'] === undefined)
       formManageCard.children[0]['children'] = []
     manageObject.searchConditions.forEach((element) => {
-      formManageCard.children[0]['children'].push({
+      let condition = {
         type: element.type,
         field: element.searchValue,
         title: element.searchName,
@@ -198,7 +198,14 @@ const showBuildManage = (manageObject: InterfaceFrontBuildManage) => {
         _fc_drag_tag: element.type,
         hidden: false,
         display: true
-      })
+      }
+      if (['input', 'select', 'datePicker'].includes(element.type)) {
+        condition['props'] = {
+          placeholder: '请输入' + element.searchName,
+          clearable: true
+        }
+      }
+      formManageCard.children[0]['children'].push(condition)
     })
   }
 
@@ -221,7 +228,7 @@ const showBuildManage = (manageObject: InterfaceFrontBuildManage) => {
     })
   }
   let formManageTable = formManageCard.children[1]
-  if (manageObject.tablePageChange != '') {
+  if (manageObject.tableIsPage && manageObject.tablePageChange != '') {
     formManageTable['event'] = [
       {
         eventName: 'page-change',
@@ -259,6 +266,8 @@ const showBuildEdit = (editObject: InterfaceFrontBuildEdit) => {
   formAttr.value.name = editObject.name
   formAttr.value.isDialog = editObject.isDialog
   formAttr.value.dialogTitle = editObject.dialogTitle
+  let isLableWidthAuto = true
+
   let formEdit = {
     type: 'el-form',
     style: {
@@ -291,7 +300,14 @@ const showBuildEdit = (editObject: InterfaceFrontBuildEdit) => {
         hidden: false,
         display: true
       }
+      if (['input', 'select', 'datePicker'].includes(element.type)) {
+        component['props'] = {
+          placeholder: '请输入' + element.componentName,
+          clearable: true
+        }
+      }
       if (element.span != 0) {
+        isLableWidthAuto = false
         const col = {
           type: 'col',
           props: {
@@ -332,6 +348,7 @@ const showBuildEdit = (editObject: InterfaceFrontBuildEdit) => {
       }
     })
   }
+  if (isLableWidthAuto) formEdit['props']['lable-width'] = 'auto'
   designer.value.setRule([formEdit])
 }
 

@@ -28,12 +28,13 @@ export const jsonParseCode = (objectRule: object, formAttr: object) => {
     if (formAttr['isDialog']) {
       deepIndex = 2
       code['script']['variable'].push('const ' + formAttr['dialogTitle'] + " = ref('')\r")
+      code['script']['variable'].push('const dialogVisible = ref(false)\r')
     }
     objectParseCode(code, objectRule, deepIndex, '')
     let codeContext =
       '<template>\r' +
       (formAttr['isDialog']
-        ? '  <Dialog v-model="dialogVisible" :title="' + formAttr['isDialog'] + '">\r'
+        ? '  <Dialog v-model="dialogVisible" :title="' + formAttr['dialogTitle'] + '">\r'
         : '') +
       code['vue'] +
       (formAttr['isDialog'] ? '  </Dialog>\r' : '') +
@@ -440,7 +441,7 @@ const frontComponent = {
           }
         }
         code['script']['variable'].push(
-          'const ' + props[':model'] + ' = reactive({\r' + childrenModel + '})\r'
+          'const ' + props[':model'] + ' = ref({\r' + childrenModel + '})\r'
         )
       }
       if (':rules' in props && props[':rules'] != '') {

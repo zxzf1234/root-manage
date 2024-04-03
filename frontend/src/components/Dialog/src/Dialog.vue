@@ -98,7 +98,6 @@ const dialogStyle = computed(() => {
 <style lang="scss">
 .#{$elNamespace}-dialog__header {
   margin-right: 0 !important;
-  border-bottom: 1px solid var(--tags-view-border-color);
 }
 
 .#{$elNamespace}-dialog__footer {
@@ -112,10 +111,6 @@ const dialogStyle = computed(() => {
 }
 
 .dark {
-  .#{$elNamespace}-dialog__header {
-    border-bottom: 1px solid var(--el-border-color);
-  }
-
   .#{$elNamespace}-dialog__footer {
     border-top: 1px solid var(--el-border-color);
   }
