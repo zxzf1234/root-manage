@@ -27,12 +27,12 @@
       <el-form-item label="是否弹窗" prop="isDialog">
         <el-checkbox v-model="formData.isDialog" />
       </el-form-item>
-      <el-form-item label="弹窗标题对象" prop="dialogTitle">
-        <el-input
-          v-model="formData.dialogTitle"
-          placeholder="请输入弹窗标题对象"
-          @keyup="formData.name = formData.name?.replace(/[^a-zA-Z_]/g, '')"
-        />
+      <el-form-item
+        v-show="formData.isDialog == true"
+        label="是否显示提交按钮"
+        prop="isShowSubmitBtn"
+      >
+        <el-checkbox v-model="formData.isShowSubmitBtn" />
       </el-form-item>
       <el-form-item label="表单数据对象" prop="model">
         <el-input
@@ -125,7 +125,7 @@ const formData = ref<InterfaceFrontBuildEdit>({
   rule: '',
   loading: '',
   isDialog: true,
-  dialogTitle: '',
+  isShowSubmitBtn: true,
   components: []
 })
 const rowDrop = () => {
@@ -291,7 +291,7 @@ const resetForm = () => {
     rule: 'formRules',
     loading: 'formLoading',
     isDialog: true,
-    dialogTitle: 'dialogTitle',
+    isShowSubmitBtn: true,
     components: []
   }
   formRef.value?.resetFields()

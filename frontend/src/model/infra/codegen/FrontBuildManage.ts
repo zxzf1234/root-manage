@@ -33,7 +33,7 @@ export interface InterfaceFrontBuildManage {
   searchRef: string
   searchRule: string
   isDialog: boolean
-  dialogTitle: string
+  isShowSubmitBtn: boolean
   tableColumnName: string
   tableIsPage: boolean
   tableData: string

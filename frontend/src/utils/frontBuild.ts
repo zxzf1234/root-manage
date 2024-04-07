@@ -19,31 +19,45 @@ const mainComponent = [
 /**
  * @param {string} jsonRule 需要转换的json
  */
-export const jsonParseCode = (objectRule: object, formAttr: object) => {
-  if (objectRule === undefined) return ''
-  if (!objectRule) return ''
+export const jsonParseCode = (ruleObject: object, formObject: object) => {
+  if (ruleObject === undefined) return ''
+  if (!ruleObject) return ''
   else {
-    const code = { vue: '', script: { import: {}, function: [], variable: <string[]>[] } }
+    const code = { vue: '', script: { import: {}, function: new Set(), variable: <string[]>[] } }
     let deepIndex = 1
-    if (formAttr['isDialog']) {
+    if (formObject['form']['isDialog']) {
       deepIndex = 2
-      code['script']['variable'].push('const ' + formAttr['dialogTitle'] + " = ref('')\r")
+      code['script']['variable'].push("const dialogTitle = ref('')\r")
       code['script']['variable'].push('const dialogVisible = ref(false)\r')
     }
-    objectParseCode(code, objectRule, deepIndex, '')
+    let showSubmitContext = ''
+    if (formObject['submitBtn']['show']) {
+      showSubmitContext =
+        '    <template #footer>\r      <el-button type="primary" @click="submitForm">确 定</el-button>\r' +
+        '     <el-button @click="dialogVisible = false">取 消</el-button>\r    </template>\r'
+      code['script']['function'].add('const submitForm = () => {}\r')
+    }
+    objectParseCode(code, ruleObject, deepIndex, '')
     let codeContext =
       '<template>\r' +
-      (formAttr['isDialog']
-        ? '  <Dialog v-model="dialogVisible" :title="' + formAttr['dialogTitle'] + '">\r'
+      (formObject['form']['isDialog']
+        ? '  <Dialog v-model="dialogVisible" :title="dialogTitle">\r'
         : '') +
       code['vue'] +
-      (formAttr['isDialog'] ? '  </Dialog>\r' : '') +
+      showSubmitContext +
+      (formObject['form']['isDialog'] ? '  </Dialog>\r' : '') +
       '</template>\r<script setup name="' +
-      formAttr['name'] +
+      formObject['form']['formName'] +
       '" lang="ts">\r'
     ;['import', 'variable', 'function'].forEach((key) => {
-      if (Object.keys(code['script'][key]).length > 0) {
-        for (const n in code['script'][key]) codeContext += code['script'][key][n]
+      if (key == 'function') {
+        for (const func of code['script'][key]) {
+          codeContext += func
+        }
+      } else {
+        if (Object.keys(code['script'][key]).length > 0) {
+          for (const n in code['script'][key]) codeContext += code['script'][key][n]
+        }
       }
     })
     codeContext += '</script>\r'
@@ -53,27 +67,24 @@ export const jsonParseCode = (objectRule: object, formAttr: object) => {
 
 const objectParseCode = (
   code: object,
-  objectRule: object,
+  ruleObject: object,
   deepIndex: number,
   formModel: string
 ) => {
-  if (Object.keys(objectRule).length < 1) return ''
-  for (const key in objectRule) {
-    if (typeof objectRule[key] === 'object' && '_fc_drag_tag' in objectRule[key]) {
-      if (mainComponent.indexOf(camelCase(objectRule[key]['_fc_drag_tag'])) > -1) {
-        frontComponent.mainComponet(code, objectRule[key], deepIndex, formModel)
-      } else if (
-        objectRule[key]['_fc_drag_tag'] == 'button' ||
-        objectRule[key]['_fc_drag_tag'] == 'row'
-      ) {
-        const func = frontComponent[camelCase(objectRule[key]['_fc_drag_tag'])]
-        func(code, objectRule[key], deepIndex, formModel)
+  if (Object.keys(ruleObject).length < 1) return ''
+  for (const key in ruleObject) {
+    if (typeof ruleObject[key] === 'object' && '_fc_drag_tag' in ruleObject[key]) {
+      if (mainComponent.indexOf(camelCase(ruleObject[key]['_fc_drag_tag'])) > -1) {
+        frontComponent.mainComponet(code, ruleObject[key], deepIndex, formModel)
+      } else if (['button', 'row'].includes(ruleObject[key]['_fc_drag_tag'])) {
+        const func = frontComponent[camelCase(ruleObject[key]['_fc_drag_tag'])]
+        func(code, ruleObject[key], deepIndex, formModel)
       } else {
-        const func = frontComponent[camelCase(objectRule[key]['_fc_drag_tag'])]
+        const func = frontComponent[camelCase(ruleObject[key]['_fc_drag_tag'])]
         if (typeof func === 'function') {
-          func(code, objectRule[key], deepIndex)
+          func(code, ruleObject[key], deepIndex)
         } else {
-          console.log(camelCase(objectRule[key]['_fc_drag_tag']) + ' not eixts')
+          console.log(camelCase(ruleObject[key]['_fc_drag_tag']) + ' not eixts')
         }
       }
     }
@@ -98,10 +109,9 @@ const addProps = (code: object, propObject: object) => {
       if (propObject['click'] == 'handleClickReset') {
         functionCodeContext = '\r  queryFormRef.value?.resetFields()\r  handleClickSearch()\r'
       }
-      const functionCode =
+      code['script']['function'].add(
         'const ' + propObject['click'] + ' = () => {' + functionCodeContext + '}\r'
-      if (!code['script']['function'].includes(functionCode))
-        code['script']['function'].push(functionCode)
+      )
     }
 
     if (key === 'hasPermi' && propObject[key] != '') {
@@ -130,10 +140,10 @@ const addEvent = (code: object, eventObject: object) => {
     if (eventObject[key]['function'] == 'handleClickReset') {
       functionCodeContext = '\r  queryFormRef.value?.resetFields()\r  handleClickSearch()\r'
     }
-    const functionCode =
+
+    code['script']['function'].add(
       'const ' + eventObject[key]['function'] + ' = () => {' + functionCodeContext + '}\r'
-    if (!code['script']['function'].includes(functionCode))
-      code['script']['function'].push(functionCode)
+    )
   }
 }
 
@@ -253,10 +263,10 @@ const addTableMenu = (code: object, menuObject: object, deepIndex: number) => {
     if (menuObject[key]['hasPermi'] !== undefined) {
       code['vue'] += ' v-hasPermi="[\'' + menuObject[key]['hasPermi'] + '\']"'
     }
-    const functionCode =
+
+    code['script']['function'].add(
       'const ' + menuObject[key]['function'] + ' = (row) => {\r  console.log(row)\r}\r'
-    if (!code['script']['function'].includes(functionCode))
-      code['script']['function'].push(functionCode)
+    )
     code['vue'] += ' />\r'
   }
   code['vue'] += generateTab(deepIndex) + '</template>\r'

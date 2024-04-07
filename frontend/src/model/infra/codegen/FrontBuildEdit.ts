@@ -13,6 +13,6 @@ export interface InterfaceFrontBuildEdit {
   rule: string
   loading: string
   isDialog: boolean
-  dialogTitle: string
+  isShowSubmitBtn: boolean
   components: Array<InterfaceFrontBuildEditComponents>
 }

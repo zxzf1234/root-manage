@@ -18,12 +18,12 @@
       <el-form-item label="是否弹窗" prop="isDialog">
         <el-checkbox v-model="formData.isDialog" />
       </el-form-item>
-      <el-form-item label="弹窗标题对象" prop="dialogTitle">
-        <el-input
-          v-model="formData.dialogTitle"
-          placeholder="请输入弹窗标题对象"
-          @keyup="formData.name = formData.name?.replace(/[^a-zA-Z_]/g, '')"
-        />
+      <el-form-item
+        v-show="formData.isDialog == true"
+        label="是否显示提交按钮"
+        prop="isShowSubmitBtn"
+      >
+        <el-checkbox v-model="formData.isShowSubmitBtn" />
       </el-form-item>
       <el-tabs v-model="tabActiveName" type="card">
         <el-tab-pane label="按钮" name="buttons">
@@ -262,7 +262,7 @@ const formData = ref<InterfaceFrontBuildManage>({
   tableData: 'tableData',
   tablePageChange: 'getPage',
   isDialog: false,
-  dialogTitle: '',
+  isShowSubmitBtn: true,
   buttons: [],
   searchConditions: [],
   tableColumns: [],
@@ -452,7 +452,7 @@ const resetForm = () => {
   formData.value = {
     name: '',
     isDialog: false,
-    dialogTitle: 'dialogTitle',
+    isShowSubmitBtn: true,
     searchModel: 'queryParams',
     searchRef: 'queryFormRef',
     searchRule: '',

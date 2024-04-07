@@ -1,30 +1,6 @@
 <template>
   <ContentWrap>
     <el-row>
-      <el-col :span="3">
-        <el-form-item label="页面名称" prop="searchModel">
-          <el-input
-            v-model="formAttr.name"
-            placeholder="请输入页面名称"
-            width="60px"
-            @keyup="formAttr.name = formAttr.name?.replace(/[^a-zA-Z_]/g, '')"
-          />
-        </el-form-item>
-      </el-col>
-      <el-col :span="2">
-        <el-form-item label="是否弹窗" prop="isDialog">
-          <el-checkbox v-model="formAttr.isDialog" />
-        </el-form-item>
-      </el-col>
-      <el-col :span="3">
-        <el-form-item label="弹窗标题对象" prop="dialogTitle">
-          <el-input
-            v-model="formAttr.dialogTitle"
-            placeholder="请输入弹窗标题对象"
-            @keyup="formAttr.name = formAttr.name?.replace(/[^a-zA-Z_]/g, '')"
-          />
-        </el-form-item>
-      </el-col>
       <el-col :span="12">
         <div class="mb-2 float-right">
           <el-button size="small" @click="setJson"> 导入JSON</el-button>
@@ -85,7 +61,6 @@ const dialogTitle = ref('') // 弹窗的标题
 const message = useMessage() // 消息
 const buildManageRef = ref()
 const buildEditRef = ref()
-let formAttr = ref({ name: '', isDialog: false, dialogTitle: '' })
 
 /** 初始化 **/
 onMounted(async () => {})
@@ -107,7 +82,7 @@ const showJson = () => {
 const showCode = () => {
   openModel('生成 代码')
   formType.value = 2
-  formData.value = jsonParseCode(designer.value.getRule(), formAttr.value)
+  formData.value = jsonParseCode(designer.value.getRule(), designer.value.getOption())
 }
 
 /** 导入 JSON */
@@ -136,9 +111,14 @@ const copy = async (text: string) => {
 }
 
 const showBuildManage = (manageObject: InterfaceFrontBuildManage) => {
-  formAttr.value.name = manageObject.name
-  formAttr.value.isDialog = manageObject.isDialog
-  formAttr.value.dialogTitle = manageObject.dialogTitle
+  const formObject = {
+    form: {
+      formName: manageObject.name,
+      isDialog: manageObject.isDialog
+    },
+    submitBtn: { show: manageObject.isShowSubmitBtn }
+  }
+  designer.value.setOption(formObject)
   // 添加代码
   let formManageCard = {
     type: 'el-card',
@@ -263,9 +243,14 @@ const showBuildManage = (manageObject: InterfaceFrontBuildManage) => {
 }
 
 const showBuildEdit = (editObject: InterfaceFrontBuildEdit) => {
-  formAttr.value.name = editObject.name
-  formAttr.value.isDialog = editObject.isDialog
-  formAttr.value.dialogTitle = editObject.dialogTitle
+  const formObject = {
+    form: {
+      formName: editObject.name,
+      isDialog: editObject.isDialog
+    },
+    submitBtn: { show: editObject.isShowSubmitBtn }
+  }
+  designer.value.setOption(formObject)
   let isLableWidthAuto = true
 
   let formEdit = {
