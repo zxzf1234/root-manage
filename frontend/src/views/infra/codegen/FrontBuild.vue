@@ -139,7 +139,7 @@ const showBuildManage = (manageObject: InterfaceFrontBuildManage) => {
           ':model': manageObject.searchModel,
           ref: manageObject.searchRef,
           ':rules': manageObject.searchRule,
-          'lable-width': 'auto'
+          'label-width': 'auto'
         }
       },
       {
@@ -251,7 +251,7 @@ const showBuildEdit = (editObject: InterfaceFrontBuildEdit) => {
     submitBtn: { show: editObject.isShowSubmitBtn }
   }
   designer.value.setOption(formObject)
-  let isLableWidthAuto = true
+  let isLabelWidthAuto = true
 
   let formEdit = {
     type: 'el-form',
@@ -292,7 +292,7 @@ const showBuildEdit = (editObject: InterfaceFrontBuildEdit) => {
         }
       }
       if (element.span != 0) {
-        isLableWidthAuto = false
+        isLabelWidthAuto = false
         const col = {
           type: 'col',
           props: {
@@ -333,7 +333,7 @@ const showBuildEdit = (editObject: InterfaceFrontBuildEdit) => {
       }
     })
   }
-  if (isLableWidthAuto) formEdit['props']['lable-width'] = 'auto'
+  if (isLabelWidthAuto) formEdit['props']['labelWidth'] = 'auto'
   designer.value.setRule([formEdit])
 }
 

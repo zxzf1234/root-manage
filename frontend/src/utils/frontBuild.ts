@@ -1,4 +1,4 @@
-import { camelCase, snakeCase } from 'lodash-es'
+import { camelCase, kebabCase } from 'lodash-es'
 const mainComponent = [
   'input',
   'inputNumber',
@@ -29,13 +29,18 @@ export const jsonParseCode = (ruleObject: object, formObject: object) => {
       deepIndex = 2
       code['script']['variable'].push("const dialogTitle = ref('')\r")
       code['script']['variable'].push('const dialogVisible = ref(false)\r')
+      code['script']['function'].add(
+        '/** 打开弹窗 */\rconst open =  () => {}\rdefineExpose({ open }) // 提供 open 方法，用于打开弹窗\r'
+      )
     }
     let showSubmitContext = ''
     if (formObject['submitBtn']['show']) {
       showSubmitContext =
-        '    <template #footer>\r      <el-button type="primary" @click="submitForm">确 定</el-button>\r' +
+        '    <template #footer>\r      <el-button type="primary" :disabled="formLoading" @click="submitForm">确 定</el-button>\r' +
         '     <el-button @click="dialogVisible = false">取 消</el-button>\r    </template>\r'
-      code['script']['function'].add('const submitForm = () => {}\r')
+      code['script']['function'].add(
+        "const emit = defineEmits(['success'])\r/** 提交表单 */\rconst submitForm = () => {\r  emit('success')\r}\r"
+      )
     }
     objectParseCode(code, ruleObject, deepIndex, '')
     let codeContext =
@@ -99,21 +104,25 @@ const generateTab = (deepIndex: number) => {
   return code
 }
 
-const addProps = (code: object, propObject: object) => {
+const addProps = (code: object, propObject: object, title: string) => {
   for (const key in propObject) {
     if (key.at(0) == '_') continue
     let propKey = key
     if (key === 'click') {
       propKey = '@click'
+      let functionRemark =
+        '/** ' + (title == undefined ? '处理点击事件' : title + '按钮操作') + ' */\r'
       let functionCodeContext = ''
       if (propObject['click'] == 'handleClickReset') {
+        functionRemark = '/** 重置按钮操作 */\r'
         functionCodeContext = '\r  queryFormRef.value?.resetFields()\r  handleClickSearch()\r'
       }
       code['script']['function'].add(
-        'const ' + propObject['click'] + ' = () => {' + functionCodeContext + '}\r'
+        functionRemark + 'const ' + propObject['click'] + ' = () => {' + functionCodeContext + '}\r'
       )
     }
 
+    propKey = kebabCase(propKey)
     if (key === 'hasPermi' && propObject[key] != '') {
       propKey = 'v-hasPermi'
       propObject[key] = "['" + propObject[key] + "']"
@@ -133,16 +142,27 @@ const addProps = (code: object, propObject: object) => {
   return code
 }
 
-const addEvent = (code: object, eventObject: object) => {
+const addEvent = (code: object, eventObject: object, title: string) => {
   for (const key in eventObject) {
+    if (eventObject[key]['eventName'] === undefined) {
+      continue
+    }
     code['vue'] += ' @' + eventObject[key]['eventName'] + '="' + eventObject[key]['function'] + '"'
+    let functionRemark =
+      '/** 处理响应事件 ' + (title == undefined || title == '' ? '' : title) + ' */\r'
     let functionCodeContext = ''
     if (eventObject[key]['function'] == 'handleClickReset') {
+      functionRemark = '/** 重置按钮操作 */\r'
       functionCodeContext = '\r  queryFormRef.value?.resetFields()\r  handleClickSearch()\r'
     }
 
     code['script']['function'].add(
-      'const ' + eventObject[key]['function'] + ' = () => {' + functionCodeContext + '}\r'
+      functionRemark +
+        'const ' +
+        eventObject[key]['function'] +
+        ' = () => {' +
+        functionCodeContext +
+        '}\r'
     )
   }
 }
@@ -265,7 +285,11 @@ const addTableMenu = (code: object, menuObject: object, deepIndex: number) => {
     }
 
     code['script']['function'].add(
-      'const ' + menuObject[key]['function'] + ' = (row) => {\r  console.log(row)\r}\r'
+      '/** 处理右击事件 ' +
+        menuObject[key]['label'] +
+        ' */\rconst ' +
+        menuObject[key]['function'] +
+        ' = (row) => {\r  console.log(row)\r}\r'
     )
     code['vue'] += ' />\r'
   }
@@ -288,19 +312,19 @@ const frontComponent = {
       componentDeepIndex++
     }
     code['vue'] +=
-      generateTab(componentDeepIndex) + '<el-' + snakeCase(componentObject['_fc_drag_tag'])
+      generateTab(componentDeepIndex) + '<el-' + kebabCase(componentObject['_fc_drag_tag'])
 
     if (formModel != '' && componentObject['field'] !== undefined) {
       code['vue'] += ' v-model="' + formModel + '.' + componentObject['field'] + '"'
     }
     // 添加属性
     if (componentObject['props'] !== undefined && typeof componentObject['props'] === 'object') {
-      addProps(code, componentObject['props'] as object)
+      addProps(code, componentObject['props'] as object, componentObject['title'])
     }
 
     // 添加function
     if (componentObject['event'] !== undefined && typeof componentObject['event'] === 'object') {
-      addEvent(code, componentObject['event'] as object)
+      addEvent(code, componentObject['event'] as object, componentObject['title'])
     }
 
     code['vue'] += 'options' in componentObject ? '>\r' : ' />\r'
@@ -314,7 +338,7 @@ const frontComponent = {
         code['vue'] +=
           generateTab(componentDeepIndex) +
           '</el-' +
-          snakeCase(componentObject['_fc_drag_tag']) +
+          kebabCase(componentObject['_fc_drag_tag']) +
           '>\r'
     }
     if (formModel != '') {
@@ -326,12 +350,12 @@ const frontComponent = {
     code['vue'] += generateTab(deepIndex) + '<Table'
     // 添加属性
     if (componentObject['props'] !== undefined && typeof componentObject['props'] === 'object') {
-      addProps(code, componentObject['props'] as object)
+      addProps(code, componentObject['props'] as object, componentObject['title'])
     }
 
     // 添加function
     if (componentObject['event'] !== undefined && typeof componentObject['event'] === 'object') {
-      addEvent(code, componentObject['event'] as object)
+      addEvent(code, componentObject['event'] as object, '')
     }
 
     if ('v-loading' in componentObject['props']) {
@@ -397,7 +421,7 @@ const frontComponent = {
         icon = propObject['icon']
         delete propObject['icon']
       }
-      addProps(code, componentObject['props'] as object)
+      addProps(code, componentObject['props'] as object, componentObject['children'][0])
     }
 
     code['vue'] += '>'
@@ -427,7 +451,7 @@ const frontComponent = {
     let formModel = ''
     // 添加属性
     if (componentObject['props'] !== undefined && typeof componentObject['props'] === 'object') {
-      addProps(code, componentObject['props'] as object)
+      addProps(code, componentObject['props'] as object, componentObject['title'])
       formModel =
         componentObject['props'][':model'] !== undefined ? componentObject['props'][':model'] : ''
 
@@ -490,7 +514,7 @@ const frontComponent = {
     code['vue'] += generateTab(deepIndex) + '<ContentWrap'
     // 添加属性
     if ('props' in componentObject && typeof componentObject['props'] === 'object') {
-      addProps(code, componentObject['props'] as object)
+      addProps(code, componentObject['props'] as object, componentObject['title'])
     }
     code['vue'] += '>\r'
     if (
@@ -508,7 +532,7 @@ const frontComponent = {
     code['vue'] += generateTab(deepIndex) + '<el-row'
     // 添加属性
     if ('props' in componentObject && typeof componentObject['props'] === 'object') {
-      addProps(code, componentObject['props'] as object)
+      addProps(code, componentObject['props'] as object, componentObject['title'])
     }
     code['vue'] += '>\r'
     if (
@@ -521,7 +545,7 @@ const frontComponent = {
         code['vue'] += generateTab(colDeepIndex) + '<el-col'
         // 添加属性
         if ('props' in colObject[key] && typeof colObject[key]['props'] === 'object') {
-          addProps(code, colObject[key]['props'] as object)
+          addProps(code, colObject[key]['props'] as object, componentObject['title'])
         }
         code['vue'] += '>\r'
 

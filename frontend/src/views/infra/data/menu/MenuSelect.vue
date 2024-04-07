@@ -53,7 +53,6 @@
         row-key="id"
         @row-dblclick="handleMenuDblclick"
         height="450"
-        scrollbar-always-on="true"
       >
         <el-table-column :show-overflow-tooltip="true" label="菜单名称" prop="name" width="250" />
         <el-table-column align="center" label="图标" prop="icon" width="100">

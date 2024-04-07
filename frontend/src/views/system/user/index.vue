@@ -150,7 +150,7 @@ const message = useMessage() // 消息弹窗
 const { t } = useI18n() // 国际化
 import { CommonStatusEnum } from '@/utils/constants'
 const loading = ref(true) // 列表的加载中
-const queryParams = reactive({
+const queryParams = ref({
   pageNo: 1,
   pageSize: 10,
   username: undefined,
@@ -210,7 +210,7 @@ const getList = async () => {
 
 /** 搜索按钮操作 */
 const handleQuery = () => {
-  queryParams.pageNo = 1
+  queryParams.value.pageNo = 1
   getList()
 }
 
@@ -222,7 +222,7 @@ const resetQuery = () => {
 
 /** 处理部门被点击 */
 const handleDeptNodeClick = async (row) => {
-  queryParams.deptId = row.id
+  queryParams.value.deptId = row.id
   await getList()
 }
 
