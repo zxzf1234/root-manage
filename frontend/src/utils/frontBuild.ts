@@ -34,7 +34,7 @@ export const jsonParseCode = (ruleObject: object, formObject: object) => {
       )
     }
     let showSubmitContext = ''
-    if (formObject['submitBtn']['show']) {
+    if (formObject['form']['isDialog'] && formObject['submitBtn']['show']) {
       showSubmitContext =
         '    <template #footer>\r      <el-button type="primary" :disabled="formLoading" @click="submitForm">确 定</el-button>\r' +
         '     <el-button @click="dialogVisible = false">取 消</el-button>\r    </template>\r'
@@ -122,7 +122,8 @@ const addProps = (code: object, propObject: object, title: string) => {
       )
     }
 
-    propKey = kebabCase(propKey)
+    // 首字母可能是非字母 先提取出来
+    propKey = propKey.slice(0, 1) + kebabCase(propKey.slice(1, propKey.length))
     if (key === 'hasPermi' && propObject[key] != '') {
       propKey = 'v-hasPermi'
       propObject[key] = "['" + propObject[key] + "']"
