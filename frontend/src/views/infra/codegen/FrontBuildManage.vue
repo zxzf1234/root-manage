@@ -246,13 +246,13 @@
 import * as CodegenApi from '@/api/infra/codegen'
 import InterfaceRelatedParam from './InterfaceRelatedParam.vue'
 import MenuSelect from '../data/menu/MenuSelect.vue'
-import { InterfaceFrontBuildManage } from '@/model/infra/codegen/FrontBuildManage'
+import * as FrontBuildManageModel from '@/model/infra/codegen/FrontBuildManage'
 import { upperFirst, camelCase } from 'lodash-es'
 import Sortable from 'sortablejs'
 const dialogVisible = ref(false) // 弹窗的是否展示
 const dialogTitle = ref('') // 弹窗的标题
 const formLoading = ref(false) // 表单的加载中：1）修改时的数据加载；2）提交的按钮禁用
-const formData = ref<InterfaceFrontBuildManage>({
+const formData = ref<FrontBuildManageModel.FrontBuildManage>({
   name: '',
   searchModel: 'queryParams',
   searchRef: 'queryFormRef',
@@ -433,13 +433,10 @@ const rowDrop = (tableName: string) => {
     const wrapper: HTMLElement | null = document.querySelector(
       '#pane-' + tableName + ' .el-table__body-wrapper tbody'
     )
-    console.log('this is wrapper')
-    console.log(wrapper)
     Sortable.create(wrapper, {
       animation: 300,
       handle: '.drag-' + tableName,
       onEnd: ({ newIndex, oldIndex }) => {
-        console.log(tableName)
         const currentRow = formData.value[tableName].splice(oldIndex, 1)[0]
         formData.value[tableName].splice(newIndex, 0, currentRow)
       }

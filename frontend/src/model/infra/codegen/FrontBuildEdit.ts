@@ -1,4 +1,4 @@
-export interface InterfaceFrontBuildEditComponents {
+export interface FrontBuildEditComponents {
   componentName: string
   componentValue: string
   type: string
@@ -6,7 +6,16 @@ export interface InterfaceFrontBuildEditComponents {
   push: number
   pull: number
 }
-export interface InterfaceFrontBuildEdit {
+
+export interface FrontBuildEditDetailTableColumn {
+  id: string
+  columnName: string
+  columnValue: string
+  isSlot: boolean
+  type: string
+}
+
+export interface FrontBuildEdit {
   name: string
   model: string
   ref: string
@@ -14,5 +23,7 @@ export interface InterfaceFrontBuildEdit {
   loading: string
   isDialog: boolean
   isShowSubmitBtn: boolean
-  components: Array<InterfaceFrontBuildEditComponents>
+  detailTableData: string
+  detailTableColumns: Array<FrontBuildEditDetailTableColumn>
+  components: Array<FrontBuildEditComponents>
 }

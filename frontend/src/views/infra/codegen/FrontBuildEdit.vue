@@ -1,10 +1,7 @@
 <template>
-  <Dialog v-model="dialogVisible" :title="dialogTitle" width="1000px">
+  <Dialog v-model="dialogVisible" :title="dialogTitle" width="1000px" class="h-[600px]">
     <el-form>
       <el-form-item>
-        <el-button @click="clickAddComponent">添加组件</el-button>
-        <el-button @click="clickAddDatabaseColumn">根据数据库表字段添加组件</el-button>
-        <el-button @click="clickDeleteComponent">删除组件</el-button>
         <el-button type="primary" @click="submitForm">确 定</el-button>
         <el-button @click="dialogVisible = false">取 消</el-button>
       </el-form-item>
@@ -62,52 +59,109 @@
           @keyup="formData.ref = formData.ref?.replace(/[^a-zA-Z_]/g, '')"
         />
       </el-form-item>
-      <Table
-        :columns="formComponentColumns"
-        :data="formData.components"
-        @current-change="currentChangeComponents"
-      >
-        <template #componentName="{ row }">
-          <div class="flex items-center">
-            <Icon
-              icon="icon-park-outline:drag"
-              data-inline="false"
-              class="drag-column cursor-grab"
-              @mouseenter="rowDrop()"
+      <el-tabs v-model="tabActiveName" type="card">
+        <el-tab-pane label="组件" name="components">
+          <el-form-item>
+            <el-button @click="clickAddComponent">添加组件</el-button>
+            <el-button @click="clickAddDatabaseColumn">根据数据库表字段添加组件</el-button>
+            <el-button @click="clickDeleteComponent">删除组件</el-button>
+          </el-form-item>
+          <Table
+            :columns="formComponentColumns"
+            :data="formData.components"
+            @current-change="currentChangeComponents"
+          >
+            <template #componentName="{ row }">
+              <div class="flex items-center">
+                <Icon
+                  icon="icon-park-outline:drag"
+                  data-inline="false"
+                  class="drag-column cursor-grab"
+                  @mouseenter="rowDrop('components')"
+                />
+                <el-input class="ml-[16px]" v-model="row.componentName" />
+              </div>
+            </template>
+            <template #componentValue="{ row }">
+              <el-input
+                v-model="row.componentValue"
+                @keyup="row.componentValue = row.componentValue.replace(/[^a-zA-Z_]/g, '')"
+              />
+            </template>
+            <template #type="{ row }">
+              <el-select v-model="row.type">
+                <el-option label="input" value="input" />
+                <el-option label="select" value="select" />
+                <el-option label="checkbox" value="checkbox" />
+                <el-option label="datePicker" value="datePicker" />
+              </el-select>
+            </template>
+            <template #span="{ row }">
+              <el-input-number v-model="row.span" :min="0" :max="24" />
+            </template>
+            <template #push="{ row }">
+              <el-input-number v-model="row.push" :min="0" :max="24" />
+            </template>
+            <template #pull="{ row }">
+              <el-input-number v-model="row.pull" :min="0" :max="24" />
+            </template>
+          </Table>
+        </el-tab-pane>
+        <el-tab-pane label="明细表" name="detailTable">
+          <el-form-item label="明细表数据对象" prop="detailTableData">
+            <el-input
+              v-model="formData.detailTableData"
+              placeholder="请输入明细表数据对象"
+              @keyup="formData.model = formData.model?.replace(/[^a-zA-Z_]/g, '')"
             />
-            <el-input class="ml-[16px]" v-model="row.componentName" />
-          </div>
-        </template>
-        <template #componentValue="{ row }">
-          <el-input
-            v-model="row.componentValue"
-            @keyup="row.componentValue = row.componentValue.replace(/[^a-zA-Z_]/g, '')"
-          />
-        </template>
-        <template #type="{ row }">
-          <el-select v-model="row.type">
-            <el-option label="input" value="input" />
-            <el-option label="select" value="select" />
-            <el-option label="checkbox" value="checkbox" />
-            <el-option label="datePicker" value="datePicker" />
-          </el-select>
-        </template>
-        <template #span="{ row }">
-          <el-input-number v-model="row.span" :min="0" :max="24" />
-        </template>
-        <template #push="{ row }">
-          <el-input-number v-model="row.push" :min="0" :max="24" />
-        </template>
-        <template #pull="{ row }">
-          <el-input-number v-model="row.pull" :min="0" :max="24" />
-        </template>
-      </Table>
+          </el-form-item>
+          <el-form-item>
+            <el-button @click="clickAddTableColumn">添加表字段</el-button>
+            <el-button @click="clickAddDatabaseColumn">添加数据库表字段</el-button>
+            <el-button @click="clickDeleteTableColumn">删除表字段</el-button>
+          </el-form-item>
+          <Table
+            :columns="detailTableColumns"
+            :data="formData.detailTableColumns"
+            @current-change="currentChangeTableColumn"
+          >
+            <template #columnName="{ row }">
+              <div class="flex items-center">
+                <Icon
+                  icon="icon-park-outline:drag"
+                  data-inline="false"
+                  class="drag-tableColumns cursor-grab"
+                  @mouseenter="rowDrop('detailTable')"
+                />
+                <el-input class="ml-[16px]" v-model="row.columnName" />
+              </div>
+            </template>
+            <template #columnValue="{ row }">
+              <el-input
+                v-model="row.columnValue"
+                @keyup="row.columnValue = row.columnValue.replace(/[^a-zA-Z_]/g, '')"
+              />
+            </template>
+            <template #isSlot="{ row }">
+              <el-checkbox v-model="row.isSlot" />
+            </template>
+            <template #type="{ row }">
+              <el-select v-model="row.type">
+                <el-option label="input" value="input" />
+                <el-option label="select" value="select" />
+                <el-option label="checkbox" value="checkbox" />
+                <el-option label="datePicker" value="datePicker" />
+              </el-select>
+            </template>
+          </Table>
+        </el-tab-pane>
+      </el-tabs>
     </el-form>
   </Dialog>
   <InterfaceRelatedParam ref="relatedParamRef" @save-param="handleBatchRelatedParam" />
 </template>
 <script lang="ts" name="FrontBuildEdit" setup>
-import { InterfaceFrontBuildEdit } from '@/model/infra/codegen/FrontBuildEdit'
+import * as frontBuildEditModel from '@/model/infra/codegen/FrontBuildEdit'
 import InterfaceRelatedParam from './InterfaceRelatedParam.vue'
 import * as CodegenApi from '@/api/infra/codegen'
 import { camelCase } from 'lodash-es'
@@ -118,29 +172,30 @@ const dialogTitle = ref('') // 弹窗的标题
 const formLoading = ref(false) // 表单的加载中：1）修改时的数据加载；2）提交的按钮禁用
 const fromComponentCurrentRow = ref()
 const relatedParamRef = ref()
-const formData = ref<InterfaceFrontBuildEdit>({
-  name: '',
-  model: '',
-  ref: '',
-  rule: '',
-  loading: '',
-  isDialog: true,
-  isShowSubmitBtn: true,
-  components: []
-})
-const rowDrop = () => {
-  nextTick(() => {
-    const wrapper: HTMLElement | null = document.querySelector('.el-table__body-wrapper tbody')
-    Sortable.create(wrapper, {
-      animation: 300,
-      handle: '.drag-column',
-      onEnd: ({ newIndex, oldIndex }) => {
-        const currentRow = formData.value.components.splice(oldIndex, 1)[0]
-        formData.value.components.splice(newIndex, 0, currentRow)
-      }
-    })
-  })
-}
+const tabActiveName = ref('components')
+const tableColumnCurrentRow = ref()
+const detailTableColumns = [
+  {
+    label: '字段名称',
+    prop: 'columnName',
+    slot: 'columnName'
+  },
+  {
+    label: '字段值',
+    prop: 'columnValue',
+    slot: 'columnValue'
+  },
+  {
+    label: '是否插槽',
+    prop: 'isSlot',
+    slot: 'isSlot'
+  },
+  {
+    label: '组件类型',
+    prop: 'type',
+    slot: 'type'
+  }
+]
 
 const formComponentColumns = [
   {
@@ -175,6 +230,60 @@ const formComponentColumns = [
     slot: 'pull'
   }
 ]
+
+const formData = ref<frontBuildEditModel.FrontBuildEdit>({
+  name: '',
+  model: '',
+  ref: '',
+  rule: '',
+  loading: '',
+  isDialog: true,
+  isShowSubmitBtn: true,
+  detailTableData: 'details',
+  detailTableColumns: [],
+  components: []
+})
+
+const rowDrop = (tableName: string) => {
+  nextTick(() => {
+    const wrapper: HTMLElement | null = document.querySelector(
+      '#pane-' + tableName + ' .el-table__body-wrapper tbody'
+    )
+    Sortable.create(wrapper, {
+      animation: 300,
+      handle: '.drag-' + tableName,
+      onEnd: ({ newIndex, oldIndex }) => {
+        const currentRow = formData.value[tableName].splice(oldIndex, 1)[0]
+        formData.value[tableName].splice(newIndex, 0, currentRow)
+      }
+    })
+  })
+}
+
+const clickAddTableColumn = () => {
+  const newTableColumn = {
+    id: crypto.randomUUID(),
+    columnName: '',
+    columnValue: '',
+    isSlot: true,
+    type: 'input'
+  }
+  formData.value.detailTableColumns.push(newTableColumn)
+}
+
+const clickDeleteTableColumn = () => {
+  if (tableColumnCurrentRow.value === undefined) {
+    message.alertError('请选择要删除的表字段')
+    return
+  }
+  const index = formData.value.detailTableColumns.indexOf(tableColumnCurrentRow.value)
+  formData.value.detailTableColumns.splice(index, 1)
+}
+
+const currentChangeTableColumn = (val) => {
+  tableColumnCurrentRow.value = val
+}
+
 const formRules = reactive({
   name: [{ required: true, message: '页面名称不能为空', trigger: 'blur' }],
   model: [{ required: true, message: '表单数据对象不能为空', trigger: 'blur' }],
@@ -269,16 +378,27 @@ const handleBatchRelatedParam = (dbSelectdColumnList) => {
     if (element.javaType == 'boolean') {
       dataType = 'checkbox'
     }
-    const newComponentCondition = {
-      id: crypto.randomUUID(),
-      componentName: element.columnComment,
-      componentValue: camelCase(element.columnName),
-      type: dataType,
-      span: 0,
-      push: 0,
-      pull: 0
+    if (tabActiveName.value === 'components') {
+      const newComponent = {
+        id: crypto.randomUUID(),
+        componentName: element.columnComment,
+        componentValue: camelCase(element.columnName),
+        type: dataType,
+        span: 0,
+        push: 0,
+        pull: 0
+      }
+      formData.value.components.push(newComponent)
+    } else {
+      const newColumn = {
+        id: crypto.randomUUID(),
+        columnName: element.columnComment,
+        columnValue: camelCase(element.columnName),
+        isSlot: true,
+        type: dataType
+      }
+      formData.value.detailTableColumns.push(newColumn)
     }
-    formData.value.components.push(newComponentCondition)
   })
 }
 
@@ -292,6 +412,8 @@ const resetForm = () => {
     loading: 'formLoading',
     isDialog: true,
     isShowSubmitBtn: true,
+    detailTableData: 'details',
+    detailTableColumns: [],
     components: []
   }
   formRef.value?.resetFields()

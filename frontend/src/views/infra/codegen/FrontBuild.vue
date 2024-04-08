@@ -48,8 +48,8 @@ import { useClipboard } from '@vueuse/core'
 import designerForm from '@/components/FcDesigner/index.es.js'
 import { jsonParseCode } from '@/utils/frontBuild'
 import FrontBuildManage from './FrontBuildManage.vue'
-import { InterfaceFrontBuildManage } from '@/model/infra/codegen/FrontBuildManage'
-import { InterfaceFrontBuildEdit } from '@/model/infra/codegen/FrontBuildEdit'
+import * as FrontBuildManageModel from '@/model/infra/codegen/FrontBuildManage'
+import * as FrontBuildEditModel from '@/model/infra/codegen/FrontBuildEdit'
 import FrontBuildEdit from './FrontBuildEdit.vue'
 const { t } = useI18n() // 国际化
 
@@ -110,7 +110,7 @@ const copy = async (text: string) => {
   }
 }
 
-const showBuildManage = (manageObject: InterfaceFrontBuildManage) => {
+const showBuildManage = (manageObject: FrontBuildManageModel.FrontBuildManage) => {
   const formObject = {
     form: {
       formName: manageObject.name,
@@ -158,7 +158,8 @@ const showBuildManage = (manageObject: InterfaceFrontBuildManage) => {
           ':page-param': manageObject.tableIsPage ? manageObject.searchModel : '',
           adaptive: true,
           [manageObject.tableIsPage ? ':page-data' : ':data']: manageObject.tableData,
-          'save-key': manageObject.name
+          'save-key': manageObject.name,
+          heightPer: '90'
         }
       }
     ],
@@ -243,7 +244,7 @@ const showBuildManage = (manageObject: InterfaceFrontBuildManage) => {
   designer.value.setRule([formManageCard])
 }
 
-const showBuildEdit = (editObject: InterfaceFrontBuildEdit) => {
+const showBuildEdit = (editObject: FrontBuildEditModel.FrontBuildEdit) => {
   const formObject = {
     form: {
       formName: editObject.name,
@@ -254,26 +255,52 @@ const showBuildEdit = (editObject: InterfaceFrontBuildEdit) => {
   designer.value.setOption(formObject)
   let isLabelWidthAuto = true
 
-  let formEdit = {
-    type: 'el-form',
-    style: {
-      width: '100%'
+  let formEdit = [
+    {
+      type: 'el-form',
+      style: {
+        width: '100%'
+      },
+      class: 'el-form--inline',
+      fullWidth: true,
+      _fc_drag_tag: 'form',
+      hidden: false,
+      display: true,
+      props: {
+        ':model': editObject.model,
+        ref: editObject.ref,
+        ':rules': editObject.rule,
+        'v-loading': editObject.loading
+      }
     },
-    class: 'el-form--inline',
-    fullWidth: true,
-    _fc_drag_tag: 'form',
-    hidden: false,
-    display: true,
-    props: {
-      ':model': editObject.model,
-      ref: editObject.ref,
-      ':rules': editObject.rule,
-      'v-loading': editObject.loading
+    {
+      type: 'el-table',
+      field: 'Fw5r1onudcn02n',
+      style: {
+        width: '100%'
+      },
+      fullWidth: true,
+      _fc_drag_tag: 'table',
+      hidden: false,
+      display: true,
+      props: {
+        ':columns': 'columns',
+        adaptive: true,
+        ':data': editObject.model + '.' + editObject.detailTableData,
+        'save-key': editObject.name,
+        ':row-style': 'rowStyle'
+      },
+      event: [
+        {
+          eventName: 'row-click',
+          function: 'handleRowClick'
+        }
+      ]
     }
-  }
+  ]
 
   if (editObject.components.length > 0) {
-    if (formEdit['children'] === undefined) formEdit['children'] = []
+    if (formEdit[0]['children'] === undefined) formEdit[0]['children'] = []
     let currentSumSpan = 0
     editObject.components.forEach((element) => {
       const component = {
@@ -312,13 +339,13 @@ const showBuildEdit = (editObject: InterfaceFrontBuildEdit) => {
           col['props']['push'] = element.push
         }
         if (element.span + currentSumSpan <= 24 && currentSumSpan > 0) {
-          const editChildrenLength = formEdit['children'].length
-          const row = formEdit['children'][editChildrenLength - 1]
+          const editChildrenLength = formEdit[0]['children'].length
+          const row = formEdit[0]['children'][editChildrenLength - 1]
           if (row['children'] === undefined) row['children'] = []
           row['children'].push(col)
           currentSumSpan += element.span
         } else {
-          formEdit['children'].push({
+          formEdit[0]['children'].push({
             type: 'FcRow',
             fullWidth: true,
             children: [col],
@@ -329,13 +356,25 @@ const showBuildEdit = (editObject: InterfaceFrontBuildEdit) => {
           currentSumSpan = element.span
         }
       } else {
-        formEdit['children'].push(component)
+        formEdit[0]['children'].push(component)
         currentSumSpan = 0
       }
     })
   }
-  if (isLabelWidthAuto) formEdit['props']['labelWidth'] = 'auto'
-  designer.value.setRule([formEdit])
+  let formManageTable = formEdit[1]
+  if (editObject.detailTableColumns.length > 0) {
+    if (formManageTable['column'] === undefined) formManageTable['column'] = []
+    editObject.detailTableColumns.forEach((element) => {
+      formManageTable['column'].push({
+        label: element.columnName,
+        prop: element.columnValue,
+        slot: element.isSlot,
+        type: element.type
+      })
+    })
+  }
+  if (isLabelWidthAuto) formEdit[0]['props']['labelWidth'] = 'auto'
+  designer.value.setRule(formEdit)
 }
 
 const buildManage = () => {

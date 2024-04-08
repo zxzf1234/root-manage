@@ -64,7 +64,7 @@
     <Table
       :columns="dataColumns"
       :data="formData.datas"
-      @current-change="handleCurrentDataChange"
+      @row-click="handleCurrentDataChange"
       :row-style="rowStyle"
     >
       <template #label="{ row }">

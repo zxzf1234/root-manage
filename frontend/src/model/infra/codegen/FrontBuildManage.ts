@@ -1,4 +1,4 @@
-export interface InterfaceFrontBuildManageButton {
+export interface FrontBuildManageButton {
   id: string
   buttonName: string
   buttonFunction: string
@@ -6,28 +6,28 @@ export interface InterfaceFrontBuildManageButton {
   hasPermi: string
 }
 
-export interface InterfaceFrontBuildManageSearchCondition {
+export interface FrontBuildManageSearchCondition {
   id: string
   searchName: string
   searchValue: string
   type: string
 }
 
-export interface InterfaceFrontBuildManageTableColumn {
+export interface FrontBuildManageTableColumn {
   id: string
   columnName: string
   columnValue: string
   isSlot: boolean
 }
 
-export interface InterfaceFrontBuildManageTableMenuItem {
+export interface FrontBuildManageTableMenuItem {
   id: string
   itemName: string
   itemFunction: string
   hasPermi: string
 }
 
-export interface InterfaceFrontBuildManage {
+export interface FrontBuildManage {
   name: string
   searchModel: string
   searchRef: string
@@ -38,8 +38,8 @@ export interface InterfaceFrontBuildManage {
   tableIsPage: boolean
   tableData: string
   tablePageChange: string
-  buttons: InterfaceFrontBuildManageButton[]
-  searchConditions: InterfaceFrontBuildManageSearchCondition[]
-  tableColumns: InterfaceFrontBuildManageTableColumn[]
-  tableMenuItems: InterfaceFrontBuildManageTableMenuItem[]
+  buttons: FrontBuildManageButton[]
+  searchConditions: FrontBuildManageSearchCondition[]
+  tableColumns: FrontBuildManageTableColumn[]
+  tableMenuItems: FrontBuildManageTableMenuItem[]
 }

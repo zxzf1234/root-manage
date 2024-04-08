@@ -30,7 +30,7 @@ export const jsonParseCode = (ruleObject: object, formObject: object) => {
       code['script']['variable'].push("const dialogTitle = ref('')\r")
       code['script']['variable'].push('const dialogVisible = ref(false)\r')
       code['script']['function'].add(
-        '/** 打开弹窗 */\rconst open =  () => {}\rdefineExpose({ open }) // 提供 open 方法，用于打开弹窗\r'
+        '/** 打开弹窗 */\rconst open =  () => {}\rdefineExpose({ open }) // 提供 open 方法，用于打开弹窗\r\r'
       )
     }
     let showSubmitContext = ''
@@ -39,7 +39,7 @@ export const jsonParseCode = (ruleObject: object, formObject: object) => {
         '    <template #footer>\r      <el-button type="primary" :disabled="formLoading" @click="submitForm">确 定</el-button>\r' +
         '     <el-button @click="dialogVisible = false">取 消</el-button>\r    </template>\r'
       code['script']['function'].add(
-        "const emit = defineEmits(['success'])\r/** 提交表单 */\rconst submitForm = () => {\r  emit('success')\r}\r"
+        "const emit = defineEmits(['success'])\r/** 提交表单 */\rconst submitForm = () => {\r  emit('success')\r}\r\r"
       )
     }
     objectParseCode(code, ruleObject, deepIndex, '')
@@ -118,7 +118,20 @@ const addProps = (code: object, propObject: object, title: string) => {
         functionCodeContext = '\r  queryFormRef.value?.resetFields()\r  handleClickSearch()\r'
       }
       code['script']['function'].add(
-        functionRemark + 'const ' + propObject['click'] + ' = () => {' + functionCodeContext + '}\r'
+        functionRemark +
+          'const ' +
+          propObject['click'] +
+          ' = () => {' +
+          functionCodeContext +
+          '}\r\r'
+      )
+    }
+
+    if (key === ':row-style') {
+      code['script']['function'].add(
+        '/** table行的style的回调方法 */\rconst rowStyle = ({ row }) => {\r' +
+          "  if (row?.operateType == 'delete') {\r" +
+          "    return { display: 'none' }\r  } else return {}\r}\r\r"
       )
     }
 
@@ -148,18 +161,28 @@ const addEvent = (code: object, eventObject: object, title: string) => {
     let functionRemark =
       '/** 处理响应事件 ' + (title == undefined || title == '' ? '' : title) + ' */\r'
     let functionCodeContext = ''
+    let functionParams = ''
     if (eventObject[key]['function'] == 'handleClickReset') {
       functionRemark = '/** 重置按钮操作 */\r'
       functionCodeContext = '\r  queryFormRef.value?.resetFields()\r  handleClickSearch()\r'
+    }
+
+    if (eventObject[key]['function'] == 'handleRowClick') {
+      functionRemark = '/** table行点击事件 */\r'
+      functionCodeContext = '\r  tableCurrentRow.value = row\r'
+      functionParams = 'row'
+      code['script']['variable'].push('const tableCurrentRow = ref()\r')
     }
 
     code['script']['function'].add(
       functionRemark +
         'const ' +
         eventObject[key]['function'] +
-        ' = () => {' +
+        ' = (' +
+        functionParams +
+        ') => {' +
         functionCodeContext +
-        '}\r'
+        '}\r\r'
     )
   }
 }
@@ -286,7 +309,7 @@ const addTableMenu = (code: object, menuObject: object, deepIndex: number) => {
         menuObject[key]['label'] +
         ' */\rconst ' +
         menuObject[key]['function'] +
-        ' = (row) => {\r  console.log(row)\r}\r'
+        ' = (row) => {\r  console.log(row)\r}\r\r'
     )
     code['vue'] += ' />\r'
   }
