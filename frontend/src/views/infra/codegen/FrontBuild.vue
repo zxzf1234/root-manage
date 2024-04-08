@@ -139,7 +139,8 @@ const showBuildManage = (manageObject: InterfaceFrontBuildManage) => {
           ':model': manageObject.searchModel,
           ref: manageObject.searchRef,
           ':rules': manageObject.searchRule,
-          'label-width': 'auto'
+          'label-width': 'auto',
+          inline: true
         }
       },
       {

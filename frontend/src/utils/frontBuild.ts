@@ -131,11 +131,7 @@ const addProps = (code: object, propObject: object, title: string) => {
     if (typeof propObject[key] === 'number') {
       code['vue'] += ' :' + propKey + '="' + propObject[key] + '"'
     } else if (typeof propObject[key] === 'boolean') {
-      if (propObject[key] === true) {
-        code['vue'] += ' ' + propKey
-      } else {
-        code['vue'] += ' :' + propKey + '="' + propObject[key] + '"'
-      }
+      code['vue'] += ' :' + propKey + '="' + propObject[key] + '"'
     } else {
       if (propObject[key] !== '') code['vue'] += ' ' + propKey + '="' + propObject[key] + '"'
     }
