@@ -1,5 +1,5 @@
 <template>
-  <Dialog v-model="dialogVisible" :title="dialogTitle" width="1000px" class="h-[600px]">
+  <Dialog v-model="dialogVisible" :title="dialogTitle" width="1000px">
     <el-form>
       <el-form-item>
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -76,7 +76,7 @@
                 <Icon
                   icon="icon-park-outline:drag"
                   data-inline="false"
-                  class="drag-column cursor-grab"
+                  class="drag-components cursor-grab"
                   @mouseenter="rowDrop('components')"
                 />
                 <el-input class="ml-[16px]" v-model="row.componentName" />
@@ -107,7 +107,7 @@
             </template>
           </Table>
         </el-tab-pane>
-        <el-tab-pane label="明细表" name="detailTable">
+        <el-tab-pane label="明细表" name="detailTableColumns">
           <el-form-item label="明细表数据对象" prop="detailTableData">
             <el-input
               v-model="formData.detailTableData"
@@ -130,8 +130,8 @@
                 <Icon
                   icon="icon-park-outline:drag"
                   data-inline="false"
-                  class="drag-tableColumns cursor-grab"
-                  @mouseenter="rowDrop('detailTable')"
+                  class="drag-detailTableColumns cursor-grab"
+                  @mouseenter="rowDrop('detailTableColumns')"
                 />
                 <el-input class="ml-[16px]" v-model="row.columnName" />
               </div>
