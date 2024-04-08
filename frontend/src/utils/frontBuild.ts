@@ -269,10 +269,14 @@ const generateTableSlot = (code: object, componentObject: object, deepIndex: num
     columnVariable +=
       '  {\r' + "    label: '" + element['label'] + "',\r    prop: '" + element['prop'] + "'"
     if (element['slot'] !== undefined && element['slot'] === true) {
+      let component = '<el-input v-model="row.' + element['prop'] + '" />\r'
+      if (element['type'] !== undefined) {
+        component =
+          '<el-' + kebabCase(element['type']) + ' v-model="row.' + element['prop'] + '" />\r'
+      }
       columnVariable += ",\r    slot: '" + element['prop'] + "'\r"
       slotCode += generateTab(deepIndex) + '<template #' + element['prop'] + '="{ row }">\r'
-      slotCode +=
-        generateTab(deepIndex + 1) + '<el-input v-model="row.' + element['prop'] + '" />\r'
+      slotCode += generateTab(deepIndex + 1) + component
       slotCode += generateTab(deepIndex) + '</template>\r'
     } else {
       columnVariable += '\r'
@@ -494,6 +498,8 @@ const frontComponent = {
             }
           }
         }
+        if (componentObject['props']['_detailTableData'] !== undefined)
+          childrenModel += '  ' + componentObject['props']['_detailTableData'] + ': [],\r'
         code['script']['variable'].push(
           'const ' + props[':model'] + ' = ref({\r' + childrenModel + '})\r'
         )

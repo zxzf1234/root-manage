@@ -270,7 +270,8 @@ const showBuildEdit = (editObject: FrontBuildEditModel.FrontBuildEdit) => {
         ':model': editObject.model,
         ref: editObject.ref,
         ':rules': editObject.rule,
-        'v-loading': editObject.loading
+        'v-loading': editObject.loading,
+        _detailTableData: editObject.detailTableData
       }
     },
     {
