@@ -1,5 +1,5 @@
 <template>
-  <Dialog v-model="dialogVisible" title="新建数据库表" width="1600px" class="h-[1000px]">
+  <Dialog v-model="dialogVisible" :title="dialogTitle" width="1600px" class="h-[1000px]">
     <!-- 操作 -->
     <el-form>
       <el-form-item>
@@ -23,35 +23,53 @@
       v-loading="formLoading"
     >
       <el-row>
-        <el-col :span="12">
+        <el-col :span="6">
           <el-form-item label="表名称" prop="name">
             <el-input
               v-model="formData.name"
               placeholder="请输表名称"
               @keyup="formData.name = formData.name.replace(/[^a-z_]/g, '')"
+              @blur="formData.name = formData.name.trim()"
             />
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="6">
           <el-form-item label="表描述" prop="comment">
-            <el-input v-model="formData.comment" placeholder="请输入" />
+            <el-input
+              v-model="formData.comment"
+              placeholder="请输入"
+              @blur="formData.comment = formData.comment.trim()"
+            />
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
-        <el-col :span="8">
+        <el-col :span="6">
           <el-form-item label="一级模块" prop="firstModule">
-            <el-input v-model="formData.firstModule" placeholder="请输入" />
+            <el-input
+              v-model="formData.firstModule"
+              placeholder="请输入"
+              @blur="formData.firstModule = formData.firstModule.trim()"
+            />
           </el-form-item>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="6">
           <el-form-item label="二级模块" prop="secondModule">
-            <el-input v-model="formData.secondModule" placeholder="请输入" />
+            <el-input
+              v-model="formData.secondModule"
+              placeholder="请输入"
+              @blur="formData.secondModule = formData.secondModule.trim()"
+            />
           </el-form-item>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="6">
           <el-form-item label="备注" prop="remark">
-            <el-input v-model="formData.remark" :rows="1" type="textarea" />
+            <el-input
+              v-model="formData.remark"
+              :rows="1"
+              type="textarea"
+              @blur="formData.remark = formData.remark.trim()"
+            />
           </el-form-item>
         </el-col>
       </el-row>
@@ -81,7 +99,7 @@
               >
                 <el-table-column label="校验注解" min-width="30%" align="center">
                   <template #default="prop">
-                    <el-select v-model="prop.row.validation">
+                    <el-select v-model="prop.row.validation" class="!w-150px">
                       <el-option label="NotBlank" value="NotBlank" />
                       <el-option label="NotEmpty" value="NotEmpty" />
                       <el-option label="NotNull" value="NotNull" />
@@ -102,12 +120,18 @@
                 </el-table-column>
                 <el-table-column label="校验条件" align="center">
                   <template #default="prop">
-                    <el-input v-model="prop.row.validationCondition" />
+                    <el-input
+                      v-model="prop.row.validationCondition"
+                      @blur="prop.row.validationCondition = prop.row.validationCondition.trim()"
+                    />
                   </template>
                 </el-table-column>
                 <el-table-column label="报错信息" align="center">
                   <template #default="prop">
-                    <el-input v-model="prop.row.message" />
+                    <el-input
+                      v-model="prop.row.message"
+                      @blur="prop.row.message = prop.row.message.trim()"
+                    />
                   </template>
                 </el-table-column>
               </el-table>
@@ -116,7 +140,9 @@
           <el-table-column label="字段列名" min-width="10%">
             <template #default="scope">
               <el-input
+                class="!w-140px"
                 v-model="scope.row.columnName"
+                @blur="scope.row.columnName = scope.row.columnName.trim()"
                 :disabled="
                   scope.row.columnName == 'id' ||
                   scope.row.columnName == 'create_time' ||
@@ -131,7 +157,9 @@
           <el-table-column label="字段描述" min-width="10%">
             <template #default="scope">
               <el-input
+                class="!w-150px"
                 v-model="scope.row.columnComment"
+                @blur="scope.row.columnComment = scope.row.columnComment.trim()"
                 :disabled="
                   scope.row.columnName == 'id' ||
                   scope.row.columnName == 'create_time' ||
@@ -150,6 +178,7 @@
                 allow-create
                 filterable
                 default-first-option
+                class="!w-150px"
                 :disabled="
                   scope.row.columnName == 'create_time' ||
                   scope.row.columnName == 'update_time' ||
@@ -175,6 +204,7 @@
             <template #default="scope">
               <el-select
                 v-model="scope.row.javaType"
+                class="!w-150px"
                 :disabled="
                   scope.row.columnName == 'create_time' ||
                   scope.row.columnName == 'update_time' ||
@@ -218,6 +248,8 @@
             <template #default="scope">
               <el-input
                 v-model="scope.row.defaultValue"
+                @blur="scope.row.defaultValue = scope.row.defaultValue.trim()"
+                class="!w-50px"
                 :disabled="
                   scope.row.columnName == 'id' ||
                   scope.row.columnName == 'create_time' ||
@@ -235,6 +267,7 @@
                 v-model="scope.row.relatedTable"
                 filterable
                 remote
+                class="!w-150px"
                 placeholder="输入表名搜索"
                 remote-show-suffix
                 :remote-method="getTableOptions"
@@ -262,6 +295,7 @@
                 v-model="scope.row.dictType"
                 clearable
                 filterable
+                class="!w-150px"
                 placeholder="请选择"
                 :disabled="
                   scope.row.columnName == 'id' ||
@@ -285,6 +319,8 @@
             <template #default="scope">
               <el-input
                 v-model="scope.row.example"
+                @blur="scope.row.example = scope.row.example.trim()"
+                class="!w-150px"
                 :disabled="
                   scope.row.columnName == 'id' ||
                   scope.row.columnName == 'create_time' ||
@@ -334,7 +370,10 @@
           </el-table-column>
           <el-table-column label="索引名称" align="center" min-width="40%">
             <template #default="scope">
-              <el-input v-model="scope.row.indexName" />
+              <el-input
+                v-model="scope.row.indexName"
+                @blur="scope.row.indexName = scope.row.indexName.trim()"
+              />
             </template>
           </el-table-column>
           <el-table-column label="字段" align="center" min-width="40%">
@@ -366,7 +405,7 @@
         >
           <el-table-column label="名称" align="center" min-width="10%">
             <template #default="scope">
-              <el-input v-model="scope.row.name" />
+              <el-input v-model="scope.row.name" @blur="scope.row.name = scope.row.name.trim()" />
             </template>
           </el-table-column>
           <el-table-column label="是否是list" min-width="6%">
@@ -395,7 +434,10 @@
           </el-table-column>
           <el-table-column label="注解" align="center" min-width="20%">
             <template #default="scope">
-              <el-input v-model="scope.row.annotate" />
+              <el-input
+                v-model="scope.row.annotate"
+                @blur="scope.row.annotate = scope.row.annotate.trim()"
+              />
             </template>
           </el-table-column>
         </el-table>
@@ -408,6 +450,7 @@ import * as DictApi from '@/api/infra/data/dict'
 import * as CodegenApi from '@/api/infra/codegen'
 import { ElTable } from 'element-plus'
 const message = useMessage() // 消息弹窗
+const { t } = useI18n() // 国际化
 
 const formRef = ref() // 表单 Ref
 const dialogVisible = ref(false) // 弹窗的是否展示
@@ -453,9 +496,12 @@ const dictOptions = ref<DictApi.DictTypeVO[]>()
 
 const formLoading = ref(false) // 表单的加载中：1）修改时的数据加载；2）提交的按钮禁用
 
+const dialogTitle = ref('') // 弹窗的标题
+
 /** 打开弹窗 */
 const open = async (type: string, id?: string) => {
   resetForm()
+  dialogTitle.value = t('action.' + type)
   formType.value = type
   if (id) {
     formLoading.value = true

@@ -1705,15 +1705,21 @@ public class CodegenEngine {
                         .setFirstModule(opTable.get().firstModule())
                         .setSecondModule(opTable.get().secondModule());
             }
-            if(Objects.equals(column.getJavaType(), "Long")
-                    || Objects.equals(column.getJavaType(), "String")
-                    || Objects.equals(column.getJavaType(), "Double")
-                    || Objects.equals(column.getJavaType(), "BigDecimal")
-                    || Objects.equals(column.getJavaType(), "UUID")){
+            if(!column.getRelatedTable().isEmpty()) {
+                Optional<InfraDatabaseTable> opTable = infraDatabaseTableRepository.findByName(column.getRelatedTable());
+                if(!opTable.isPresent())
+                    return null;
+                column.setHumpRelatedTable(upperFirst(toCamelCase(column.getRelatedTable())))
+                        .setFirstModule(opTable.get().firstModule())
+                        .setSecondModule(opTable.get().secondModule());
+            }
+            if(Objects.equals(column.getJavaType(), "String") || Objects.equals(column.getJavaType(), "UUID")){
                 column.setVueDataType("string");
             } else if(Objects.equals(column.getJavaType(), "LocalDateTime") ){
                 column.setVueDataType("Date");
-            }else if(Objects.equals(column.getJavaType(), "Integer") ){
+            }else if(Objects.equals(column.getJavaType(), "Long") || Objects.equals(column.getJavaType(), "BigDecimal") ){
+                column.setVueDataType("bigint");
+            }else if(Objects.equals(column.getJavaType(), "Integer") || Objects.equals(column.getJavaType(), "Double") ){
                 column.setVueDataType("number");
             }else if(Objects.equals(column.getJavaType(), "Boolean") ){
                 column.setVueDataType("boolean");
@@ -1722,6 +1728,11 @@ public class CodegenEngine {
             } else if(Objects.equals(column.getJavaType(), "Map<String, Object>") ) {
                 column.setVueDataType("Map<String, Object>");
             }
+
+            if(column.getNullable()){
+                column.setVueDataType(column.getVueDataType() + " | null");
+            }
+
             column.setHumpName(toCamelCase(column.getColumnName()));
         }
         List<CodegenDatabaseMapping> codegenMappings = CodegenConvert.INSTANCE.convertList16(table.mappings());

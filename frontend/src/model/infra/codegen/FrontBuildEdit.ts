@@ -1,4 +1,4 @@
-export interface FrontBuildEditComponents {
+export type FrontBuildEditComponents = {
   componentName: string
   componentValue: string
   type: string
@@ -7,7 +7,7 @@ export interface FrontBuildEditComponents {
   pull: number
 }
 
-export interface FrontBuildEditDetailTableColumn {
+export type FrontBuildEditDetailTableColumn = {
   id: string
   columnName: string
   columnValue: string
@@ -15,7 +15,7 @@ export interface FrontBuildEditDetailTableColumn {
   type: string
 }
 
-export interface FrontBuildEdit {
+export type FrontBuildEdit = {
   name: string
   model: string
   ref: string

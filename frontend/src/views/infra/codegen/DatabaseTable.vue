@@ -48,7 +48,7 @@
         </el-button>
         <el-button @click="newTable">
           <Icon icon="ep:plus" />
-          新建
+          新增
         </el-button>
       </el-form-item>
     </el-form>
