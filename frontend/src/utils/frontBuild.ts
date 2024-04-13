@@ -32,6 +32,8 @@ export const jsonParseCode = (ruleObject: object, formObject: object) => {
       code['script']['function'].add(
         '/** 打开弹窗 */\rconst open =  () => {}\rdefineExpose({ open }) // 提供 open 方法，用于打开弹窗\r\r'
       )
+    } else {
+      code['script']['function'].add('/** 初始化 */\ronMounted(() => {})\r\r')
     }
     let showSubmitContext = ''
     if (formObject['form']['isDialog'] && formObject['submitBtn']['show']) {
@@ -269,7 +271,7 @@ const generateTableSlot = (code: object, componentObject: object, deepIndex: num
     columnVariable +=
       '  {\r' + "    label: '" + element['label'] + "',\r    prop: '" + element['prop'] + "'"
     if (element['slot'] !== undefined && element['slot'] === true) {
-      let component = '<el-input v-model="row.' + element['prop'] + '" />\r'
+      let component = '{{ row.' + element['prop'] + ' }}/>\r'
       if (element['type'] !== undefined) {
         component =
           '<el-' + kebabCase(element['type']) + ' v-model="row.' + element['prop'] + '" />\r'
