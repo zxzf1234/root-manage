@@ -1713,13 +1713,15 @@ public class CodegenEngine {
                         .setFirstModule(opTable.get().firstModule())
                         .setSecondModule(opTable.get().secondModule());
             }
-            if(Objects.equals(column.getJavaType(), "String") || Objects.equals(column.getJavaType(), "UUID")){
+            if(Objects.equals(column.getJavaType(), "String")
+                    || Objects.equals(column.getJavaType(), "UUID")
+                    || Objects.equals(column.getJavaType(), "Long")
+                    || Objects.equals(column.getJavaType(), "BigDecimal")
+                    || Objects.equals(column.getJavaType(), "Double")){
                 column.setVueDataType("string");
             } else if(Objects.equals(column.getJavaType(), "LocalDateTime") ){
                 column.setVueDataType("Date");
-            }else if(Objects.equals(column.getJavaType(), "Long") || Objects.equals(column.getJavaType(), "BigDecimal") ){
-                column.setVueDataType("bigint");
-            }else if(Objects.equals(column.getJavaType(), "Integer") || Objects.equals(column.getJavaType(), "Double") ){
+            }else if(Objects.equals(column.getJavaType(), "Integer")){
                 column.setVueDataType("number");
             }else if(Objects.equals(column.getJavaType(), "Boolean") ){
                 column.setVueDataType("boolean");

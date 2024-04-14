@@ -1,6 +1,6 @@
 export type ${classNameHump} = {
 #foreach ($column in $columns)
-#if (${column.humpName} != "deleted")
+#if (${column.humpName} != "deleted" && ${column.humpName} != "createTime" && ${column.humpName} != "updateTime" && ${column.humpName} != "creatorId" && ${column.humpName} != "updaterId")
   ${column.humpName}: ${column.vueDataType}
 #end
 #end

@@ -5,6 +5,7 @@ import org.babyfish.jimmer.meta.ImmutableProp;
 import org.babyfish.jimmer.meta.ImmutableType;
 
 import java.util.Collection;
+import java.util.Objects;
 
 public class EntityUtils {
     public static boolean isEquals(Object oldObject, Object newObject){
@@ -19,7 +20,12 @@ public class EntityUtils {
                     && !oldProp.getName().equals("creatorId")
                     && !oldProp.getName().equals("updaterId")
                     && !oldProp.getName().equals("deleted")){
-                if(!ImmutableObjects.get(oldObject, oldProp).equals(ImmutableObjects.get(newObject, oldProp)))
+                Object oldColumnObject = ImmutableObjects.get(oldObject, oldProp);
+                Object newColumnObject = ImmutableObjects.get(newObject, oldProp);
+                if(Objects.isNull(oldColumnObject)){
+                    return Objects.isNull(newColumnObject);
+                }
+                if(!oldColumnObject.equals(newColumnObject))
                     return false;
             }
         }

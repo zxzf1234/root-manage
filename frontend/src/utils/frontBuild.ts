@@ -486,7 +486,7 @@ const frontComponent = {
         code['script']['variable'].push('const ' + props['ref'] + ' = ref()\r')
       }
       if ('v-loading' in props) {
-        code['script']['variable'].push('const ' + props['v-loading'] + ' = ref(true)\r')
+        code['script']['variable'].push('const ' + props['v-loading'] + ' = ref(false)\r')
       }
       if (':model' in props) {
         let childrenModel = ''
