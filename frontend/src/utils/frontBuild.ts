@@ -353,7 +353,8 @@ const frontComponent = {
       addEvent(code, componentObject['event'] as object, componentObject['title'])
     }
 
-    code['vue'] += 'options' in componentObject ? '>\r' : ' />\r'
+    code['vue'] +=
+      'options' in componentObject && componentObject['options'] !== undefined ? '>\r' : ' />\r'
     // 添加options
     if (
       componentObject['options'] !== undefined &&

@@ -43,7 +43,11 @@
       </el-form-item>
 
       <el-form-item label="描述" prop="comment">
-        <el-input v-model="formData.comment" placeholder="请输入描述" />
+        <el-input
+          v-model="formData.comment"
+          placeholder="请输入描述"
+          @blur="formData.comment = formData.comment.trim()"
+        />
       </el-form-item>
 
       <el-form-item label="调用方法" prop="method">
@@ -93,7 +97,7 @@
             <el-col :span="8">
               <el-form-item label="入参继承类" style="display: flex" prop="inputExtendClass">
                 <div style="display: flex">
-                  <el-input v-model="formData.inputExtendClass" disabled />
+                  <el-input v-model="formData.inputExtendClass" disabled class="!w-140px" />
                   <el-button @click="handleAddExtendClass()"> 添加 </el-button>
                   <el-button @click="formData.inputExtendClass = ''"> 置空 </el-button>
                 </div>
@@ -150,12 +154,18 @@
                 </el-table-column>
                 <el-table-column label="校验条件" align="center">
                   <template #default="prop">
-                    <el-input v-model="prop.row.validationCondition" />
+                    <el-input
+                      v-model="prop.row.validationCondition"
+                      @blur="prop.row.validationCondition = prop.row.validationCondition.trim()"
+                    />
                   </template>
                 </el-table-column>
                 <el-table-column label="报错信息" align="center">
                   <template #default="prop">
-                    <el-input v-model="prop.row.message" />
+                    <el-input
+                      v-model="prop.row.message"
+                      @blur="prop.row.message = prop.row.message.trim()"
+                    />
                   </template>
                 </el-table-column>
               </el-table>
@@ -164,14 +174,20 @@
           <el-table-column label="参数名" min-width="10%">
             <template #default="scope">
               <el-input
+                class="!w-140px"
                 v-model="scope.row.name"
                 @keyup="scope.row.name = scope.row.name.replace(/[^a-zA-Z]/g, '')"
+                @blur="scope.row.name = scope.row.name.trim()"
               />
             </template>
           </el-table-column>
           <el-table-column label="参数描述" min-width="10%">
             <template #default="scope">
-              <el-input v-model="scope.row.comment" />
+              <el-input
+                class="!w-140px"
+                v-model="scope.row.comment"
+                @blur="scope.row.comment = scope.row.comment.trim()"
+              />
             </template>
           </el-table-column>
           <el-table-column label="是否是List" min-width="6%">
@@ -181,7 +197,7 @@
           </el-table-column>
           <el-table-column label="参数类型" min-width="11%">
             <template #default="scope">
-              <el-select v-model="scope.row.variableType">
+              <el-select v-model="scope.row.variableType" class="!w-140px">
                 <el-option label="Long" value="Long" />
                 <el-option label="String" value="String" />
                 <el-option label="Integer" value="Integer" />
@@ -206,7 +222,11 @@
           </el-table-column>
           <el-table-column label="示例" min-width="10%">
             <template #default="scope">
-              <el-input v-model="scope.row.example" />
+              <el-input
+                class="!w-140px"
+                v-model="scope.row.example"
+                @blur="scope.row.example = scope.row.example.trim()"
+              />
             </template>
           </el-table-column>
           <el-table-column label="前端必传" min-width="6%">
@@ -289,12 +309,18 @@
                 </el-table-column>
                 <el-table-column label="校验条件" align="center">
                   <template #default="prop">
-                    <el-input v-model="prop.row.validationCondition" />
+                    <el-input
+                      v-model="prop.row.validationCondition"
+                      @blur="prop.row.validationCondition = prop.row.validationCondition.trim()"
+                    />
                   </template>
                 </el-table-column>
                 <el-table-column label="报错信息" align="center">
                   <template #default="prop">
-                    <el-input v-model="prop.row.message" />
+                    <el-input
+                      v-model="prop.row.message"
+                      @blur="prop.row.message = prop.row.message.trim()"
+                    />
                   </template>
                 </el-table-column>
               </el-table>
@@ -303,14 +329,20 @@
           <el-table-column label="参数名" min-width="10%">
             <template #default="scope">
               <el-input
+                class="!w-140px"
                 v-model="scope.row.name"
                 @keyup="scope.row.name = scope.row.name.replace(/[^a-zA-Z_]/g, '')"
+                @blur="scope.row.name = scope.row.name.trim()"
               />
             </template>
           </el-table-column>
           <el-table-column label="参数描述" min-width="10%">
             <template #default="scope">
-              <el-input v-model="scope.row.comment" />
+              <el-input
+                class="!w-140px"
+                v-model="scope.row.comment"
+                @blur="scope.row.comment = scope.row.comment.trim()"
+              />
             </template>
           </el-table-column>
           <el-table-column label="是否是List" min-width="6%">
@@ -320,7 +352,7 @@
           </el-table-column>
           <el-table-column label="参数类型" min-width="11%">
             <template #default="scope">
-              <el-select v-model="scope.row.variableType">
+              <el-select v-model="scope.row.variableType" class="!w-140px">
                 <el-option label="Long" value="Long" />
                 <el-option label="String" value="String" />
                 <el-option label="Integer" value="Integer" />
@@ -344,7 +376,11 @@
           </el-table-column>
           <el-table-column label="示例" min-width="10%">
             <template #default="scope">
-              <el-input v-model="scope.row.example" />
+              <el-input
+                class="!w-140px"
+                v-model="scope.row.example"
+                @blur="scope.row.example = scope.row.example.trim()"
+              />
             </template>
           </el-table-column>
           <el-table-column label="前端必传" min-width="6%">
@@ -411,12 +447,20 @@
                       </el-table-column>
                       <el-table-column label="校验条件" align="center">
                         <template #default="prop">
-                          <el-input v-model="prop.row.validationCondition" />
+                          <el-input
+                            v-model="prop.row.validationCondition"
+                            @blur="
+                              prop.row.validationCondition = prop.row.validationCondition.trim()
+                            "
+                          />
                         </template>
                       </el-table-column>
                       <el-table-column label="报错信息" align="center">
                         <template #default="prop">
-                          <el-input v-model="prop.row.message" />
+                          <el-input
+                            v-model="prop.row.message"
+                            @blur="prop.row.message = prop.row.message.trim()"
+                          />
                         </template>
                       </el-table-column>
                     </el-table>
@@ -425,14 +469,20 @@
                 <el-table-column label="参数名" min-width="10%">
                   <template #default="scope">
                     <el-input
+                      class="!w-120px"
                       v-model="scope.row.name"
                       @keyup="scope.row.name = scope.row.name.replace(/[^a-zA-Z]/g, '')"
+                      @blur="scope.row.name = scope.row.name.trim()"
                     />
                   </template>
                 </el-table-column>
                 <el-table-column label="参数描述" min-width="10%">
                   <template #default="scope">
-                    <el-input v-model="scope.row.comment" />
+                    <el-input
+                      class="!w-120px"
+                      v-model="scope.row.comment"
+                      @blur="scope.row.comment = scope.row.comment.trim()"
+                    />
                   </template>
                 </el-table-column>
                 <el-table-column label="是否是List" min-width="8%">
@@ -442,7 +492,7 @@
                 </el-table-column>
                 <el-table-column label="参数类型" min-width="11%">
                   <template #default="scope">
-                    <el-select v-model="scope.row.variableType">
+                    <el-select v-model="scope.row.variableType" class="!w-140px">
                       <el-option label="Long" value="Long" />
                       <el-option label="String" value="String" />
                       <el-option label="Integer" value="Integer" />
@@ -466,7 +516,11 @@
                 </el-table-column>
                 <el-table-column label="示例" min-width="10%">
                   <template #default="scope">
-                    <el-input v-model="scope.row.example" />
+                    <el-input
+                      class="!w-120px"
+                      v-model="scope.row.example"
+                      @blur="scope.row.example = scope.row.example.trim()"
+                    />
                   </template>
                 </el-table-column>
                 <el-table-column label="前端必传" min-width="6%">
@@ -486,12 +540,16 @@
               <el-input
                 v-model="scopeClass.row.name"
                 @keyup="scopeClass.row.name = scopeClass.row.name.replace(/[^a-zA-Z_]/g, '')"
+                @blur="scopeClass.row.name = scopeClass.row.name.trim()"
               />
             </template>
           </el-table-column>
           <el-table-column label="子类描述" min-width="10%">
             <template #default="scopeClass">
-              <el-input v-model="scopeClass.row.comment" />
+              <el-input
+                v-model="scopeClass.row.comment"
+                @blur="scopeClass.row.comment = scopeClass.row.comment.trim()"
+              />
             </template>
           </el-table-column>
           <el-table-column label="继承类" min-width="20%">
@@ -560,12 +618,20 @@
                       </el-table-column>
                       <el-table-column label="校验条件" align="center">
                         <template #default="prop">
-                          <el-input v-model="prop.row.validationCondition" />
+                          <el-input
+                            v-model="prop.row.validationCondition"
+                            @blur="
+                              prop.row.validationCondition = prop.row.validationCondition.trim()
+                            "
+                          />
                         </template>
                       </el-table-column>
                       <el-table-column label="报错信息" align="center">
                         <template #default="prop">
-                          <el-input v-model="prop.row.message" />
+                          <el-input
+                            v-model="prop.row.message"
+                            @blur="prop.row.message = prop.row.message.trim()"
+                          />
                         </template>
                       </el-table-column>
                     </el-table>
@@ -574,14 +640,20 @@
                 <el-table-column label="参数名" min-width="10%">
                   <template #default="scope">
                     <el-input
+                      class="!w-120px"
                       v-model="scope.row.name"
-                      @keyup="scopeClass.row.name = scopeClass.row.name.replace(/[^a-zA-Z]/g, '')"
+                      @keyup="scope.row.name = scope.row.name.replace(/[^a-zA-Z]/g, '')"
+                      @blur="scope.row.name = scope.row.name.trim()"
                     />
                   </template>
                 </el-table-column>
                 <el-table-column label="参数描述" min-width="10%">
                   <template #default="scope">
-                    <el-input v-model="scope.row.comment" />
+                    <el-input
+                      class="!w-120px"
+                      v-model="scope.row.comment"
+                      @blur="scope.row.comment = scope.row.comment.trim()"
+                    />
                   </template>
                 </el-table-column>
                 <el-table-column label="是否是List" min-width="8%">
@@ -591,7 +663,7 @@
                 </el-table-column>
                 <el-table-column label="参数类型" min-width="11%">
                   <template #default="scope">
-                    <el-select v-model="scope.row.variableType">
+                    <el-select v-model="scope.row.variableType" class="!w-140px">
                       <el-option label="Long" value="Long" />
                       <el-option label="String" value="String" />
                       <el-option label="Integer" value="Integer" />
@@ -615,7 +687,11 @@
                 </el-table-column>
                 <el-table-column label="示例" min-width="10%">
                   <template #default="scope">
-                    <el-input v-model="scope.row.example" />
+                    <el-input
+                      class="!w-120px"
+                      v-model="scope.row.example"
+                      @blur="scope.row.example = scope.row.example.trim()"
+                    />
                   </template>
                 </el-table-column>
                 <el-table-column label="前端必传" min-width="6%">
@@ -631,11 +707,19 @@
             </template>
           </el-table-column>
           <el-table-column label="子类名" min-width="10%">
-            <template #default="scopeClass"> <el-input v-model="scopeClass.row.name" /> </template>
+            <template #default="scopeClass">
+              <el-input
+                v-model="scopeClass.row.name"
+                @blur="scopeClass.row.name = scopeClass.row.name.trim()"
+              />
+            </template>
           </el-table-column>
           <el-table-column label="子类描述" min-width="10%">
             <template #default="scopeClass">
-              <el-input v-model="scopeClass.row.comment" />
+              <el-input
+                v-model="scopeClass.row.comment"
+                @blur="scopeClass.row.comment = scopeClass.row.comment.trim()"
+              />
             </template>
           </el-table-column>
           <el-table-column label="继承类" min-width="20%">
