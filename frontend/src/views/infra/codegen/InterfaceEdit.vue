@@ -135,7 +135,7 @@
               >
                 <el-table-column label="校验注解" min-width="30%" align="center">
                   <template #default="prop">
-                    <el-select v-model="prop.row.validation">
+                    <el-select v-model="prop.row.validation" class="!w-130px">
                       <el-option label="NotBlank" value="NotBlank" />
                       <el-option label="NotEmpty" value="NotEmpty" />
                       <el-option label="NotNull" value="NotNull" />
@@ -174,7 +174,7 @@
           <el-table-column label="参数名" min-width="10%">
             <template #default="scope">
               <el-input
-                class="!w-140px"
+                class="!w-130px"
                 v-model="scope.row.name"
                 @keyup="scope.row.name = scope.row.name.replace(/[^a-zA-Z]/g, '')"
                 @blur="scope.row.name = scope.row.name.trim()"
@@ -290,7 +290,7 @@
               >
                 <el-table-column label="校验注解" min-width="30%" align="center">
                   <template #default="prop">
-                    <el-select v-model="prop.row.validation">
+                    <el-select v-model="prop.row.validation" class="!w-130px">
                       <el-option label="NotBlank" value="NotBlank" />
                       <el-option label="NotEmpty" value="NotEmpty" />
                       <el-option label="NotNull" value="NotNull" />
@@ -329,7 +329,7 @@
           <el-table-column label="参数名" min-width="10%">
             <template #default="scope">
               <el-input
-                class="!w-140px"
+                class="!w-130px"
                 v-model="scope.row.name"
                 @keyup="scope.row.name = scope.row.name.replace(/[^a-zA-Z_]/g, '')"
                 @blur="scope.row.name = scope.row.name.trim()"
@@ -428,7 +428,7 @@
                     >
                       <el-table-column label="校验注解" min-width="30%" align="center">
                         <template #default="prop">
-                          <el-select v-model="prop.row.validation">
+                          <el-select v-model="prop.row.validation" class="!w-130px">
                             <el-option label="NotBlank" value="NotBlank" />
                             <el-option label="NotEmpty" value="NotEmpty" />
                             <el-option label="NotNull" value="NotNull" />
@@ -469,7 +469,7 @@
                 <el-table-column label="参数名" min-width="10%">
                   <template #default="scope">
                     <el-input
-                      class="!w-120px"
+                      class="!w-110px"
                       v-model="scope.row.name"
                       @keyup="scope.row.name = scope.row.name.replace(/[^a-zA-Z]/g, '')"
                       @blur="scope.row.name = scope.row.name.trim()"
@@ -479,7 +479,7 @@
                 <el-table-column label="参数描述" min-width="10%">
                   <template #default="scope">
                     <el-input
-                      class="!w-120px"
+                      class="!w-110px"
                       v-model="scope.row.comment"
                       @blur="scope.row.comment = scope.row.comment.trim()"
                     />
@@ -492,7 +492,7 @@
                 </el-table-column>
                 <el-table-column label="参数类型" min-width="11%">
                   <template #default="scope">
-                    <el-select v-model="scope.row.variableType" class="!w-140px">
+                    <el-select v-model="scope.row.variableType" class="!w-130px">
                       <el-option label="Long" value="Long" />
                       <el-option label="String" value="String" />
                       <el-option label="Integer" value="Integer" />
@@ -517,7 +517,7 @@
                 <el-table-column label="示例" min-width="10%">
                   <template #default="scope">
                     <el-input
-                      class="!w-120px"
+                      class="!w-110px"
                       v-model="scope.row.example"
                       @blur="scope.row.example = scope.row.example.trim()"
                     />
@@ -599,7 +599,7 @@
                     >
                       <el-table-column label="校验注解" min-width="30%" align="center">
                         <template #default="prop">
-                          <el-select v-model="prop.row.validation">
+                          <el-select v-model="prop.row.validation" class="!w-130px">
                             <el-option label="NotBlank" value="NotBlank" />
                             <el-option label="NotEmpty" value="NotEmpty" />
                             <el-option label="NotNull" value="NotNull" />
@@ -640,7 +640,7 @@
                 <el-table-column label="参数名" min-width="10%">
                   <template #default="scope">
                     <el-input
-                      class="!w-120px"
+                      class="!w-110px"
                       v-model="scope.row.name"
                       @keyup="scope.row.name = scope.row.name.replace(/[^a-zA-Z]/g, '')"
                       @blur="scope.row.name = scope.row.name.trim()"
@@ -650,7 +650,7 @@
                 <el-table-column label="参数描述" min-width="10%">
                   <template #default="scope">
                     <el-input
-                      class="!w-120px"
+                      class="!w-110px"
                       v-model="scope.row.comment"
                       @blur="scope.row.comment = scope.row.comment.trim()"
                     />
@@ -663,7 +663,7 @@
                 </el-table-column>
                 <el-table-column label="参数类型" min-width="11%">
                   <template #default="scope">
-                    <el-select v-model="scope.row.variableType" class="!w-140px">
+                    <el-select v-model="scope.row.variableType" class="!w-130px">
                       <el-option label="Long" value="Long" />
                       <el-option label="String" value="String" />
                       <el-option label="Integer" value="Integer" />
@@ -688,7 +688,7 @@
                 <el-table-column label="示例" min-width="10%">
                   <template #default="scope">
                     <el-input
-                      class="!w-120px"
+                      class="!w-110px"
                       v-model="scope.row.example"
                       @blur="scope.row.example = scope.row.example.trim()"
                     />
@@ -1272,12 +1272,12 @@ const handleBatchRelatedParam = (dbSelectdColumnList) => {
       newParam.parentId = inputSubclassCurrentRow.value.id
       newParam.parentType = 1
       newParam.inoutType = 0
-      inputSubclassCurrentRow.value.params.push(newParam)
+      inputSubclassCurrentRow.value.subclassParams.push(newParam)
     } else {
-      newParam.parentId = inputSubclassCurrentRow.value.id
+      newParam.parentId = outputSubclassCurrentRow.value.id
       newParam.parentType = 1
-      newParam.inoutType = 0
-      inputSubclassCurrentRow.value.params.push(newParam)
+      newParam.inoutType = 1
+      outputSubclassCurrentRow.value.subclassParams.push(newParam)
     }
   })
 }
