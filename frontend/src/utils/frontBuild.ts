@@ -271,7 +271,7 @@ const generateTableSlot = (code: object, componentObject: object, deepIndex: num
     columnVariable +=
       '  {\r' + "    label: '" + element['label'] + "',\r    prop: '" + element['prop'] + "'"
     if (element['slot'] !== undefined && element['slot'] === true) {
-      let component = '{{ row.' + element['prop'] + ' }}/>\r'
+      let component = '{{ row.' + element['prop'] + ' }}\r'
       if (element['type'] !== undefined) {
         component =
           '<el-' + kebabCase(element['type']) + ' v-model="row.' + element['prop'] + '" />\r'
