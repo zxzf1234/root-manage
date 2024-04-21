@@ -1746,7 +1746,11 @@ public class CodegenEngine {
             mapping.setHumpMappingTable(upperFirst(toCamelCase(mapping.getMappingTable())))
                     .setFirstModule(opTable.get().firstModule())
                     .setSecondModule(opTable.get().secondModule())
-                    .setAnnotate(mapping.getAnnotate().replaceAll("\r", "    \r"));
+                    .setAnnotate(mapping.getAnnotate().replace("\n", "\n    "));
+            if(mapping.getIsList())
+                mapping.setMappingVariableType("List<" + mapping.getHumpMappingTable() + ">");
+            else
+                mapping.setMappingVariableType(mapping.getHumpMappingTable());
         }
         bindingMap.put("table", table);
         bindingMap.put("columns", codegenColumns);

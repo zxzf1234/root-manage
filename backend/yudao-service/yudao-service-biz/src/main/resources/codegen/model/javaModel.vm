@@ -8,7 +8,7 @@ import ${basePackage}.service.model.${column.firstModule}.${column.secondModule}
 #end
 #foreach ($mapping in $mappings)
 #if (${mapping.humpMappingTable} !="")
-import ${basePackage}.service.model.${mapping.firstModule}.${mapping.secondModule}.${column.humpMappingTable};
+import ${basePackage}.service.model.${mapping.firstModule}.${mapping.secondModule}.${mapping.humpMappingTable};
 #end
 #end
 import org.babyfish.jimmer.sql.*;
@@ -115,7 +115,7 @@ public interface ${classNameHump} extends BaseEntity {
 #end
 #foreach ($mapping in $mappings)
     ${mapping.annotate}
-    #if(${mapping.isList} == true)List<#end${mapping.humpMappingTable}#if(${mapping.isList} == true)>#end ${mapping.name}();
+    ${mapping.mappingVariableType} ${mapping.name}();
 
 #end
 }
