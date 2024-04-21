@@ -66,6 +66,7 @@ public class DatabaseTableServiceImpl implements DatabaseTableService {
 
     @Override
     public List<DatabaseTableColumnResp> getColumnList(DatabaseTableListReqVO list) {
+        list.setName(toSymbolCase(list.getName(), '_'));
         List<InfraDatabaseTable> tables = infraDatabaseTableRepository.selectColumnList(list);
         return CodegenConvert.INSTANCE.convertList13(tables);
     }

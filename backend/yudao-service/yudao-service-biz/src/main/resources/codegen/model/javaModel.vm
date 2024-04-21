@@ -6,6 +6,11 @@ import ${basePackage}.service.model.base.BaseEntity;
 import ${basePackage}.service.model.${column.firstModule}.${column.secondModule}.${column.humpRelatedTable};
 #end
 #end
+#foreach ($mapping in $mappings)
+#if (${mapping.humpMappingTable} !="")
+import ${basePackage}.service.model.${mapping.firstModule}.${mapping.secondModule}.${column.humpMappingTable};
+#end
+#end
 import org.babyfish.jimmer.sql.*;
 ## 处理 Date 字段的引入
 #foreach ($column in $columns)
@@ -110,8 +115,7 @@ public interface ${classNameHump} extends BaseEntity {
 #end
 #foreach ($mapping in $mappings)
     ${mapping.annotate}
-    #if(${mapping.isList} == true)
-    List<#end${mapping.humpMappingTable}#if(${mapping.isList} == true)>#end ${mapping.name}();
+    #if(${mapping.isList} == true)List<#end${mapping.humpMappingTable}#if(${mapping.isList} == true)>#end ${mapping.name}();
 
 #end
 }

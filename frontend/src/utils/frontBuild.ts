@@ -56,17 +56,17 @@ export const jsonParseCode = (ruleObject: object, formObject: object) => {
       '</template>\r<script setup name="' +
       formObject['form']['formName'] +
       '" lang="ts">\r'
-    ;['import', 'variable', 'function'].forEach((key) => {
-      if (key == 'function') {
-        for (const func of code['script'][key]) {
-          codeContext += func
-        }
-      } else {
-        if (Object.keys(code['script'][key]).length > 0) {
-          for (const n in code['script'][key]) codeContext += code['script'][key][n]
-        }
-      }
-    })
+
+    for (const n in code['script']['import']) {
+      codeContext += 'import { ' + code['script']['import'][n].join(', ') + " } from '" + n + "'\r"
+    }
+
+    for (const n in code['script']['variable']) codeContext += code['script']['variable'][n]
+
+    for (const func of code['script']['function']) {
+      codeContext += func
+    }
+
     codeContext += '</script>\r'
     return codeContext
   }
@@ -197,7 +197,7 @@ const addOptions = (code: object, optionsObject: object, componentDeepIndex: num
       generateTab(optionsDeepIndex) +
       '<el-option v-for="dict in getIntDictOptions(DICT_TYPE.' +
       dict.toUpperCase() +
-      ')" :key="dict.value" :label="dict.label" :value="dict.value"\r'
+      ')" :key="dict.value" :label="dict.label" :value="dict.value"/>\r'
     if (code['script']['import'] === undefined) {
       code['script']['import'] = {}
     }
@@ -361,7 +361,7 @@ const frontComponent = {
       typeof componentObject['options'] === 'object'
     ) {
       addOptions(code, componentObject['options'] as object, componentDeepIndex)
-      if (componentObject['options']['dict'] === undefined)
+      if (componentObject['options']['dict'] !== undefined)
         code['vue'] +=
           generateTab(componentDeepIndex) +
           '</el-' +
@@ -387,7 +387,7 @@ const frontComponent = {
 
     if ('v-loading' in componentObject['props']) {
       code['script']['variable'].push(
-        'const ' + componentObject['props']['v-loading'] + ' = ref(true)\r'
+        'const ' + componentObject['props']['v-loading'] + ' = ref(false)\r'
       )
     }
 

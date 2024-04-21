@@ -13,4 +13,8 @@ public class CodegenDatabaseMapping {
     private String mappingTable;
 
     private String humpMappingTable;
+
+    private String firstModule;
+
+    private String secondModule;
 }

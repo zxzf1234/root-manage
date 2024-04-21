@@ -437,6 +437,7 @@
               <el-input
                 v-model="scope.row.annotate"
                 @blur="scope.row.annotate = scope.row.annotate.trim()"
+                type="textarea"
               />
             </template>
           </el-table-column>

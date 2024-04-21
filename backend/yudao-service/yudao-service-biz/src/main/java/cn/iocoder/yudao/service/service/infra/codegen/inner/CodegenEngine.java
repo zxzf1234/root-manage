@@ -1740,7 +1740,13 @@ public class CodegenEngine {
         List<CodegenDatabaseMapping> codegenMappings = CodegenConvert.INSTANCE.convertList16(table.mappings());
         for(CodegenDatabaseMapping mapping : codegenMappings)
         {
-            mapping.setHumpMappingTable(upperFirst(toCamelCase(mapping.getMappingTable())));
+            Optional<InfraDatabaseTable> opTable = infraDatabaseTableRepository.findByName(mapping.getMappingTable());
+            if(!opTable.isPresent())
+                return null;
+            mapping.setHumpMappingTable(upperFirst(toCamelCase(mapping.getMappingTable())))
+                    .setFirstModule(opTable.get().firstModule())
+                    .setSecondModule(opTable.get().secondModule())
+                    .setAnnotate(mapping.getAnnotate().replaceAll("\r", "    \r"));
         }
         bindingMap.put("table", table);
         bindingMap.put("columns", codegenColumns);
