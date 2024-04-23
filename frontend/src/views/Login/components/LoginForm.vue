@@ -173,7 +173,6 @@ const loginData = reactive({
   isShowPassword: false,
   // 登陆后，是否图片验证
   captchaEnable: import.meta.env.VITE_APP_CAPTCHA_ENABLE,
-  tenantEnable: import.meta.env.VITE_APP_TENANT_ENABLE,
   loginForm: {
     tenantName: '芋道源码',
     username: 'admin',

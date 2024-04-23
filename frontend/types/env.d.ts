@@ -13,7 +13,6 @@ interface ImportMetaEnv {
   readonly VITE_OPEN: string
   readonly VITE_DEV: string
   readonly VITE_APP_CAPTCHA_ENABLE: string
-  readonly VITE_APP_TENANT_ENABLE: string
   readonly VITE_BASE_URL: string
   readonly VITE_UPLOAD_URL: string
   readonly VITE_API_BASEPATH: string
@@ -23,6 +22,7 @@ interface ImportMetaEnv {
   readonly VITE_DROP_CONSOLE: string
   readonly VITE_SOURCEMAP: string
   readonly VITE_OUT_DIR: string
+  readonly VITE_FRONT_BASE_URL: string
 }
 
 declare global {

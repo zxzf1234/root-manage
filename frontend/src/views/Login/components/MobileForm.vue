@@ -16,17 +16,6 @@
           <LoginFormTitle style="width: 100%" />
         </el-form-item>
       </el-col>
-      <el-col :span="24" style="padding-left: 10px; padding-right: 10px">
-        <el-form-item v-if="loginData.tenantEnable === 'true'" prop="tenantName">
-          <el-input
-            v-model="loginData.loginForm.tenantName"
-            :placeholder="t('login.tenantNamePlaceholder')"
-            :prefix-icon="iconHouse"
-            type="primary"
-            link
-          />
-        </el-form-item>
-      </el-col>
       <!-- 手机号 -->
       <el-col :span="24" style="padding-left: 10px; padding-right: 10px">
         <el-form-item prop="mobileNumber">
@@ -108,7 +97,6 @@ const permissionStore = usePermissionStore()
 const { currentRoute, push } = useRouter()
 const formSmsLogin = ref()
 const loginLoading = ref(false)
-const iconHouse = useIcon({ icon: 'ep:house' })
 const iconCellphone = useIcon({ icon: 'ep:cellphone' })
 const iconCircleCheck = useIcon({ icon: 'ep:circle-check' })
 const { validForm } = useFormValid(formSmsLogin)
@@ -122,7 +110,6 @@ const rules = {
 }
 const loginData = reactive({
   codeImg: '',
-  tenantEnable: import.meta.env.VITE_APP_TENANT_ENABLE,
   token: '',
   loading: {
     signIn: false
