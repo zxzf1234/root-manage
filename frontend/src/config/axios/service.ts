@@ -6,7 +6,7 @@ import axios, {
   InternalAxiosRequestConfig
 } from 'axios'
 
-import { ElMessage, ElMessageBox, ElNotification } from 'element-plus'
+import { ElMessage, ElNotification } from 'element-plus'
 import qs from 'qs'
 import { config } from '@/config/axios/config'
 import { getAccessToken, getRefreshToken, getTenantId, removeToken, setToken } from '@/utils/auth'
@@ -211,24 +211,14 @@ const refreshToken = async () => {
 }
 const handleAuthorized = () => {
   const { t } = useI18n()
-  if (!isRelogin.show) {
-    isRelogin.show = true
-    ElMessageBox.confirm(t('sys.api.timeoutMessage'), t('common.confirmTitle'), {
-      showCancelButton: false,
-      closeOnClickModal: false,
-      showClose: false,
-      confirmButtonText: t('login.relogin'),
-      type: 'warning'
-    }).then(() => {
-      const { wsCache } = useCache()
-      resetRouter() // 重置静态路由表
-      wsCache.clear()
-      removeToken()
-      isRelogin.show = false
-      // 干掉token后再走一次路由让它过router.beforeEach的校验
-      window.location.href = window.location.href
-    })
-  }
+  const { wsCache } = useCache()
+  resetRouter() // 重置静态路由表
+  wsCache.clear()
+  removeToken()
+  isRelogin.show = false
+  // 干掉token后再走一次路由让它过router.beforeEach的校验
+  window.location.href = window.location.href
+
   return Promise.reject(t('sys.api.timeoutMessage'))
 }
 export { service }
