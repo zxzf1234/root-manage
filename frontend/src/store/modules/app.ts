@@ -7,7 +7,6 @@ import { ElementPlusSize } from '@/types/elementPlus'
 import { LayoutType } from '@/types/layout'
 import { ThemeTypes } from '@/types/theme'
 
-// hfz 解构赋值 语法。
 const { wsCache } = useCache()
 // console.log('wsCache==' + JSON.stringify(wsCache))
 // console.log('wsCache2==' + wsCache.get(CACHE_KEY.LAYOUT))

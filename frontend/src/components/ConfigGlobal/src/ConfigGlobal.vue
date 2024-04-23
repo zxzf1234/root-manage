@@ -48,7 +48,6 @@ const localeStore = useLocaleStore()
 
 const currentLocale = computed(() => localeStore.currentLocale)
 </script>
-<!-- hfz   ConfigProvider 被用来提供全局的配置选项，让你的配置能够在全局都能够被访问到。 -->
 <template>
   <!-- 自定义命名空间 -->
   <ElConfigProvider

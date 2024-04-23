@@ -280,13 +280,11 @@ const doSocialLogin = async (type: number) => {
     window.location.href = res
   }
 }
-// hfz ？？？？
+
 watch(
   () => currentRoute.value,
   (route: RouteLocationNormalizedLoaded) => {
     redirect.value = route?.query?.redirect as string
-    console.log('aaaa')
-    console.log(redirect.value)
   },
   {
     immediate: true

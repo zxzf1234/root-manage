@@ -14,7 +14,6 @@ export interface PermissionState {
   menuTabRouters: AppRouteRecordRaw[]
 }
 
-// hfz 调用 pinia  的接口
 export const usePermissionStore = defineStore('permission', {
   state: (): PermissionState => ({
     routers: [],
@@ -34,15 +33,12 @@ export const usePermissionStore = defineStore('permission', {
   },
   actions: {
     async generateRoutes(): Promise<unknown> {
-      // alert('4')
       return new Promise<void>(async (resolve) => {
         let res: AppCustomRouteRecordRaw[]
         if (wsCache.get(CACHE_KEY.ROLE_ROUTERS)) {
           res = wsCache.get(CACHE_KEY.ROLE_ROUTERS) as AppCustomRouteRecordRaw[]
         } else {
           res = await getAsyncRoutes() // 调用后端接口，获取当前登陆用户的菜单列表。
-          //alert('5')
-
           wsCache.set(CACHE_KEY.ROLE_ROUTERS, res)
         }
         // 将菜单列表转化动态路由列表

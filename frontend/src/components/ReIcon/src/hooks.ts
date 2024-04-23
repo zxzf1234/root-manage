@@ -1,4 +1,3 @@
-// hfz 通用图标 useRenderIcon
 import { iconType } from './types'
 import { h, defineComponent, Component } from 'vue'
 import { IconifyIconOnline, IconifyIconOffline, FontIcon } from './index'

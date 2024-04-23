@@ -1201,7 +1201,6 @@ const handleAddRelatedColumn = (scope) => {
     formData.value.inputSubclasses.forEach((item: CodegenApi.InterfaceSubclassVO) => {
       if (item.name != '' && item.name != relatedRef.value.name) Subclasses.push(item)
     })
-    console.log(scope.row)
     if (scope.row.hasOwnProperty('variableType')) {
       variableType = (1 << 1) | (1 << 2) | (1 << 3) | (1 << 4)
       relateType = 1

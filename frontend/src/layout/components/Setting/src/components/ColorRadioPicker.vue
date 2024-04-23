@@ -6,7 +6,6 @@ import { useDesign } from '@/hooks/web/useDesign'
 const { getPrefixCls } = useDesign()
 
 const prefixCls = getPrefixCls('color-radio-picker')
-//hfz defineProps 接受父组件传来的变量 schema  API是一个函数，它的返回值就是父亲传来的属性
 const props = defineProps({
   schema: {
     type: Array as PropType<string[]>,
@@ -32,7 +31,6 @@ watch(
 watch(
   () => colorVal.value,
   (val: string) => {
-    //hfz 在 emits() 的第一个参数，是监听事件的字面量。第二个参数为事件传递的参数。
     emit('update:modelValue', val)
     emit('change', val)
   }

@@ -1,5 +1,5 @@
 /**
- * hfz 数据字典工具类
+ *  数据字典工具类
  */
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { ElementPlusInfoType } from '@/types/elementPlus'

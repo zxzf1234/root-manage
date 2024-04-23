@@ -101,7 +101,6 @@ const submitForm = async () => {
   try {
     const data = formData.value as unknown as CodegenApi.InterfaceModuleVO
     if (formType.value === 'create') {
-      console.log(data)
       await CodegenApi.createInterfaceModule(data)
       message.success(t('common.createSuccess'))
     } else {
