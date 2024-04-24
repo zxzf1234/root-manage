@@ -16,7 +16,7 @@ spring:
       #          url: jdbc:oracle:thin:@127.0.0.1:1521:xe # Oracle 连接的示例
       #          url: jdbc:sqlserver://127.0.0.1:1433;DatabaseName=${spring.datasource.dynamic.datasource.master.name} # SQLServer 连接的示例
     username: root
-    password: 888admin
+    password: 3WLiVUBEwTbvAfsh
     driver-class-name: com.mysql.cj.jdbc.Driver
 #    druid: # Druid 【监控】相关的全局配置
 #      web-stat-filter:
