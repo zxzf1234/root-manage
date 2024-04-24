@@ -1,6 +1,5 @@
 package cn.iocoder.yudao.service.model.infra.codegen;
 
-import org.apache.ibatis.jdbc.SQL;
 import org.babyfish.jimmer.sql.JSqlClient;
 import org.babyfish.jimmer.sql.TransientResolver;
 import org.babyfish.jimmer.sql.ast.tuple.Tuple2;

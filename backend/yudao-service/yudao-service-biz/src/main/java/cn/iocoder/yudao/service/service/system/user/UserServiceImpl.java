@@ -1,6 +1,5 @@
 package cn.iocoder.yudao.service.service.system.user;
 import cn.iocoder.yudao.framework.common.exception.ServiceException;
-import cn.iocoder.yudao.framework.datapermission.core.util.DataPermissionUtils;
 import cn.iocoder.yudao.service.api.infra.file.FileApi;
 import cn.iocoder.yudao.service.repository.system.dept.SystemUserPostRepository;
 import cn.iocoder.yudao.service.repository.system.user.SystemUserRepository;
@@ -282,21 +281,20 @@ public class UserServiceImpl implements UserService {
 
     private void validateUserForCreateOrUpdate(Long id, String username, String mobile, String email,
                                                Long deptId, List<Long> postIds) {
-        // 关闭数据权限，避免因为没有数据权限，查询不到数据，进而导致唯一校验不正确
-        DataPermissionUtils.executeIgnore(() -> {
-            // 校验用户存在
-            validateUserExists(id);
-            // 校验用户名唯一
-            validateUsernameUnique(id, username);
-            // 校验手机号唯一
-            validateMobileUnique(id, mobile);
-            // 校验邮箱唯一
-            validateEmailUnique(id, email);
-            // 校验部门处于开启状态
-            deptService.validateDeptList(CollectionUtils.singleton(deptId));
-            // 校验岗位处于开启状态
-            postService.validatePostList(postIds);
-        });
+
+        // 校验用户存在
+        validateUserExists(id);
+        // 校验用户名唯一
+        validateUsernameUnique(id, username);
+        // 校验手机号唯一
+        validateMobileUnique(id, mobile);
+        // 校验邮箱唯一
+        validateEmailUnique(id, email);
+        // 校验部门处于开启状态
+        deptService.validateDeptList(CollectionUtils.singleton(deptId));
+        // 校验岗位处于开启状态
+        postService.validatePostList(postIds);
+
     }
 
     @VisibleForTesting

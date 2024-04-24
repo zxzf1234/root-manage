@@ -6,6 +6,7 @@ import org.babyfish.jimmer.sql.*;
 import java.time.LocalDateTime;
 import org.jetbrains.annotations.Nullable;
 import java.util.List;
+
 @Entity
 public interface SystemUser extends BaseEntity {
     @Id

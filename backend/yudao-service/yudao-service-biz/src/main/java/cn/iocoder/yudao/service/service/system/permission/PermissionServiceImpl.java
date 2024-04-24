@@ -7,7 +7,6 @@ import cn.iocoder.yudao.framework.common.enums.CommonStatusEnum;
 import cn.iocoder.yudao.framework.common.util.collection.CollectionUtils;
 import cn.iocoder.yudao.framework.common.util.collection.MapUtils;
 import cn.iocoder.yudao.framework.common.util.json.JsonUtils;
-import cn.iocoder.yudao.framework.datapermission.core.annotation.DataPermission;
 import cn.iocoder.yudao.service.api.system.permission.dto.DeptDataPermissionRespDTO;
 import cn.iocoder.yudao.service.enums.system.permission.SystemDataScopeEnum;
 import cn.iocoder.yudao.service.model.infra.data.SystemMenu;
@@ -249,7 +248,6 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
-    @DataPermission(enable = false) // 关闭数据权限，不然就会出现递归获取数据权限的问题
     public DeptDataPermissionRespDTO getDeptDataPermission(Long userId) {
         // 获得用户的角色
         List<Long> roleIds = getUserRoleIds(userId, singleton(CommonStatusEnum.ENABLE.getStatus()));

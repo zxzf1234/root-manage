@@ -23,10 +23,7 @@
         <servlet.versoin>2.5</servlet.versoin>
         <!-- DB 相关 -->
         <druid.version>1.2.16</druid.version>
-        <mybatis-plus.version>3.5.3.1</mybatis-plus.version>
-        <mybatis-plus-generator.version>3.5.3.1</mybatis-plus-generator.version>
         <dynamic-datasource.version>3.6.1</dynamic-datasource.version>
-        <mybatis-plus-join-boot-starter.version>1.4.3.2</mybatis-plus-join-boot-starter.version>
         <redisson.version>3.18.0</redisson.version>
         <jimmer.version>0.8.10</jimmer.version>
         <flyway.version>8.2.0</flyway.version>
@@ -41,8 +38,6 @@
         <podam.version>7.2.11.RELEASE</podam.version>
         <jedis-mock.version>1.0.7</jedis-mock.version>
         <mockito-inline.version>4.11.0</mockito-inline.version>
-        <!-- Bpm 工作流相关 -->
-        <flowable.version>6.8.0</flowable.version>
         <!-- 工具类相关 -->
         <captcha-plus.version>1.0.2</captcha-plus.version>
         <jsoup.version>1.15.4</jsoup.version>
@@ -118,11 +113,6 @@
             </dependency>
             <dependency>
                 <groupId>cn.iocoder.boot</groupId>
-                <artifactId>yudao-spring-boot-starter-biz-data-permission</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>cn.iocoder.boot</groupId>
                 <artifactId>yudao-spring-boot-starter-biz-social</artifactId>
                 <version>${revision}</version>
             </dependency>
@@ -182,13 +172,13 @@
             <!-- DB 相关 -->
             <dependency>
                 <groupId>cn.iocoder.boot</groupId>
-                <artifactId>yudao-spring-boot-starter-mybatis</artifactId>
+                <artifactId>yudao-spring-boot-starter-jimmer</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>cn.iocoder.boot</groupId>
-                <artifactId>yudao-spring-boot-starter-jimmer</artifactId>
-                <version>${revision}</version>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>8.0.22</version>
             </dependency>
             <dependency>
                 <groupId>org.babyfish.jimmer</groupId>
@@ -210,26 +200,11 @@
                 <artifactId>druid-spring-boot-starter</artifactId>
                 <version>${druid.version}</version>
             </dependency>
-            <dependency>
-                <groupId>com.baomidou</groupId>
-                <artifactId>mybatis-plus-boot-starter</artifactId>
-                <version>${mybatis-plus.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.baomidou</groupId>
-                <artifactId>mybatis-plus-generator</artifactId> <!-- 代码生成器，使用它解析表结构 -->
-                <version>${mybatis-plus-generator.version}</version>
-            </dependency>
+
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>dynamic-datasource-spring-boot-starter</artifactId> <!-- 多数据源 -->
                 <version>${dynamic-datasource.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.github.yulichang</groupId>
-                <artifactId>mybatis-plus-join-boot-starter</artifactId>
-                <version>${mybatis-plus-join-boot-starter.version}</version>
             </dependency>
 
             <dependency>
@@ -388,24 +363,6 @@
                 <artifactId>podam</artifactId>
                 <version>${podam.version}</version>
             </dependency>
-
-            <!-- 工作流相关 -->
-            <dependency>
-                <groupId>cn.iocoder.boot</groupId>
-                <artifactId>yudao-spring-boot-starter-flowable</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.flowable</groupId>
-                <artifactId>flowable-spring-boot-starter-process</artifactId>
-                <version>${flowable.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.flowable</groupId>
-                <artifactId>flowable-spring-boot-starter-actuator</artifactId>
-                <version>${flowable.version}</version>
-            </dependency>
-            <!-- 工作流相关结束 -->
 
             <!-- 工具类相关 -->
             <dependency>

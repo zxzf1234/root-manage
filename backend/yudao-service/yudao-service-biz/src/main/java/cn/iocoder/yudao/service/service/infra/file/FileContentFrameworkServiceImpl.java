@@ -7,7 +7,6 @@ import cn.iocoder.yudao.service.model.infra.file.InfraFileContent;
 import cn.iocoder.yudao.service.model.infra.file.InfraFileContentDraft;
 import cn.iocoder.yudao.service.model.infra.file.InfraFileContentTable;
 import cn.iocoder.yudao.service.repository.infra.file.InfraFileContentRepository;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;

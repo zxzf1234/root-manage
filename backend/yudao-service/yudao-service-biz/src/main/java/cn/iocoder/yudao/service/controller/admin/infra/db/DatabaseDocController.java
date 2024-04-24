@@ -9,8 +9,6 @@ import cn.smallbun.screw.core.engine.EngineFileType;
 import cn.smallbun.screw.core.engine.EngineTemplateType;
 import cn.smallbun.screw.core.execute.DocumentationExecute;
 import cn.smallbun.screw.core.process.ProcessConfig;
-import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DataSourceProperty;
-import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DynamicDataSourceProperties;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,8 +30,6 @@ import java.util.Arrays;
 @RequestMapping("/infra/db-doc")
 public class DatabaseDocController {
 
-    @Resource
-    private DynamicDataSourceProperties dynamicDataSourceProperties;
 
     private static final String FILE_OUTPUT_DIR = System.getProperty("java.io.tmpdir") + File.separator
             + "db-doc";
@@ -86,21 +82,22 @@ public class DatabaseDocController {
      * @return 生成的文件所在路径
      */
     private String doExportFile(EngineFileType fileOutputType, String fileName) {
-        try (HikariDataSource dataSource = buildDataSource()) {
-            // 创建 screw 的配置
-            Configuration config = Configuration.builder()
-                    .version(DOC_VERSION)  // 版本
-                    .description(DOC_DESCRIPTION) // 描述
-                    .dataSource(dataSource) // 数据源
-                    .engineConfig(buildEngineConfig(fileOutputType, fileName)) // 引擎配置
-                    .produceConfig(buildProcessConfig()) // 处理配置
-                    .build();
-
-            // 执行 screw，生成数据库文档
-            new DocumentationExecute(config).execute();
-
-            return FILE_OUTPUT_DIR + File.separator + fileName + fileOutputType.getFileSuffix();
-        }
+//        try (HikariDataSource dataSource = buildDataSource()) {
+//            // 创建 screw 的配置
+//            Configuration config = Configuration.builder()
+//                    .version(DOC_VERSION)  // 版本
+//                    .description(DOC_DESCRIPTION) // 描述
+//                    .dataSource(dataSource) // 数据源
+//                    .engineConfig(buildEngineConfig(fileOutputType, fileName)) // 引擎配置
+//                    .produceConfig(buildProcessConfig()) // 处理配置
+//                    .build();
+//
+//            // 执行 screw，生成数据库文档
+//            new DocumentationExecute(config).execute();
+//
+//            return FILE_OUTPUT_DIR + File.separator + fileName + fileOutputType.getFileSuffix();
+//        }
+        return "";
     }
 
     private void handleDeleteFile(Boolean deleteFile, String filePath) {
@@ -114,19 +111,19 @@ public class DatabaseDocController {
      * 创建数据源
      */
     // TODO 芋艿：screw 暂时不支持 druid，尴尬
-    private HikariDataSource buildDataSource() {
-        // 获得 DataSource 数据源，目前只支持首个
-        String primary = dynamicDataSourceProperties.getPrimary();
-        DataSourceProperty dataSourceProperty = dynamicDataSourceProperties.getDatasource().get(primary);
-        // 创建 HikariConfig 配置类
-        HikariConfig hikariConfig = new HikariConfig();
-        hikariConfig.setJdbcUrl(dataSourceProperty.getUrl());
-        hikariConfig.setUsername(dataSourceProperty.getUsername());
-        hikariConfig.setPassword(dataSourceProperty.getPassword());
-        hikariConfig.addDataSourceProperty("useInformationSchema", "true"); // 设置可以获取 tables remarks 信息
-        // 创建数据源
-        return new HikariDataSource(hikariConfig);
-    }
+//    private HikariDataSource buildDataSource() {
+//        // 获得 DataSource 数据源，目前只支持首个
+//        String primary = dynamicDataSourceProperties.getPrimary();
+//        DataSourceProperty dataSourceProperty = dynamicDataSourceProperties.getDatasource().get(primary);
+//        // 创建 HikariConfig 配置类
+//        HikariConfig hikariConfig = new HikariConfig();
+//        hikariConfig.setJdbcUrl(dataSourceProperty.getUrl());
+//        hikariConfig.setUsername(dataSourceProperty.getUsername());
+//        hikariConfig.setPassword(dataSourceProperty.getPassword());
+//        hikariConfig.addDataSourceProperty("useInformationSchema", "true"); // 设置可以获取 tables remarks 信息
+//        // 创建数据源
+//        return new HikariDataSource(hikariConfig);
+//    }
 
     /**
      * 创建 screw 的引擎配置

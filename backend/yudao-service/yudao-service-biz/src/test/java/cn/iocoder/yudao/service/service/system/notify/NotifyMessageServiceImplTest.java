@@ -4,7 +4,6 @@ package cn.iocoder.yudao.service.service.system.notify;
 import cn.hutool.core.map.MapUtil;
 import cn.iocoder.yudao.framework.common.enums.UserTypeEnum;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
-import cn.iocoder.yudao.framework.mybatis.core.enums.SqlConstants;
 import cn.iocoder.yudao.framework.test.core.ut.BaseDbUnitTest;
 import cn.iocoder.yudao.service.vo.system.notify.message.NotifyMessageMyPageReqVO;
 import cn.iocoder.yudao.service.vo.system.notify.message.NotifyMessagePageReqVO;
