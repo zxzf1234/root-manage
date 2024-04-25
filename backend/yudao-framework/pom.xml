@@ -38,7 +38,7 @@
         <module>yudao-spring-boot-starter-captcha</module>
         <module>yudao-spring-boot-starter-websocket</module>
         <module>yudao-spring-boot-starter-desensitize</module>
-        <module>yudao-spring-boot-starter-jimmer</module>
+        <module>yudao-spring-boot-starter-db</module>
         <module>yudao-spring-boot-starter-flyway</module>
     </modules>
 

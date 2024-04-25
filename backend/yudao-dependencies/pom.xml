@@ -172,7 +172,7 @@
             <!-- DB 相关 -->
             <dependency>
                 <groupId>cn.iocoder.boot</groupId>
-                <artifactId>yudao-spring-boot-starter-jimmer</artifactId>
+                <artifactId>yudao-spring-boot-starter-db</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
