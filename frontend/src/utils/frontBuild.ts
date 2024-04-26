@@ -156,9 +156,13 @@ const addProps = (code: object, propObject: object, title: string) => {
 
 const addEvent = (code: object, eventObject: object, title: string) => {
   for (const key in eventObject) {
-    if (eventObject[key]['eventName'] === undefined) {
+    if (eventObject[key]['eventName'] === undefined || eventObject[key]['eventName'] == '') {
       continue
     }
+    if (eventObject[key]['function'] === undefined || eventObject[key]['function'] == '') {
+      continue
+    }
+    console.log(eventObject[key]['eventName'])
     code['vue'] += ' @' + eventObject[key]['eventName'] + '="' + eventObject[key]['function'] + '"'
     let functionRemark =
       '/** 处理响应事件 ' + (title == undefined || title == '' ? '' : title) + ' */\r'
@@ -320,6 +324,27 @@ const addTableMenu = (code: object, menuObject: object, deepIndex: number) => {
     code['vue'] += ' />\r'
   }
   code['vue'] += generateTab(deepIndex) + '</template>\r'
+}
+
+const getFormComponent = (form: object) => {
+  const componets: object[] = []
+  if ('children' in form) {
+    const childrenObject = form['children'] as object
+    if (Object.keys(childrenObject).length > 0) {
+      for (const key in childrenObject) {
+        if (childrenObject[key]['type'] == 'FcRow') {
+          for (const rowKey in childrenObject[key]['children']) {
+            if (typeof childrenObject[key]['children'][rowKey]['children'][0] === 'object') {
+              componets.push(childrenObject[key]['children'][rowKey]['children'][0] as object)
+            }
+          }
+        } else if (typeof childrenObject[key] === 'object') {
+          componets.push(childrenObject[key] as object)
+        }
+      }
+    }
+  }
+  return componets
 }
 
 const frontComponent = {
@@ -489,19 +514,22 @@ const frontComponent = {
       if ('v-loading' in props) {
         code['script']['variable'].push('const ' + props['v-loading'] + ' = ref(false)\r')
       }
+      const components = getFormComponent(componentObject)
       if (':model' in props) {
         let childrenModel = ''
         if ('children' in componentObject) {
-          const childrenObject = componentObject['children'] as object
-          if (Object.keys(childrenObject).length > 0) {
-            for (const key in childrenObject) {
-              if (typeof childrenObject[key] === 'object' && 'field' in childrenObject[key]) {
-                childrenModel += '  ' + childrenObject[key]['field'] + ': undefined,\r'
+          if (Object.keys(components).length > 0) {
+            for (const key in components) {
+              if (typeof components[key] === 'object' && 'field' in components[key]) {
+                childrenModel += '  ' + components[key]['field'] + ': undefined,\r'
               }
             }
           }
         }
-        if (componentObject['props']['_detailTableData'] !== undefined)
+        if (
+          componentObject['props']['_detailTableData'] !== undefined &&
+          componentObject['props']['_detailTableData'] !== ''
+        )
           childrenModel += '  ' + componentObject['props']['_detailTableData'] + ': [],\r'
         code['script']['variable'].push(
           'const ' + props[':model'] + ' = ref({\r' + childrenModel + '})\r'
@@ -510,16 +538,15 @@ const frontComponent = {
       if (':rules' in props && props[':rules'] != '') {
         let childrenRule = ''
         if ('children' in componentObject) {
-          const childrenObject = componentObject['children'] as object
-          if (Object.keys(childrenObject).length > 0) {
-            for (const key in childrenObject) {
+          if (Object.keys(components).length > 0) {
+            for (const key in components) {
               if (
-                typeof childrenObject[key] === 'object' &&
-                'field' in childrenObject[key] &&
-                'validate' in childrenObject[key]
+                typeof components[key] === 'object' &&
+                'field' in components[key] &&
+                'validate' in components[key]
               ) {
-                const validate = generateValidateCode(childrenObject[key]['validate'])
-                childrenRule += '  ' + childrenObject[key]['field'] + ': [' + validate + '],\r'
+                const validate = generateValidateCode(components[key]['validate'])
+                childrenRule += '  ' + components[key]['field'] + ': [' + validate + '],\r'
               }
             }
           }

@@ -362,17 +362,22 @@ const showBuildEdit = (editObject: FrontBuildEditModel.FrontBuildEdit) => {
       }
     })
   }
-  let formManageTable = formEdit[1]
+
   if (editObject.detailTableColumns.length > 0) {
-    if (formManageTable['column'] === undefined) formManageTable['column'] = []
+    formEdit.push()
+    let formEditTable = formEdit[1]
+    if (formEditTable['column'] === undefined) formEditTable['column'] = []
     editObject.detailTableColumns.forEach((element) => {
-      formManageTable['column'].push({
+      formEditTable['column'].push({
         label: element.columnName,
         prop: element.columnValue,
         slot: element.isSlot,
         type: element.type
       })
     })
+  } else {
+    formEdit.splice(1, 1)
+    formEdit[0]['props']['_detailTableData'] = ''
   }
   if (isLabelWidthAuto) formEdit[0]['props']['labelWidth'] = 'auto'
   designer.value.setRule(formEdit)
