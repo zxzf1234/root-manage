@@ -32,6 +32,10 @@
   width: 240px !important;
 }
 
+table .cell {
+  padding: 0 !important;
+}
+
 // 解决抽屉弹出时，body宽度变化的问题
 .el-popup-parent--hidden {
   width: 100% !important;
