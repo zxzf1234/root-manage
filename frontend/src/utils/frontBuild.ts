@@ -277,8 +277,16 @@ const generateTableSlot = (code: object, componentObject: object, deepIndex: num
     if (element['slot'] !== undefined && element['slot'] === true) {
       let component = '{{ row.' + element['prop'] + ' }}\r'
       if (element['type'] !== undefined) {
+        let attr = ''
+        if (kebabCase(element['type']) == 'input') {
+          attr += ' class="!w-70px"'
+        }
+        if (kebabCase(element['type']) == 'date-picker') {
+          attr += ' value-format="YYYY-MM-DD HH:mm:ss" style="width: 130px !important"'
+          columnVariable += ",\r    minWidth: '130'"
+        }
         component =
-          '<el-' + kebabCase(element['type']) + ' v-model="row.' + element['prop'] + '" />\r'
+          '<el-' + kebabCase(element['type']) + attr + ' v-model="row.' + element['prop'] + '" />\r'
       }
       columnVariable += ",\r    slot: '" + element['prop'] + "'\r"
       slotCode += generateTab(deepIndex) + '<template #' + element['prop'] + '="{ row }">\r'
@@ -422,6 +430,7 @@ const frontComponent = {
       )
     }
 
+    // 添加slot
     const childrenIndex = deepIndex + 1
     const slotCode = generateTableSlot(code, componentObject, childrenIndex)
 

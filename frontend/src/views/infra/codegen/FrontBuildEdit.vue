@@ -85,7 +85,7 @@
             <template #componentValue="{ row }">
               <el-input
                 v-model="row.componentValue"
-                @keyup="row.componentValue = row.componentValue.replace(/[^a-zA-Z_]/g, '')"
+                @keyup="row.componentValue = row.componentValue.replace(/[^a-zA-Z_.]/g, '')"
               />
             </template>
             <template #type="{ row }">
@@ -94,6 +94,7 @@
                 <el-option label="select" value="select" />
                 <el-option label="checkbox" value="checkbox" />
                 <el-option label="datePicker" value="datePicker" />
+                <el-option label="dateTimePicker" value="dateTimePicker" />
               </el-select>
             </template>
             <template #span="{ row }">
@@ -139,7 +140,7 @@
             <template #columnValue="{ row }">
               <el-input
                 v-model="row.columnValue"
-                @keyup="row.columnValue = row.columnValue.replace(/[^a-zA-Z_]/g, '')"
+                @keyup="row.columnValue = row.columnValue.replace(/[^a-zA-Z_.]/g, '')"
               />
             </template>
             <template #isSlot="{ row }">

@@ -121,7 +121,7 @@
             <template #searchValue="{ row }">
               <el-input
                 v-model="row.searchValue"
-                @keyup="row.searchValue = row.searchValue.replace(/[^a-zA-Z_]/g, '')"
+                @keyup="row.searchValue = row.searchValue.replace(/[^a-zA-Z_.]/g, '')"
               />
             </template>
             <template #type="{ row }">
@@ -193,7 +193,7 @@
             <template #columnValue="{ row }">
               <el-input
                 v-model="row.columnValue"
-                @keyup="row.columnValue = row.columnValue.replace(/[^a-zA-Z_]/g, '')"
+                @keyup="row.columnValue = row.columnValue.replace(/[^a-zA-Z_.]/g, '')"
               />
             </template>
             <template #isSlot="{ row }">

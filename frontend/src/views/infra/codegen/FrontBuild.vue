@@ -181,10 +181,18 @@ const showBuildManage = (manageObject: FrontBuildManageModel.FrontBuildManage) =
         hidden: false,
         display: true
       }
-      if (['input', 'select', 'datePicker'].includes(element.type)) {
+      if (['input', 'select'].includes(element.type)) {
         condition['props'] = {
           placeholder: '请输入' + element.searchName,
           clearable: true
+        }
+      }
+      if (element.type == 'datePicker') {
+        condition['props'] = {
+          type: 'daterange',
+          'value-format': 'YYYY-MM-DD HH:mm:ss',
+          'start-placeholder': '开始日期',
+          'end-placeholder': '结束日期'
         }
       }
       formManageCard.children[0]['children'].push(condition)
@@ -253,7 +261,7 @@ const showBuildEdit = (editObject: FrontBuildEditModel.FrontBuildEdit) => {
     submitBtn: { show: editObject.isShowSubmitBtn }
   }
   designer.value.setOption(formObject)
-  let isLabelWidthAuto = true
+  let isInline = true
 
   let formEdit = [
     {
@@ -320,8 +328,11 @@ const showBuildEdit = (editObject: FrontBuildEditModel.FrontBuildEdit) => {
           clearable: true
         }
       }
+      if (element.type == 'datePicker') {
+        component['props']['value-format'] = 'YYYY-MM-DD HH:mm:ss'
+      }
       if (element.span != 0) {
-        isLabelWidthAuto = false
+        isInline = false
         const col = {
           type: 'col',
           props: {
@@ -379,7 +390,8 @@ const showBuildEdit = (editObject: FrontBuildEditModel.FrontBuildEdit) => {
     formEdit.splice(1, 1)
     formEdit[0]['props']['_detailTableData'] = ''
   }
-  if (isLabelWidthAuto) formEdit[0]['props']['labelWidth'] = 'auto'
+  if (isInline) formEdit[0]['props']['inline'] = true
+  formEdit[0]['props']['labelWidth'] = 'auto'
   designer.value.setRule(formEdit)
 }
 

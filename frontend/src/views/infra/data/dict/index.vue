@@ -9,19 +9,19 @@
       class="-mb-15px"
       label-width="68px"
     >
-      <el-form-item label="字典名称" prop="name">
-        <el-input
-          v-model="queryParams.name"
-          clearable
-          placeholder="请输入字典名称"
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
       <el-form-item label="字典类型" prop="type">
         <el-input
           v-model="queryParams.type"
           clearable
           placeholder="请输入字典类型"
+          @keyup.enter="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="字典名称" prop="name">
+        <el-input
+          v-model="queryParams.name"
+          clearable
+          placeholder="请输入字典名称"
           @keyup.enter="handleQuery"
         />
       </el-form-item>
