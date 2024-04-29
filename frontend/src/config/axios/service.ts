@@ -6,7 +6,7 @@ import axios, {
   InternalAxiosRequestConfig
 } from 'axios'
 
-import { ElMessage, ElNotification } from 'element-plus'
+import { ElMessage } from 'element-plus'
 import qs from 'qs'
 import { config } from '@/config/axios/config'
 import { getAccessToken, getRefreshToken, getTenantId, removeToken, setToken } from '@/utils/auth'
@@ -91,7 +91,6 @@ service.interceptors.request.use(
   },
   (error: AxiosError) => {
     // Do something with request error
-    console.log(error) // for debug
     Promise.reject(error)
   }
 )
@@ -182,7 +181,7 @@ service.interceptors.response.use(
         // hard coding：忽略这个提示，直接登出
         console.log(msg)
       } else {
-        ElNotification.error({ title: msg })
+        ElMessage.error(msg)
       }
       return Promise.reject('error')
     } else {
@@ -190,7 +189,6 @@ service.interceptors.response.use(
     }
   },
   (error: AxiosError) => {
-    console.log('err' + error) // for debug
     let { message } = error
     const { t } = useI18n()
     if (message === 'Network Error') {

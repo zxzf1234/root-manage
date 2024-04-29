@@ -136,19 +136,12 @@
                 <el-table-column label="校验注解" min-width="30%" align="center">
                   <template #default="prop">
                     <el-select v-model="prop.row.validation" class="!w-130px">
-                      <el-option label="NotBlank" value="NotBlank" />
-                      <el-option label="NotEmpty" value="NotEmpty" />
-                      <el-option label="NotNull" value="NotNull" />
-                      <el-option label="Pattern" value="Pattern" />
-                      <el-option label="Min" value="Min" />
-                      <el-option label="Max" value="Max" />
-                      <el-option label="Range" value="Range" />
-                      <el-option label="Size" value="Size" />
-                      <el-option label="Length" value="Length" />
-                      <el-option label="Email" value="Email" />
-                      <el-option label="Mobile" value="Range" />
-                      <el-option label="InEnum" value="InEnum" />
-                      <el-option label="URL" value="URL" />
+                      <el-option
+                        v-for="item in validationChange(scope.row)"
+                        :key="item"
+                        :label="item"
+                        :value="item"
+                      />
                     </el-select>
                   </template>
                 </el-table-column>
@@ -198,18 +191,12 @@
           <el-table-column label="参数类型" min-width="11%">
             <template #default="scope">
               <el-select v-model="scope.row.variableType" class="!w-140px">
-                <el-option label="Long" value="Long" />
-                <el-option label="String" value="String" />
-                <el-option label="Integer" value="Integer" />
-                <el-option label="Double" value="Double" />
-                <el-option label="BigDecimal" value="BigDecimal" />
-                <el-option label="LocalDateTime" value="LocalDateTime" />
-                <el-option label="LocalDateTime[]" value="LocalDateTime[]" />
-                <el-option label="Boolean" value="Boolean" />
-                <el-option label="UUID" value="UUID" />
-                <el-option label="Map<String, Object>" value="Map<String, Object>" />
-                <el-option label="VO类" value="VOClass" />
-                <el-option label="子类" value="Subclass" />
+                <el-option
+                  v-for="item in variableTypes"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
               </el-select>
             </template>
           </el-table-column>
@@ -291,19 +278,12 @@
                 <el-table-column label="校验注解" min-width="30%" align="center">
                   <template #default="prop">
                     <el-select v-model="prop.row.validation" class="!w-130px">
-                      <el-option label="NotBlank" value="NotBlank" />
-                      <el-option label="NotEmpty" value="NotEmpty" />
-                      <el-option label="NotNull" value="NotNull" />
-                      <el-option label="Pattern" value="Pattern" />
-                      <el-option label="Min" value="Min" />
-                      <el-option label="Max" value="Max" />
-                      <el-option label="Range" value="Range" />
-                      <el-option label="Size" value="Size" />
-                      <el-option label="Length" value="Length" />
-                      <el-option label="Email" value="Email" />
-                      <el-option label="Mobile" value="Mobile" />
-                      <el-option label="InEnum" value="InEnum" />
-                      <el-option label="URL" value="URL" />
+                      <el-option
+                        v-for="item in validationChange(scope.row)"
+                        :key="item"
+                        :label="item"
+                        :value="item"
+                      />
                     </el-select>
                   </template>
                 </el-table-column>
@@ -353,17 +333,12 @@
           <el-table-column label="参数类型" min-width="11%">
             <template #default="scope">
               <el-select v-model="scope.row.variableType" class="!w-140px">
-                <el-option label="Long" value="Long" />
-                <el-option label="String" value="String" />
-                <el-option label="Integer" value="Integer" />
-                <el-option label="Double" value="Double" />
-                <el-option label="BigDecimal" value="BigDecimal" />
-                <el-option label="LocalDateTime" value="LocalDateTime" />
-                <el-option label="LocalDateTime[]" value="LocalDateTime[]" />
-                <el-option label="Boolean" value="Boolean" />
-                <el-option label="UUID" value="UUID" />
-                <el-option label="VO类" value="VOClass" />
-                <el-option label="子类" value="Subclass" />
+                <el-option
+                  v-for="item in variableTypes"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
               </el-select>
             </template>
           </el-table-column>
@@ -429,19 +404,12 @@
                       <el-table-column label="校验注解" min-width="30%" align="center">
                         <template #default="prop">
                           <el-select v-model="prop.row.validation" class="!w-130px">
-                            <el-option label="NotBlank" value="NotBlank" />
-                            <el-option label="NotEmpty" value="NotEmpty" />
-                            <el-option label="NotNull" value="NotNull" />
-                            <el-option label="Pattern" value="Pattern" />
-                            <el-option label="Min" value="Min" />
-                            <el-option label="Max" value="Max" />
-                            <el-option label="Range" value="Range" />
-                            <el-option label="Size" value="Size" />
-                            <el-option label="Length" value="Length" />
-                            <el-option label="Email" value="Email" />
-                            <el-option label="Mobile" value="Range" />
-                            <el-option label="InEnum" value="InEnum" />
-                            <el-option label="URL" value="URL" />
+                            <el-option
+                              v-for="item in validationChange(scope.row)"
+                              :key="item"
+                              :label="item"
+                              :value="item"
+                            />
                           </el-select>
                         </template>
                       </el-table-column>
@@ -493,17 +461,12 @@
                 <el-table-column label="参数类型" min-width="11%">
                   <template #default="scope">
                     <el-select v-model="scope.row.variableType" class="!w-130px">
-                      <el-option label="Long" value="Long" />
-                      <el-option label="String" value="String" />
-                      <el-option label="Integer" value="Integer" />
-                      <el-option label="Double" value="Double" />
-                      <el-option label="BigDecimal" value="BigDecimal" />
-                      <el-option label="LocalDateTime" value="LocalDateTime" />
-                      <el-option label="LocalDateTime[]" value="LocalDateTime[]" />
-                      <el-option label="Boolean" value="Boolean" />
-                      <el-option label="UUID" value="UUID" />
-                      <el-option label="VO类" value="VOClass" />
-                      <el-option label="子类" value="Subclass" />
+                      <el-option
+                        v-for="item in variableTypes"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                      />
                     </el-select>
                   </template>
                 </el-table-column>
@@ -600,19 +563,12 @@
                       <el-table-column label="校验注解" min-width="30%" align="center">
                         <template #default="prop">
                           <el-select v-model="prop.row.validation" class="!w-130px">
-                            <el-option label="NotBlank" value="NotBlank" />
-                            <el-option label="NotEmpty" value="NotEmpty" />
-                            <el-option label="NotNull" value="NotNull" />
-                            <el-option label="Pattern" value="Pattern" />
-                            <el-option label="Min" value="Min" />
-                            <el-option label="Max" value="Max" />
-                            <el-option label="Range" value="Range" />
-                            <el-option label="Size" value="Size" />
-                            <el-option label="Length" value="Length" />
-                            <el-option label="Email" value="Email" />
-                            <el-option label="Mobile" value="Range" />
-                            <el-option label="InEnum" value="InEnum" />
-                            <el-option label="URL" value="URL" />
+                            <el-option
+                              v-for="item in validationChange(scope.row)"
+                              :key="item"
+                              :label="item"
+                              :value="item"
+                            />
                           </el-select>
                         </template>
                       </el-table-column>
@@ -664,17 +620,12 @@
                 <el-table-column label="参数类型" min-width="11%">
                   <template #default="scope">
                     <el-select v-model="scope.row.variableType" class="!w-130px">
-                      <el-option label="Long" value="Long" />
-                      <el-option label="String" value="String" />
-                      <el-option label="Integer" value="Integer" />
-                      <el-option label="Double" value="Double" />
-                      <el-option label="BigDecimal" value="BigDecimal" />
-                      <el-option label="LocalDateTime" value="LocalDateTime" />
-                      <el-option label="LocalDateTime[]" value="LocalDateTime[]" />
-                      <el-option label="Boolean" value="Boolean" />
-                      <el-option label="UUID" value="UUID" />
-                      <el-option label="VO类" value="VOClass" />
-                      <el-option label="子类" value="Subclass" />
+                      <el-option
+                        v-for="item in variableTypes"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                      />
                     </el-select>
                   </template>
                 </el-table-column>
@@ -754,6 +705,20 @@ const dialogTitle = ref('') // 弹窗的标题
 const formLoading = ref(false) // 表单的加载中：1）修改时的数据加载；2）提交的按钮禁用
 const formType = ref('') // 表单的类型：create - 新增；update - 修改
 const relatedParamRef = ref()
+const variableTypes = ref([
+  { label: 'Long', value: 'Long' },
+  { label: 'String', value: 'String' },
+  { label: 'Integer', value: 'Integer' },
+  { label: 'Double', value: 'Double' },
+  { label: 'BigDecimal', value: 'BigDecimal' },
+  { label: 'LocalDateTime', value: 'LocalDateTime' },
+  { label: 'LocalDateTime[]', value: 'LocalDateTime[]' },
+  { label: 'Boolean', value: 'Boolean' },
+  { label: 'UUID', value: 'UUID' },
+  { label: 'Map<String, Object>', value: 'Map<String, Object>' },
+  { label: 'VO类', value: 'VOClass' },
+  { label: '子类', value: 'Subclass' }
+])
 const initFormData = {
   id: '',
   name: '',
@@ -1403,5 +1368,25 @@ const getTree = async () => {
   moduleTree.value = []
   const data = await CodegenApi.getSimpleList()
   moduleTree.value = handleTree(data)
+}
+
+const validationChange = (row) => {
+  let validations = ['NotNull', 'Mobile', 'InEnum', 'URL']
+  if (row.variableType == 'String') {
+    validations = validations.concat(['NotBlank', 'Pattern', 'Length', 'Email'])
+  }
+  if (['String', 'Map<String, Object>'].includes(row.variableType) || row.isList == 'true') {
+    validations.push('NotEmpty', 'Size')
+  }
+  if (['Long', 'Integer', 'Double'].includes(row.variableType)) {
+    validations = validations.concat(['Min', 'Max'])
+  }
+  if (row.variableType == 'BigDecimal') {
+    validations = validations.concat(['DecimalMin', 'DecimalMax'])
+  }
+  if (['Long', 'Integer', 'Double', 'BigDecimal'].includes(row.variableType)) {
+    validations = validations.concat(['Range'])
+  }
+  return validations
 }
 </script>

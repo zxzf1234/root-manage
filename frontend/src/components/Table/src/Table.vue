@@ -287,6 +287,7 @@ export default defineComponent({
     })
     let menuSlot = slots?.['menu']?.({ row: {} })
     function showMouseMenu(row, _column, event) {
+      if (menuSlot == undefined || menuSlot?.length <= 0) return
       event.preventDefault()
       const { x, y } = event
       menuOption.value.show = true

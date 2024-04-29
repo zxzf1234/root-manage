@@ -3,11 +3,7 @@
     ${inputSrcExtendClass} ${interfaceNameHump}InputConvert(${interfaceInput} input);
 #elseif(${interface.inputType}=="VOClassList" && ${inputSrcExtendClass} != "")
 
-    List<${inputSrcExtendClass}> ${interfaceNameHump}InputConvert(${interfaceInput} input);
-#end
-#if(${inputSubTableName} != "")
-
-    ${inputSubTableName} ${interfaceNameHump}InputConvert(${interfaceInput}.${inputSubClassName} input);
+List<${inputSrcExtendClass}> ${interfaceNameHump}InputConvert(${interfaceInput} input);
 #end
 #if(${interface.outputType}=="VOClass" && ${outputSrcExtendClass} != "")
 
