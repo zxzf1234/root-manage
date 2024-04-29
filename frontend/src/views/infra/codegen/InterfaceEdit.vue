@@ -11,6 +11,7 @@
         <el-button @click="handleDeleteSubclass">删除子类</el-button>
         <el-button @click="handleAddValidation">添加校验</el-button>
         <el-button @click="handleDeleteValidation">删除校验</el-button>
+        <el-button @click="handleCompletionValidation">自动补全校验</el-button>
       </el-form-item>
     </el-form>
     <el-form
@@ -1113,6 +1114,68 @@ const handleDeleteValidation = async () => {
   validationCurrentRow.value[tabActiveName.value] = undefined
 }
 
+/** 自动补全校验 */
+const handleCompletionValidation = async () => {
+  if (paramCurrentRow.value[tabActiveName.value] === undefined) {
+    message.alertError('请先选择参数')
+    return
+  }
+
+  if (paramCurrentRow.value[tabActiveName.value]['row'] === undefined) {
+    message.alertError('请先选择参数')
+    return
+  }
+  if (paramCurrentRow.value[tabActiveName.value]['row'].variableType != 'BigDecimal') return
+
+  const newValidations = [
+    {
+      id: crypto.randomUUID(),
+      parentId: paramCurrentRow.value[tabActiveName.value]['row'].id,
+      validation: 'NotNull',
+      validationCondition: '',
+      message: paramCurrentRow.value[tabActiveName.value]['row'].comment + '不能为空',
+      operateType: 'new'
+    },
+    {
+      id: crypto.randomUUID(),
+      parentId: paramCurrentRow.value[tabActiveName.value]['row'].id,
+      validation: 'Positive',
+      validationCondition: '',
+      message: paramCurrentRow.value[tabActiveName.value]['row'].comment + '必须大于0',
+      operateType: 'new'
+    },
+    {
+      id: crypto.randomUUID(),
+      parentId: paramCurrentRow.value[tabActiveName.value]['row'].id,
+      validation: 'Digits',
+      validationCondition: 'integer = 13, fraction = 4',
+      message: paramCurrentRow.value[tabActiveName.value]['row'].comment + '格式无效',
+      operateType: 'new'
+    }
+  ]
+
+  paramTable.value[tabActiveName.value]?.toggleRowExpansion(
+    paramCurrentRow.value[tabActiveName.value]['row'],
+    true
+  )
+  if (paramCurrentRow.value[tabActiveName.value]['row'].validations == undefined)
+    paramCurrentRow.value[tabActiveName.value]['row'].validations = newValidations
+  else {
+    const existsValidation = paramCurrentRow.value[tabActiveName.value]['row'].validations.map(
+      (item) => item.validation
+    )
+    if (existsValidation.indexOf('NotNull') < 0) {
+      paramCurrentRow.value[tabActiveName.value]['row'].validations.push(newValidations[0])
+    }
+    if (existsValidation.indexOf('Positive') < 0) {
+      paramCurrentRow.value[tabActiveName.value]['row'].validations.push(newValidations[1])
+    }
+    if (existsValidation.indexOf('Digits') < 0) {
+      paramCurrentRow.value[tabActiveName.value]['row'].validations.push(newValidations[2])
+    }
+  }
+}
+
 const handleAddExtendClass = () => {
   let variableType = 1 << 2
 
@@ -1382,7 +1445,13 @@ const validationChange = (row) => {
     validations = validations.concat(['Min', 'Max'])
   }
   if (row.variableType == 'BigDecimal') {
-    validations = validations.concat(['DecimalMin', 'DecimalMax'])
+    validations = validations.concat([
+      'DecimalMin',
+      'DecimalMax',
+      'Positive',
+      'PositiveOrZero',
+      'Digits'
+    ])
   }
   if (['Long', 'Integer', 'Double', 'BigDecimal'].includes(row.variableType)) {
     validations = validations.concat(['Range'])
