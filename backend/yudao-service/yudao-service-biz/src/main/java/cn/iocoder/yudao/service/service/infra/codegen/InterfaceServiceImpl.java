@@ -133,6 +133,12 @@ public class InterfaceServiceImpl implements InterfaceService{
                             .map(InterfaceEditInput.validation::getId).collect(Collectors.toList()));
                 }
             }else if(Objects.equals(inputSubclass.getOperateType(), "new")){
+                inputSubclass.setSubclassParams(inputSubclass.getSubclassParams().stream().filter(
+                        param -> !Objects.equals(param.getOperateType(), "delete")).collect(Collectors.toList()));
+                inputSubclass.getSubclassParams().forEach(
+                        param -> param.setValidations(param.getValidations().stream().filter(
+                                validation -> !Objects.equals(validation.getOperateType(), "delete")).collect(Collectors.toList()))
+                );
                 InfraInterfaceSubclass newSubclass = CodegenConvert.INSTANCE.convert(inputSubclass);
 
                 for(InfraInterfaceParam subclassParam : newSubclass.subclassParams()){
@@ -166,6 +172,13 @@ public class InterfaceServiceImpl implements InterfaceService{
                             .map(InterfaceEditInput.validation::getId).collect(Collectors.toList()));
                 }
             }else if(Objects.equals(outputSubclass.getOperateType(), "new")){
+                outputSubclass.setSubclassParams(outputSubclass.getSubclassParams().stream().filter(
+                        param -> !Objects.equals(param.getOperateType(), "delete")).collect(Collectors.toList()));
+                outputSubclass.getSubclassParams().forEach(
+                        param -> param.setValidations(param.getValidations().stream().filter(
+                                validation -> !Objects.equals(validation.getOperateType(), "delete")).collect(Collectors.toList()))
+                );
+
                 InfraInterfaceSubclass newSubclass = CodegenConvert.INSTANCE.convert(outputSubclass);
 
                 for(InfraInterfaceParam subclassParam : newSubclass.subclassParams()){
@@ -195,6 +208,7 @@ public class InterfaceServiceImpl implements InterfaceService{
                 deleteValidations.addAll(inputParam.getValidations().stream().map(InterfaceEditInput.validation::getId)
                         .collect(Collectors.toList()));
             }else if(Objects.equals(inputParam.getOperateType(), "new")){
+                inputParam.setValidations(inputParam.getValidations().stream().filter(validation -> !validation.getOperateType().equals("delete")).collect(Collectors.toList()));
                 InfraInterfaceParam newParam = CodegenConvert.INSTANCE.convert(inputParam);
                 newValidations.addAll(newParam.validations());
                 newParam = InfraInterfaceParamDraft.$.produce(newParam, draft -> draft.setValidations(Collections.emptyList()));
@@ -218,6 +232,7 @@ public class InterfaceServiceImpl implements InterfaceService{
                 deleteValidations.addAll(outputParam.getValidations().stream().map(InterfaceEditInput.validation::getId)
                         .collect(Collectors.toList()));
             }else if(Objects.equals(outputParam.getOperateType(), "new")){
+                outputParam.setValidations(outputParam.getValidations().stream().filter(validation -> !validation.getOperateType().equals("delete")).collect(Collectors.toList()));
                 InfraInterfaceParam newParam = CodegenConvert.INSTANCE.convert(outputParam);
                 newValidations.addAll(newParam.validations());
                 newParam = InfraInterfaceParamDraft.$.produce(newParam, draft -> draft.setValidations(Collections.emptyList()));

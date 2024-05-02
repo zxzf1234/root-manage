@@ -401,6 +401,7 @@
                       row-key="id"
                       style="width: 1100px"
                       class="mx-10"
+                      :row-style="rowStyle"
                     >
                       <el-table-column label="校验注解" min-width="30%" align="center">
                         <template #default="prop">
