@@ -185,12 +185,18 @@ public class CodegenEngine {
         {
             param.setClassType(0);
             if(Objects.equals(param.getVariableType(), "VOClass")) {
-                InfraInterfaceVoClass voClass = infraInterfaceVoClassRepository.findById(UUID.fromString(param.getRelatedId())).get();
+                Optional<InfraInterfaceVoClass> optionalInfraInterfaceVoClass = infraInterfaceVoClassRepository.findById(UUID.fromString(param.getRelatedId()));
+                if(!optionalInfraInterfaceVoClass.isPresent())
+                    break;
+                InfraInterfaceVoClass voClass = optionalInfraInterfaceVoClass.get();
                 param.setVariableType(voClass.name());
                 param.setClassType(1);
             }
             if(Objects.equals(param.getVariableType(), "Subclass")) {
-                InfraInterfaceSubclass subclass = infraInterfaceSubclassRepository.findById(UUID.fromString(param.getRelatedId())).get();
+                Optional<InfraInterfaceSubclass> optionalInfraInterfaceSubclass = infraInterfaceSubclassRepository.findById(UUID.fromString(param.getRelatedId()));
+                if(!optionalInfraInterfaceSubclass.isPresent())
+                    break;
+                InfraInterfaceSubclass subclass = optionalInfraInterfaceSubclass.get();
                 param.setVariableType(subclass.name());
                 param.setClassType(2);
             }
@@ -435,7 +441,7 @@ public class CodegenEngine {
                 functionContent.append("            ").append("}else if(Objects.equals(").append(inputSubClassName)
                         .append(".getOperateType(), \"new\")){\r\n");
                 if(!subDuplicateErrorCode.isEmpty()) {
-                //生成代码 Optional<InfraDictData> optionalDuplicateInfraDictData = infraDictDataRepository.findByTypeIdAndValue(data.getTypeId(), data.getValue());
+                    //生成代码 Optional<InfraDictData> optionalDuplicateInfraDictData = infraDictDataRepository.findByTypeIdAndValue(data.getTypeId(), data.getValue());
                     functionContent.append("                Optional<").append(inputSubTableName).append("> optionalDuplicate")
                             .append(inputSubTableName).append(" = ").append(inputSubRepositoryName)
                             .append(".").append(subRepositoryDuplicateFunctionName)
@@ -467,7 +473,7 @@ public class CodegenEngine {
                 //生成代码          }
                 functionContent.append("                }\r\n");
                 if(!subDuplicateErrorCode.isEmpty()) {
-                  //生成代码 Optional<InfraDictData> optionalDuplicateInfraDictData = infraDictDataRepository.findByTypeIdAndValue(data.getTypeId(), data.getValue());
+                    //生成代码 Optional<InfraDictData> optionalDuplicateInfraDictData = infraDictDataRepository.findByTypeIdAndValue(data.getTypeId(), data.getValue());
                     functionContent.append("                Optional<").append(inputSubTableName).append("> optionalDuplicate")
                             .append(inputSubTableName).append(" = ").append(inputSubRepositoryName)
                             .append(".").append(subRepositoryDuplicateFunctionName)
@@ -502,13 +508,13 @@ public class CodegenEngine {
                     .append(convertClass).append(".INSTANCE.").append(convertName).append("(inputVO);\r\n");
             if(inputSubTable != null){
                 String upperInputSubClassName = bindingMap.get("inputSubClassName").toString().toUpperCase();
-            //生成代码 updateInfraDictType = InfraDictTypeDraft.$.produce(updateInfraDictType, draft -> {
+                //生成代码 updateInfraDictType = InfraDictTypeDraft.$.produce(updateInfraDictType, draft -> {
                 functionContent.append("        update").append(inputTableName).append(" = ").append(inputTableName)
                         .append("Draft.$.produce(update").append(inputTableName).append(", draft -> {\r\n");
-            //生成代码 DraftObjects.unload(draft, InfraDictTypeProps.DATAS);
+                //生成代码 DraftObjects.unload(draft, InfraDictTypeProps.DATAS);
                 functionContent.append("            DraftObjects.unload(draft, ").append(inputTableName).append("Props.")
                         .append(upperInputSubClassName).append("S);\r\n");
-            //生成代码 });
+                //生成代码 });
                 functionContent.append("        });\r\n");
             }
 

@@ -162,7 +162,6 @@ const addEvent = (code: object, eventObject: object, title: string) => {
     if (eventObject[key]['function'] === undefined || eventObject[key]['function'] == '') {
       continue
     }
-    console.log(eventObject[key]['eventName'])
     code['vue'] += ' @' + eventObject[key]['eventName'] + '="' + eventObject[key]['function'] + '"'
     let functionRemark =
       '/** 处理响应事件 ' + (title == undefined || title == '' ? '' : title) + ' */\r'

@@ -11,6 +11,18 @@ import hd from "@form-create/element-ui";
 function Mf({ t: u }) {
   return [
     {
+      type: "input",
+      field: "formName",
+      value: "",
+      title: "\u9875\u9762\u540D\u79F0"
+    },
+    {
+      type: "switch",
+      field: "isDialog",
+      value: !1,
+      title: "\u662F\u5426\u5F39\u7A97"
+    },
+    {
       type: "radio",
       field: "labelPosition",
       value: "left",
