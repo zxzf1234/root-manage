@@ -743,7 +743,7 @@ public class CodegenEngine {
                     .append((" inputVO){\r\n        return pager(inputVO.getPageNo() - 1, inputVO.getPageSize()).execute(\r\n                sql().createQuery("))
                     .append(outputTableTable).append(")\r\n")
                     .append(where)
-                    .append("                        .orderBy(").append(outputTableTable).append(".id())\r\n")
+                    .append("                        .orderBy(").append(outputTableTable).append(".id().desc())\r\n")
                     .append("                        .select(").append(outputTableTable).append(")\r\n        );\r\n    }\r\n");
         }
         if(infraInterface.name().toLowerCase().contains("listquery")){
@@ -751,7 +751,7 @@ public class CodegenEngine {
                     .append(infraInterface.name()).append("(") .append(inputClass)
                     .append((" inputVO){\r\n        return sql().createQuery(")).append(outputTableTable).append(")\r\n")
                     .append(where)
-                    .append("                .orderBy(").append(outputTableTable).append(".id())\r\n")
+                    .append("                .orderBy(").append(outputTableTable).append(".id().desc())\r\n")
                     .append("                .select(").append(outputTableTable).append(").execute();\r\n    }\r\n");
 
         }
