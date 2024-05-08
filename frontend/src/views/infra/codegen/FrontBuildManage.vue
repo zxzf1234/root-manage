@@ -204,7 +204,7 @@
         <el-tab-pane label="表右键菜单" name="tableMenuItems">
           <el-button @click="clickAddTableMenuItem">添加右键菜单</el-button>
           <el-button @click="clickAddMenuPermi">按菜单权限添加</el-button>
-          <el-button @click="clickDeleteTableMenuItem">删除表字段</el-button>
+          <el-button @click="clickDeleteTableMenuItem">删除右键菜单</el-button>
           <Table
             :columns="tableMenuItems"
             :data="formData.tableMenuItems"
@@ -478,6 +478,7 @@ const resetForm = () => {
     tableMenuItems: []
   }
   formRef.value?.resetFields()
+  tabActiveName.value = 'buttons'
 }
 
 const clickAddButton = () => {

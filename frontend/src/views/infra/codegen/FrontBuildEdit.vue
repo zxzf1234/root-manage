@@ -94,7 +94,6 @@
                 <el-option label="select" value="select" />
                 <el-option label="checkbox" value="checkbox" />
                 <el-option label="datePicker" value="datePicker" />
-                <el-option label="dateTimePicker" value="dateTimePicker" />
               </el-select>
             </template>
             <template #span="{ row }">
@@ -245,6 +244,14 @@ const formData = ref<frontBuildEditModel.FrontBuildEdit>({
   components: []
 })
 
+const formRef = ref() // 表单 Ref
+/** 打开弹窗 */
+const open = async () => {
+  dialogVisible.value = true
+  resetForm()
+}
+defineExpose({ open }) // 提供 open 方法，用于打开弹窗
+
 const rowDrop = (tableName: string) => {
   nextTick(() => {
     const wrapper: HTMLElement | null = document.querySelector(
@@ -292,13 +299,6 @@ const formRules = reactive({
   rruleef: [{ required: true, message: '表单验证规则对象不能为空', trigger: 'blur' }],
   loading: [{ required: true, message: '表单加载中对象不能为空', trigger: 'blur' }]
 })
-const formRef = ref() // 表单 Ref
-/** 打开弹窗 */
-const open = async () => {
-  dialogVisible.value = true
-  resetForm()
-}
-defineExpose({ open }) // 提供 open 方法，用于打开弹窗
 
 const currentChangeComponents = (val) => {
   fromComponentCurrentRow.value = val
@@ -418,5 +418,6 @@ const resetForm = () => {
     components: []
   }
   formRef.value?.resetFields()
+  tabActiveName.value = 'components'
 }
 </script>
