@@ -45,7 +45,8 @@
 </template>
 <script setup lang="ts" name="InfraBuild">
 import { useClipboard } from '@vueuse/core'
-import designerForm from '@/components/FcDesigner/index.es.js'
+// import designerForm from '@/components/FcDesigner/index.es.js'
+import designerForm from '@zxzf1234/designer'
 import { jsonParseCode } from '@/utils/frontBuild'
 import FrontBuildManage from './FrontBuildManage.vue'
 import * as FrontBuildManageModel from '@/model/infra/codegen/FrontBuildManage'
