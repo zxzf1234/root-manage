@@ -322,15 +322,25 @@ const showBuildEdit = (editObject: FrontBuildEditModel.FrontBuildEdit) => {
         hidden: false,
         display: true
       }
-      if (['input', 'select', 'datePicker'].includes(element.type)) {
+      if (element.type == 'input') {
         component['props'] = {
           placeholder: '请输入' + element.componentName,
           clearable: true
         }
       }
-      if (element.type == 'datePicker') {
-        component['props']['value-format'] = 'YYYY-MM-DD HH:mm:ss'
+      if (element.type == 'select') {
+        component['props'] = {
+          placeholder: '请输入' + element.componentName
+        }
       }
+      if (element.type == 'datePicker') {
+        component['props'] = {
+          placeholder: '请输入' + element.componentName,
+          clearable: true,
+          'value-format': 'YYYY-MM-DD HH:mm:ss'
+        }
+      }
+
       if (element.span != 0) {
         isInline = false
         const col = {

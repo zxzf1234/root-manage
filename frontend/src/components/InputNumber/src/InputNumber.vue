@@ -21,6 +21,7 @@ onMounted(() => {
   if (props.type != 'decimal') {
     precision.value = 0
   }
+
   min.value = props.min
   model.value = props.modelValue
 })
@@ -32,9 +33,15 @@ watch(
   (modelValue: number) => {
     if (modelValue == null) {
       model.value = 0
-      modelValue = 0
     }
-    emit('update:modelValue', modelValue)
+    emit('update:modelValue', model.value)
+  }
+)
+
+watch(
+  () => props.modelValue,
+  (propModelValue: number) => {
+    model.value = propModelValue
   }
 )
 

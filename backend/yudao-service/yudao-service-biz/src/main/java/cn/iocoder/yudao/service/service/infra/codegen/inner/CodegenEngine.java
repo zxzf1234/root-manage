@@ -1718,13 +1718,14 @@ public class CodegenEngine {
             }
             if(Objects.equals(column.getJavaType(), "String")
                     || Objects.equals(column.getJavaType(), "UUID")
+                    ){
+                column.setVueDataType("string");
+            } else if(Objects.equals(column.getJavaType(), "LocalDateTime") ){
+                column.setVueDataType("Date | undefined");
+            }else if(Objects.equals(column.getJavaType(), "Integer")
                     || Objects.equals(column.getJavaType(), "Long")
                     || Objects.equals(column.getJavaType(), "BigDecimal")
                     || Objects.equals(column.getJavaType(), "Double")){
-                column.setVueDataType("string");
-            } else if(Objects.equals(column.getJavaType(), "LocalDateTime") ){
-                column.setVueDataType("Date");
-            }else if(Objects.equals(column.getJavaType(), "Integer")){
                 column.setVueDataType("number");
             }else if(Objects.equals(column.getJavaType(), "Boolean") ){
                 column.setVueDataType("boolean");
