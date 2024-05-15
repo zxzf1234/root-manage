@@ -799,14 +799,13 @@ public class CodegenEngine {
         bindingMap.put("moduleNameHumpUp", moduleNameHumpUp);
         bindingMap.put("moduleNameSymbol", moduleNameSymbol);
         bindingMap.put("modulePath", String.join("/", parentNames));
-        String vueFileName = moduleNameHump;
         String vueModulePath = String.join("/", parentNames);
-        if(parentNames.get(parentNames.size()-1).equals(moduleNameHump)) {
-            vueModulePath = vueModulePath.substring(0, vueModulePath.length() - moduleNameHump.length() - 1);
-            vueFileName = "index";
-        }
+//        if(parentNames.get(parentNames.size()-1).equals(moduleNameHump)) {
+//            vueModulePath = vueModulePath.substring(0, vueModulePath.length() - moduleNameHump.length() - 1);
+//            vueFileName = "index";
+//        }
         bindingMap.put("vueModulePath", vueModulePath);
-        bindingMap.put("vueFileName", vueFileName);
+        bindingMap.put("vueFileName", moduleNameHump);
         List<CodegenInterfaceParam> inputParams = CodegenConvert.INSTANCE.convertList19(infraInterface.inputParams());
         convertParams(inputParams);
         bindingMap.put("inputParams", inputParams);
@@ -1539,10 +1538,10 @@ public class CodegenEngine {
         bindingMap.put("modulePath", String.join("/", parentNames));
         String vueFileName = module.name();
         String vueModulePath = String.join("/", parentNames);
-        if(parentNames.get(parentNames.size()-1).equals(module.name())) {
-            vueModulePath = vueModulePath.substring(0, vueModulePath.length() - module.name().length() - 1);
-            vueFileName = "index";
-        }
+//        if(parentNames.get(parentNames.size()-1).equals(module.name())) {
+//            vueModulePath = vueModulePath.substring(0, vueModulePath.length() - module.name().length() - 1);
+//            vueFileName = "index";
+//        }
         bindingMap.put("vueModulePath", vueModulePath);
         bindingMap.put("vueFileName", vueFileName);
         String moduleRootName = parentNames.get(0);
@@ -1718,7 +1717,7 @@ public class CodegenEngine {
             }
             if(Objects.equals(column.getJavaType(), "String")
                     || Objects.equals(column.getJavaType(), "UUID")
-                    ){
+            ){
                 column.setVueDataType("string");
             } else if(Objects.equals(column.getJavaType(), "LocalDateTime") ){
                 column.setVueDataType("Date | undefined");

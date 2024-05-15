@@ -179,6 +179,12 @@ const addEvent = (code: object, eventObject: object, title: string) => {
       code['script']['variable'].push('const tableCurrentRow = ref()\r')
     }
 
+    if (eventObject[key]['function'] == 'handleTableDblclick') {
+      functionRemark = '/** 处理table行双击事件 */\r'
+      functionCodeContext = '\r  console.log(row)\r'
+      functionParams = 'row'
+    }
+
     code['script']['function'].add(
       functionRemark +
         'const ' +

@@ -224,6 +224,10 @@ const showBuildManage = (manageObject: FrontBuildManageModel.FrontBuildManage) =
       {
         eventName: 'page-change',
         function: manageObject.tablePageChange
+      },
+      {
+        eventName: 'row-dblclick',
+        function: 'handleTableDblclick'
       }
     ]
   }
