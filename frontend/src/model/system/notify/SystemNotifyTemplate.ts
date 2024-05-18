@@ -1,5 +1,5 @@
 export type SystemNotifyTemplate = {
-  id: string
+  id: number
   name: string
   code: string
   nickname: string
@@ -8,8 +8,4 @@ export type SystemNotifyTemplate = {
   params: string[]
   status: number
   remark: string
-  createTime: Date
-  updateTime: Date
-  creatorId: string
-  updaterId: string
 }

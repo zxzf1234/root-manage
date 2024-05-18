@@ -5,8 +5,4 @@ export type InfraDatabaseTable = {
   remark: string
   firstModule: string
   secondModule: string
-  createTime: Date
-  updateTime: Date
-  creatorId: string
-  updaterId: string
 }

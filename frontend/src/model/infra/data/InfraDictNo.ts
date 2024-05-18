@@ -4,7 +4,7 @@ export type InfraDictNo = {
   prefix: string
   dateForm: number
   dateBase: number
-  lastDate: Date | null
+  lastDate: Date | undefined
   postfixLen: number
   postfixVal: number
   remark: string

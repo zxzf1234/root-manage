@@ -4,7 +4,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import java.util.*;
 import javax.validation.constraints.*;
-import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.*;
+import javax.validation.constraints.NotEmpty;
+import org.springframework.format.annotation.DateTimeFormat;
+import static cn.iocoder.yudao.framework.common.util.date.DateUtils.FORMAT_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND;
+import java.time.LocalDateTime;
 
 /**
  * 数据库表定义 Base VO，提供给添加、修改、详细的子 VO 使用
@@ -14,8 +18,8 @@ import org.hibernate.validator.constraints.Length;
 public class InfraDatabaseTableBase {
 
     @Schema(description = "表名称", requiredMode = Schema.RequiredMode.REQUIRED, example = "infra_database")
-    @Pattern(regexp = "^[a-z_]+$", message = "表名称只能是小写英文和_")
     @NotNull(message = "表名称不能为空")
+    @Pattern(regexp = "^[a-z_]+$", message = "表名称只能是小写英文和_")
     private String name;
 
     @Schema(description = "表描述", requiredMode = Schema.RequiredMode.REQUIRED, example = "32")

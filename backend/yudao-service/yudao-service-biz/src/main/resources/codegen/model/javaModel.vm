@@ -64,6 +64,7 @@ import java.math.BigDecimal;
         #break
     #end
 #end
+
 @Entity
 public interface ${classNameHump} extends BaseEntity {
 #foreach ($column in $columns)
@@ -80,9 +81,12 @@ public interface ${classNameHump} extends BaseEntity {
 
     #end
     #end
-    #if (${column.humpName} != "id" && ${column.humpName} != "createTime" && ${column.humpName} != "updateTime" && ${column.humpName} != "creatorId" && ${column.humpName} != "updaterId" && ${column.humpName} != "deleted")
+    #if (${column.humpName} != "id" && ${column.humpName} != "createTime" && ${column.humpName} != "updateTime" && ${column.humpName} != "creatorId" && ${column.humpName} != "updaterId")
     #if (${column.nullable} == true && ${column.relatedTable} =="")
     @Nullable
+    #end
+    #if (${column.humpName}=="deletedTime")
+    @LogicalDeleted("now")
     #end
     #if (${column.relatedTable} !="")
     @IdView
@@ -92,7 +96,7 @@ public interface ${classNameHump} extends BaseEntity {
     @Serialized
     #end
     #foreach ($index in $indexes)
-    #if($index.indexType == "UNIQUE INDEX" && $index.columnNames.contains(${column.columnName}) && ${column.relatedTable} == "")
+    #if($index.indexType == "UNIQUE INDEX" && $index.columnNames.contains(${column.columnName}) && ${column.relatedTable} == "" && ${column.humpName}!="deletedTime")
     @Key
     #end
     #end

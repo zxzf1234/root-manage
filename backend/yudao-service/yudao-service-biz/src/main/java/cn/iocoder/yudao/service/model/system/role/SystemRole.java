@@ -2,7 +2,10 @@ package cn.iocoder.yudao.service.model.system.role;
 
 import cn.iocoder.yudao.service.model.base.BaseEntity;
 import org.babyfish.jimmer.sql.*;
+import java.time.LocalDateTime;
+import org.jetbrains.annotations.Nullable;
 import java.util.List;
+
 @Entity
 public interface SystemRole extends BaseEntity {
     @Id
@@ -25,5 +28,9 @@ public interface SystemRole extends BaseEntity {
     Integer type();
 
     String remark();
+
+    @Nullable
+    @LogicalDeleted("now")
+    LocalDateTime deletedTime();
 
 }

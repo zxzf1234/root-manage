@@ -3,6 +3,7 @@ package cn.iocoder.yudao.service.model.infra.data;
 import cn.iocoder.yudao.service.model.base.BaseEntity;
 import cn.iocoder.yudao.service.model.infra.data.InfraDictType;
 import org.babyfish.jimmer.sql.*;
+import java.time.LocalDateTime;
 import org.jetbrains.annotations.Nullable;
 import org.babyfish.jimmer.sql.meta.UUIDIdGenerator;
 import java.util.UUID;
@@ -37,5 +38,9 @@ public interface InfraDictData extends BaseEntity {
     String remark();
 
     String dataEnum();
+
+    @Nullable
+    @LogicalDeleted("now")
+    LocalDateTime deletedTime();
 
 }

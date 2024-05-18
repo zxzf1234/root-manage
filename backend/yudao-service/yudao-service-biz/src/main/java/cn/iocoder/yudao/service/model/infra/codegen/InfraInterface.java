@@ -2,11 +2,17 @@ package cn.iocoder.yudao.service.model.infra.codegen;
 
 import cn.iocoder.yudao.service.model.base.BaseEntity;
 import cn.iocoder.yudao.service.model.infra.codegen.InfraInterfaceModule;
+import cn.iocoder.yudao.service.model.infra.codegen.InfraInterfaceParam;
+import cn.iocoder.yudao.service.model.infra.codegen.InfraInterfaceSubclass;
+import cn.iocoder.yudao.service.model.infra.codegen.InfraInterfaceParam;
+import cn.iocoder.yudao.service.model.infra.codegen.InfraInterfaceSubclass;
 import org.babyfish.jimmer.sql.*;
+import java.time.LocalDateTime;
 import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import org.babyfish.jimmer.sql.meta.UUIDIdGenerator;
 import java.util.UUID;
+
 @Entity
 public interface InfraInterface extends BaseEntity {
     @Id
@@ -40,6 +46,10 @@ public interface InfraInterface extends BaseEntity {
     String outputExtendClass();
 
     Boolean inputServlet();
+
+    @Nullable
+    @LogicalDeleted("now")
+    LocalDateTime deletedTime();
 
     @Transient(InfraInterfaceInputParamResolver.class)
     List<InfraInterfaceParam> inputParams();

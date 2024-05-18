@@ -11,6 +11,7 @@
         <el-button @click="handleDeleteIndex">删除索引</el-button>
         <el-button @click="handleAddMapping">添加映射</el-button>
         <el-button @click="handleDeleteMapping">删除映射</el-button>
+        <el-button @click="handleAddDeletedTime">添加删除时间</el-button>
         <el-button type="primary" @click="handleSaveTable"> 保存 </el-button>
         <el-button @click="close">关闭</el-button>
       </el-form-item>
@@ -144,12 +145,14 @@
                 v-model="scope.row.columnName"
                 @blur="scope.row.columnName = scope.row.columnName.trim()"
                 :disabled="
-                  scope.row.columnName == 'id' ||
-                  scope.row.columnName == 'create_time' ||
-                  scope.row.columnName == 'update_time' ||
-                  scope.row.columnName == 'creator_id' ||
-                  scope.row.columnName == 'updater_id' ||
-                  scope.row.columnName == 'deleted'
+                  [
+                    'id',
+                    'create_time',
+                    'update_time',
+                    'creator_id',
+                    'updater_id',
+                    'deleted_time'
+                  ].includes(scope.row.columnName)
                 "
               />
             </template>
@@ -161,12 +164,14 @@
                 v-model="scope.row.columnComment"
                 @blur="scope.row.columnComment = scope.row.columnComment.trim()"
                 :disabled="
-                  scope.row.columnName == 'id' ||
-                  scope.row.columnName == 'create_time' ||
-                  scope.row.columnName == 'update_time' ||
-                  scope.row.columnName == 'creator_id' ||
-                  scope.row.columnName == 'updater_id' ||
-                  scope.row.columnName == 'deleted'
+                  [
+                    'id',
+                    'create_time',
+                    'update_time',
+                    'creator_id',
+                    'updater_id',
+                    'deleted_time'
+                  ].includes(scope.row.columnName)
                 "
               />
             </template>
@@ -180,11 +185,13 @@
                 default-first-option
                 class="!w-150px"
                 :disabled="
-                  scope.row.columnName == 'create_time' ||
-                  scope.row.columnName == 'update_time' ||
-                  scope.row.columnName == 'creator_id' ||
-                  scope.row.columnName == 'updater_id' ||
-                  scope.row.columnName == 'deleted'
+                  [
+                    'create_time',
+                    'update_time',
+                    'creator_id',
+                    'updater_id',
+                    'deleted_time'
+                  ].includes(scope.row.columnName)
                 "
                 @change="dataTypeBlur(scope)"
               >
@@ -206,11 +213,13 @@
                 v-model="scope.row.javaType"
                 class="!w-150px"
                 :disabled="
-                  scope.row.columnName == 'create_time' ||
-                  scope.row.columnName == 'update_time' ||
-                  scope.row.columnName == 'creator_id' ||
-                  scope.row.columnName == 'updater_id' ||
-                  scope.row.columnName == 'deleted'
+                  [
+                    'create_time',
+                    'update_time',
+                    'creator_id',
+                    'updater_id',
+                    'deleted_time'
+                  ].includes(scope.row.columnName)
                 "
               >
                 <el-option label="Long" value="Long" />
@@ -232,12 +241,14 @@
               <el-checkbox
                 v-model="scope.row.nullable"
                 :disabled="
-                  scope.row.columnName == 'id' ||
-                  scope.row.columnName == 'create_time' ||
-                  scope.row.columnName == 'update_time' ||
-                  scope.row.columnName == 'creator_id' ||
-                  scope.row.columnName == 'updater_id' ||
-                  scope.row.columnName == 'deleted'
+                  [
+                    'id',
+                    'create_time',
+                    'update_time',
+                    'creator_id',
+                    'updater_id',
+                    'deleted_time'
+                  ].includes(scope.row.columnName)
                 "
                 false-value="false"
                 true-value="true"
@@ -251,12 +262,14 @@
                 @blur="scope.row.defaultValue = scope.row.defaultValue.trim()"
                 class="!w-50px"
                 :disabled="
-                  scope.row.columnName == 'id' ||
-                  scope.row.columnName == 'create_time' ||
-                  scope.row.columnName == 'update_time' ||
-                  scope.row.columnName == 'creator_id' ||
-                  scope.row.columnName == 'updater_id' ||
-                  scope.row.columnName == 'deleted'
+                  [
+                    'id',
+                    'create_time',
+                    'update_time',
+                    'creator_id',
+                    'updater_id',
+                    'deleted_time'
+                  ].includes(scope.row.columnName)
                 "
               />
             </template>
@@ -278,12 +291,14 @@
                   :label="dict.name"
                   :value="dict.name"
                   :disabled="
-                    scope.row.columnName == 'id' ||
-                    scope.row.columnName == 'create_time' ||
-                    scope.row.columnName == 'update_time' ||
-                    scope.row.columnName == 'creator_id' ||
-                    scope.row.columnName == 'updater_id' ||
-                    scope.row.columnName == 'deleted'
+                    [
+                      'id',
+                      'create_time',
+                      'update_time',
+                      'creator_id',
+                      'updater_id',
+                      'deleted_time'
+                    ].includes(scope.row.columnName)
                   "
                 />
               </el-select>
@@ -298,12 +313,14 @@
                 class="!w-150px"
                 placeholder="请选择"
                 :disabled="
-                  scope.row.columnName == 'id' ||
-                  scope.row.columnName == 'create_time' ||
-                  scope.row.columnName == 'update_time' ||
-                  scope.row.columnName == 'creator_id' ||
-                  scope.row.columnName == 'updater_id' ||
-                  scope.row.columnName == 'deleted'
+                  [
+                    'id',
+                    'create_time',
+                    'update_time',
+                    'creator_id',
+                    'updater_id',
+                    'deleted_time'
+                  ].includes(scope.row.columnName)
                 "
               >
                 <el-option
@@ -322,12 +339,14 @@
                 @blur="scope.row.example = scope.row.example.trim()"
                 class="!w-150px"
                 :disabled="
-                  scope.row.columnName == 'id' ||
-                  scope.row.columnName == 'create_time' ||
-                  scope.row.columnName == 'update_time' ||
-                  scope.row.columnName == 'creator_id' ||
-                  scope.row.columnName == 'updater_id' ||
-                  scope.row.columnName == 'deleted'
+                  [
+                    'id',
+                    'create_time',
+                    'update_time',
+                    'creator_id',
+                    'updater_id',
+                    'deleted_time'
+                  ].includes(scope.row.columnName)
                 "
               />
             </template>
@@ -340,12 +359,14 @@
                 true-value="true"
                 @change="clickRequired(scope)"
                 :disabled="
-                  scope.row.columnName == 'id' ||
-                  scope.row.columnName == 'create_time' ||
-                  scope.row.columnName == 'update_time' ||
-                  scope.row.columnName == 'creator_id' ||
-                  scope.row.columnName == 'updater_id' ||
-                  scope.row.columnName == 'deleted'
+                  [
+                    'id',
+                    'create_time',
+                    'update_time',
+                    'creator_id',
+                    'updater_id',
+                    'deleted_time'
+                  ].includes(scope.row.columnName)
                 "
               />
             </template>
@@ -615,12 +636,12 @@ const open = async (type: string, id?: string) => {
         {
           id: crypto.randomUUID(),
           tableId: tableId,
-          columnName: 'deleted',
-          dataType: 'TINYINT(4)',
-          columnComment: '是否删除',
+          columnName: 'deleted_time',
+          dataType: 'DATETIME',
+          columnComment: '删除时间',
           nullable: 0,
           defaultValue: '0',
-          javaType: 'boolean',
+          javaType: 'LocalDateTime',
           dictType: '',
           example: '',
           relatedTable: '',
@@ -847,7 +868,7 @@ const handleDeleteColumn = async () => {
     columnName == 'update_time' ||
     columnName == 'creator_id' ||
     columnName == 'updater_id' ||
-    columnName == 'deleted'
+    columnName == 'deleted_time'
   ) {
     message.alertError('内置字段不可删除')
     return
@@ -940,6 +961,26 @@ const handleAddMapping = async () => {
     operateType: 'new'
   }
   formData.value.mappings.push(newMapping)
+}
+
+const handleAddDeletedTime = () => {
+  formData.value.columns.push({
+    id: crypto.randomUUID(),
+    tableId: tableId,
+    columnName: 'deleted_time',
+    dataType: 'DATETIME',
+    columnComment: '删除时间',
+    nullable: 1,
+    defaultValue: 'NULL',
+    javaType: 'LocalDateTime',
+    dictType: '',
+    example: '',
+    relatedTable: '',
+    required: 0,
+    operateType: 'new',
+    sort: 1004,
+    validations: []
+  })
 }
 
 /** 删除映射 */

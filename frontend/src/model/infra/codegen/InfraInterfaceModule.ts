@@ -5,8 +5,4 @@ export type InfraInterfaceModule = {
   parentId: string
   type: number
   sort: number
-  createTime: Date
-  updateTime: Date
-  creatorId: string
-  updaterId: string
 }

@@ -6,13 +6,13 @@ import org.babyfish.jimmer.sql.*;
 import java.time.LocalDateTime;
 import org.jetbrains.annotations.Nullable;
 import java.util.List;
-
 @Entity
 public interface SystemUser extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id();
 
+    @Key
     String username();
 
     String password();
@@ -50,5 +50,9 @@ public interface SystemUser extends BaseEntity {
     LocalDateTime loginDate();
 
     String userNo();
+
+    @Nullable
+    @LogicalDeleted("now")
+    LocalDateTime deletedTime();
 
 }

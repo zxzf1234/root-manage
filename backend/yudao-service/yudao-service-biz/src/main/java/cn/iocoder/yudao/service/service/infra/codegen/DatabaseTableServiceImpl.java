@@ -190,11 +190,13 @@ public class DatabaseTableServiceImpl implements DatabaseTableService {
 
         // 更新VoClass
         Optional<InfraInterfaceVoClass>  opUpdateVoClass = infraInterfaceVoClassRepository.findFirstByParentId(reqVo.getId().toString());
-        InfraInterfaceVoClass updateVoClass = InfraInterfaceVoClassDraft.$.produce(opUpdateVoClass.get(), draft -> {
-            draft.setComment(reqVo.getComment())
-                    .setName(upperFirst(StrUtil.toCamelCase(reqVo.getName())) + "Base");
-        });
-        infraInterfaceVoClassRepository.update(updateVoClass);
+        if(opUpdateVoClass.isPresent()) {
+            InfraInterfaceVoClass updateVoClass = InfraInterfaceVoClassDraft.$.produce(opUpdateVoClass.get(), draft -> {
+                draft.setComment(reqVo.getComment())
+                        .setName(upperFirst(StrUtil.toCamelCase(reqVo.getName())) + "Base");
+            });
+            infraInterfaceVoClassRepository.update(updateVoClass);
+        }
 
         // 执行代码生成
         InfraDatabaseTable updateDatabaseTable = infraDatabaseTableRepository.findDetailById(reqVo.getId()).get();
@@ -232,7 +234,7 @@ public class DatabaseTableServiceImpl implements DatabaseTableService {
     private String updateColumn(DatabaseUpdateReq.Column reqVoColumn){
         if (Objects.equals(reqVoColumn.getColumnName(), "create_time")
                 || Objects.equals(reqVoColumn.getColumnName(), "update_time") || Objects.equals(reqVoColumn.getColumnName(), "creator_id")
-                || Objects.equals(reqVoColumn.getColumnName(), "updater_id") || Objects.equals(reqVoColumn.getColumnName(), "deleted"))
+                || Objects.equals(reqVoColumn.getColumnName(), "updater_id") || Objects.equals(reqVoColumn.getColumnName(), "deletedTime"))
             return "";
         if(reqVoColumn.getValidations() != null) {
             for(DatabaseUpdateReq.Validation validation : reqVoColumn.getValidations())

@@ -29,6 +29,4 @@ public interface BaseEntity {
     @IdView
     Long updaterId();
 
-    @LogicalDeleted("true")
-    boolean deleted();
 }

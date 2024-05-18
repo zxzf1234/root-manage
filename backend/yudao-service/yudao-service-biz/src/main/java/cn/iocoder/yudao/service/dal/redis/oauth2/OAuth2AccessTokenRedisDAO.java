@@ -39,7 +39,7 @@ public class OAuth2AccessTokenRedisDAO {
 
         accessTokenDO = SystemOauth2AccessTokenDraft.$.produce(accessTokenDO, SystemOauth2AccessToken->{
             SystemOauth2AccessToken.setUpdaterId(0L).setUpdateTime(LocalDateTime.now())
-                    .setCreateTime(LocalDateTime.now()).setDeleted(false);
+                    .setCreateTime(LocalDateTime.now());
         });
         long time = LocalDateTimeUtil.between(LocalDateTime.now(), accessTokenDO.expiresTime(), ChronoUnit.SECONDS);
         if(time == 0)

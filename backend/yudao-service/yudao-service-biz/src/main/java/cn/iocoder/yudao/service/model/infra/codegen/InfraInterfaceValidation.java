@@ -2,8 +2,11 @@ package cn.iocoder.yudao.service.model.infra.codegen;
 
 import cn.iocoder.yudao.service.model.base.BaseEntity;
 import org.babyfish.jimmer.sql.*;
+import java.time.LocalDateTime;
+import org.jetbrains.annotations.Nullable;
 import org.babyfish.jimmer.sql.meta.UUIDIdGenerator;
 import java.util.UUID;
+
 @Entity
 public interface InfraInterfaceValidation extends BaseEntity {
     @Id
@@ -21,5 +24,9 @@ public interface InfraInterfaceValidation extends BaseEntity {
     String validationCondition();
 
     String message();
+
+    @Nullable
+    @LogicalDeleted("now")
+    LocalDateTime deletedTime();
 
 }

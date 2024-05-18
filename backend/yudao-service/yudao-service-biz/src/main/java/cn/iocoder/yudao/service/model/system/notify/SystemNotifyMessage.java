@@ -6,6 +6,7 @@ import org.babyfish.jimmer.sql.*;
 import java.time.LocalDateTime;
 import org.jetbrains.annotations.Nullable;
 import java.util.Map;
+
 @Entity
 public interface SystemNotifyMessage extends BaseEntity {
     @Id
@@ -39,5 +40,9 @@ public interface SystemNotifyMessage extends BaseEntity {
 
     @Nullable
     LocalDateTime readTime();
+
+    @Nullable
+    @LogicalDeleted("now")
+    LocalDateTime deletedTime();
 
 }
