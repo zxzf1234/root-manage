@@ -23,6 +23,7 @@ public interface InfraDictDataRepository extends JRepository<InfraDictData, Long
 
     default List<InfraDictData> findSimpleList(){
         return sql().createQuery(infraDictDataTable)
+                .orderBy(infraDictDataTable.sort())
                 .select(infraDictDataTable.fetch(InfraDictDataFetcher.$.allScalarFields().type(InfraDictTypeFetcher.$.type())))
                 .execute();
     }
