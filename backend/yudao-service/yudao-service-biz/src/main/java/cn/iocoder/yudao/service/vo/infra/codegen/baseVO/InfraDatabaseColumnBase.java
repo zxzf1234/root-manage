@@ -4,6 +4,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import java.util.*;
 import javax.validation.constraints.*;
+import org.hibernate.validator.constraints.*;
+import javax.validation.constraints.NotEmpty;
+import org.springframework.format.annotation.DateTimeFormat;
+import static cn.iocoder.yudao.framework.common.util.date.DateUtils.FORMAT_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND;
+import java.time.LocalDateTime;
 
 /**
  * 数据库表字段 Base VO，提供给添加、修改、详细的子 VO 使用
@@ -16,21 +21,30 @@ public class InfraDatabaseColumnBase {
     private UUID tableId;
 
     @Schema(description = "字段名", requiredMode = Schema.RequiredMode.REQUIRED, example = "user_age")
+    @NotEmpty(message = "字段名不能为空")
+    @Pattern(regexp = "^[a-z_]+$", message = "字段名只能是小写英文和_")
     private String columnName;
 
     @Schema(description = "字段类型", requiredMode = Schema.RequiredMode.REQUIRED, example = "int(11)")
+    @NotEmpty(message = "物理类型不能为空")
+    @Pattern(regexp = "^(BIT|TINYINT|SMALLINT|MEDIUMINT|INT|BIGINT|FLOAT|DOUBLE|DECIMAL|DATE|TIME|YEAR|DATETIME|TIMESTAMP|VARCHAR|CHAR|TEXT)[0-9(),]*$", message = "物理类型不合法")
     private String dataType;
 
     @Schema(description = "字段描述", requiredMode = Schema.RequiredMode.REQUIRED, example = "年龄")
+    @NotEmpty(message = "字段描述不能为空")
     private String columnComment;
 
     @Schema(description = "是否允许为空", requiredMode = Schema.RequiredMode.REQUIRED, example = "true")
+    @NotNull(message = "是否允许为空不能为空")
     private Boolean nullable;
 
     @Schema(description = "默认值", requiredMode = Schema.RequiredMode.REQUIRED, example = "年龄")
+    @NotNull(message = "默认值不能为空")
+    @Pattern(regexp = "^[\\x00-\\xff]*$", message = "默认值不合法")
     private String defaultValue;
 
     @Schema(description = "Java 属性类型", requiredMode = Schema.RequiredMode.REQUIRED, example = "userAge")
+    @NotEmpty(message = "Java 属性类型不能为空")
     private String javaType;
 
     @Schema(description = "字典类型", example = "sys_gender")
@@ -40,12 +54,15 @@ public class InfraDatabaseColumnBase {
     private String example;
 
     @Schema(description = "前端必传", requiredMode = Schema.RequiredMode.REQUIRED, example = "true")
+    @NotNull(message = "是否允许前端必传不能为空")
     private Boolean required;
 
     @Schema(description = "关联表", requiredMode = Schema.RequiredMode.REQUIRED, example = "system_user")
+    @NotNull(message = "关联表不能为空")
     private String relatedTable;
 
     @Schema(description = "排序", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
+    @NotNull(message = "排序不能为空")
     private Integer sort;
 
 }

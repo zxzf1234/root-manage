@@ -98,6 +98,8 @@ public class JimmerExecutor {
             sql = sql + arrSql[i];
         // insert要追加ignore
         sql = sql.replaceFirst("insert", "insert ignore");
+        // 替换localTime null
+        sql = sql.replaceFirst("DbNull\\{type=class java.time.LocalDateTime}", "NULL");
         // 追加回车 方便查看
         sql = sql + ";\r\n";
         return sql;

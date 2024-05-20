@@ -1717,6 +1717,7 @@ public class CodegenEngine {
             }
             if(Objects.equals(column.getJavaType(), "String")
                     || Objects.equals(column.getJavaType(), "UUID")
+
             ){
                 column.setVueDataType("string");
             } else if(Objects.equals(column.getJavaType(), "LocalDateTime") ){
@@ -1734,8 +1735,8 @@ public class CodegenEngine {
                 column.setVueDataType("Map<String, Object>");
             }
 
-            if(column.getNullable()){
-                column.setVueDataType(column.getVueDataType() + " | null");
+            if(column.getNullable() && !Objects.equals(column.getJavaType(), "LocalDateTime")){
+                column.setVueDataType(column.getVueDataType() + " | undefined");
             }
 
             column.setHumpName(toCamelCase(column.getColumnName()));

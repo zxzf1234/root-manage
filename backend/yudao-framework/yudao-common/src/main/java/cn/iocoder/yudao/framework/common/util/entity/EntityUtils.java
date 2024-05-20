@@ -19,7 +19,7 @@ public class EntityUtils {
                     && !oldProp.getName().equals("updateTime")
                     && !oldProp.getName().equals("creatorId")
                     && !oldProp.getName().equals("updaterId")
-                    && !oldProp.getName().equals("deleted")){
+                    && !oldProp.getName().equals("deletedTime")){
                 Object oldColumnObject = ImmutableObjects.get(oldObject, oldProp);
                 Object newColumnObject = ImmutableObjects.get(newObject, oldProp);
                 if(Objects.isNull(oldColumnObject)){

@@ -21,7 +21,7 @@ import ${basePackage}.framework.common.enums.*;
 #end
 ## 处理 Date 字段的引入
 #foreach ($column in $columns)
-#if (${column.humpName} != "id" && ${column.humpName} != "createTime" && ${column.humpName} != "updateTime" && ${column.humpName} != "creatorId" && ${column.humpName} != "updaterId" && ${column.humpName} != "deleted" && ${column.javaType} == "LocalDateTime")## 时间类型
+#if (${column.humpName} != "id" && ${column.humpName} != "createTime" && ${column.humpName} != "updateTime" && ${column.humpName} != "creatorId" && ${column.humpName} != "updaterId" && ${column.javaType} == "LocalDateTime")## 时间类型
 import org.springframework.format.annotation.DateTimeFormat;
 import static ${DateUtilsClassName}.FORMAT_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND;
 import java.time.LocalDateTime;
@@ -37,7 +37,7 @@ import java.time.LocalDateTime;
 public class ${classNameHump}Base {
 
 #foreach ($column in $columns)
-#if (${column.humpName} != "id" && ${column.humpName} != "createTime" && ${column.humpName} != "updateTime" && ${column.humpName} != "creatorId" && ${column.humpName} != "updaterId" && ${column.humpName} != "deleted")
+#if (${column.humpName} != "id" && ${column.humpName} != "createTime" && ${column.humpName} != "updateTime" && ${column.humpName} != "creatorId" && ${column.humpName} != "updaterId" && ${column.humpName} != "deletedTime")
     #parse("codegen/model/column.vm")
 #end
 #end

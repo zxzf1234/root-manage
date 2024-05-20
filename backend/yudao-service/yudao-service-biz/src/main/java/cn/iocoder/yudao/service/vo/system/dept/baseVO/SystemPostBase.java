@@ -4,6 +4,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import java.util.*;
 import javax.validation.constraints.*;
+import org.hibernate.validator.constraints.*;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import org.springframework.format.annotation.DateTimeFormat;
+import static cn.iocoder.yudao.framework.common.util.date.DateUtils.FORMAT_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND;
+import java.time.LocalDateTime;
 
 /**
  * 岗位信息表 Base VO，提供给添加、修改、详细的子 VO 使用
@@ -13,13 +20,13 @@ import javax.validation.constraints.*;
 public class SystemPostBase {
 
     @Schema(description = "岗位编码", requiredMode = Schema.RequiredMode.REQUIRED, example = "yudao")
-    @Size(max = 64, message = "岗位编码长度不能超过64个字符")
     @NotBlank(message = "岗位编码不能为空")
+    @Size(max = 64, message = "岗位编码长度不能超过64个字符")
     private String code;
 
     @Schema(description = "岗位名称", requiredMode = Schema.RequiredMode.REQUIRED, example = "小博主")
-    @Size(max = 50, message = "岗位名称长度不能超过50个字符")
     @NotBlank(message = "岗位名称不能为空")
+    @Size(max = 50, message = "岗位名称长度不能超过50个字符")
     private String name;
 
     @Schema(description = "显示顺序", requiredMode = Schema.RequiredMode.REQUIRED, example = "1024")

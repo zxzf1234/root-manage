@@ -22,7 +22,6 @@ public interface SystemUserRepository extends JRepository<SystemUser, Long>{
     default Page<SystemUser> getUserPage(UserPageInput reqVO){
         return pager(reqVO.getPageNo() - 1, reqVO.getPageSize()).execute(
                 sql().createQuery(systemUsersTable)
-                        .where(systemUsersTable.deleted().eq(false))
                         .whereIf(StringUtils.hasText(reqVO.getUsername()), systemUsersTable.username().like(reqVO.getUsername()))
                         .whereIf(StringUtils.hasText(reqVO.getMobile()), systemUsersTable.mobile().like(reqVO.getMobile()))
                         .whereIf(reqVO.getStatus() != null, systemUsersTable.status().eq(reqVO.getStatus()))
@@ -33,7 +32,7 @@ public interface SystemUserRepository extends JRepository<SystemUser, Long>{
 
     default List<SystemUser> getExportUserList(UserExportedInput reqVO){
         return sql()
-                .createQuery(systemUsersTable).where(systemUsersTable.deleted().eq(false))
+                .createQuery(systemUsersTable)
                 .whereIf(StringUtils.hasText(reqVO.getUsername()), systemUsersTable.username().like(reqVO.getUsername()))
                 .whereIf(StringUtils.hasText(reqVO.getMobile()), systemUsersTable.mobile().like(reqVO.getMobile()))
                 .whereIf(reqVO.getStatus() != null, systemUsersTable.status().eq(reqVO.getStatus()))

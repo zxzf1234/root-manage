@@ -3,6 +3,7 @@ package cn.iocoder.yudao.service.model.infra.codegen;
 import cn.iocoder.yudao.service.model.base.BaseEntity;
 import cn.iocoder.yudao.service.model.infra.codegen.InfraDatabaseTable;
 import org.babyfish.jimmer.sql.*;
+import java.time.LocalDateTime;
 import org.jetbrains.annotations.Nullable;
 import org.babyfish.jimmer.sql.meta.UUIDIdGenerator;
 import java.util.UUID;
@@ -16,9 +17,9 @@ public interface InfraDatabaseMapping extends BaseEntity {
     @Nullable
     UUID tableId();
 
+    @Key
     @ManyToOne
     @Nullable
-    @Key
     InfraDatabaseTable table();
 
     @Key
@@ -29,5 +30,9 @@ public interface InfraDatabaseMapping extends BaseEntity {
     String annotate();
 
     String mappingTable();
+
+    @Nullable
+    @LogicalDeleted("now")
+    LocalDateTime deletedTime();
 
 }

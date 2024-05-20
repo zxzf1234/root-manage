@@ -1,17 +1,13 @@
 export type SystemNotifyMessage = {
-  id: string
-  userId: string
+  id: number
+  userId: number
   userType: number
-  templateId: string
+  templateId: number
   templateCode: string
   templateNickname: string
   templateContent: string
   templateType: number
   templateParams: Map<String, Object>
   readStatus: boolean
-  readTime: Date
-  createTime: Date
-  updateTime: Date
-  creatorId: string
-  updaterId: string
+  readTime: Date | undefined
 }

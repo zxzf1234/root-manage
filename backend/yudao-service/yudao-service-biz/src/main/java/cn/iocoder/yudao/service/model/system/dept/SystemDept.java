@@ -3,9 +3,8 @@ package cn.iocoder.yudao.service.model.system.dept;
 import cn.iocoder.yudao.service.model.base.BaseEntity;
 import cn.iocoder.yudao.service.model.system.user.SystemUser;
 import org.babyfish.jimmer.sql.*;
+import java.time.LocalDateTime;
 import org.jetbrains.annotations.Nullable;
-
-
 
 @Entity
 public interface SystemDept extends BaseEntity {
@@ -20,6 +19,7 @@ public interface SystemDept extends BaseEntity {
     Integer sort();
 
     @IdView
+    @Nullable
     Long leaderUserId();
 
     @ManyToOne
@@ -31,5 +31,9 @@ public interface SystemDept extends BaseEntity {
     String email();
 
     Integer status();
+
+    @Nullable
+    @LogicalDeleted("now")
+    LocalDateTime deletedTime();
 
 }

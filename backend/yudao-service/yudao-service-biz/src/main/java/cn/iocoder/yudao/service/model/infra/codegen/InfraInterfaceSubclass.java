@@ -2,7 +2,9 @@ package cn.iocoder.yudao.service.model.infra.codegen;
 
 import cn.iocoder.yudao.service.model.base.BaseEntity;
 import cn.iocoder.yudao.service.model.infra.codegen.InfraInterface;
+import cn.iocoder.yudao.service.model.infra.codegen.InfraInterfaceParam;
 import org.babyfish.jimmer.sql.*;
+import java.time.LocalDateTime;
 import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import org.babyfish.jimmer.sql.meta.UUIDIdGenerator;
@@ -17,7 +19,6 @@ public interface InfraInterfaceSubclass extends BaseEntity {
     @Nullable
     UUID parentId();
 
-    @Key
     @ManyToOne
     @Nullable
     InfraInterface parent();
@@ -33,6 +34,10 @@ public interface InfraInterfaceSubclass extends BaseEntity {
 
     @Key
     Integer type();
+
+    @Nullable
+    @LogicalDeleted("now")
+    LocalDateTime deletedTime();
 
     @Transient(InfraInterfaceSubclassParamResolver.class)
     List<InfraInterfaceParam> subclassParams();

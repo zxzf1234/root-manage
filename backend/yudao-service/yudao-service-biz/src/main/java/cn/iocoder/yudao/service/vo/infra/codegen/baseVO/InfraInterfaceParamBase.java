@@ -4,6 +4,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import java.util.*;
 import javax.validation.constraints.*;
+import org.hibernate.validator.constraints.*;
+import javax.validation.constraints.NotEmpty;
+import org.springframework.format.annotation.DateTimeFormat;
+import static cn.iocoder.yudao.framework.common.util.date.DateUtils.FORMAT_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND;
+import java.time.LocalDateTime;
 
 /**
  * 接口参数 Base VO，提供给添加、修改、详细的子 VO 使用
@@ -13,7 +18,6 @@ import javax.validation.constraints.*;
 public class InfraInterfaceParamBase {
 
     @Schema(description = "参数名", example = "name")
-    @NotBlank(message = "参数名不能为空")
     private String name;
 
     @Schema(description = "描述", example = "字段名")
@@ -23,7 +27,6 @@ public class InfraInterfaceParamBase {
     private Boolean isList;
 
     @Schema(description = "参数类型", example = "string")
-    @NotBlank(message = "参数类型不能为空")
     private String variableType;
 
     @Schema(description = "关联字段id", example = "23423423")

@@ -1,5 +1,5 @@
 export type SystemRole = {
-  id: string
+  id: number
   name: string
   code: string
   sort: number
@@ -8,8 +8,4 @@ export type SystemRole = {
   status: number
   type: number
   remark: string
-  createTime: Date
-  updateTime: Date
-  creatorId: string
-  updaterId: string
 }

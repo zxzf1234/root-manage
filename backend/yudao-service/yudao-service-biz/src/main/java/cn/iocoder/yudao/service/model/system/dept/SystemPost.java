@@ -2,8 +2,8 @@ package cn.iocoder.yudao.service.model.system.dept;
 
 import cn.iocoder.yudao.service.model.base.BaseEntity;
 import org.babyfish.jimmer.sql.*;
+import java.time.LocalDateTime;
 import org.jetbrains.annotations.Nullable;
-
 
 @Entity
 public interface SystemPost extends BaseEntity {
@@ -21,5 +21,9 @@ public interface SystemPost extends BaseEntity {
 
     @Nullable
     String remark();
+
+    @Nullable
+    @LogicalDeleted("now")
+    LocalDateTime deletedTime();
 
 }

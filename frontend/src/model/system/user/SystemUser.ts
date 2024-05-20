@@ -1,21 +1,17 @@
 export type SystemUser = {
-  id: string
+  id: number
   username: string
   password: string
   nickname: string
-  remark: string
-  deptId: string
-  postIds: string[]
+  remark: string | null
+  deptId: number | null
+  postIds: string[] | null
   email: string
   mobile: string
   sex: number
   avatar: string
   status: number
   loginIp: string
-  loginDate: Date
+  loginDate: Date | undefined | null
   userNo: string
-  createTime: Date
-  updateTime: Date
-  creatorId: string
-  updaterId: string
 }

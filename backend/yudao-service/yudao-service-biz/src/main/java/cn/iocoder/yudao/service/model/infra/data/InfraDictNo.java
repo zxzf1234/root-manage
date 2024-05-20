@@ -30,4 +30,8 @@ public interface InfraDictNo extends BaseEntity {
 
     String remark();
 
+    @Nullable
+    @LogicalDeleted("now")
+    LocalDateTime deletedTime();
+
 }
