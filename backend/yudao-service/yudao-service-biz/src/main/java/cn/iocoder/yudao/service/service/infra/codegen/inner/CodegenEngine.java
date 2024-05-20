@@ -1729,13 +1729,23 @@ public class CodegenEngine {
                 column.setVueDataType("number");
             }else if(Objects.equals(column.getJavaType(), "Boolean") ){
                 column.setVueDataType("boolean");
-            }else if(Objects.equals(column.getJavaType(), "List<String>") || Objects.equals(column.getJavaType(), "List<Long>")){
+            }else if(Objects.equals(column.getJavaType(), "List<String>")){
                 column.setVueDataType("string[]");
+            }else if(  Objects.equals(column.getJavaType(), "List<Long>")){
+                column.setVueDataType("number[]");
             } else if(Objects.equals(column.getJavaType(), "Map<String, Object>") ) {
                 column.setVueDataType("Map<String, Object>");
             }
 
-            if(column.getNullable() && !Objects.equals(column.getJavaType(), "LocalDateTime")){
+            if(!column.getRelatedTable().isEmpty()){
+                column.setVueDataType(column.getVueDataType() + " | undefined");
+            }
+
+            if(column.getColumnName().equals("id")){
+                column.setVueDataType(column.getVueDataType() + " | undefined");
+            }
+
+            if(column.getNullable() && !column.getVueDataType().contains("undefined")){
                 column.setVueDataType(column.getVueDataType() + " | undefined");
             }
 

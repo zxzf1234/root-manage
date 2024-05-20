@@ -26,7 +26,7 @@ export type DatabaseColumnVO = {
   columnName: string
   dataType: string
   columnComment: string
-  nullable: number
+  nullable: boolean
   defaultValue: string
   javaType: string
   dictType: string

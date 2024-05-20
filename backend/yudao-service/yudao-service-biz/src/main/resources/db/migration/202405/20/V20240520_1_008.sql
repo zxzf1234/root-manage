@@ -1,0 +1,1 @@
+update infra_database_column set deleted_time = NULL;
