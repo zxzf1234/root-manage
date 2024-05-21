@@ -52,7 +52,7 @@ const currentLocale = computed(() => localeStore.currentLocale)
   <!-- 自定义命名空间 -->
   <ElConfigProvider
     :locale="currentLocale.elLocale"
-    :message="{ max: 1 }"
+    :message="{ max: 5 }"
     :namespace="variables.elNamespace"
     :size="size"
   >

@@ -4,7 +4,7 @@
       ref="uploadRef"
       :multiple="props.limit > 1"
       name="file"
-      v-model="valueRef"
+      v-model="fileList"
       v-model:file-list="fileList"
       :show-file-list="true"
       :auto-upload="autoUpload"
@@ -20,7 +20,12 @@
       :on-preview="handlePreview"
       class="upload-file-uploader"
     >
-      <el-button type="primary"><Icon icon="ep:upload-filled" />选取文件</el-button>
+      <el-button type="primary" v-if="drag == false">
+        <Icon icon="ep:upload-filled" />选取文件</el-button
+      >
+      <div v-else class="h-[90px]" style="margin-top: 20px"
+        ><Icon icon="ph:upload-simple" :size="26" /><div>可点击或拖拽上传</div></div
+      >
       <template v-if="isShowTip" #tip>
         <div style="font-size: 8px">
           大小不超过 <b style="color: #f56c6c">{{ fileSize }}MB</b>
@@ -49,7 +54,7 @@ const props = defineProps({
   },
   title: propTypes.string.def('文件上传'),
   updateUrl: propTypes.string.def(import.meta.env.VITE_UPLOAD_URL),
-  fileType: propTypes.array.def(['doc', 'xls', 'ppt', 'txt', 'pdf']), // 文件类型, 例如['png', 'jpg', 'jpeg']
+  fileType: propTypes.array.def([]), // 文件类型, 例如['png', 'jpg', 'jpeg']
   fileSize: propTypes.number.def(5), // 大小限制(MB)
   limit: propTypes.number.def(5), // 数量限制
   autoUpload: propTypes.bool.def(true), // 自动上传
@@ -57,7 +62,6 @@ const props = defineProps({
   isShowTip: propTypes.bool.def(true) // 是否显示提示
 })
 // ========== 上传相关 ==========
-const valueRef = ref(props.modelValue)
 const uploadRef = ref<UploadInstance>()
 const uploadList = ref<UploadUserFile[]>([])
 const fileList = ref<UploadUserFile[]>(props.modelValue)
@@ -66,6 +70,16 @@ const uploadHeaders = ref({
   Authorization: 'Bearer ' + getAccessToken(),
   'tenant-id': getTenantId()
 })
+const currentUploadFile = ref()
+const currentUploadingMessage = ref()
+
+watch(
+  () => props.modelValue,
+  (propModelValue: UploadUserFile[]) => {
+    fileList.value = propModelValue
+  }
+)
+
 // 文件上传之前判断
 const beforeUpload: UploadProps['beforeUpload'] = (file: UploadRawFile) => {
   if (fileList.value.length >= props.limit) {
@@ -76,12 +90,15 @@ const beforeUpload: UploadProps['beforeUpload'] = (file: UploadRawFile) => {
   if (file.name.lastIndexOf('.') > -1) {
     fileExtension = file.name.slice(file.name.lastIndexOf('.') + 1)
   }
-  const isImg = props.fileType.some((type: string) => {
-    if (file.type.indexOf(type) > -1) return true
-    return !!(fileExtension && fileExtension.indexOf(type) > -1)
-  })
+  const isFormatRight =
+    props.fileType.length == 0
+      ? true
+      : props.fileType.some((type: string) => {
+          if (file.type.indexOf(type) > -1) return true
+          return !!(fileExtension && fileExtension.indexOf(type) > -1)
+        })
   const isLimit = file.size < props.fileSize * 1024 * 1024
-  if (!isImg) {
+  if (!isFormatRight) {
     message.error(`文件格式不正确, 请上传${props.fileType.join('/')}格式!`)
     return false
   }
@@ -89,7 +106,9 @@ const beforeUpload: UploadProps['beforeUpload'] = (file: UploadRawFile) => {
     message.error(`上传文件大小不能超过${props.fileSize}MB!`)
     return false
   }
-  message.success('正在上传文件，请稍候...')
+  // message.success('正在上传文件，请稍候...')
+  currentUploadingMessage.value = message.success('正在上传文件，请稍候...')
+  currentUploadFile.value = file
   uploadNumber.value++
 }
 // 处理上传的文件发生变化
@@ -98,16 +117,17 @@ const beforeUpload: UploadProps['beforeUpload'] = (file: UploadRawFile) => {
 // }
 // 文件上传成功
 const handleFileSuccess: UploadProps['onSuccess'] = (res: any): void => {
+  currentUploadingMessage.value.close()
   message.success('上传成功')
   const fileListNew = fileList.value
   fileListNew.pop()
   fileList.value = fileListNew
-  uploadList.value.push({ name: res.data, url: res.data })
+  uploadList.value.push({ name: currentUploadFile.value.name, url: res.data })
   if (uploadList.value.length == uploadNumber.value) {
     fileList.value = fileList.value.concat(uploadList.value)
     uploadList.value = []
     uploadNumber.value = 0
-    emit('update:modelValue', listToString(fileList.value))
+    emit('update:modelValue', fileList.value)
   }
 }
 // 文件数超出提示
@@ -140,6 +160,9 @@ const listToString = (list: UploadUserFile[], separator?: string) => {
 }
 </script>
 <style scoped lang="scss">
+.upload-file {
+  width: 240px;
+}
 .upload-file-uploader {
   margin-bottom: 5px;
 }
