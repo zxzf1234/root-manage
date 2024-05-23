@@ -42,7 +42,14 @@ import { PropType } from 'vue'
 
 import { propTypes } from '@/utils/propTypes'
 import { getAccessToken, getTenantId } from '@/utils/auth'
-import type { UploadInstance, UploadUserFile, UploadProps, UploadRawFile } from 'element-plus'
+import type {
+  UploadInstance,
+  UploadUserFile,
+  UploadProps,
+  UploadRawFile,
+  UploadFile,
+  MessageHandler
+} from 'element-plus'
 
 const message = useMessage() // 消息弹窗
 const emit = defineEmits(['update:modelValue'])
@@ -63,7 +70,6 @@ const props = defineProps({
 })
 // ========== 上传相关 ==========
 const uploadRef = ref<UploadInstance>()
-const uploadList = ref<UploadUserFile[]>([])
 const fileList = ref<UploadUserFile[]>(props.modelValue)
 const uploadNumber = ref<number>(0)
 const uploadHeaders = ref({
@@ -71,7 +77,8 @@ const uploadHeaders = ref({
   'tenant-id': getTenantId()
 })
 const currentUploadFile = ref()
-const currentUploadingMessage = ref()
+const currentUploadingMessages = ref<MessageHandler[]>([])
+const uploadSucessNumber = ref<number>(0)
 
 watch(
   () => props.modelValue,
@@ -106,8 +113,7 @@ const beforeUpload: UploadProps['beforeUpload'] = (file: UploadRawFile) => {
     message.error(`上传文件大小不能超过${props.fileSize}MB!`)
     return false
   }
-  // message.success('正在上传文件，请稍候...')
-  currentUploadingMessage.value = message.success('正在上传文件，请稍候...')
+  currentUploadingMessages.value.push(message.success('正在上传文件，请稍候...'))
   currentUploadFile.value = file
   uploadNumber.value++
 }
@@ -116,16 +122,17 @@ const beforeUpload: UploadProps['beforeUpload'] = (file: UploadRawFile) => {
 //   uploadRef.value.data.path = uploadFile.name
 // }
 // 文件上传成功
-const handleFileSuccess: UploadProps['onSuccess'] = (res: any): void => {
-  currentUploadingMessage.value.close()
+const handleFileSuccess: UploadProps['onSuccess'] = (res: any, uploadFile: UploadFile): void => {
+  const currentUploadingMessage = currentUploadingMessages.value.pop()
+  if (currentUploadingMessage != undefined) currentUploadingMessage.close()
   message.success('上传成功')
-  const fileListNew = fileList.value
-  fileListNew.pop()
-  fileList.value = fileListNew
-  uploadList.value.push({ name: currentUploadFile.value.name, url: res.data })
-  if (uploadList.value.length == uploadNumber.value) {
-    fileList.value = fileList.value.concat(uploadList.value)
-    uploadList.value = []
+
+  fileList.value.forEach((file) => {
+    if (file.name == uploadFile.name) file.url = res.data
+  })
+  uploadSucessNumber.value++
+  if (uploadSucessNumber.value == uploadNumber.value) {
+    uploadSucessNumber.value = 0
     uploadNumber.value = 0
     emit('update:modelValue', fileList.value)
   }

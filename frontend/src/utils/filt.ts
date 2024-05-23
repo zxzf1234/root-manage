@@ -116,7 +116,7 @@ export const downloadByData = (data: BlobPart, filename: string, mime?: string, 
  * Download file according to file address
  * @param {*} sUrl
  */
-export const downloadByUrl = ({
+export const downloadByUrl = async ({
   url,
   target = '_blank',
   fileName
@@ -124,29 +124,28 @@ export const downloadByUrl = ({
   url: string
   target?: '_self' | '_blank'
   fileName?: string
-}): boolean => {
+}): Promise<boolean> => {
   const isChrome = window.navigator.userAgent.toLowerCase().indexOf('chrome') > -1
   const isSafari = window.navigator.userAgent.toLowerCase().indexOf('safari') > -1
-
   if (/(iP)/g.test(window.navigator.userAgent)) {
     console.error('Your browser does not support download!')
     return false
   }
+
   if (isChrome || isSafari) {
+    const response = await fetch(url)
+    const blob = await response.blob()
     const link = document.createElement('a')
-    link.href = url
     link.target = target
-
+    link.href = window.URL.createObjectURL(blob)
     if (link.download !== undefined) {
-      link.download = fileName || url.substring(url.lastIndexOf('/') + 1, url.length)
+      link.setAttribute('download', fileName || url.substring(url.lastIndexOf('/') + 1, url.length))
     }
 
-    if (document.createEvent) {
-      const e = document.createEvent('MouseEvents')
-      e.initEvent('click', true, true)
-      link.dispatchEvent(e)
-      return true
-    }
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    return true
   }
   if (url.indexOf('?') === -1) {
     url += '?download'
