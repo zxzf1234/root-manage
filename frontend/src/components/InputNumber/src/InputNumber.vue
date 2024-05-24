@@ -9,34 +9,24 @@ const props = defineProps({
   controls: propTypes.bool.def(true),
   type: propTypes.string.def('number'),
   min: propTypes.number.def(0),
-  modelValue: propTypes.number.def(0)
+  modelValue: propTypes.number.def(undefined),
+  allowUndefined: propTypes.bool.def(false)
 })
 
 const controls = ref(false)
 const precision = ref()
 const min = ref(0)
-const model = ref(0)
+const model = ref<number | undefined>(0)
 
 onMounted(() => {
   if (props.type != 'decimal') {
     precision.value = 0
   }
-
   min.value = props.min
   model.value = props.modelValue
 })
 
 const emit = defineEmits(['blur', 'update:modelValue'])
-
-watch(
-  () => model.value,
-  (modelValue: number) => {
-    if (modelValue == null) {
-      model.value = 0
-    }
-    emit('update:modelValue', model.value)
-  }
-)
 
 watch(
   () => props.modelValue,
@@ -46,10 +36,10 @@ watch(
 )
 
 const handleBlur = () => {
-  if (props.type == 'decimal') {
+  if (props.type == 'decimal' && model.value != undefined) {
     model.value = parseFloat(model.value.toFixed(4))
+    emit('update:modelValue', model.value)
   }
-  emit('update:modelValue', model.value)
   emit('blur')
 }
 </script>
@@ -61,6 +51,7 @@ const handleBlur = () => {
     :precision="precision"
     v-model="model"
     @blur="handleBlur"
+    :valueOnClear="0"
   />
 </template>
 
