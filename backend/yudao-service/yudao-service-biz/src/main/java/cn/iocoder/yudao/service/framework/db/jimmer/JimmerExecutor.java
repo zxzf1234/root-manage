@@ -7,6 +7,8 @@ import cn.hutool.core.util.RuntimeUtil;
 import cn.iocoder.yudao.service.enums.infra.codegen.InfraCodegenExcludeFunctionEnum;
 import cn.iocoder.yudao.service.enums.infra.codegen.InfraCodegenTableEnum;
 import cn.iocoder.yudao.service.framework.codegen.config.SchemaHistory;
+import cn.iocoder.yudao.service.util.collection.SimpleTrie;
+import cn.iocoder.yudao.service.util.upgrade.UpgradeUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.babyfish.jimmer.sql.runtime.*;
 import org.jetbrains.annotations.NotNull;
@@ -16,6 +18,7 @@ import org.springframework.context.annotation.Configuration;
 import javax.annotation.Resource;
 import java.io.File;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 
@@ -25,6 +28,8 @@ public class JimmerExecutor {
 
     @Resource
     private SchemaHistory schemaHistory;
+
+    private UpgradeUtils upgradeUtils = new UpgradeUtils();
 
     @Bean
     public Executor executor() {
@@ -67,20 +72,8 @@ public class JimmerExecutor {
 
         }
         sql = commonSql(sql, variables);
-        String curDate = DateUtil.format(LocalDateTime.now(), "yyyyMMdd");
-        String curMouth = DateUtil.format(LocalDateTime.now(), "yyyyMM");
-        String curDay = DateUtil.format(LocalDateTime.now(), "dd");
-
-        Integer curGitUserVersion = schemaHistory.getCurGitUserVersion();
-        Integer curGitUserId = schemaHistory.getCurGitUserId();
-        if (curGitUserVersion == null || curGitUserId == null)
-            return;
-        String path = FileUtil.getAbsolutePath("db/migration").replace("target/classes", "src/main/resources") + "/" + curMouth + "/" + curDay;
-
-        String newFileName = path + "/" + "V"+ curDate + "_" + curGitUserId + "_" + String.format("%3d", curGitUserVersion + 1).replace(" ", "0") + ".sql";
-        File newFile = FileUtil.touch(newFileName);
-        FileUtil.appendUtf8String(sql, newFile);
-        RuntimeUtil.execForStr("git add " + newFileName);
+        upgradeUtils.upgradeSql(sql);
+       
     }
 
     String commonSql(String sql, List<Object> variables){
