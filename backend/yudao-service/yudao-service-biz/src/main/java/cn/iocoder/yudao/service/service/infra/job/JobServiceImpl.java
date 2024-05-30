@@ -1,9 +1,17 @@
 package cn.iocoder.yudao.service.service.infra.job;
 
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
+import cn.iocoder.yudao.framework.common.util.upgrade.UpgradeUtils;
 import cn.iocoder.yudao.framework.quartz.core.scheduler.SchedulerManager;
 import cn.iocoder.yudao.framework.quartz.core.util.CronUtils;
+import cn.iocoder.yudao.service.framework.codegen.config.SchemaHistory;
+import cn.iocoder.yudao.service.model.infra.data.QrtzCronTriggers;
+import cn.iocoder.yudao.service.model.infra.data.QrtzJobDetails;
+import cn.iocoder.yudao.service.model.infra.data.QrtzTriggers;
 import cn.iocoder.yudao.service.model.infra.job.InfraJobProps;
+import cn.iocoder.yudao.service.repository.infra.data.QrtzCronTriggersRepository;
+import cn.iocoder.yudao.service.repository.infra.data.QrtzJobDetailsRepository;
+import cn.iocoder.yudao.service.repository.infra.data.QrtzTriggersRepository;
 import cn.iocoder.yudao.service.vo.infra.job.job.JobCreateReqVO;
 import cn.iocoder.yudao.service.vo.infra.job.job.JobExportReqVO;
 import cn.iocoder.yudao.service.vo.infra.job.job.JobPageReqVO;
@@ -20,11 +28,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.babyfish.jimmer.ImmutableObjects;
 
+import java.nio.charset.StandardCharsets;
 import javax.annotation.Resource;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
 import static cn.iocoder.yudao.service.enums.infra.ErrorCodeConstants.*;
@@ -44,6 +50,18 @@ public class JobServiceImpl implements JobService {
 
     @Resource
     private SchedulerManager schedulerManager;
+
+    @Resource
+    private QrtzCronTriggersRepository qrtzCronTriggersRepository;
+
+    @Resource
+    private QrtzTriggersRepository qrtzTriggersRepository;
+
+    @Resource
+    private QrtzJobDetailsRepository qrtzJobDetailsRepository;
+
+    @Resource
+    private SchemaHistory schemaHistory;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -71,8 +89,74 @@ public class JobServiceImpl implements JobService {
         });
         infraJobRepository.update(updateObj);
 
+        Integer curGitUserVersion = schemaHistory.getCurGitUserVersion();
+        Integer curGitUserId = schemaHistory.getCurGitUserId();
+
+        Optional<QrtzCronTriggers> optionalQrtzCronTriggers = qrtzCronTriggersRepository.findByTriggerName(job.handlerName());
+        if(optionalQrtzCronTriggers.isPresent()){
+            String sql = "INSERT IGNORE INTO qrtz_cron_triggers(SCHED_NAME, TRIGGER_NAME, TRIGGER_GROUP, CRON_EXPRESSION, TIME_ZONE_ID)VALUES ("
+                    + "'" +  optionalQrtzCronTriggers.get().schedName() + "',"
+                    + "'" +  optionalQrtzCronTriggers.get().triggerName() + "',"
+                    + "'" +  optionalQrtzCronTriggers.get().triggerGroup() + "',"
+                    + "'" +  optionalQrtzCronTriggers.get().cronExpression() + "',"
+                    + "'" +  optionalQrtzCronTriggers.get().timeZoneId() + "');\r\n";
+            UpgradeUtils.upgradeSql(sql, curGitUserVersion, curGitUserId);
+        }
+
+        Optional<QrtzJobDetails> optionalQrtzJobDetails = qrtzJobDetailsRepository.findById(job.handlerName());
+        if(optionalQrtzJobDetails.isPresent()){
+            String sql = "INSERT IGNORE INTO qrtz_job_details(SCHED_NAME, JOB_NAME, JOB_GROUP, DESCRIPTION, JOB_CLASS_NAME, IS_DURABLE, IS_NONCONCURRENT, IS_UPDATE_DATA, REQUESTS_RECOVERY, JOB_DATA)VALUES ("
+                    + "'" +  optionalQrtzJobDetails.get().schedName() + "',"
+                    + "'" +  optionalQrtzJobDetails.get().jobName() + "',"
+                    + "'" +  optionalQrtzJobDetails.get().jobGroup() + "',"
+                    + "'" +  optionalQrtzJobDetails.get().description() + "',"
+                    + "'" +  optionalQrtzJobDetails.get().jobClassName() + "',"
+                    + "'" +  optionalQrtzJobDetails.get().isDurable() + "',"
+                    + "'" +  optionalQrtzJobDetails.get().isNonconcurrent() + "',"
+                    + "'" +  optionalQrtzJobDetails.get().isUpdateData() + "',"
+                    + "'" +  optionalQrtzJobDetails.get().requestsRecovery() + "',"
+                    + "UNHEX('" +  bytesToHex(optionalQrtzJobDetails.get().jobData()) + "'));\r\n";
+            UpgradeUtils.upgradeSql(sql, curGitUserVersion, curGitUserId);
+        }
+
+        Optional<QrtzTriggers> optionalQrtzTriggers = qrtzTriggersRepository.findById(job.handlerName());
+        if(optionalQrtzTriggers.isPresent()){
+            String sql = "INSERT IGNORE INTO qrtz_triggers(SCHED_NAME, TRIGGER_NAME, TRIGGER_GROUP, JOB_NAME, "
+                    +"JOB_GROUP, DESCRIPTION, NEXT_FIRE_TIME, PREV_FIRE_TIME, PRIORITY, TRIGGER_STATE, TRIGGER_TYPE, " +
+                    "START_TIME, END_TIME, CALENDAR_NAME, MISFIRE_INSTR, JOB_DATA)VALUES ("
+                    + "'" +  optionalQrtzTriggers.get().schedName() + "',"
+                    + "'" +  optionalQrtzTriggers.get().triggerName() + "',"
+                    + "'" +  optionalQrtzTriggers.get().triggerGroup() + "',"
+                    + "'" +  optionalQrtzTriggers.get().jobName() + "',"
+                    + "'" +  optionalQrtzTriggers.get().jobGroup() + "',"
+                    + "'" +  optionalQrtzTriggers.get().description() + "',"
+                    + "'" +  optionalQrtzTriggers.get().nextFireTime() + "',"
+                    + "'" +  optionalQrtzTriggers.get().prevFireTime() + "',"
+                    + "'" +  optionalQrtzTriggers.get().priority() + "',"
+                    + "'" +  optionalQrtzTriggers.get().triggerState() + "',"
+                    + "'" +  optionalQrtzTriggers.get().triggerType() + "',"
+                    + "'" +  optionalQrtzTriggers.get().startTime() + "',"
+                    + "'" +  optionalQrtzTriggers.get().endTime() + "',"
+                    + "'" +  optionalQrtzTriggers.get().calendarName() + "',"
+                    + "'" +  optionalQrtzTriggers.get().misfireInstr() + "',"
+                    + "UNHEX('" +  bytesToHex(optionalQrtzTriggers.get().jobData()) + "'));\r\n";
+            UpgradeUtils.upgradeSql(sql, curGitUserVersion, curGitUserId);
+        }
+
         // 返回
         return job.id().toString();
+    }
+
+    private static String bytesToHex(byte[] bytes) {
+        StringBuilder hexString = new StringBuilder();
+        for (byte b : bytes) {
+            String hex = Integer.toHexString(0xFF & b);
+            if (hex.length() == 1) {
+                hexString.append('0');
+            }
+            hexString.append(hex);
+        }
+        return hexString.toString();
     }
 
     @Override

@@ -5,9 +5,10 @@ import org.babyfish.jimmer.sql.Id;
 
 @Entity
 public interface QrtzCronTriggers {
-    @Id
+
     String schedName();
 
+    @Id
     String triggerName();
 
     String triggerGroup();

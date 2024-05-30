@@ -1,14 +1,10 @@
 package cn.iocoder.yudao.service.framework.db.jimmer;
 
-import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.BooleanUtil;
-import cn.hutool.core.util.RuntimeUtil;
 import cn.iocoder.yudao.service.enums.infra.codegen.InfraCodegenExcludeFunctionEnum;
 import cn.iocoder.yudao.service.enums.infra.codegen.InfraCodegenTableEnum;
 import cn.iocoder.yudao.service.framework.codegen.config.SchemaHistory;
-import cn.iocoder.yudao.service.util.collection.SimpleTrie;
-import cn.iocoder.yudao.service.util.upgrade.UpgradeUtils;
+import cn.iocoder.yudao.framework.common.util.upgrade.UpgradeUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.babyfish.jimmer.sql.runtime.*;
 import org.jetbrains.annotations.NotNull;
@@ -16,9 +12,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.Resource;
-import java.io.File;
-import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 
@@ -28,8 +21,6 @@ public class JimmerExecutor {
 
     @Resource
     private SchemaHistory schemaHistory;
-
-    private UpgradeUtils upgradeUtils = new UpgradeUtils();
 
     @Bean
     public Executor executor() {
@@ -72,8 +63,10 @@ public class JimmerExecutor {
 
         }
         sql = commonSql(sql, variables);
-        upgradeUtils.upgradeSql(sql);
-       
+        Integer curGitUserVersion = schemaHistory.getCurGitUserVersion();
+        Integer curGitUserId = schemaHistory.getCurGitUserId();
+        UpgradeUtils.upgradeSql(sql, curGitUserVersion, curGitUserId);
+
     }
 
     String commonSql(String sql, List<Object> variables){
