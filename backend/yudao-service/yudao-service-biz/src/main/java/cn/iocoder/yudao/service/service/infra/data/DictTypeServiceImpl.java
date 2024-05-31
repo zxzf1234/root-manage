@@ -182,7 +182,7 @@ public class DictTypeServiceImpl implements DictTypeService {
 
     @Override
     public DictTypeGetOutput get(UUID id) {
-        return infraDictTypeRepository.findById(id).map(DictTypeConvert.INSTANCE::getOutputConvert).orElse(null);
+        return infraDictTypeRepository.findByDetailId(id).map(DictTypeConvert.INSTANCE::getOutputConvert).orElse(null);
     }
 
     @Override

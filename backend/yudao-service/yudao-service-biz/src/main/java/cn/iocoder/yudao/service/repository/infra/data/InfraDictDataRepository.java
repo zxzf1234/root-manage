@@ -10,16 +10,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface InfraDictDataRepository extends JRepository<InfraDictData, Long> {
+public interface InfraDictDataRepository extends JRepository<InfraDictData, UUID> {
     InfraDictDataTable infraDictDataTable = InfraDictDataTable.$;
 
     Optional<InfraDictData> findByTypeIdAndValue(UUID typeId, String value);
 
-    Optional<InfraDictData> findById(UUID id);
-
     List<InfraDictData> findByTypeId(UUID typeId);
-
-    void deleteById(UUID id);
 
     default List<InfraDictData> findSimpleList(){
         return sql().createQuery(infraDictDataTable)

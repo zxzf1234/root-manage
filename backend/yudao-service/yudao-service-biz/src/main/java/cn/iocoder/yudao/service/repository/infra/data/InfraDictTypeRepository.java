@@ -14,14 +14,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface InfraDictTypeRepository extends JRepository<InfraDictType, Long> {
+public interface InfraDictTypeRepository extends JRepository<InfraDictType, UUID> {
     InfraDictTypeTable infraDictTypeTable = InfraDictTypeTable.$;
 
     Optional<InfraDictType> findByName(String name);
 
     Optional<InfraDictType> findByType(String type);
-
-    void deleteById(UUID id);
 
     default Page<InfraDictType> selectPage(DictTypePageInput reqVO){
         return pager(reqVO.getPageNo() - 1, reqVO.getPageSize()).execute(
@@ -44,7 +42,7 @@ public interface InfraDictTypeRepository extends JRepository<InfraDictType, Long
                 .select(infraDictTypeTable).execute();
     }
 
-    default Optional<InfraDictType> findById(UUID id){
+    default Optional<InfraDictType> findByDetailId(UUID id){
         return sql()
                 .createQuery(infraDictTypeTable)
                 .where(infraDictTypeTable.id().eq(id))

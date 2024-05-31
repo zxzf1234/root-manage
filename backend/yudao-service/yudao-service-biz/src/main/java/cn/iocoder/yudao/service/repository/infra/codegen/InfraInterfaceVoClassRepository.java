@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface InfraInterfaceVoClassRepository extends JRepository<InfraInterfaceVoClass, Long> {
+public interface InfraInterfaceVoClassRepository extends JRepository<InfraInterfaceVoClass, UUID> {
     InfraInterfaceVoClassTable infraInterfaceVoClassTable = InfraInterfaceVoClassTable.$;
 
     default List<InfraInterfaceVoClass> findList(InterfaceListReqVO reqVO){
@@ -20,8 +20,6 @@ public interface InfraInterfaceVoClassRepository extends JRepository<InfraInterf
                 .select(infraInterfaceVoClassTable)
                 .execute();
     }
-
-    Optional<InfraInterfaceVoClass> findById(UUID id);
 
     Optional<InfraInterfaceVoClass> findByName(String name);
 

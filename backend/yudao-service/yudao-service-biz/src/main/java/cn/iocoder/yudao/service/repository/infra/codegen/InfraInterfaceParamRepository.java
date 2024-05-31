@@ -8,11 +8,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface InfraInterfaceParamRepository extends JRepository<InfraInterfaceParam, Long> {
+public interface InfraInterfaceParamRepository extends JRepository<InfraInterfaceParam, UUID> {
     InfraInterfaceParamTable infraInterfaceParamTable = InfraInterfaceParamTable.$;
 
-    void deleteByIdIn(List<UUID> uuids);
-
-    Optional<InfraInterfaceParam> findById(UUID id);
 
 }

@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface InfraJobRepository extends JRepository<InfraJob, Long> {
+public interface InfraJobRepository extends JRepository<InfraJob, UUID> {
     InfraJobTable infraJobTable = InfraJobTable.$;
 
     default Page<InfraJob> selectPage(JobPageReqVO reqVO){
@@ -38,11 +38,6 @@ public interface InfraJobRepository extends JRepository<InfraJob, Long> {
 
     }
 
-    Optional<InfraJob> findById(UUID id);
-
-    void deleteById(UUID id);
-
     Optional<InfraJob> findByHandlerName(String handlerName);
 
-    List<InfraJob> findByIdIn(Collection<UUID> ids);
 }

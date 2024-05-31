@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface InfraInterfaceModuleRepository extends JRepository<InfraInterfaceModule, Long> {
+public interface InfraInterfaceModuleRepository extends JRepository<InfraInterfaceModule, UUID> {
     InfraInterfaceModuleTable infraInterfaceModuleTable = InfraInterfaceModuleTable.$;
 
     default List<InfraInterfaceModule> selectList(InterfaceModuleListReqVO reqVO){
@@ -27,10 +27,6 @@ public interface InfraInterfaceModuleRepository extends JRepository<InfraInterfa
                 .select(infraInterfaceModuleTable)
                 .execute();
     }
-
-    Optional<InfraInterfaceModule> findById(UUID id);
-
-    void deleteById(UUID id);
 
     int countByParentId(String parentId);
 

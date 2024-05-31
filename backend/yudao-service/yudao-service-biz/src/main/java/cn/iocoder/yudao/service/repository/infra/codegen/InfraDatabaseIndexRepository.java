@@ -8,10 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface InfraDatabaseIndexRepository extends JRepository<InfraDatabaseIndex, Long> {
+public interface InfraDatabaseIndexRepository extends JRepository<InfraDatabaseIndex, UUID> {
     InfraDatabaseIndexTable infraDatabaseIndexTable = InfraDatabaseIndexTable.$;
 
-    void deleteById(UUID id);
-
-    Optional<InfraDatabaseIndex> findById(UUID id);
 }

@@ -8,11 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface InfraInterfaceSubclassRepository extends JRepository<InfraInterfaceSubclass, Long> {
+public interface InfraInterfaceSubclassRepository extends JRepository<InfraInterfaceSubclass, UUID> {
     InfraInterfaceSubclassTable infraInterfaceSubclassTable = InfraInterfaceSubclassTable.$;
-
-    void deleteByIdIn(List<UUID> ids);
-
-    Optional<InfraInterfaceSubclass> findById(UUID id);
 
 }

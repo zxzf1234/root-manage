@@ -8,14 +8,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface InfraInterfaceValidationRepository extends JRepository<InfraInterfaceValidation, Long> {
+public interface InfraInterfaceValidationRepository extends JRepository<InfraInterfaceValidation, UUID> {
     InfraInterfaceValidationTable infraInterfaceValidationTable = InfraInterfaceValidationTable.$;
 
-    void deleteById(UUID id);
-
-    void deleteByIdIn(List<UUID> uuids);
-
-    Optional<InfraInterfaceValidation> findById(UUID id);
     List<InfraInterfaceValidation> findByParentId(UUID parentId);
 
 }

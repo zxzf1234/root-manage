@@ -232,12 +232,12 @@ const handleChangeStatus = async (row: JobApi.JobVO) => {
 }
 
 /** 删除按钮操作 */
-const handleDelete = async (id: number) => {
+const handleDelete = async (row) => {
   try {
     // 删除的二次确认
     await message.delConfirm()
     // 发起删除
-    await JobApi.deleteJob(id)
+    await JobApi.deleteJob(row.id)
     message.success(t('common.delSuccess'))
     // 刷新列表
     await getList()

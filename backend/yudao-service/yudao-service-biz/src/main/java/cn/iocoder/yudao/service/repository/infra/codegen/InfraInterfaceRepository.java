@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface InfraInterfaceRepository extends JRepository<InfraInterface, Long> {
+public interface InfraInterfaceRepository extends JRepository<InfraInterface, UUID> {
     InfraInterfaceTable infraInterfaceTable = InfraInterfaceTable.$;
 
     default Page<InfraInterface> getList(InterfaceListReqVO reqVO){
@@ -51,8 +51,6 @@ public interface InfraInterfaceRepository extends JRepository<InfraInterface, Lo
                 .select(infraInterfaceTable)
                 .fetchOptional();
     }
-
-    Optional<InfraInterface> findById(UUID id);
 
     Optional<InfraInterface> findByNameAndModuleId(String name, UUID moduleId);
 

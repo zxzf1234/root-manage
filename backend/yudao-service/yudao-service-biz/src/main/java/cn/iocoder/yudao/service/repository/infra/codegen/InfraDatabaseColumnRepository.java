@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface InfraDatabaseColumnRepository extends JRepository<InfraDatabaseColumn, Long> {
+public interface InfraDatabaseColumnRepository extends JRepository<InfraDatabaseColumn, UUID> {
     InfraDatabaseColumnTable infradatabaseColumnTable = InfraDatabaseColumnTable.$;
     
     default void updateColumn(InfraDatabaseColumn column){
@@ -27,12 +27,6 @@ public interface InfraDatabaseColumnRepository extends JRepository<InfraDatabase
                 .where(infradatabaseColumnTable.id().eq(column.id()))
                 .execute();
     }
-
-
-
-    void deleteById(UUID id);
-
-    Optional<InfraDatabaseColumn> findById(UUID id);
 
     int countByTableIdAndColumnNameIn(UUID tableId, List<String> columnNameList);
 }

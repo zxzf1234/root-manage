@@ -249,7 +249,7 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public List<InfraJob> getJobList(Collection<UUID> ids) {
-        return infraJobRepository.findByIdIn(ids);
+        return infraJobRepository.findAllById(ids);
     }
 
     @Override

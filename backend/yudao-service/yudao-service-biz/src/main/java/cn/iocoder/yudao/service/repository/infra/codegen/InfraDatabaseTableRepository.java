@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface InfraDatabaseTableRepository extends JRepository<InfraDatabaseTable, Long> {
+public interface InfraDatabaseTableRepository extends JRepository<InfraDatabaseTable, UUID> {
     InfraDatabaseTableTable infraDatabaseTableTable = InfraDatabaseTableTable.$;
 
     default Page<InfraDatabaseTable> selectList(DatabaseTableListReqVO listReqVO){
@@ -66,8 +66,6 @@ public interface InfraDatabaseTableRepository extends JRepository<InfraDatabaseT
                 .where(infraDatabaseTableTable.id().eq(id))
                 .execute();
     }
-
-    Optional<InfraDatabaseTable> findById(UUID id);
 
     default Optional<InfraDatabaseTable> findByName(String name){
         return sql().createQuery(infraDatabaseTableTable)

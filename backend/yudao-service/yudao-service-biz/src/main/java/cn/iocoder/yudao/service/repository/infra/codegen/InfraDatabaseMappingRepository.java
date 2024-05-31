@@ -7,11 +7,8 @@ import org.babyfish.jimmer.spring.repository.JRepository;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface InfraDatabaseMappingRepository extends JRepository<InfraDatabaseMapping, Long> {
+public interface InfraDatabaseMappingRepository extends JRepository<InfraDatabaseMapping, UUID> {
     InfraDatabaseMappingTable infraDatabaseMappingTable = InfraDatabaseMappingTable.$;
 
-    void deleteById(UUID id);
-
-    Optional<InfraDatabaseMapping> findById(UUID id);
 
 }

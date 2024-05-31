@@ -10,7 +10,7 @@ import org.springframework.util.StringUtils;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface InfraDictNoRepository extends JRepository<InfraDictNo, Long> {
+public interface InfraDictNoRepository extends JRepository<InfraDictNo, UUID> {
     InfraDictNoTable infraDictNoTable = InfraDictNoTable.$;
 
     default Page<InfraDictNo> query(DictNoQueryInput inputVO){
@@ -22,8 +22,6 @@ public interface InfraDictNoRepository extends JRepository<InfraDictNo, Long> {
                 .select(infraDictNoTable)
         );
     }
-
-    Optional<InfraDictNo> findById(UUID id);
 
     Optional<InfraDictNo> findByKeyName(String keyName);
 

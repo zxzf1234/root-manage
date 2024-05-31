@@ -255,11 +255,11 @@ public class InterfaceServiceImpl implements InterfaceService{
         infraInterfaceValidationRepository.saveAll(newValidations);
 
         if (!deleteValidations.isEmpty())
-            infraInterfaceValidationRepository.deleteByIdIn(deleteValidations);
+            infraInterfaceValidationRepository.deleteByIds(deleteValidations);
         if (!deleteParams.isEmpty())
-            infraInterfaceParamRepository.deleteByIdIn(deleteParams);
+            infraInterfaceParamRepository.deleteByIds(deleteParams);
         if (!deleteSubclasses.isEmpty())
-            infraInterfaceSubclassRepository.deleteByIdIn(deleteSubclasses);
+            infraInterfaceSubclassRepository.deleteByIds(deleteSubclasses);
 
         InfraInterface updateInterface = CodegenConvert.INSTANCE.convert(reqVO);
         Optional<InfraInterface> opOldInterface = infraInterfaceRepository.findById(reqVO.getId());
