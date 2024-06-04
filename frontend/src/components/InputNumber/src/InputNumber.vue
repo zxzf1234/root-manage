@@ -35,6 +35,16 @@ watch(
   }
 )
 
+watch(
+  () => model.value,
+  (modelValue: number) => {
+    if (modelValue == null) {
+      model.value = 0
+    }
+    emit('update:modelValue', model.value)
+  }
+)
+
 const handleBlur = () => {
   if (props.type == 'decimal' && model.value != undefined) {
     model.value = parseFloat(model.value.toFixed(4))
