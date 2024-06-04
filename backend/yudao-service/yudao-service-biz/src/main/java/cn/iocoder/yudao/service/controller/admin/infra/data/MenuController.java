@@ -71,7 +71,7 @@ public class MenuController {
         // 获得菜单列表，只要开启状态的
         MenuListReqVO reqVO = new MenuListReqVO();
         reqVO.setStatus(CommonStatusEnum.ENABLE.getStatus());
-        List<SystemMenu> list = menuService.getMenuListByTenant(reqVO);
+        List<SystemMenu> list = menuService.getMenuList(reqVO);
         // 排序后，返回给前端
         list.sort(Comparator.comparing(SystemMenu::sort));
         return success(MenuConvert.INSTANCE.convertList02(list));

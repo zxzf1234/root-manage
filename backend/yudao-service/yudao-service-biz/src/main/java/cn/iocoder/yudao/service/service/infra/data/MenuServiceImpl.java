@@ -111,11 +111,6 @@ public class MenuServiceImpl implements MenuService {
         return systemMenuRepository.findAll();
     }
 
-    @Override
-    public List<SystemMenu> getMenuListByTenant(MenuListReqVO reqVO) {
-        List<SystemMenu> menus = getMenuList(reqVO);
-        return menus;
-    }
 
     @Override
     public List<SystemMenu> getMenuList(MenuListReqVO reqVO) {

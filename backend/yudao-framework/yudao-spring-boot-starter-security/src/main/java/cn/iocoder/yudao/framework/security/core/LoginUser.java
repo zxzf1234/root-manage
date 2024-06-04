@@ -28,10 +28,6 @@ public class LoginUser {
      */
     private Integer userType;
     /**
-     * 租户编号
-     */
-    private Long tenantId;
-    /**
      * 授权范围
      */
     private List<String> scopes;

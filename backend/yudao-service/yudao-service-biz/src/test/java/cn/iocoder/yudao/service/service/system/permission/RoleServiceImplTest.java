@@ -301,9 +301,7 @@ public class RoleServiceImplTest extends BaseDbUnitTest {
         // 是超级
         assertTrue(roleService.hasAnySuperAdmin(singletonList(randomPojo(RoleDO.class,
                 o -> o.setCode("super_admin")))));
-        // 非超级
-        assertFalse(roleService.hasAnySuperAdmin(singletonList(randomPojo(RoleDO.class,
-                o -> o.setCode("tenant_admin")))));
+
     }
 
     @Test

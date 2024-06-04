@@ -42,7 +42,7 @@
 </template>
 <script lang="ts" name="SystemUserImportForm" setup>
 import * as UserApi from '@/api/system/user'
-import { getAccessToken, getTenantId } from '@/utils/auth'
+import { getAccessToken } from '@/utils/auth'
 import download from '@/utils/download'
 
 const message = useMessage() // 消息弹窗
@@ -71,8 +71,7 @@ const submitForm = async () => {
   }
   // 提交请求
   uploadHeaders.value = {
-    Authorization: 'Bearer ' + getAccessToken(),
-    'tenant-id': getTenantId()
+    Authorization: 'Bearer ' + getAccessToken()
   }
   formLoading.value = true
   uploadRef.value!.submit()

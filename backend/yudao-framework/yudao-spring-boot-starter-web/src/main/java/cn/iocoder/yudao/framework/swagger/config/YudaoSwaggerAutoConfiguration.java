@@ -26,8 +26,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static cn.iocoder.yudao.framework.web.core.util.WebFrameworkUtils.HEADER_TENANT_ID;
-
 /**
  * Swagger 自动配置类，基于 OpenAPI + Springdoc 实现。
  *
@@ -134,7 +132,7 @@ public class YudaoSwaggerAutoConfiguration {
                 .name(HttpHeaders.AUTHORIZATION) // header 名
                 .description("认证 Token") // 描述
                 .in(String.valueOf(SecurityScheme.In.HEADER)) // 请求 header
-                .schema(new StringSchema()._default("Bearer test1").name(HEADER_TENANT_ID).description("认证 Token")); // 默认：使用用户编号为 1
+                .schema(new StringSchema()._default("Bearer test1").description("认证 Token")); // 默认：使用用户编号为 1
     }
 
 }

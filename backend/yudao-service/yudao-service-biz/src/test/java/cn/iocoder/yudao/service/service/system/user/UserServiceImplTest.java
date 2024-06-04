@@ -15,7 +15,6 @@ import cn.iocoder.yudao.service.vo.system.user.user.*;
 import cn.iocoder.yudao.service.dal.dataobject.dept.DeptDO;
 import cn.iocoder.yudao.service.dal.dataobject.dept.PostDO;
 import cn.iocoder.yudao.service.dal.dataobject.dept.UserPostDO;
-import cn.iocoder.yudao.service.dal.dataobject.tenant.TenantDO;
 import cn.iocoder.yudao.service.dal.dataobject.user.AdminUserDO;
 import cn.iocoder.yudao.service.dal.mysql.dept.UserPostMapper;
 import cn.iocoder.yudao.service.dal.mysql.user.AdminUserMapper;
@@ -23,7 +22,6 @@ import cn.iocoder.yudao.service.enums.common.SexEnum;
 import cn.iocoder.yudao.service.service.system.dept.DeptService;
 import cn.iocoder.yudao.service.service.system.dept.PostService;
 import cn.iocoder.yudao.service.service.system.permission.PermissionService;
-import cn.iocoder.yudao.service.service.tenant.TenantService;
 import org.junit.jupiter.api.Test;
 import org.mockito.stubbing.Answer;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -73,8 +71,7 @@ public class UserServiceImplTest extends BaseDbUnitTest {
     private PermissionService permissionService;
     @MockBean
     private PasswordEncoder passwordEncoder;
-    @MockBean
-    private TenantService tenantService;
+
     @MockBean
     private FileApi fileApi;
 
@@ -87,11 +84,8 @@ public class UserServiceImplTest extends BaseDbUnitTest {
             o.setPostIds(asSet(1L, 2L));
         });
         // mock 账户额度充足
-        TenantDO tenant = randomPojo(TenantDO.class, o -> o.setAccountCount(1));
-        doNothing().when(tenantService).handleTenantInfo(argThat(handler -> {
-            handler.handle(tenant);
-            return true;
-        }));
+
+
         // mock deptService 的方法
         DeptDO dept = randomPojo(DeptDO.class, o -> {
             o.setId(reqVO.getDeptId());
@@ -126,11 +120,7 @@ public class UserServiceImplTest extends BaseDbUnitTest {
         // 准备参数
         UserCreateReqVO reqVO = randomPojo(UserCreateReqVO.class);
         // mock 账户额度不足
-        TenantDO tenant = randomPojo(TenantDO.class, o -> o.setAccountCount(-1));
-        doNothing().when(tenantService).handleTenantInfo(argThat(handler -> {
-            handler.handle(tenant);
-            return true;
-        }));
+
 
         // 调用，并断言异常
         assertServiceException(() -> userService.createUser(reqVO), USER_COUNT_MAX, -1);

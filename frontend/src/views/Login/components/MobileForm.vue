@@ -104,7 +104,6 @@ const { handleBackLogin, getLoginState } = useLoginState()
 const getShow = computed(() => unref(getLoginState) === LoginStateEnum.MOBILE)
 
 const rules = {
-  tenantName: [required],
   mobileNumber: [required],
   code: [required]
 }
@@ -116,7 +115,6 @@ const loginData = reactive({
   },
   loginForm: {
     uuid: '',
-    tenantName: '芋道源码',
     mobileNumber: '',
     code: ''
   }

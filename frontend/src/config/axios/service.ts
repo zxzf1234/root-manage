@@ -9,7 +9,7 @@ import axios, {
 import { ElMessage } from 'element-plus'
 import qs from 'qs'
 import { config } from '@/config/axios/config'
-import { getAccessToken, getRefreshToken, getTenantId, removeToken, setToken } from '@/utils/auth'
+import { getAccessToken, getRefreshToken, removeToken, setToken } from '@/utils/auth'
 import errorCode from './errorCode'
 
 import { resetRouter } from '@/router'
@@ -204,7 +204,6 @@ service.interceptors.response.use(
 )
 
 const refreshToken = async () => {
-  axios.defaults.headers.common['tenant-id'] = getTenantId()
   return await axios.post(base_url + '/infra/auth/refresh-token?refreshToken=' + getRefreshToken())
 }
 const handleAuthorized = () => {

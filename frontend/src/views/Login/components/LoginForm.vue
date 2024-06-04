@@ -150,7 +150,6 @@ const captchaType = ref('blockPuzzle') // blockPuzzle 滑块 clickWord 点击文
 const getShow = computed(() => unref(getLoginState) === LoginStateEnum.LOGIN)
 
 const LoginRules = {
-  tenantName: [required],
   username: [required],
   password: [required]
 }
@@ -159,7 +158,6 @@ const loginData = reactive({
   // 登陆后，是否图片验证
   captchaEnable: import.meta.env.VITE_APP_CAPTCHA_ENABLE,
   loginForm: {
-    tenantName: '芋道源码',
     username: 'admin',
     password: 'admin123',
     captchaVerification: '',
@@ -196,8 +194,7 @@ const getCookie = () => {
       ...loginData.loginForm,
       username: loginForm.username ? loginForm.username : loginData.loginForm.username,
       password: loginForm.password ? loginForm.password : loginData.loginForm.password,
-      rememberMe: loginForm.rememberMe ? true : false,
-      tenantName: loginForm.tenantName ? loginForm.tenantName : loginData.loginForm.tenantName
+      rememberMe: loginForm.rememberMe ? true : false
     }
   }
 }
@@ -205,7 +202,6 @@ const getCookie = () => {
 const handleLogin = async (params) => {
   loginLoading.value = true
   try {
-    //await getTenantId()
     const data = await validForm() // ture
     if (!data) {
       return

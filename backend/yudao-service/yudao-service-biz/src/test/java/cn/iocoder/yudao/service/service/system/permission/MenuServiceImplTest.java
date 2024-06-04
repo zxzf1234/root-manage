@@ -10,7 +10,6 @@ import cn.iocoder.yudao.service.dal.dataobject.permission.MenuDO;
 import cn.iocoder.yudao.service.dal.mysql.permission.MenuMapper;
 import cn.iocoder.yudao.service.enums.system.permission.MenuTypeEnum;
 import cn.iocoder.yudao.service.mq.producer.permission.MenuProducer;
-import cn.iocoder.yudao.service.service.tenant.TenantService;
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
 import org.junit.jupiter.api.Test;
@@ -48,8 +47,7 @@ public class MenuServiceImplTest extends BaseDbUnitTest {
     private PermissionService permissionService;
     @MockBean
     private MenuProducer menuProducer;
-    @MockBean
-    private TenantService tenantService;
+
 
     @Test
     public void testInitLocalCache_success() {
@@ -194,30 +192,7 @@ public class MenuServiceImplTest extends BaseDbUnitTest {
         assertPojoEquals(menuDO, result.get(0));
     }
 
-    @Test
-    public void testGetMenuListByTenant() {
-        // mock 数据
-        MenuDO menu100 = randomPojo(MenuDO.class, o -> o.setId(100L).setStatus(CommonStatusEnum.ENABLE.getStatus()));
-        menuMapper.insert(menu100);
-        MenuDO menu101 = randomPojo(MenuDO.class, o -> o.setId(101L).setStatus(CommonStatusEnum.DISABLE.getStatus()));
-        menuMapper.insert(menu101);
-        MenuDO menu102 = randomPojo(MenuDO.class, o -> o.setId(102L).setStatus(CommonStatusEnum.ENABLE.getStatus()));
-        menuMapper.insert(menu102);
-        // mock 过滤菜单
-        Set<Long> menuIds = asSet(100L, 101L);
-        doNothing().when(tenantService).handleTenantMenu(argThat(handler -> {
-            handler.handle(menuIds);
-            return true;
-        }));
-        // 准备参数
-        MenuListReqVO reqVO = new MenuListReqVO().setStatus(CommonStatusEnum.ENABLE.getStatus());
 
-        // 调用
-        List<MenuDO> result = menuService.getMenuListByTenant(reqVO);
-        // 断言
-        assertEquals(1, result.size());
-        assertPojoEquals(menu100, result.get(0));
-    }
 
     @Test
     public void testListMenusFromCache_withoutId() {

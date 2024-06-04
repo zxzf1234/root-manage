@@ -31,7 +31,7 @@
   </Dialog>
 </template>
 <script lang="ts" name="InfraFileForm" setup>
-import { getAccessToken, getTenantId } from '@/utils/auth'
+import { getAccessToken } from '@/utils/auth'
 
 const { t } = useI18n() // 国际化
 const message = useMessage() // 消息弹窗
@@ -64,8 +64,7 @@ const submitFileForm = () => {
   }
   // 提交请求
   uploadHeaders.value = {
-    Authorization: 'Bearer ' + getAccessToken(),
-    'tenant-id': getTenantId()
+    Authorization: 'Bearer ' + getAccessToken()
   }
   unref(uploadRef)?.submit()
 }

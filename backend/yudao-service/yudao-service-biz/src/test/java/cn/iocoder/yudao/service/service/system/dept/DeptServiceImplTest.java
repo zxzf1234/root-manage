@@ -4,7 +4,6 @@ package cn.iocoder.yudao.service.service.system.dept;
 import cn.iocoder.yudao.framework.common.enums.CommonStatusEnum;
 import cn.iocoder.yudao.framework.common.util.collection.ArrayUtils;
 import cn.iocoder.yudao.framework.common.util.object.ObjectUtils;
-import cn.iocoder.yudao.framework.tenant.core.context.TenantContextHolder;
 import cn.iocoder.yudao.framework.test.core.ut.BaseDbUnitTest;
 import cn.iocoder.yudao.service.vo.system.dept.dept.DeptCreateReqVO;
 import cn.iocoder.yudao.service.vo.system.dept.dept.DeptListReqVO;
@@ -53,8 +52,7 @@ public class DeptServiceImplTest extends BaseDbUnitTest {
 
     @BeforeEach
     public void setUp() {
-        // 清理租户上下文
-        TenantContextHolder.clear();
+
     }
 
     @Test

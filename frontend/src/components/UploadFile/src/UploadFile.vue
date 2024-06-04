@@ -41,7 +41,7 @@
 import { PropType } from 'vue'
 
 import { propTypes } from '@/utils/propTypes'
-import { getAccessToken, getTenantId } from '@/utils/auth'
+import { getAccessToken } from '@/utils/auth'
 import type {
   UploadInstance,
   UploadUserFile,
@@ -73,8 +73,7 @@ const uploadRef = ref<UploadInstance>()
 const fileList = ref<UploadUserFile[]>(props.modelValue)
 const uploadNumber = ref<number>(0)
 const uploadHeaders = ref({
-  Authorization: 'Bearer ' + getAccessToken(),
-  'tenant-id': getTenantId()
+  Authorization: 'Bearer ' + getAccessToken()
 })
 const currentUploadFile = ref()
 const currentUploadingMessages = ref<MessageHandler[]>([])
