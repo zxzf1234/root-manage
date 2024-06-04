@@ -14,7 +14,7 @@
                 <avatar class="avatar" />
                 <Motion>
                   <h2 class="outline-none">
-                    <ReTpeit :cursor="false" :speed="150" :values="['管理系统']" />
+                    <ReTpeit :cursor="false" :speed="150" :values="[appTitle]" />
                   </h2>
                 </Motion>
                 <Transition appear enter-active-class="animate__animated animate__bounceInRight">
@@ -45,7 +45,10 @@
 import { ReTpeit } from '@/components/ReTpeit'
 import { LoginForm, MobileForm, QrCodeForm, RegisterForm, SSOLoginVue } from './components'
 import { toRaw } from 'vue'
-import { bg, avatar, illustration } from './utils/static'
+import bg from '@/assets/imgs/login/bg.png'
+import avatar from '@/assets/imgs/login/avatar.svg?component'
+import illustration from '@/assets/imgs/login/illustration.svg?component'
+const appTitle = import.meta.env.VITE_APP_TITLE
 </script>
 
 <style lang="scss" scoped>
