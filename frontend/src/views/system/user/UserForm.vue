@@ -99,9 +99,9 @@
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
 import { CommonStatusEnum } from '@/utils/constants'
 import { defaultProps, handleTree } from '@/utils/tree'
-import * as PostApi from '@/api/system/post'
-import * as DeptApi from '@/api/system/dept'
-import * as UserApi from '@/api/system/user'
+import * as PostApi from '@/api/system/post/post'
+import * as DeptApi from '@/api/system/dept/dept'
+import * as UserApi from '@/api/system/user/user'
 
 const { t } = useI18n() // 国际化
 const message = useMessage() // 消息弹窗

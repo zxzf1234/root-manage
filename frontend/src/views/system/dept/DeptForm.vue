@@ -60,8 +60,8 @@
 <script lang="ts" name="SystemDeptForm" setup>
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
 import { defaultProps, handleTree } from '@/utils/tree'
-import * as DeptApi from '@/api/system/dept'
-import * as UserApi from '@/api/system/user'
+import * as DeptApi from '@/api/system/dept/dept'
+import * as UserApi from '@/api/system/user/user'
 import { CommonStatusEnum } from '@/utils/constants'
 
 const { t } = useI18n() // 国际化

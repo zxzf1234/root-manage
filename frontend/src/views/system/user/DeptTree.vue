@@ -23,7 +23,7 @@
 
 <script lang="ts" name="SystemUserDeptTree" setup>
 import { ElTree } from 'element-plus'
-import * as DeptApi from '@/api/system/dept'
+import * as DeptApi from '@/api/system/dept/dept'
 import { defaultProps, handleTree } from '@/utils/tree'
 
 const deptName = ref('')

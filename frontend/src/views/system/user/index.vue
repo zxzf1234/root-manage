@@ -143,7 +143,7 @@
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
 import { formatDate } from '@/utils/formatTime'
 import download from '@/utils/download'
-import * as UserApi from '@/api/system/user'
+import * as UserApi from '@/api/system/user/user'
 import UserForm from './UserForm.vue'
 import UserImportForm from './UserImportForm.vue'
 import UserAssignRoleForm from './UserAssignRoleForm.vue'

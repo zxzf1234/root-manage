@@ -74,9 +74,9 @@
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
 // import { dateFormatter } from '@/utils/formatTime'
 import { handleTree } from '@/utils/tree'
-import * as DeptApi from '@/api/system/dept'
+import * as DeptApi from '@/api/system/dept/dept'
 import DeptForm from './DeptForm.vue'
-import * as UserApi from '@/api/system/user'
+import * as UserApi from '@/api/system/user/user'
 import { formatDate } from '@/utils/formatTime'
 const message = useMessage() // 消息弹窗
 const { t } = useI18n() // 国际化

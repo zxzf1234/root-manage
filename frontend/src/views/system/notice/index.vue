@@ -74,7 +74,7 @@
 <script setup lang="tsx" name="SystemNotice">
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
 // import { dateFormatter } from '@/utils/formatTime'
-import * as NoticeApi from '@/api/system/notice'
+import * as NoticeApi from '@/api/system/notice/notice'
 import NoticeForm from './NoticeForm.vue'
 import { formatDate } from '@/utils/formatTime'
 const message = useMessage() // 消息弹窗

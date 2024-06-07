@@ -88,7 +88,7 @@
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
 // import { dateFormatter } from '@/utils/formatTime'
 import download from '@/utils/download'
-import * as PostApi from '@/api/system/post'
+import * as PostApi from '@/api/system/post/post'
 import PostForm from './PostForm.vue'
 import { formatDate } from '@/utils/formatTime'
 const message = useMessage() // 消息弹窗

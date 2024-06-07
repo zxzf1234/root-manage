@@ -127,7 +127,7 @@ import RoleForm from './RoleForm.vue'
 import RoleAssignMenuForm from './RoleAssignMenuForm.vue'
 import RoleDataPermissionForm from './RoleDataPermissionForm.vue'
 import download from '@/utils/download'
-import * as RoleApi from '@/api/system/role'
+import * as RoleApi from '@/api/system/role/role'
 import { formatDate } from '@/utils/formatTime'
 import { CommonStatusEnum } from '@/utils/constants'
 const message = useMessage() // 消息弹窗

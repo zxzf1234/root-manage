@@ -66,8 +66,8 @@
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
 import { defaultProps, handleTree } from '@/utils/tree'
 import { SystemDataScopeEnum } from '@/utils/constants'
-import * as RoleApi from '@/api/system/role'
-import * as DeptApi from '@/api/system/dept'
+import * as RoleApi from '@/api/system/role/role'
+import * as DeptApi from '@/api/system/dept/dept'
 import * as PermissionApi from '@/api/system/permission'
 
 const { t } = useI18n() // 国际化

@@ -21,8 +21,8 @@
 </template>
 <script lang="ts" name="SystemUserAssignRoleForm" setup>
 import * as PermissionApi from '@/api/system/permission'
-import * as UserApi from '@/api/system/user'
-import * as RoleApi from '@/api/system/role'
+import * as UserApi from '@/api/system/user/user'
+import * as RoleApi from '@/api/system/role/role'
 
 const { t } = useI18n() // 国际化
 const message = useMessage() // 消息弹窗
