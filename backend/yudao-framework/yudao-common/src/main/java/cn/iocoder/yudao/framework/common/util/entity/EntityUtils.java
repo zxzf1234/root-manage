@@ -13,6 +13,7 @@ public class EntityUtils {
         Collection<ImmutableProp> newProps = ImmutableType.get(newObject.getClass()).getProps().values();
         if(oldProps.size() != newProps.size())
             return false;
+        boolean isEquals = true;
         for(ImmutableProp oldProp : oldProps){
             if(oldProp.getTargetType()  == null
                     && !oldProp.getName().equals("createTime")
@@ -23,13 +24,15 @@ public class EntityUtils {
                 Object oldColumnObject = ImmutableObjects.get(oldObject, oldProp);
                 Object newColumnObject = ImmutableObjects.get(newObject, oldProp);
                 if(Objects.isNull(oldColumnObject)){
-                    return Objects.isNull(newColumnObject);
+                    if(!Objects.isNull(newColumnObject))
+                        isEquals = false;
+                    continue;
                 }
                 if(!oldColumnObject.equals(newColumnObject))
-                    return false;
+                    isEquals = false;
             }
         }
 
-        return true;
+        return isEquals;
     }
 }

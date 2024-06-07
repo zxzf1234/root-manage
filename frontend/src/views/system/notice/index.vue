@@ -100,11 +100,6 @@ const columns: TableColumnList = [
     slot: 'type'
   },
   {
-    label: '角色标识',
-    prop: 'code'
-  },
-
-  {
     label: '状态',
     prop: 'status',
     slot: 'status'

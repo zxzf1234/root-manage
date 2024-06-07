@@ -65,10 +65,7 @@ watch(
       ]"
       to="/"
     >
-      <img
-        class="w-[calc(var(--logo-height)-10px)] h-[calc(var(--logo-height)-10px)]"
-        src="@/assets/imgs/logo.png"
-      />
+      <img class="h-[calc(var(--logo-height)-10px)]" src="@/assets/imgs/logo.png" />
       <div
         v-if="show"
         :class="[

@@ -11,7 +11,8 @@
           <div class="login-container">
             <div class="login-box">
               <div class="login-form">
-                <avatar class="avatar" />
+                <logo class="avatar" />
+
                 <Motion>
                   <h2 class="outline-none">
                     <ReTpeit :cursor="false" :speed="150" :values="[appTitle]" />
@@ -45,9 +46,9 @@
 import { ReTpeit } from '@/components/ReTpeit'
 import { LoginForm, MobileForm, QrCodeForm, RegisterForm, SSOLoginVue } from './components'
 import { toRaw } from 'vue'
-import bg from '@/assets/imgs/login/bg.png'
-import avatar from '@/assets/imgs/login/avatar.svg?component'
-import illustration from '@/assets/imgs/login/illustration.svg?component'
+import bg from '@/assets/imgs/bg.png'
+import logo from '@/assets/imgs/logo.svg?component'
+import illustration from '@/assets/imgs/illustration.svg?component'
 const appTitle = import.meta.env.VITE_APP_TITLE
 </script>
 
