@@ -1,0 +1,1 @@
+ALTER TABLE system_menu CHANGE COLUMN `deletedTime` `deleted_time` DATETIME DEFAULT NULL COMMENT '删除时间'

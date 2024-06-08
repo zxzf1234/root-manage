@@ -30,6 +30,7 @@ public interface SystemRoleRepository extends JRepository<SystemRole, Long> {
         return pager(reqVO.getPageNo() - 1, reqVO.getPageSize()).execute(
                 sql()
                         .createQuery(systemRoleTable)
+                        .where(systemRoleTable.id().ge(0L))
                         .whereIf(reqVO.getStatus() != null, systemRoleTable.status().eq(reqVO.getStatus()))
                         .whereIf(StringUtils.hasText(reqVO.getCode()), systemRoleTable.code().eq(reqVO.getCode()))
                         .whereIf(StringUtils.hasText(reqVO.getName()), systemRoleTable.name().eq(reqVO.getName()))

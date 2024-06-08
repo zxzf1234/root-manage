@@ -13,6 +13,7 @@ import cn.iocoder.yudao.service.model.infra.data.SystemMenu;
 import cn.iocoder.yudao.service.model.system.dept.SystemDept;
 import cn.iocoder.yudao.service.model.system.permission.*;
 import cn.iocoder.yudao.service.model.system.role.SystemRole;
+import cn.iocoder.yudao.service.repository.infra.data.SystemMenuRepository;
 import cn.iocoder.yudao.service.repository.system.permission.SystemRoleMenuRepository;
 import cn.iocoder.yudao.service.repository.system.permission.SystemUserRoleRepository;
 import cn.iocoder.yudao.service.service.infra.data.MenuService;
@@ -39,6 +40,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+import static cn.iocoder.yudao.framework.common.util.collection.CollectionUtils.convertList;
 import static cn.iocoder.yudao.framework.common.util.collection.CollectionUtils.convertSet;
 import static java.util.Collections.singleton;
 
@@ -55,6 +57,9 @@ public class PermissionServiceImpl implements PermissionService {
     private SystemRoleMenuRepository systemRoleMenuRepository;
     @Resource
     private SystemUserRoleRepository systemUserRoleRepository;
+
+    @Resource
+    private SystemMenuRepository systemMenuRepository;
 
     @Resource
     private RoleService roleService;
@@ -75,9 +80,12 @@ public class PermissionServiceImpl implements PermissionService {
         }
 
         // 判断角色是否包含超级管理员。如果是超级管理员，获取到全部
-        List<SystemRole> roleList = roleService.getRoleListFrom(roleIds);
         if (roleService.hasAnySuperAdmin(roleIds)) {
-            return menuService.getMenuList(menuTypes, menusStatuses);
+            return menuService.getMenuList(menuTypes, menusStatuses, false);
+        }
+
+        if (roleService.hasAnyRoot(roleIds)) {
+            return menuService.getMenuList(menuTypes, menusStatuses, null);
         }
 
         // 获得角色拥有的菜单关联
@@ -103,13 +111,17 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
-    public Set<UUID> getRoleMenuIds(Long roleId) {
+    public List<UUID> getRoleMenuIds(Long roleId) {
         // 如果是管理员的情况下，获取全部菜单编号
         if (roleService.hasAnySuperAdmin(Collections.singletonList(roleId))) {
-            return convertSet(menuService.getMenuList(), SystemMenu::id);
+            return convertList(systemMenuRepository.findAllExcludeBack(), SystemMenu::id);
         }
+        if (roleService.hasAnyRoot(Collections.singletonList(roleId))) {
+            return convertList(systemMenuRepository.findAll(), SystemMenu::id);
+        }
+
         // 如果是非管理员的情况下，获得拥有的菜单编号
-        return convertSet(systemRoleMenuRepository.findByRoleId(roleId), SystemRoleMenu::menuId);
+        return convertList(systemRoleMenuRepository.findByRoleId(roleId), SystemRoleMenu::menuId);
     }
 
     @Override
@@ -213,6 +225,10 @@ public class PermissionServiceImpl implements PermissionService {
             return true;
         }
 
+        if (roleService.hasAnyRoot(roleIds)) {
+            return true;
+        }
+
         // 遍历权限，判断是否有一个满足
         return Arrays.stream(permissions).anyMatch(permission -> {
             List<SystemMenu> menuList = menuService.getMenuListByPermissionFromCache(permission);
@@ -240,6 +256,10 @@ public class PermissionServiceImpl implements PermissionService {
         }
         // 判断是否是超管。如果是，当然符合条件
         if (roleService.hasAnySuperAdmin(roleIds)) {
+            return true;
+        }
+
+        if (roleService.hasAnyRoot(roleIds)) {
             return true;
         }
         Set<String> userRoles = convertSet(roleService.getRoleListFrom(roleIds),

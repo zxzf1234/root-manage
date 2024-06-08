@@ -1,0 +1,10 @@
+update INFRA_DICT_DATA set DELETED_TIME = '2024-06-08T11:27:46.671420700' where ID in ('fd49961f-bbe0-4260-9443-611b146f5713');
+insert ignore into INFRA_DICT_DATA(CREATOR_ID, UPDATER_ID, ID, SORT, LABEL, VALUE, TYPE_ID, STATUS, COLOR_TYPE, CSS_CLASS, REMARK, DATA_ENUM, DELETED_TIME) values('1', '1', '57ef5a8a-9331-412f-9a9a-a51dcc544371', '0', 'root', 'root', '230c2944-c4d1-458f-8ece-137d0d6bc8f7', '0', '', '', '', 'ROOT', NULL);
+delete tb_1_ from SYSTEM_MENU tb_1_ where tb_1_.ID = '06cc0770-23b0-11ee-a1af-047c1649ee1e';
+delete tb_1_ from SYSTEM_MENU tb_1_ where tb_1_.ID = '06cc065f-23b0-11ee-a1af-047c1649ee1e';
+delete tb_1_ from SYSTEM_MENU tb_1_ where tb_1_.ID = '06cc087a-23b0-11ee-a1af-047c1649ee1e';
+delete tb_1_ from SYSTEM_MENU tb_1_ where tb_1_.ID = '06cc07f5-23b0-11ee-a1af-047c1649ee1e';
+delete tb_1_ from SYSTEM_MENU tb_1_ where tb_1_.ID = '06cc06e7-23b0-11ee-a1af-047c1649ee1e';
+delete tb_1_ from SYSTEM_MENU tb_1_ where tb_1_.ID = '06cc05da-23b0-11ee-a1af-047c1649ee1e';
+delete tb_1_ from SYSTEM_MENU tb_1_ where tb_1_.ID = '06cbf7c1-23b0-11ee-a1af-047c1649ee1e';
+delete tb_1_ from SYSTEM_MENU tb_1_ where tb_1_.ID = '06cbf738-23b0-11ee-a1af-047c1649ee1e';

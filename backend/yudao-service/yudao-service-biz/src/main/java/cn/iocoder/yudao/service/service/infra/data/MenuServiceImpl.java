@@ -29,6 +29,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
+import static cn.iocoder.yudao.framework.security.core.util.SecurityFrameworkUtils.getLoginUserId;
 import static cn.iocoder.yudao.service.enums.infra.ErrorCodeConstants.*;
 
 /**
@@ -107,23 +108,17 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public List<SystemMenu> getMenuList() {
-        return systemMenuRepository.findAll();
-    }
-
-
-    @Override
     public List<SystemMenu> getMenuList(MenuListReqVO reqVO) {
-        return systemMenuRepository.selectList(reqVO);
+        return systemMenuRepository.selectList(reqVO, getLoginUserId());
     }
 
     @Override
-    public List<SystemMenu> getMenuList(Collection<Integer> menuTypes, Collection<Integer> menusStatuses) {
+    public List<SystemMenu> getMenuList(Collection<Integer> menuTypes, Collection<Integer> menusStatuses, Boolean showBack) {
         // 任一一个参数为空，则返回空
         if (CollectionUtils.isAnyEmpty(menuTypes, menusStatuses)) {
             return Collections.emptyList();
         }
-        return systemMenuRepository.findByTypeInAndStatusIn(menuTypes, menusStatuses);
+        return systemMenuRepository.findByTypeInAndStatusIn(menuTypes, menusStatuses, showBack);
     }
 
     @Override

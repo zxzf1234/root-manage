@@ -121,6 +121,9 @@ public class DictTypeServiceImpl implements DictTypeService {
         Optional<InfraDictType> opOldType = infraDictTypeRepository.findById(inputVO.getId());
         if(!opOldType.isPresent())
             throw exception(DICT_TYPE_NOT_EXISTS);
+        Optional<InfraDictType> opOldTypeDetail = infraDictTypeRepository.findByDetailId(inputVO.getId());
+        if(!opOldTypeDetail.isPresent())
+            throw exception(DICT_TYPE_NOT_EXISTS);
         for(DictTypeUpdateInput.data data : inputVO.getDatas()){
             if(Objects.equals(data.getOperateType(), "delete")){
                 Optional<InfraDictData> optionalDeleteInfraDictData = infraDictDataRepository.findById(data.getId());
@@ -157,8 +160,8 @@ public class DictTypeServiceImpl implements DictTypeService {
         });
         if (!EntityUtils.isEquals(opOldType.get(), updateType))
             infraDictTypeRepository.update(updateType);
-        updateType = infraDictTypeRepository.findById(inputVO.getId()).get();
-        codegenEngine.dictUpdateExecute(opOldType.get(), updateType);
+        updateType = infraDictTypeRepository.findByDetailId(inputVO.getId()).get();
+        codegenEngine.dictUpdateExecute(opOldTypeDetail.get(), updateType);
         return true;
     }
 

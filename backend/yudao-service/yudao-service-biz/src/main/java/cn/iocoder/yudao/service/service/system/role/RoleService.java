@@ -39,6 +39,8 @@ public interface RoleService {
 
     boolean hasAnySuperAdmin(Collection<Long> roleList);
 
+    boolean hasAnyRoot(Collection<Long> roleList);
+
     List<SystemRole> getRoleListFrom(Collection<Long> ids);
 
     SystemRole getRoleFrom(Long id);

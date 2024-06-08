@@ -11,6 +11,10 @@ import lombok.Getter;
 public enum SystemRoleCodeEnum {
 
     /**
+    * root
+    */
+    ROOT("root"),
+    /**
     * 超级管理员
     */
     SUPER_ADMIN("super_admin");

@@ -38,13 +38,6 @@ public interface MenuService {
      */
     void deleteMenu(UUID id);
 
-    /**
-     * 获得所有菜单列表
-     *
-     * @return 菜单列表
-     */
-    List<SystemMenu> getMenuList();
-
 
     /**
      * 筛选菜单列表
@@ -63,7 +56,7 @@ public interface MenuService {
      * @param menusStatuses 菜单状态数组
      * @return 菜单列表
      */
-    List<SystemMenu> getMenuList(Collection<Integer> menuTypes, Collection<Integer> menusStatuses);
+    List<SystemMenu> getMenuList(Collection<Integer> menuTypes, Collection<Integer> menusStatuses, Boolean showBack);
 
     /**
      * 获得指定编号的菜单数组，从缓存中

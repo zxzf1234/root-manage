@@ -46,7 +46,7 @@ public interface PermissionService {
      * @param roleId 角色编号
      * @return 菜单编号集合
      */
-    Set<UUID> getRoleMenuIds(Long roleId);
+    List<UUID> getRoleMenuIds(Long roleId);
 
     /**
      * 获得拥有多个角色的用户编号集合

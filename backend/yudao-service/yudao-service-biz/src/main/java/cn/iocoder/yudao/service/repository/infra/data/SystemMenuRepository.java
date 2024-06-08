@@ -11,13 +11,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface SystemMenuRepository extends JRepository<SystemMenu, Long> {
+public interface SystemMenuRepository extends JRepository<SystemMenu, UUID> {
     SystemMenuTable systemMenuTable = SystemMenuTable.$;
-    default List<SystemMenu> selectList(MenuListReqVO reqVO){
+    default List<SystemMenu> selectList(MenuListReqVO reqVO, Long userId){
         return sql()
                 .createQuery(systemMenuTable)
                 .whereIf(reqVO.getStatus() != null, systemMenuTable.status().eq(reqVO.getStatus()))
                 .whereIf(StringUtils.hasText(reqVO.getName()), systemMenuTable.name().eq(reqVO.getName()))
+                .whereIf(userId != -1, systemMenuTable.backShow().eq(false))
                 .select(systemMenuTable)
                 .execute();
     };
@@ -26,13 +27,32 @@ public interface SystemMenuRepository extends JRepository<SystemMenu, Long> {
 
     long countByParentId(String menuId);
 
-    Optional<SystemMenu> findById(UUID id);
-
-    void deleteById(UUID id);
-
     List<SystemMenu> findByPermission(String permission);
 
-    List<SystemMenu> findByTypeInAndStatusIn(Collection<Integer> types, Collection<Integer> statuses);
+    default List<SystemMenu> findByTypeInAndStatusIn(Collection<Integer> types, Collection<Integer> statuses, Boolean showBack){
+        return sql().createQuery(systemMenuTable)
+                .where(systemMenuTable.type().in(types))
+                .where(systemMenuTable.status().in(statuses))
+                .whereIf(showBack != null, systemMenuTable.backShow().eq(showBack))
+                .select(systemMenuTable)
+                .execute();
+    };
 
-    List<SystemMenu> findByIdInAndTypeInAndStatusIn(Collection<UUID> menuIds, Collection<Integer> types, Collection<Integer> statuses);
+    default List<SystemMenu> findByIdInAndTypeInAndStatusIn(Collection<UUID> menuIds, Collection<Integer> types, Collection<Integer> statuses){
+        return sql().createQuery(systemMenuTable)
+                .where(systemMenuTable.id().in(menuIds))
+                .where(systemMenuTable.type().in(types))
+                .where(systemMenuTable.status().in(statuses))
+                .where(systemMenuTable.backShow().eq(false))
+                .select(systemMenuTable)
+                .execute();
+    };
+
+    default List<SystemMenu> findAllExcludeBack(){
+        return sql().createQuery(systemMenuTable)
+                .where(systemMenuTable.backShow().eq(false))
+                .select(systemMenuTable)
+                .execute();
+    };
+
 }

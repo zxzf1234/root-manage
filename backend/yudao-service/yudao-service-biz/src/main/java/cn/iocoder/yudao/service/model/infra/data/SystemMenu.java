@@ -1,13 +1,12 @@
 package cn.iocoder.yudao.service.model.infra.data;
 
 import cn.iocoder.yudao.service.model.base.BaseEntity;
-import org.babyfish.jimmer.sql.Entity;
-import org.babyfish.jimmer.sql.GeneratedValue;
-import org.babyfish.jimmer.sql.GenerationType;
-import org.babyfish.jimmer.sql.Id;
-import org.babyfish.jimmer.sql.meta.UUIDIdGenerator;
-
+import org.babyfish.jimmer.sql.*;
+import java.time.LocalDateTime;
 import java.util.UUID;
+
+import org.babyfish.jimmer.sql.meta.UUIDIdGenerator;
+import org.jetbrains.annotations.Nullable;
 
 @Entity
 public interface SystemMenu extends BaseEntity {
@@ -19,9 +18,9 @@ public interface SystemMenu extends BaseEntity {
 
     String permission();
 
-    int type();
+    Integer type();
 
-    int sort();
+    Integer sort();
 
     String parentId();
 
@@ -33,12 +32,18 @@ public interface SystemMenu extends BaseEntity {
 
     String componentName();
 
-    int status();
+    Integer status();
 
-    boolean visible();
+    Boolean visible();
 
-    boolean keepAlive();
+    Boolean keepAlive();
 
-    boolean alwaysShow();
+    Boolean alwaysShow();
+
+    Boolean backShow();
+
+    @Nullable
+    @LogicalDeleted("now")
+    LocalDateTime deletedTime();
 
 }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -36,7 +37,7 @@ public class PermissionController {
     @Parameter(name = "roleId", description = "角色编号", required = true)
     @GetMapping("/list-role-resources")
     @PreAuthorize("@ss.hasPermission('system:permission:assign-role-menu')")
-    public CommonResult<Set<UUID>> listRoleMenus(Long roleId) {
+    public CommonResult<List<UUID>> listRoleMenus(Long roleId) {
         return success(permissionService.getRoleMenuIds(roleId));
     }
 
