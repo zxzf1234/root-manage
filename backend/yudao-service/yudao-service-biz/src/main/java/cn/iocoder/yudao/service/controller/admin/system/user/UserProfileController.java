@@ -13,10 +13,8 @@ import cn.iocoder.yudao.service.vo.system.user.profile.UserProfileUpdateReqVO;
 import cn.iocoder.yudao.service.convert.system.user.UserConvert;
 import cn.iocoder.yudao.service.model.system.dept.SystemDept;
 import cn.iocoder.yudao.service.model.system.dept.SystemPost;
-import cn.iocoder.yudao.service.model.infra.social.SystemSocialUser;
 import cn.iocoder.yudao.service.service.system.dept.DeptService;
 import cn.iocoder.yudao.service.service.system.permission.PermissionService;
-import cn.iocoder.yudao.service.service.infra.social.SocialUserService;
 import cn.iocoder.yudao.service.service.system.user.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
@@ -48,8 +46,6 @@ public class UserProfileController {
     private PermissionService permissionService;
     @Resource
     private RoleService roleService;
-    @Resource
-    private SocialUserService socialService;
 
     @GetMapping("/get")
     @Operation(summary = "获得登录用户信息")
@@ -70,9 +66,6 @@ public class UserProfileController {
             List<SystemPost> posts = postService.getPostList(user.postIds());
             resp.setPosts(UserConvert.INSTANCE.convertList02(posts));
         }
-        // 获得社交用户信息
-        List<SystemSocialUser> socialUsers = socialService.getSocialUserList(user.id(), UserTypeEnum.ADMIN.getValue());
-        resp.setSocialUsers(UserConvert.INSTANCE.convertList03(socialUsers));
         return success(resp);
     }
 

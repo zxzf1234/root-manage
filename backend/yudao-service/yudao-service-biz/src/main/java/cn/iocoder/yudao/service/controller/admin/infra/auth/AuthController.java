@@ -14,7 +14,6 @@ import cn.iocoder.yudao.service.model.system.role.SystemRole;
 import cn.iocoder.yudao.service.model.system.user.SystemUser;
 import cn.iocoder.yudao.service.service.infra.auth.AdminAuthService;
 import cn.iocoder.yudao.service.service.system.permission.PermissionService;
-import cn.iocoder.yudao.service.service.infra.social.SocialUserService;
 import cn.iocoder.yudao.service.service.system.role.RoleService;
 import cn.iocoder.yudao.service.service.system.user.UserService;
 import cn.iocoder.yudao.service.vo.infra.auth.*;
@@ -53,8 +52,6 @@ public class AuthController {
     private RoleService roleService;
     @Resource
     private PermissionService permissionService;
-    @Resource
-    private SocialUserService socialUserService;
     @Resource
     private SecurityProperties securityProperties;
 
@@ -117,47 +114,6 @@ public class AuthController {
                 singleton(CommonStatusEnum.ENABLE.getStatus())); // 只要开启的
         // 转换成 Tree 结构返回
         return success(AuthConvert.INSTANCE.buildMenuTree(menuList));
-    }
-
-    // ========== 短信登录相关 ==========
-
-    @PostMapping("/sms-login")
-    @PermitAll
-    @Operation(summary = "使用短信验证码登录")
-    @OperateLog(enable = false) // 避免 Post 请求被记录操作日志
-    public CommonResult<AuthLoginRespVO> smsLogin(@RequestBody @Valid AuthSmsLoginReqVO reqVO) {
-        return success(authService.smsLogin(reqVO));
-    }
-
-    @PostMapping("/send-sms-code")
-    @PermitAll
-    @Operation(summary = "发送手机验证码")
-    @OperateLog(enable = false) // 避免 Post 请求被记录操作日志
-    public CommonResult<Boolean> sendLoginSmsCode(@RequestBody @Valid AuthSmsSendReqVO reqVO) {
-        authService.sendSmsCode(reqVO);
-        return success(true);
-    }
-
-    // ========== 社交登录相关 ==========
-
-    @GetMapping("/social-auth-redirect")
-    @PermitAll
-    @Operation(summary = "社交授权的跳转")
-    @Parameters({
-            @Parameter(name = "type", description = "社交类型", required = true),
-            @Parameter(name = "redirectUri", description = "回调路径")
-    })
-    public CommonResult<String> socialLogin(@RequestParam("type") Integer type,
-                                                    @RequestParam("redirectUri") String redirectUri) {
-        return CommonResult.success(socialUserService.getAuthorizeUrl(type, redirectUri));
-    }
-
-    @PostMapping("/social-login")
-    @PermitAll
-    @Operation(summary = "社交快捷登录，使用 code 授权码", description = "适合未登录的用户，但是社交账号已绑定用户")
-    @OperateLog(enable = false) // 避免 Post 请求被记录操作日志
-    public CommonResult<AuthLoginRespVO> socialQuickLogin(@RequestBody @Valid AuthSocialLoginReqVO reqVO) {
-        return success(authService.socialLogin(reqVO));
     }
 
 }

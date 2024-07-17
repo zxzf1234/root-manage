@@ -7,19 +7,14 @@ import cn.iocoder.yudao.framework.common.util.monitor.TracerUtils;
 import cn.iocoder.yudao.framework.common.util.servlet.ServletUtils;
 import cn.iocoder.yudao.framework.common.util.validation.ValidationUtils;
 import cn.iocoder.yudao.service.api.infra.logger.dto.LoginLogCreateReqDTO;
-import cn.iocoder.yudao.service.api.system.sms.SmsCodeApi;
-import cn.iocoder.yudao.service.api.system.social.dto.SocialUserBindReqDTO;
 import cn.iocoder.yudao.service.convert.infra.auth.AuthConvert;
 import cn.iocoder.yudao.service.enums.system.login.SystemLoginTypeEnum;
 import cn.iocoder.yudao.service.enums.system.login.SystemLoginResultEnum;
 import cn.iocoder.yudao.service.enums.infra.oauth2.OAuth2ClientConstants;
-import cn.iocoder.yudao.service.enums.system.sms.SmsSceneEnum;
 import cn.iocoder.yudao.service.model.infra.oauth2.SystemOauth2AccessToken;
 import cn.iocoder.yudao.service.model.system.user.SystemUser;
 import cn.iocoder.yudao.service.service.infra.logger.LoginLogService;
-import cn.iocoder.yudao.service.service.system.member.MemberService;
 import cn.iocoder.yudao.service.service.infra.oauth2.OAuth2TokenService;
-import cn.iocoder.yudao.service.service.infra.social.SocialUserService;
 import cn.iocoder.yudao.service.service.system.user.UserService;
 import cn.iocoder.yudao.service.vo.infra.auth.*;
 import com.xingyuv.captcha.model.common.ResponseModel;
@@ -55,15 +50,9 @@ public class AdminAuthServiceImpl implements AdminAuthService {
     @Resource
     private OAuth2TokenService oauth2TokenService;
     @Resource
-    private SocialUserService socialUserService;
-    @Resource
-    private MemberService memberService;
-    @Resource
     private Validator validator;
     @Resource
     private CaptchaService captchaService;
-    @Resource
-    private SmsCodeApi smsCodeApi;
 
     /**
      * 验证码的开关，默认为 true
@@ -100,38 +89,8 @@ public class AdminAuthServiceImpl implements AdminAuthService {
         // 使用账号密码，进行登录
         SystemUser user = authenticate(reqVO.getUsername(), reqVO.getPassword());
 
-        // 如果 socialType 非空，说明需要绑定社交用户
-        if (reqVO.getSocialType() != null) {
-            socialUserService.bindSocialUser(new SocialUserBindReqDTO(user.id(), getUserType().getValue(),
-                    reqVO.getSocialType(), reqVO.getSocialCode(), reqVO.getSocialState()));
-        }
         // 创建 Token 令牌，记录登录日志
         return createTokenAfterLoginSuccess(user.id(), reqVO.getUsername(), SystemLoginTypeEnum.LOGIN_USERNAME);
-    }
-
-    @Override
-    public void sendSmsCode(AuthSmsSendReqVO reqVO) {
-        // 登录场景，验证是否存在
-        if (!userService.getUserByMobile(reqVO.getMobile()).isPresent()) {
-            throw exception(AUTH_MOBILE_NOT_EXISTS);
-        }
-        // 发送验证码
-        smsCodeApi.sendSmsCode(AuthConvert.INSTANCE.convert(reqVO).setCreateIp(getClientIP()));
-    }
-
-    @Override
-    public AuthLoginRespVO smsLogin(AuthSmsLoginReqVO reqVO) {
-        // 校验验证码
-        smsCodeApi.useSmsCode(AuthConvert.INSTANCE.convert(reqVO, SmsSceneEnum.ADMIN_MEMBER_LOGIN.getScene(), getClientIP()));
-
-        // 获得用户信息
-        Optional<SystemUser> opUser = userService.getUserByMobile(reqVO.getMobile());
-        if (!opUser.isPresent()) {
-            throw exception(USER_NOT_EXISTS);
-        }
-
-        // 创建 Token 令牌，记录登录日志
-        return createTokenAfterLoginSuccess(opUser.get().id(), reqVO.getMobile(), SystemLoginTypeEnum.LOGIN_MOBILE);
     }
 
     private void createLoginLog(Long userId, String username,
@@ -151,25 +110,6 @@ public class AdminAuthServiceImpl implements AdminAuthService {
         if (userId != null && Objects.equals(SystemLoginResultEnum.SUCCESS.getValue(), loginResult.getValue())) {
             userService.updateUserLogin(userId, ServletUtils.getClientIP());
         }
-    }
-
-    @Override
-    public AuthLoginRespVO socialLogin(AuthSocialLoginReqVO reqVO) {
-        // 使用 code 授权码，进行登录。然后，获得到绑定的用户编号
-        Long userId = socialUserService.getBindUserId(UserTypeEnum.ADMIN.getValue(), reqVO.getType(),
-                reqVO.getCode(), reqVO.getState());
-        if (userId == null) {
-            throw exception(AUTH_THIRD_LOGIN_NOT_BIND);
-        }
-
-        // 获得用户
-        Optional<SystemUser> user = userService.getUser(userId);
-        if (!user.isPresent()) {
-            throw exception(USER_NOT_EXISTS);
-        }
-
-        // 创建 Token 令牌，记录登录日志
-        return createTokenAfterLoginSuccess(user.get().id(), user.get().username(), SystemLoginTypeEnum.LOGIN_SOCIAL);
     }
 
     @VisibleForTesting
@@ -226,8 +166,6 @@ public class AdminAuthServiceImpl implements AdminAuthService {
         reqDTO.setUserType(userType);
         if (ObjectUtil.equal(getUserType().getValue(), userType)) {
             reqDTO.setUsername(getUsername(userId));
-        } else {
-            reqDTO.setUsername(memberService.getMemberUserMobile(userId));
         }
         reqDTO.setUserAgent(ServletUtils.getUserAgent());
         reqDTO.setUserIp(ServletUtils.getClientIP());

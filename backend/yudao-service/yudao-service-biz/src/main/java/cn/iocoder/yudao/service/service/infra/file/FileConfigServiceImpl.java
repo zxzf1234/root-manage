@@ -15,7 +15,6 @@ import cn.iocoder.yudao.service.vo.infra.file.config.FileConfigUpdateReqVO;
 import cn.iocoder.yudao.service.convert.infra.file.FileConfigConvert;
 import cn.iocoder.yudao.service.model.infra.file.InfraFileConfig;
 import cn.iocoder.yudao.service.model.infra.file.InfraFileConfigDraft;
-import cn.iocoder.yudao.service.mq.producer.file.FileConfigProducer;
 import cn.iocoder.yudao.service.repository.infra.file.InfraFileConfigRepository;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -59,9 +58,6 @@ public class FileConfigServiceImpl implements FileConfigService {
     private InfraFileConfigRepository infraFileConfigRepository;
 
     @Resource
-    private FileConfigProducer fileConfigProducer;
-
-    @Resource
     private Validator validator;
 
     @Override
@@ -92,10 +88,8 @@ public class FileConfigServiceImpl implements FileConfigService {
             draft.setConfig(parseClientConfig(createReqVO.getStorage(), createReqVO.getConfig()))
                     .setMaster(false);
         });
-                 // 默认非 master
+        // 默认非 master
         fileConfig = infraFileConfigRepository.insert(fileConfig);
-        // 发送刷新配置的消息
-        fileConfigProducer.sendFileConfigRefreshMessage();
         // 返回
         return fileConfig.id();
     }
@@ -111,8 +105,6 @@ public class FileConfigServiceImpl implements FileConfigService {
         });
 
         infraFileConfigRepository.update(updateObj);
-        // 发送刷新配置的消息
-        fileConfigProducer.sendFileConfigRefreshMessage();
     }
 
     @Override
@@ -124,15 +116,6 @@ public class FileConfigServiceImpl implements FileConfigService {
         infraFileConfigRepository.update(InfraFileConfigDraft.$.produce(draft -> {draft.setMaster(false);}));
         // 更新
         infraFileConfigRepository.update(InfraFileConfigDraft.$.produce(draft -> {draft.setId(id).setMaster(true);}));
-        // 发送刷新配置的消息
-        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
-
-            @Override
-            public void afterCommit() {
-                fileConfigProducer.sendFileConfigRefreshMessage();
-            }
-
-        });
     }
 
     private FileClientConfig parseClientConfig(Integer storage, Map<String, Object> config) {
@@ -151,12 +134,10 @@ public class FileConfigServiceImpl implements FileConfigService {
         // 校验存在
         InfraFileConfig config = validateFileConfigExists(id);
         if (Boolean.TRUE.equals(config.master())) {
-             throw exception(FILE_CONFIG_DELETE_FAIL_MASTER);
+            throw exception(FILE_CONFIG_DELETE_FAIL_MASTER);
         }
         // 删除
         infraFileConfigRepository.deleteById(id);
-        // 发送刷新配置的消息
-        fileConfigProducer.sendFileConfigRefreshMessage();
     }
 
     private InfraFileConfig validateFileConfigExists(Long id) {
