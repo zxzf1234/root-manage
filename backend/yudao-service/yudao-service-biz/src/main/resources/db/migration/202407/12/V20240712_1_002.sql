@@ -1,0 +1,12 @@
+delete from SYSTEM_MENU where ID in ('06cbe403-23b0-11ee-a1af-047c1649ee1e');
+delete from SYSTEM_MENU where ID in ('06cbe48d-23b0-11ee-a1af-047c1649ee1e');
+delete from SYSTEM_MENU where ID in ('06cbe51d-23b0-11ee-a1af-047c1649ee1e');
+delete from SYSTEM_MENU where ID in ('06cbe59e-23b0-11ee-a1af-047c1649ee1e');
+delete from SYSTEM_MENU where ID in ('06cbe63d-23b0-11ee-a1af-047c1649ee1e');
+delete from SYSTEM_MENU where ID in ('06cbe36e-23b0-11ee-a1af-047c1649ee1e');
+delete from SYSTEM_MENU where ID in ('06cbeddd-23b0-11ee-a1af-047c1649ee1e');
+delete from SYSTEM_MENU where ID in ('06cbee61-23b0-11ee-a1af-047c1649ee1e');
+delete from SYSTEM_MENU where ID in ('06cbeefb-23b0-11ee-a1af-047c1649ee1e');
+delete from SYSTEM_MENU where ID in ('06cbef7d-23b0-11ee-a1af-047c1649ee1e');
+delete from SYSTEM_MENU where ID in ('06cbf005-23b0-11ee-a1af-047c1649ee1e');
+delete from SYSTEM_MENU where ID in ('06cbed4d-23b0-11ee-a1af-047c1649ee1e');
