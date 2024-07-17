@@ -93,18 +93,6 @@ public interface ErrorCodeConstants {
     ErrorCode OAUTH2_CODE_NOT_EXISTS = new ErrorCode(1001018000, "code 不存在");
     ErrorCode OAUTH2_CODE_EXPIRE = new ErrorCode(1001018001, "code 已过期");
 
-    // ========== 邮箱账号 1001019000 ==========
-    ErrorCode MAIL_ACCOUNT_NOT_EXISTS = new ErrorCode(1001019000, "邮箱账号不存在");
-    ErrorCode MAIL_ACCOUNT_RELATE_TEMPLATE_EXISTS = new ErrorCode(1001019001, "无法删除，该邮箱账号还有邮件模板");
-
-    // ========== 邮件模版 1001020000 ==========
-    ErrorCode MAIL_TEMPLATE_NOT_EXISTS = new ErrorCode(1001020000, "邮件模版不存在");
-    ErrorCode MAIL_TEMPLATE_CODE_EXISTS = new ErrorCode(1001020001, "邮件模版 code({}) 已存在");
-
-    // ========== 邮件发送 1001021000 ==========
-    ErrorCode MAIL_SEND_TEMPLATE_PARAM_MISS = new ErrorCode(1001021000, "模板参数({})缺失");
-    ErrorCode MAIL_SEND_MAIL_NOT_EXISTS = new ErrorCode(1001021000, "邮箱不存在");
-
     // ========== 菜单模块 1001022000 ==========
     ErrorCode MENU_NAME_DUPLICATE = new ErrorCode(1001022000, "已经存在该名字的菜单");
     ErrorCode MENU_PARENT_NOT_EXISTS = new ErrorCode(1001022001, "父菜单不存在");
