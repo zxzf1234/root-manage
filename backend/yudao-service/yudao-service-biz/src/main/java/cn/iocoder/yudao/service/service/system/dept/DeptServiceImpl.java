@@ -22,7 +22,7 @@ import javax.annotation.Resource;
 import java.util.*;
 
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
-import static cn.iocoder.yudao.service.errorCode.system.ErrorCodeConstants.*;
+import static cn.iocoder.yudao.service.errorCode.system.dept.DeptErrorCode.*;
 
 /**
  * 部门 Service 实现类

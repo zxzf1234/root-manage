@@ -93,6 +93,11 @@ public interface ErrorCodeConstants {
     ErrorCode OAUTH2_CODE_NOT_EXISTS = new ErrorCode(1001018000, "code 不存在");
     ErrorCode OAUTH2_CODE_EXPIRE = new ErrorCode(1001018001, "code 已过期");
 
+    // ========== AUTH 模块 1001900000 ==========
+    ErrorCode AUTH_LOGIN_BAD_CREDENTIALS = new ErrorCode(1001900000, "登录失败，账号密码不正确");
+    ErrorCode AUTH_LOGIN_USER_DISABLED = new ErrorCode(1001900001, "登录失败，账号被禁用");
+    ErrorCode AUTH_LOGIN_CAPTCHA_CODE_ERROR = new ErrorCode(1001900004, "验证码不正确，原因：{}");
+
     // ========== 菜单模块 1001022000 ==========
     ErrorCode MENU_NAME_DUPLICATE = new ErrorCode(1001022000, "已经存在该名字的菜单");
     ErrorCode MENU_PARENT_NOT_EXISTS = new ErrorCode(1001022001, "父菜单不存在");

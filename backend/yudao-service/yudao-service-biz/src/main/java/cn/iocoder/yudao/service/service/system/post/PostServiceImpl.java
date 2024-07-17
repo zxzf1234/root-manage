@@ -26,7 +26,7 @@ import cn.hutool.core.collection.CollUtil;
 import static cn.iocoder.yudao.framework.common.util.collection.CollectionUtils.convertMap;
 
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
-import static cn.iocoder.yudao.service.errorCode.system.ErrorCodeConstants.*;
+import static cn.iocoder.yudao.service.errorCode.system.post.PostErrorCode.*;
 import static cn.iocoder.yudao.framework.common.util.collection.SetUtils.asSet;
 
 /**

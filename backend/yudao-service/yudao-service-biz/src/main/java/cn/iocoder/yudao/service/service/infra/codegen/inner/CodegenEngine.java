@@ -1573,8 +1573,7 @@ public class CodegenEngine {
         Map<String, String> templates = new LinkedHashMap<>(MODULE_TEMPLATES);
         templates.forEach((vmPath, filePath) -> {
             filePath = templateEngine.getTemplate(filePath).render(bindingMap);
-            if(!filePath.contains("ErrorCode"))
-                RuntimeUtil.execForStr("git rm -f " + filePath);
+            RuntimeUtil.execForStr("git rm -f " + filePath);
         });
     }
 
@@ -1630,16 +1629,7 @@ public class CodegenEngine {
             String content = "";
             if(!vmPath.isEmpty()) {
                 content = templateEngine.getTemplate(vmPath).render(bindingMap);
-                if(vmPath.contains("errorCode")){
-                    StringBuilder fileContent = new StringBuilder(FileUtil.readUtf8String(newFile));
-                    int index = fileContent.lastIndexOf("\r\n}");
-                    int count = fileContent.toString().split("// ==========").length - 1;
-                    content = content.replace("${moduleIndex}", String.format("%03d", count));
-                    fileContent.insert(index, content);
-                    FileUtil.writeUtf8String(fileContent.toString(), newFile);
-                }else {
-                    FileUtil.writeUtf8String(content, newFile);
-                }
+                FileUtil.writeUtf8String(content, newFile);
             }
         });
     }

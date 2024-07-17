@@ -1,13 +1,13 @@
-package ${basePackage}.service.errorCode.${sceneEnum.basePackage}#foreach ($parentName in $parentNames).$parentName#end;
+package ${basePackage}.service.errorCode#foreach ($parentName in $parentNames).$parentName#end;
 
 import ${basePackage}.framework.common.exception.ErrorCode;
 
 /**
 * ${module.name} 错误码枚举类
 *
-* ${module.name} ${module.comment}，使用 ${moduleIndex}000 段
+* ${module.name} ${module.comment}，使用 ${module.sort}段
 */
 public interface ${nameHumpUp}ErrorCode {
-public static final Integer ERROR_CODE_START_CODE = ${moduleIndex};
+    public static final Integer ERROR_CODE_START_CODE = ${module.sort};
 
 }
