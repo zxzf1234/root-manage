@@ -25,7 +25,6 @@
         <module>yudao-spring-boot-starter-biz-operatelog</module>
 
         <module>yudao-spring-boot-starter-captcha</module>
-        <module>yudao-spring-boot-starter-websocket</module>
         <module>yudao-spring-boot-starter-db</module>
         <module>yudao-spring-boot-starter-flyway</module>
     </modules>
