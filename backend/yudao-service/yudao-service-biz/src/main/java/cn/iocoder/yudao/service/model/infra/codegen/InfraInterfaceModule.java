@@ -21,7 +21,7 @@ public interface InfraInterfaceModule extends BaseEntity {
 
     Integer type();
 
-    Integer sort();
+    Long sort();
 
     @Nullable
     @LogicalDeleted("now")

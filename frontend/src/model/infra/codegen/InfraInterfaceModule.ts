@@ -1,5 +1,5 @@
 export type InfraInterfaceModule = {
-  id: string
+  id: string | undefined
   name: string
   comment: string
   parentId: string

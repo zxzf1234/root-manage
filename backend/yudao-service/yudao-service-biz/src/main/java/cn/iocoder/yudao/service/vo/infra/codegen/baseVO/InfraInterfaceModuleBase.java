@@ -33,7 +33,6 @@ public class InfraInterfaceModuleBase {
     private Integer type;
 
     @Schema(description = "排序")
-    @Range(max = 100000000, message = "排序最大不能超过100000000")
-    private Integer sort;
+    private Long sort;
 
 }
