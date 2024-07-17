@@ -122,10 +122,6 @@ yudao:
     base-package: ${yudao.info.base-package}
     db-schemas: ${spring.datasource.dynamic.datasource.master.name}
     front-type: 10 # 前端模版的类型，参见 CodegenFrontTypeEnum 枚举类
-  error-code: # 错误码相关配置项
-    constants-class-list:
-      - cn.iocoder.yudao.service.enums.infra.ErrorCodeConstants
-      - cn.iocoder.yudao.service.enums.system.ErrorCodeConstants
   sms-code: # 短信验证码相关的配置项
     expire-times: 10m
     send-frequency: 1m
