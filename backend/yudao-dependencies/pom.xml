@@ -155,12 +155,6 @@
             </dependency>
 
             <dependency>
-                <groupId>com.baomidou</groupId>
-                <artifactId>dynamic-datasource-spring-boot-starter</artifactId> <!-- 多数据源 -->
-                <version>${dynamic-datasource.version}</version>
-            </dependency>
-
-            <dependency>
                 <groupId>cn.iocoder.boot</groupId>
                 <artifactId>yudao-spring-boot-starter-redis</artifactId>
                 <version>${revision}</version>
@@ -177,19 +171,6 @@
                 <groupId>cn.iocoder.boot</groupId>
                 <artifactId>yudao-spring-boot-starter-job</artifactId>
                 <version>${revision}</version>
-            </dependency>
-
-
-            <dependency>
-                <groupId>com.baomidou</groupId>
-                <artifactId>lock4j-redisson-spring-boot-starter</artifactId>
-                <version>${lock4j.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <artifactId>redisson-spring-boot-starter</artifactId>
-                        <groupId>org.redisson</groupId>
-                    </exclusion>
-                </exclusions>
             </dependency>
 
             <dependency>
