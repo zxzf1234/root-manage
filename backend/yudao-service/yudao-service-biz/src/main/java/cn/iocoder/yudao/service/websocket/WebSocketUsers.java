@@ -3,7 +3,7 @@ package cn.iocoder.yudao.service.websocket;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.bouncycastle.util.Strings;
+import org.springframework.util.StringUtils;
 
 import javax.validation.constraints.NotNull;
 import javax.websocket.Session;
@@ -164,9 +164,9 @@ public class WebSocketUsers {
         } else {
             String queryString = session.getQueryString();
             if (!StrUtil.isEmpty(queryString)) {
-                String[] params = Strings.split(queryString, '&');
+                String[] params = StringUtils.split(queryString, "&");
                 for (String paramPair : params) {
-                    String[] nameValues = Strings.split(paramPair, '=');
+                    String[] nameValues = StringUtils.split(paramPair, "=");
                     if (key.equals(nameValues[0])) {
                         value = nameValues[1];
                     }

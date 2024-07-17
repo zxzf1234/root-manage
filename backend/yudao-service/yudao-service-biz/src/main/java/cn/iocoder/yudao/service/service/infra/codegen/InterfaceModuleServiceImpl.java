@@ -5,11 +5,13 @@ import cn.iocoder.yudao.service.model.infra.codegen.InfraInterfaceModule;
 import cn.iocoder.yudao.service.repository.infra.codegen.InfraInterfaceModuleRepository;
 import cn.iocoder.yudao.service.service.infra.codegen.inner.CodegenEngine;
 import cn.iocoder.yudao.service.vo.infra.codegen.interfaceModule.*;
+import org.babyfish.jimmer.sql.ast.mutation.DeleteMode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -57,6 +59,8 @@ public class InterfaceModuleServiceImpl implements InterfaceModuleService{
             throw exception(CODEGEN_INTERFACE_MODULE_NOT_EXITS);
         InfraInterfaceModule oldModule = opModule.get();
         InfraInterfaceModule newModule = infraInterfaceModuleRepository.update(CodegenConvert.INSTANCE.convert(reqVO));
+        if(!Objects.equals(oldModule.type(), newModule.type()))
+            throw exception(CODEGEN_INTERFACE_MODULE_TYPE_NOT_CHANGE);
         if(oldModule.type() == 1)
             codegenEngine.moduleUpdateExecute(oldModule, newModule);
 
@@ -84,6 +88,6 @@ public class InterfaceModuleServiceImpl implements InterfaceModuleService{
         InfraInterfaceModule module = opModule.get();
         if(module.type() == 1)
             codegenEngine.moduleDeleteExecute(module);
-        infraInterfaceModuleRepository.deleteById(UUID.fromString(id));
+        infraInterfaceModuleRepository.deleteById(UUID.fromString(id), DeleteMode.PHYSICAL);
     }
 }

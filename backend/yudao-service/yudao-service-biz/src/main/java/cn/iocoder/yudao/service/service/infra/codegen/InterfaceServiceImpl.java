@@ -10,6 +10,7 @@ import cn.iocoder.yudao.service.vo.infra.codegen.interfaceModule.*;
 import org.babyfish.jimmer.meta.ImmutableProp;
 import org.babyfish.jimmer.meta.ImmutableType;
 import org.babyfish.jimmer.spring.repository.parser.PropPredicate;
+import org.babyfish.jimmer.sql.ast.mutation.DeleteMode;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -337,4 +338,14 @@ public class InterfaceServiceImpl implements InterfaceService{
         List<InfraInterfaceVoClass> voClasses = infraInterfaceVoClassRepository.findList(reqVO);
         return CodegenConvert.INSTANCE.convertList18(voClasses);
     }
+
+    @Override
+    public void deleted(String id){
+        UUID interfaceId = UUID.fromString(id);
+        codegenEngine.interfaceDelete(interfaceId);
+        infraInterfaceParamRepository.deleteByParentId(interfaceId);
+        infraInterfaceSubclassRepository.deleteByParentId(interfaceId);
+        infraInterfaceRepository.deleteById(interfaceId, DeleteMode.PHYSICAL);
+    }
+
 }

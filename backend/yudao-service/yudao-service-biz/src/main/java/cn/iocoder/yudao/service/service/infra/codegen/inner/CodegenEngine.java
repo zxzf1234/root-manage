@@ -26,7 +26,6 @@ import cn.iocoder.yudao.service.convert.infra.codegen.CodegenConvert;
 import cn.iocoder.yudao.service.convert.infra.data.DictNoConvert;
 import cn.iocoder.yudao.service.convert.infra.data.DictTypeConvert;
 import cn.iocoder.yudao.service.enums.infra.codegen.CodegenSceneEnum;
-import cn.iocoder.yudao.service.framework.codegen.config.CodegenProperties;
 import cn.iocoder.yudao.service.framework.codegen.config.SchemaHistory;
 import cn.iocoder.yudao.service.model.infra.codegen.*;
 import cn.iocoder.yudao.service.model.infra.data.*;
@@ -77,6 +76,13 @@ public class CodegenEngine {
 
     private static final Map<String, String> TABLE_UPDATE_TEMPLATES = MapUtil.<String, String>builder(new LinkedHashMap<>()) // 有序
             .put(templatePath("model/baseVO"), templatePath("model/baseVOPath"))
+            .put(templatePath("model/repository"), templatePath("model/repositoryPath"))
+            .put(templatePath("model/javaModel"), templatePath("model/javaModelPath"))
+            .put(templatePath("model/vueModel"), templatePath("model/vueModelPath"))
+            .build();
+    private static final Map<String, String> TABLE_DELETE_TEMPLATES = MapUtil.<String, String>builder(new LinkedHashMap<>()) // 有序
+            .put(templatePath("model/baseVO"), templatePath("model/baseVOPath"))
+            .put(templatePath("model/repository"), templatePath("model/repositoryPath"))
             .put(templatePath("model/javaModel"), templatePath("model/javaModelPath"))
             .put(templatePath("model/vueModel"), templatePath("model/vueModelPath"))
             .build();
@@ -124,10 +130,6 @@ public class CodegenEngine {
             .put(templatePath("interface/vueApi"), templatePath("interface/vueApiPath"))
             .build();
 
-
-    @Resource
-    private CodegenProperties codegenProperties;
-
     @Resource
     private InfraDatabaseTableRepository infraDatabaseTableRepository;
 
@@ -166,7 +168,7 @@ public class CodegenEngine {
     @PostConstruct
     private void initGlobalBindingMap() {
         // 全局配置
-        globalBindingMap.put("basePackage", codegenProperties.getBasePackage());
+        globalBindingMap.put("basePackage", "cn.iocoder.yudao");
         // 全局 Java Bean
         globalBindingMap.put("CommonResultClassName", CommonResult.class.getName());
         globalBindingMap.put("PageResultClassName", PageResult.class.getName());
@@ -760,7 +762,9 @@ public class CodegenEngine {
 
     private Map<String, Object> getInterfaceBindingMap(InfraInterface infraInterface){
         Map<String, Object> bindingMap = new HashMap<>(globalBindingMap);
-        InfraInterfaceModule infraInterfaceModule =  infraInterfaceModuleRepository.findById(infraInterface.moduleId()).get();
+        if(infraInterface.moduleId() == null)
+            return null;
+        InfraInterfaceModule infraInterfaceModule =  infraInterfaceModuleRepository.findById(Objects.requireNonNull(infraInterface.moduleId())).get();
         String interfaceNameHump = toCamelCase(infraInterface.name());
         String interfaceNameSymbol = toSymbolCase(infraInterface.name(), '-');
         String moduleNameHump = infraInterfaceModule.name();
@@ -800,11 +804,9 @@ public class CodegenEngine {
         bindingMap.put("moduleNameSymbol", moduleNameSymbol);
         bindingMap.put("modulePath", String.join("/", parentNames));
         String vueModulePath = String.join("/", parentNames);
-//        if(parentNames.get(parentNames.size()-1).equals(moduleNameHump)) {
-//            vueModulePath = vueModulePath.substring(0, vueModulePath.length() - moduleNameHump.length() - 1);
-//            vueFileName = "index";
-//        }
+
         bindingMap.put("vueModulePath", vueModulePath);
+        bindingMap.put("vueModulePathSymbol", toSymbolCase(vueModulePath, '-'));
         bindingMap.put("vueFileName", moduleNameHump);
         List<CodegenInterfaceParam> inputParams = CodegenConvert.INSTANCE.convertList19(infraInterface.inputParams());
         convertParams(inputParams);
@@ -1248,6 +1250,118 @@ public class CodegenEngine {
 
     }
 
+    public void interfaceDelete(UUID interfaceId){
+        InfraInterface infraInterface = infraInterfaceRepository.findDetailById(interfaceId).get();
+
+        Map<String, Object> bindingMap = getInterfaceBindingMap(infraInterface);
+
+        List<String> oldControllerImportList = Convert.toList(String.class, bindingMap.get("controllerImportList"));
+        List<String> oldConvertImportList = Convert.toList(String.class, bindingMap.get("convertImportList"));
+        List<String> oldInputImportList = Convert.toList(String.class, bindingMap.get("inputImportList"));
+        List<String> oldOutputImportList = Convert.toList(String.class, bindingMap.get("outputImportList"));
+
+        Map<String, String> templates = new LinkedHashMap<>(INTERFACE_UPDATE_TEMPLATES);
+        for(Map.Entry<String, String> entry : templates.entrySet()){
+            String vmPath = entry.getKey();
+            String filePath = entry.getValue();
+            // 删除旧的传入传出参数类
+            if (vmPath.contains("voInput")) {
+                String oldVoInputFilePath = templateEngine.getTemplate(filePath).render(bindingMap);
+                if(FileUtil.exist(oldVoInputFilePath)) {
+                    RuntimeUtil.execForStr("git rm -f " + oldVoInputFilePath);
+                    continue;
+                }
+            }
+            if (vmPath.contains("voOutput")) {
+                String oldVoOutputFilePath = templateEngine.getTemplate(filePath).render(bindingMap);
+                if(FileUtil.exist(oldVoOutputFilePath)) {
+                    RuntimeUtil.execForStr("git rm -f " + oldVoOutputFilePath);
+                    continue;
+                }
+            }
+
+            String oldInterfaceContent = "";
+            if(!vmPath.isEmpty()) {
+                oldInterfaceContent = templateEngine.getTemplate(vmPath).render(bindingMap);
+                filePath = templateEngine.getTemplate(filePath).render(bindingMap);
+
+                File file = FileUtil.file(filePath);
+                if(!FileUtil.exist(file))
+                    continue;
+                StringBuilder fileContent = new StringBuilder(FileUtil.readUtf8String(file));
+                if(vmPath.contains("controller") || vmPath.contains("serviceImpl")){
+                    int oldSplitFirstIndex = 0;
+                    // 查找函数拆分的下标 根据) {或) throws IOException { 拆分成两部分
+                    if(oldInterfaceContent.contains(") {")) {
+                        oldSplitFirstIndex = oldInterfaceContent.indexOf(") {");
+                    }
+                    if(oldSplitFirstIndex == 0 && oldInterfaceContent.contains(") throws IOException {")){
+                        oldSplitFirstIndex = oldInterfaceContent.indexOf(") throws IOException {");
+                    }
+                    if(oldSplitFirstIndex == 0)
+                        continue;
+                    String oldFunctionContent = oldInterfaceContent.substring(0, oldSplitFirstIndex);
+
+                    int functionBeginIndex = fileContent.indexOf(oldFunctionContent);
+                    int functionEndIndex = fileContent.indexOf("\n    }", functionBeginIndex);
+                    if(functionBeginIndex > 0){
+                        fileContent.replace(functionBeginIndex , functionEndIndex + 8, "");
+                    }
+                }else if(vmPath.contains("convert") || vmPath.contains("service") ){
+                    int index = fileContent.indexOf(oldInterfaceContent);
+                    if(index > 0){
+                        fileContent.replace(index , index + oldInterfaceContent.length(), "");
+                    }
+
+                }else if( vmPath.contains("vueApi") ) {
+                    int index = fileContent.indexOf(oldInterfaceContent);
+                    if(index > 0){
+                        fileContent.replace(index , index + oldInterfaceContent.length(), "");
+                    }
+
+                }
+                if(vmPath.contains("convert") && !oldConvertImportList.isEmpty())
+                    fileDeleteImport(fileContent, oldConvertImportList);
+
+                if((vmPath.contains("serviceImpl") || vmPath.contains("service") || vmPath.contains("controller"))
+                        && !oldControllerImportList.isEmpty())
+                    fileDeleteImport(fileContent, oldControllerImportList);
+
+                if(vmPath.contains("voInput") && !oldInputImportList.isEmpty())
+                    fileDeleteImport(fileContent, oldInputImportList);
+
+                if(vmPath.contains("voOutput") && !oldOutputImportList.isEmpty())
+                    fileDeleteImport(fileContent, oldOutputImportList);
+
+                FileUtil.writeUtf8String(fileContent.toString(), file);
+
+            }
+        }
+    }
+
+    private void fileDeleteImport(StringBuilder fileContent, List<String> oldImportList) {
+        int insertImportIndex = 0;
+        // 剔除import之后的代码坐标
+        int codeIndex = fileContent.indexOf(";", fileContent.lastIndexOf("import "));
+        for(String strImport : oldImportList) {
+            if(strImport.isEmpty())
+                continue;
+            if(fileContent.indexOf(strImport) >= 0) {
+
+                int deleteImportIndex = fileContent.indexOf(strImport);
+                // 计算新的import要插入的位置 尽量插入删除import的位置 如果没有删除的import就插入到import的末尾
+                if (insertImportIndex == 0 || insertImportIndex > deleteImportIndex){
+                    insertImportIndex = deleteImportIndex;
+                }
+                // 找出要删除的class 如果代码没有使用才删除
+                String deleteClass = strImport.substring(strImport.lastIndexOf(".") + 1, strImport.lastIndexOf(";"));
+                if(fileContent.indexOf(deleteClass, codeIndex) < 0)
+                    fileContent.delete(deleteImportIndex, deleteImportIndex + strImport.length() + 2);
+            }
+        }
+
+    }
+
     public void interfaceUpdate(UUID newInterfaceId, InfraInterface oldInterface){
         InfraInterface newInterface = infraInterfaceRepository.findDetailById(newInterfaceId).get();
 
@@ -1280,9 +1394,9 @@ public class CodegenEngine {
                     continue;
             }
             if (vmPath.contains("voOutput")) {
-                String oldVoOutputfilePath = templateEngine.getTemplate(filePath).render(oldBindingMap);
-                if(FileUtil.exist(oldVoOutputfilePath)) {
-                    RuntimeUtil.execForStr("git rm -f " + oldVoOutputfilePath);
+                String oldVoOutputFilePath = templateEngine.getTemplate(filePath).render(oldBindingMap);
+                if(FileUtil.exist(oldVoOutputFilePath)) {
+                    RuntimeUtil.execForStr("git rm -f " + oldVoOutputFilePath);
                 }
                 if(Objects.equals(newInterface.outputType(), "void")
                         || Objects.equals(newInterface.outputType(), "param"))
@@ -1520,7 +1634,8 @@ public class CodegenEngine {
         Map<String, String> templates = new LinkedHashMap<>(MODULE_TEMPLATES);
         templates.forEach((vmPath, filePath) -> {
             filePath = templateEngine.getTemplate(filePath).render(bindingMap);
-            RuntimeUtil.execForStr("git rm -f " + filePath);
+            if(!filePath.contains("ErrorCode"))
+                RuntimeUtil.execForStr("git rm -f " + filePath);
         });
     }
 
@@ -1532,16 +1647,15 @@ public class CodegenEngine {
         List<String> parentNames = getParentName(UUID.fromString(module.parentId()));
         Collections.reverse(parentNames);
         bindingMap.put("parentNames", parentNames);
+        List<String> parentNamesSymbol = parentNames.stream().map(parentName -> toSymbolCase(parentName, '-')).collect(Collectors.toList());
+        bindingMap.put("parentNamesSymbol", parentNamesSymbol);
         bindingMap.put("nameSymbol", toSymbolCase(module.name(),'-'));
         bindingMap.put("nameHumpUp", upperFirst(module.name()));
         bindingMap.put("nameHump", 	module.name());
         bindingMap.put("modulePath", String.join("/", parentNames));
         String vueFileName = module.name();
         String vueModulePath = String.join("/", parentNames);
-//        if(parentNames.get(parentNames.size()-1).equals(module.name())) {
-//            vueModulePath = vueModulePath.substring(0, vueModulePath.length() - module.name().length() - 1);
-//            vueFileName = "index";
-//        }
+
         bindingMap.put("vueModulePath", vueModulePath);
         bindingMap.put("vueFileName", vueFileName);
         String moduleRootName = parentNames.get(0);
@@ -1643,10 +1757,13 @@ public class CodegenEngine {
             if(!FileUtil.exist(filePath)) {
                 newFile = FileUtil.touch(filePath);
                 RuntimeUtil.execForStr("git add " + filePath);
+                FileUtil.writeUtf8String(content, newFile);
             }else{
                 newFile = FileUtil.file(filePath);
+                if (!filePath.contains("repository"))
+                    FileUtil.writeUtf8String(content, newFile);
             }
-            FileUtil.writeUtf8String(content, newFile);
+
         });
     }
 
@@ -1659,6 +1776,11 @@ public class CodegenEngine {
                 || !Objects.equals(newTable.secondModule(), oldTable.secondModule())){
             deleteOldTableFile(oldTable);
         }
+    }
+
+    public void tableDeleteExecute(InfraDatabaseTable deleteTable, String deleteSql){
+        deleteOldTableFile(deleteTable);
+        generateUpdateTable(deleteSql);
     }
 
     public void generateUpdateTable(String updateSql){
@@ -1678,12 +1800,12 @@ public class CodegenEngine {
 
     private void deleteOldTableFile(InfraDatabaseTable oldTable){
         Map<String, Object> bindingMap = getTableBindingMap(oldTable);
-        generateUpdateOldTable(bindingMap);
+        generateDeleteOldTable(bindingMap);
     }
 
-    public void generateUpdateOldTable(Map<String, Object> bindingMap)
+    public void generateDeleteOldTable(Map<String, Object> bindingMap)
     {
-        Map<String, String> templates = new LinkedHashMap<>(TABLE_UPDATE_TEMPLATES);
+        Map<String, String> templates = new LinkedHashMap<>(TABLE_DELETE_TEMPLATES);
         templates.forEach((vmPath, filePath) -> {
             filePath = templateEngine.getTemplate(filePath).render(bindingMap);
 

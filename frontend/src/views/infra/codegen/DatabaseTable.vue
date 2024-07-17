@@ -66,6 +66,7 @@
     >
       <template #menu="{ row }">
         <context-menu-item label="修改" @click="handleUpdate(row)" />
+        <context-menu-item label="删除" @click="handleDelete(row.id)" />
       </template>
     </Table>
   </ContentWrap>
@@ -134,6 +135,8 @@ import * as CodegenApi from '@/api/infra/codegen'
 import DatabaseTableEdit from './DatabaseTableEdit.vue'
 import { ElTable } from 'element-plus'
 import { formatDate } from '@/utils/formatTime'
+const message = useMessage() // 消息弹窗
+const { t } = useI18n() // 国际化
 
 const dbTableLoading = ref(true) // 数据源的加载中
 const databaseTableData = ref<CodegenApi.DatabaseTableVO[]>([]) // 表的列表
@@ -220,4 +223,11 @@ const newTable = () => {
 onMounted(async () => {
   await getList()
 })
+
+/** 删除操作 */
+const handleDelete = async (id: string) => {
+  await CodegenApi.deleteDatabaseTable(id)
+  await getList()
+  message.success(t('common.delSuccess'))
+}
 </script>

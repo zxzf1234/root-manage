@@ -29,4 +29,7 @@ public interface InfraDatabaseColumnRepository extends JRepository<InfraDatabase
     }
 
     int countByTableIdAndColumnNameIn(UUID tableId, List<String> columnNameList);
+
+    void deleteByTableId(UUID tableId);
+
 }

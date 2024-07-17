@@ -14,6 +14,7 @@ import cn.iocoder.yudao.service.service.infra.codegen.inner.CodegenEngine;
 import cn.iocoder.yudao.service.service.infra.db.DataSourceConfigService;
 import cn.iocoder.yudao.service.vo.infra.codegen.baseVO.InfraDatabaseColumnBase;
 import cn.iocoder.yudao.service.vo.infra.codegen.database.*;
+import org.babyfish.jimmer.sql.ast.mutation.DeleteMode;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -354,5 +355,17 @@ public class DatabaseTableServiceImpl implements DatabaseTableService {
             detailRespVo = CodegenConvert.INSTANCE.convert(infraDatabaseTableOptional.get());
         }
         return detailRespVo;
+    }
+
+    @Override
+    public void deleted(String id){
+        UUID tableId = UUID.fromString(id);
+        InfraDatabaseTable deleteTable = infraDatabaseTableRepository.findDetailById(tableId).get();
+        codegenEngine.tableDeleteExecute(deleteTable, "DROP TABLE IF EXISTS "+deleteTable.name() + ";\n");
+        infraDatabaseColumnRepository.deleteByTableId(tableId);
+        infraDatabaseIndexRepository.deleteByTableId(tableId);
+        infraDatabaseMappingRepository.deleteByTableId(tableId);
+        infraInterfaceVoClassRepository.deleteByParentId(id);
+        infraDatabaseTableRepository.deleteById(tableId, DeleteMode.PHYSICAL);
     }
 }

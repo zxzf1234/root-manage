@@ -42,4 +42,7 @@ public interface DatabaseTableService {
      * @return 字段详情
      */
     List<DatabaseTableColumnResp> getColumnList(DatabaseTableListReqVO listReqVO);
+
+    void deleted(String id);
+
 }

@@ -51,6 +51,7 @@
     >
       <template #menu="{ row }">
         <context-menu-item label="修改" @click="openForm('update', row.id)" />
+        <context-menu-item label="删除" @click="handleDelete(row.id)" />
       </template>
       <template #isTransaction="{ row }">
         <dict-tag :type="DICT_TYPE.COMMON_STATUS" :value="row.isTransaction ? 0 : 1" />
@@ -162,6 +163,8 @@ import InterfaceEdit from './InterfaceEdit.vue'
 import { defaultProps, handleTree } from '@/utils/tree'
 import { ElInput } from 'element-plus'
 import { formatDate } from '@/utils/formatTime'
+const message = useMessage() // 消息弹窗
+const { t } = useI18n() // 国际化
 const initFormData = {
   id: '',
   name: '',
@@ -324,6 +327,13 @@ const handleRowClick = async (row: CodegenApi.DatabaseTableVO) => {
 /** 添加/修改操作 */
 const openForm = (type: string, id?: string) => {
   formRef.value.open(type, id)
+}
+
+/** 删除操作 */
+const handleDelete = async (id: string) => {
+  await CodegenApi.deleteInterface(id)
+  await getList()
+  message.success(t('common.delSuccess'))
 }
 
 /** 初始化 **/

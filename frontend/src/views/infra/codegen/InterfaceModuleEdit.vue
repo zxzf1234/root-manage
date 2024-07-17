@@ -21,7 +21,7 @@
         <el-input
           v-model="formData.name"
           placeholder="请输入名称"
-          @keyup="formData.name = formData.name?.replace(/[^a-zA-Z_]/g, '')"
+          @keyup="formData.name = formData.name?.replace(/[^a-zA-Z]/g, '')"
         />
       </el-form-item>
       <el-form-item label="描述" prop="comment">

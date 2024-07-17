@@ -10,5 +10,6 @@ import java.util.UUID;
 public interface InfraDatabaseMappingRepository extends JRepository<InfraDatabaseMapping, UUID> {
     InfraDatabaseMappingTable infraDatabaseMappingTable = InfraDatabaseMappingTable.$;
 
+    void deleteByTableId(UUID tableId);
 
 }

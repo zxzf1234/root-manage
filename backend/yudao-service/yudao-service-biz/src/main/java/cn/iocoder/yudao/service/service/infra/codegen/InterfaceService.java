@@ -20,4 +20,7 @@ public interface InterfaceService {
     InterfaceDetailResp getInterface(UUID id);
 
     List<InterfaceVoClassOutput> getVoClassList(InterfaceListReqVO reqVO);
+
+    void deleted(String id);
+
 }

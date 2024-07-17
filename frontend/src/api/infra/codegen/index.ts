@@ -158,6 +158,13 @@ export const updateDatabaseTable = (data: DatabaseTableVO) => {
   return request.post({ url: '/infra/codegen/database-table/update', data })
 }
 
+/**
+ * 删除数据库表
+ */
+export const deleteDatabaseTable = (id: string) => {
+  return request.delete({ url: '/infra/codegen/database-table/deleted?id=' + id })
+}
+
 // 编辑接口模块
 export const editInterfaceModule = (data: InterfaceModuleVO) => {
   return request.post({ url: '/infra/codegen/interface-module/update', data })
@@ -208,6 +215,13 @@ export const createInterface = (data: InterfaceVO) => {
  */
 export const updateInterface = (data: InterfaceVO) => {
   return request.post({ url: '/infra/codegen/interface/update', data })
+}
+
+/**
+ * 删除接口
+ */
+export const deleteInterface = (id: string) => {
+  return request.delete({ url: '/infra/codegen/interface/deleted?id=' + id })
 }
 
 // 查询单个接口

@@ -61,4 +61,12 @@ public class InterfaceController {
         return success(interfaceService.getVoClassList(reqVO));
     }
 
+    @DeleteMapping("/deleted")
+    @Operation(summary = "删除接口")
+    @Parameter(name = "id", description = "编号", required = true, example = "1024")
+    public CommonResult<Boolean> deleteModule(@RequestParam("id") String id) {
+        interfaceService.deleted(id);
+        return success(true);
+    }
+
 }

@@ -11,4 +11,6 @@ import java.util.UUID;
 public interface InfraDatabaseIndexRepository extends JRepository<InfraDatabaseIndex, UUID> {
     InfraDatabaseIndexTable infraDatabaseIndexTable = InfraDatabaseIndexTable.$;
 
+    void deleteByTableId(UUID tableId);
+
 }

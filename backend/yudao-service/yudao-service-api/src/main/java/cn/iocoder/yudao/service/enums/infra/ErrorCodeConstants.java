@@ -44,6 +44,7 @@ public interface ErrorCodeConstants {
     ErrorCode CODEGEN_INTERFACE_SUBCLASS_NOT_EXITS = new ErrorCode(1001004018, "接口子类不存在");
     ErrorCode CODEGEN_DATABASE_MAPPING_NOT_EXITS = new ErrorCode(1001004019, "数据库表映射不存在");
     ErrorCode CODEGEN_DATABASE_TABLE_COLUMN_DISTINCT = new ErrorCode(1001004020, "数据库表字段重复");
+    ErrorCode CODEGEN_INTERFACE_MODULE_TYPE_NOT_CHANGE = new ErrorCode(1001004013, "接口模块的模块类型不能修改，请删除后重新添加");
 
     // ========== 字典类型 1001005000 ==========
     ErrorCode DICT_TYPE_NOT_EXISTS = new ErrorCode(1001005000, "当前字典类型不存在");
@@ -56,7 +57,7 @@ public interface ErrorCodeConstants {
     ErrorCode DICT_DATA_NOT_ENABLE = new ErrorCode(1001005007, "字典数据({})不处于开启状态，不允许选择");
     ErrorCode DICT_DATA_VALUE_DUPLICATE= new ErrorCode(1001005008, "已经存在该值的字典数据");
     ErrorCode DICT_DATA_EXPORT_EXCEPTION = new ErrorCode(1001005009, "字段导出异常");
-    
+
     // ========== 文件配置 1001006000 ==========
     ErrorCode FILE_CONFIG_NOT_EXISTS = new ErrorCode(1001006000, "文件配置不存在");
     ErrorCode FILE_CONFIG_DELETE_FAIL_MASTER = new ErrorCode(1001006001, "该文件配置不允许删除，原因：它是主配置，删除会导致无法上传文件");
@@ -69,42 +70,9 @@ public interface ErrorCodeConstants {
     ErrorCode DICT_NO_EXISTS = new ErrorCode(1001008000, "当前字典编号不存在");
     ErrorCode DICT_NO_NOT_EXISTS = new ErrorCode(1001008001, "当前字典编号已存在");
 
-    // ========== 短信渠道 1001009000 ==========
-    ErrorCode SMS_CHANNEL_NOT_EXISTS = new ErrorCode(1001009000, "短信渠道不存在");
-    ErrorCode SMS_CHANNEL_DISABLE = new ErrorCode(1001009001, "短信渠道不处于开启状态，不允许选择");
-    ErrorCode SMS_CHANNEL_HAS_CHILDREN = new ErrorCode(1001009002, "无法删除，该短信渠道还有短信模板");
-
-    // ========== 短信模板 1001010000 ==========
-    ErrorCode SMS_TEMPLATE_NOT_EXISTS = new ErrorCode(1001010000, "短信模板不存在");
-    ErrorCode SMS_TEMPLATE_CODE_DUPLICATE = new ErrorCode(1001010001, "已经存在编码为【{}】的短信模板");
-
-    // ========== 短信发送 1001011000 ==========
-    ErrorCode SMS_SEND_MOBILE_NOT_EXISTS = new ErrorCode(1001011000, "手机号不存在");
-    ErrorCode SMS_SEND_MOBILE_TEMPLATE_PARAM_MISS = new ErrorCode(1001011001, "模板参数({})缺失");
-    ErrorCode SMS_SEND_TEMPLATE_NOT_EXISTS = new ErrorCode(1001011002, "短信模板不存在");
-
-    // ========== 短信验证码 1001012000 ==========
-    ErrorCode SMS_CODE_NOT_FOUND = new ErrorCode(1001012000, "验证码不存在");
-    ErrorCode SMS_CODE_EXPIRED = new ErrorCode(1001012001, "验证码已过期");
-    ErrorCode SMS_CODE_USED = new ErrorCode(1001012002, "验证码已使用");
-    ErrorCode SMS_CODE_NOT_CORRECT = new ErrorCode(1001012003, "验证码不正确");
-    ErrorCode SMS_CODE_EXCEED_SEND_MAXIMUM_QUANTITY_PER_DAY = new ErrorCode(1001012004, "超过每日短信发送数量");
-    ErrorCode SMS_CODE_SEND_TOO_FAST = new ErrorCode(1001012005, "短信发送过于频率");
-    ErrorCode SMS_CODE_IS_EXISTS = new ErrorCode(1001012006, "手机号已被使用");
-    ErrorCode SMS_CODE_IS_UNUSED = new ErrorCode(1001012007, "验证码未被使用");
-
     // ========== 错误码模块 1001013000 ==========
     ErrorCode ERROR_CODE_NOT_EXISTS = new ErrorCode(1001013000, "错误码不存在");
     ErrorCode ERROR_CODE_DUPLICATE = new ErrorCode(1001013001, "已经存在编码为【{}】的错误码");
-
-    // ========== 社交用户 1001014000 ==========
-    ErrorCode SOCIAL_USER_AUTH_FAILURE = new ErrorCode(1001014000, "社交授权失败，原因是：{}");
-    ErrorCode SOCIAL_USER_UNBIND_NOT_SELF = new ErrorCode(1001014001, "社交解绑失败，非当前用户绑定");
-    ErrorCode SOCIAL_USER_NOT_FOUND = new ErrorCode(1001014002, "社交授权失败，找不到对应的用户");
-
-    // ========== 系统敏感词 1001015000 =========
-    ErrorCode SENSITIVE_WORD_NOT_EXISTS = new ErrorCode(1001015000, "系统敏感词在所有标签中都不存在");
-    ErrorCode SENSITIVE_WORD_EXISTS = new ErrorCode(1001015001, "系统敏感词已在标签中存在");
 
     // ========== OAuth2 客户端 1001016000 =========
     ErrorCode OAUTH2_CLIENT_NOT_EXISTS = new ErrorCode(1001016000, "OAuth2 客户端不存在");

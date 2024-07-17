@@ -50,6 +50,7 @@
             <el-input
               v-model="formData.firstModule"
               placeholder="请输入"
+              @keyup="formData.firstModule = formData.firstModule.replace(/[^a-zA-Z]/g, '')"
               @blur="formData.firstModule = formData.firstModule.trim()"
             />
           </el-form-item>
@@ -59,6 +60,7 @@
             <el-input
               v-model="formData.secondModule"
               placeholder="请输入"
+              @keyup="formData.secondModule = formData.secondModule.replace(/[^a-zA-Z]/g, '')"
               @blur="formData.secondModule = formData.secondModule.trim()"
             />
           </el-form-item>
@@ -143,6 +145,7 @@
               <el-input
                 class="!w-140px"
                 v-model="scope.row.columnName"
+                @keyup="scope.row.columnName = scope.row.columnName.replace(/[^a-z_]/g, '')"
                 @blur="scope.row.columnName = scope.row.columnName.trim()"
                 :disabled="
                   [

@@ -11,5 +11,7 @@ import java.util.UUID;
 public interface InfraInterfaceParamRepository extends JRepository<InfraInterfaceParam, UUID> {
     InfraInterfaceParamTable infraInterfaceParamTable = InfraInterfaceParamTable.$;
 
+    void deleteByParentId(UUID interfaceId);
+
 
 }

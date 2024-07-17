@@ -64,4 +64,13 @@ public class DatabaseTableController {
     public CommonResult<UUID> updateTable(@Valid @RequestBody DatabaseUpdateReq reqVO) {
         return success(databaseTableService.updateTable(reqVO));
     }
+
+    @DeleteMapping("/deleted")
+    @Operation(summary = "删除接口")
+    @Parameter(name = "id", description = "编号", required = true, example = "1024")
+    public CommonResult<Boolean> deleteModule(@RequestParam("id") String id) {
+        databaseTableService.deleted(id);
+        return success(true);
+    }
+
 }
