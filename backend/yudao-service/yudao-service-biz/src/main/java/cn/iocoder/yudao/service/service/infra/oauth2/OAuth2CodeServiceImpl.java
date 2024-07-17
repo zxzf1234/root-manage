@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
-import static cn.iocoder.yudao.service.enums.infra.ErrorCodeConstants.OAUTH2_CODE_EXPIRE;
-import static cn.iocoder.yudao.service.enums.infra.ErrorCodeConstants.OAUTH2_CODE_NOT_EXISTS;
+import static cn.iocoder.yudao.service.errorCode.infra.ErrorCodeConstants.OAUTH2_CODE_EXPIRE;
+import static cn.iocoder.yudao.service.errorCode.infra.ErrorCodeConstants.OAUTH2_CODE_NOT_EXISTS;
 
 /**
  * OAuth2.0 授权码 Service 实现类

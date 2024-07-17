@@ -7,23 +7,17 @@ import cn.iocoder.yudao.service.model.infra.codegen.*;
 import cn.iocoder.yudao.service.repository.infra.codegen.*;
 import cn.iocoder.yudao.service.service.infra.codegen.inner.CodegenEngine;
 import cn.iocoder.yudao.service.vo.infra.codegen.interfaceModule.*;
-import org.babyfish.jimmer.meta.ImmutableProp;
-import org.babyfish.jimmer.meta.ImmutableType;
-import org.babyfish.jimmer.spring.repository.parser.PropPredicate;
 import org.babyfish.jimmer.sql.ast.mutation.DeleteMode;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
-import org.babyfish.jimmer.ImmutableObjects;
 
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
-import static cn.iocoder.yudao.service.enums.infra.ErrorCodeConstants.*;
+import static cn.iocoder.yudao.service.errorCode.infra.ErrorCodeConstants.*;
 
 @Service
 public class InterfaceServiceImpl implements InterfaceService{

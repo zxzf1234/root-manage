@@ -22,13 +22,11 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
-import cn.iocoder.yudao.service.vo.system.post.post.*;
 import cn.hutool.core.collection.CollUtil;
 import static cn.iocoder.yudao.framework.common.util.collection.CollectionUtils.convertMap;
 
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
-import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
-import static cn.iocoder.yudao.service.enums.system.ErrorCodeConstants.*;
+import static cn.iocoder.yudao.service.errorCode.system.ErrorCodeConstants.*;
 import static cn.iocoder.yudao.framework.common.util.collection.SetUtils.asSet;
 
 /**

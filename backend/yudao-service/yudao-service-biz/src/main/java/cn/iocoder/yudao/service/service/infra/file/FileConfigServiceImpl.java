@@ -21,8 +21,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionSynchronization;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.validation.annotation.Validated;
 
 import javax.annotation.PostConstruct;
@@ -33,8 +31,8 @@ import java.util.Map;
 import java.util.Optional;
 
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
-import static cn.iocoder.yudao.service.enums.infra.ErrorCodeConstants.FILE_CONFIG_DELETE_FAIL_MASTER;
-import static cn.iocoder.yudao.service.enums.infra.ErrorCodeConstants.FILE_CONFIG_NOT_EXISTS;
+import static cn.iocoder.yudao.service.errorCode.infra.ErrorCodeConstants.FILE_CONFIG_DELETE_FAIL_MASTER;
+import static cn.iocoder.yudao.service.errorCode.infra.ErrorCodeConstants.FILE_CONFIG_NOT_EXISTS;
 
 /**
  * 文件配置 Service 实现类

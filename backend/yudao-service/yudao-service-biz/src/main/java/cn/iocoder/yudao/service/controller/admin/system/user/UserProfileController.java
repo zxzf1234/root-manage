@@ -1,7 +1,6 @@
 package cn.iocoder.yudao.service.controller.admin.system.user;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.iocoder.yudao.framework.common.enums.UserTypeEnum;
 import cn.iocoder.yudao.framework.common.pojo.CommonResult;
 import cn.iocoder.yudao.service.model.system.role.SystemRole;
 import cn.iocoder.yudao.service.model.system.user.SystemUser;
@@ -29,7 +28,7 @@ import java.util.List;
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
 import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
 import static cn.iocoder.yudao.framework.security.core.util.SecurityFrameworkUtils.getLoginUserId;
-import static cn.iocoder.yudao.service.enums.infra.ErrorCodeConstants.FILE_IS_EMPTY;
+import static cn.iocoder.yudao.service.errorCode.infra.ErrorCodeConstants.FILE_IS_EMPTY;
 
 @Tag(name = "管理后台 - 用户个人中心")
 @RestController

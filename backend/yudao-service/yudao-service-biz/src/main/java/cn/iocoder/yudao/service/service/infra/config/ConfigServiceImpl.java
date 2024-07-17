@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
-import static cn.iocoder.yudao.service.enums.infra.ErrorCodeConstants.*;
+import static cn.iocoder.yudao.service.errorCode.infra.ErrorCodeConstants.*;
 
 /**
  * 参数配置 Service 实现类

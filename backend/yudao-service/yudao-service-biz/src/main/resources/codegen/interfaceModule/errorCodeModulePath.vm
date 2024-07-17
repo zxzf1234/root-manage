@@ -1,1 +1,0 @@
-${javaPath}/yudao-service/yudao-service-api/src/main/java/${basePackage.replaceAll("\.", "/")}/service/enums/${module.name}/ErrorCodeConstants.java

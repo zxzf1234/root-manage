@@ -4,7 +4,7 @@ import cn.iocoder.yudao.framework.common.pojo.CommonResult;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.excel.core.util.ExcelUtils;
 import cn.iocoder.yudao.framework.operatelog.core.annotations.OperateLog;
-import cn.iocoder.yudao.service.enums.infra.ErrorCodeConstants;
+import cn.iocoder.yudao.service.errorCode.infra.ErrorCodeConstants;
 import cn.iocoder.yudao.service.convert.infra.config.ConfigConvert;
 import cn.iocoder.yudao.service.model.infra.config.InfraConfig;
 import cn.iocoder.yudao.service.service.infra.config.ConfigService;

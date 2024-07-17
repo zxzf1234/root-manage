@@ -4,7 +4,7 @@ import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.iocoder.yudao.framework.common.enums.UserTypeEnum;
-import cn.iocoder.yudao.service.enums.infra.ErrorCodeConstants;
+import cn.iocoder.yudao.service.errorCode.infra.ErrorCodeConstants;
 import cn.iocoder.yudao.service.model.infra.oauth2.SystemOauth2AccessToken;
 import cn.iocoder.yudao.service.model.infra.oauth2.SystemOauth2Code;
 import cn.iocoder.yudao.service.model.system.user.SystemUser;

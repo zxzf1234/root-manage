@@ -22,11 +22,10 @@ import org.springframework.validation.annotation.Validated;
 import javax.annotation.Resource;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
-import static cn.iocoder.yudao.service.enums.infra.ErrorCodeConstants.*;
+import static cn.iocoder.yudao.service.errorCode.infra.ErrorCodeConstants.*;
 
 /**
  * OAuth2.0 Client Service 实现类

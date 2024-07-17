@@ -16,7 +16,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
-import static cn.iocoder.yudao.service.enums.infra.ErrorCodeConstants.*;
+import static cn.iocoder.yudao.service.errorCode.infra.ErrorCodeConstants.*;
 
 @Service
 public class InterfaceModuleServiceImpl implements InterfaceModuleService{
@@ -46,8 +46,6 @@ public class InterfaceModuleServiceImpl implements InterfaceModuleService{
         module = infraInterfaceModuleRepository.insert(module);
         if(module.type() == 1)
             codegenEngine.moduleInsertExecute(module);
-        else
-            codegenEngine.moduleEnumsInsertExecute(module);
         return module.id().toString();
     }
 

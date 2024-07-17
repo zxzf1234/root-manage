@@ -12,10 +12,8 @@ import cn.iocoder.yudao.service.convert.system.dept.DeptConvert;
 import cn.iocoder.yudao.service.enums.system.dept.DeptIdEnum;
 import cn.iocoder.yudao.service.model.system.dept.SystemDept;
 import cn.iocoder.yudao.service.repository.system.dept.SystemDeptRepository;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
@@ -24,8 +22,7 @@ import javax.annotation.Resource;
 import java.util.*;
 
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
-import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
-import static cn.iocoder.yudao.service.enums.system.ErrorCodeConstants.*;
+import static cn.iocoder.yudao.service.errorCode.system.ErrorCodeConstants.*;
 
 /**
  * 部门 Service 实现类

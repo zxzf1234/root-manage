@@ -1,4 +1,4 @@
-package cn.iocoder.yudao.service.enums.infra;
+package cn.iocoder.yudao.service.errorCode.infra;
 
 import cn.iocoder.yudao.framework.common.exception.ErrorCode;
 

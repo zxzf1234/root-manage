@@ -19,8 +19,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
-import static cn.iocoder.yudao.service.enums.infra.ErrorCodeConstants.API_ERROR_LOG_NOT_FOUND;
-import static cn.iocoder.yudao.service.enums.infra.ErrorCodeConstants.API_ERROR_LOG_PROCESSED;
+import static cn.iocoder.yudao.service.errorCode.infra.ErrorCodeConstants.API_ERROR_LOG_NOT_FOUND;
+import static cn.iocoder.yudao.service.errorCode.infra.ErrorCodeConstants.API_ERROR_LOG_PROCESSED;
 
 /**
  * API 错误日志 Service 实现类

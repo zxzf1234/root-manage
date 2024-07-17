@@ -32,7 +32,7 @@ import java.util.Optional;
 
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
 import static cn.iocoder.yudao.framework.common.util.servlet.ServletUtils.getClientIP;
-import static cn.iocoder.yudao.service.enums.system.ErrorCodeConstants.*;
+import static cn.iocoder.yudao.service.errorCode.system.ErrorCodeConstants.*;
 
 /**
  * Auth Service 实现类

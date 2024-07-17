@@ -1,7 +1,6 @@
 package cn.iocoder.yudao.service.service.infra.data;
 
 import cn.iocoder.yudao.framework.common.util.entity.EntityUtils;
-import cn.iocoder.yudao.service.convert.infra.data.DictDataConvert;
 import cn.iocoder.yudao.service.model.infra.data.*;
 import cn.iocoder.yudao.service.vo.infra.data.dictType.DictTypeUpdateInput;
 import cn.iocoder.yudao.service.service.infra.codegen.inner.CodegenEngine;
@@ -13,9 +12,6 @@ import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.service.repository.infra.data.InfraDictDataRepository;
 import cn.iocoder.yudao.service.repository.infra.data.InfraDictTypeRepository;
 import org.babyfish.jimmer.DraftObjects;
-import org.babyfish.jimmer.meta.ImmutableProp;
-import org.babyfish.jimmer.sql.DissociateAction;
-import org.babyfish.jimmer.sql.ast.mutation.SaveMode;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
@@ -31,7 +27,7 @@ import java.util.*;
 import cn.iocoder.yudao.service.convert.infra.data.DictTypeConvert;
 
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
-import static cn.iocoder.yudao.service.enums.infra.ErrorCodeConstants.*;
+import static cn.iocoder.yudao.service.errorCode.infra.ErrorCodeConstants.*;
 
 /**
  * 字典类型 Service 实现类

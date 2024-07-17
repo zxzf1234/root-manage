@@ -1,1 +1,1 @@
-${javaPath}/yudao-service/yudao-service-api/src/main/java/${basePackage.replaceAll("\.", "/")}/service/enums/${moduleRootName}/ErrorCodeConstants.java
+${javaPath}/yudao-service/yudao-service-biz/src/main/java/${basePackage.replaceAll("\.", "/")}/service/errorCode/${sceneEnum.basePackage}/${modulePath}/${nameHumpUp}ErrorCode.java

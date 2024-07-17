@@ -5,7 +5,6 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.RuntimeUtil;
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.template.TemplateConfig;
 import cn.hutool.extra.template.TemplateEngine;
 import cn.hutool.extra.template.engine.velocity.VelocityEngine;
@@ -14,27 +13,16 @@ import cn.iocoder.yudao.framework.common.pojo.CommonResult;
 import cn.iocoder.yudao.framework.common.pojo.PageParam;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.common.util.date.DateUtils;
-import cn.iocoder.yudao.framework.common.util.date.LocalDateTimeUtils;
-import cn.iocoder.yudao.framework.common.util.entity.EntityUtils;
-import cn.iocoder.yudao.framework.common.util.object.ObjectUtils;
-import cn.iocoder.yudao.framework.excel.core.annotations.DictFormat;
-import cn.iocoder.yudao.framework.excel.core.convert.DictConvert;
 import cn.iocoder.yudao.framework.excel.core.util.ExcelUtils;
 import cn.iocoder.yudao.framework.operatelog.core.annotations.OperateLog;
 import cn.iocoder.yudao.framework.operatelog.core.enums.OperateTypeEnum;
 import cn.iocoder.yudao.service.convert.infra.codegen.CodegenConvert;
-import cn.iocoder.yudao.service.convert.infra.data.DictNoConvert;
-import cn.iocoder.yudao.service.convert.infra.data.DictTypeConvert;
 import cn.iocoder.yudao.service.enums.infra.codegen.CodegenSceneEnum;
 import cn.iocoder.yudao.service.framework.codegen.config.SchemaHistory;
 import cn.iocoder.yudao.service.model.infra.codegen.*;
 import cn.iocoder.yudao.service.model.infra.data.*;
 import cn.iocoder.yudao.service.repository.infra.codegen.*;
-import cn.iocoder.yudao.service.vo.infra.data.dictNo.DictNoQueryOutput;
-import cn.iocoder.yudao.service.vo.infra.data.dictType.DictTypeUpdateInput;
-import org.babyfish.jimmer.DraftObjects;
 import org.jsoup.internal.StringUtil;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -47,8 +35,6 @@ import java.util.stream.Collectors;
 import static cn.hutool.core.map.MapUtil.getStr;
 import static cn.hutool.core.text.CharSequenceUtil.*;
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
-import static cn.iocoder.yudao.service.enums.infra.ErrorCodeConstants.DICT_DATA_NOT_EXISTS;
-import static cn.iocoder.yudao.service.enums.infra.ErrorCodeConstants.DICT_DATA_VALUE_DUPLICATE;
 
 /**
  * 代码生成的引擎，用于具体生成代码
@@ -95,9 +81,6 @@ public class CodegenEngine {
             .put(templatePath("interfaceModule/vo"), templatePath("interfaceModule/voPath"))
             .put(templatePath("interfaceModule/errorCode"), templatePath("interfaceModule/errorCodePath"))
             .put(templatePath("interfaceModule/vueApi"), templatePath("interfaceModule/vueApiPath"))
-            .build();
-    private static final Map<String, String> GROUP_MODULE_TEMPLATES = MapUtil.<String, String>builder(new LinkedHashMap<>()) // 有序
-            .put(templatePath("interfaceModule/errorCodeModule"), templatePath("interfaceModule/errorCodeModulePath"))
             .build();
 
     private static final Map<String, String> DICT_TEMPLATES = MapUtil.<String, String>builder(new LinkedHashMap<>()) // 有序
@@ -1535,50 +1518,6 @@ public class CodegenEngine {
             if(fileContent.indexOf(strImport) < 0)
                 fileContent.insert(insertImportIndex, strImport + "\r\n");
         }
-    }
-
-    public void moduleEnumsInsertExecute(InfraInterfaceModule module){
-        Optional<InfraInterfaceModule> opAdminModule = infraInterfaceModuleRepository.findFirstByName("admin");
-        if(!opAdminModule.isPresent())
-            return;
-        if(!UUID.fromString(module.parentId()).equals(opAdminModule.get().id())){
-            return;
-        }
-        int moduleCount = infraInterfaceModuleRepository.countByParentId(module.parentId());
-        Map<String, Object> bindingMap = getEnumsModuleBindingMap(module,moduleCount);
-        generateEnumsModule(bindingMap);
-    }
-
-    private Map<String, Object> getEnumsModuleBindingMap(InfraInterfaceModule module, int moduleCount){
-        Map<String, Object> bindingMap = new HashMap<>(globalBindingMap);
-
-        bindingMap.put("sceneEnum", CodegenSceneEnum.valueOf("ADMIN"));
-        bindingMap.put("moduleIndex", moduleCount);
-        bindingMap.put("module", module);
-
-        return bindingMap;
-    }
-
-    public void generateEnumsModule(Map<String, Object> bindingMap)
-    {
-        Map<String, String> templates = new LinkedHashMap<>(GROUP_MODULE_TEMPLATES);
-        templates.forEach((vmPath, filePath) -> {
-            filePath = templateEngine.getTemplate(filePath).render(bindingMap);
-            File newFile;
-            if(!FileUtil.exist(filePath)) {
-                newFile = FileUtil.touch(filePath);
-                RuntimeUtil.execForStr("git add " + filePath);
-            }else{
-                newFile = FileUtil.file(filePath);
-            }
-
-            String content = "";
-            if(!vmPath.isEmpty()) {
-                content = templateEngine.getTemplate(vmPath).render(bindingMap);
-
-                FileUtil.writeUtf8String(content, newFile);
-            }
-        });
     }
 
     public void moduleInsertExecute(InfraInterfaceModule module){

@@ -48,7 +48,7 @@ import cn.iocoder.yudao.service.vo.system.user.user.*;
 import cn.iocoder.yudao.framework.common.enums.CommonStatusEnum;
 
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
-import static cn.iocoder.yudao.service.enums.system.ErrorCodeConstants.*;
+import static cn.iocoder.yudao.service.errorCode.system.ErrorCodeConstants.*;
 import static cn.iocoder.yudao.framework.common.util.collection.CollectionUtils.convertList;
 
 /**
