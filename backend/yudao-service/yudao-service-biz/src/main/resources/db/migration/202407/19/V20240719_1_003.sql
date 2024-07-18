@@ -1,0 +1,3 @@
+insert ignore into INFRA_INTERFACE_MODULE(CREATOR_ID, UPDATER_ID, ID, NAME, COMMENT, PARENT_ID, TYPE, SORT, DELETED_TIME) values('-1', '-1', '2af45a7c-b136-4601-a94c-da7a8a79baf2', 'config', '配置管理', '0fde120d-ce5d-48e3-ad64-285c8ef82839', '1', '1002001000', NULL);
+delete from INFRA_INTERFACE_MODULE where ID in ('2af45a7c-b136-4601-a94c-da7a8a79baf2');
+insert ignore into INFRA_INTERFACE_MODULE(CREATOR_ID, UPDATER_ID, ID, NAME, COMMENT, PARENT_ID, TYPE, SORT, DELETED_TIME) values('-1', '-1', '7b3ff1f9-f885-4437-9a60-803577ab0667', 'config', '配置管理', '0fde120d-ce5d-48e3-ad64-285c8ef82839', '1', '1002001000', NULL);
