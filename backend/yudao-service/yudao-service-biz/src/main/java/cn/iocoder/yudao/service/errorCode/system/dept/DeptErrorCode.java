@@ -6,7 +6,7 @@ import cn.iocoder.yudao.framework.common.exception.ErrorCode;
  * dept 部门管理 错误码枚举类
  */
 public interface DeptErrorCode {
-    public static final Integer ERROR_CODE_START_CODE = 1002003000;
+    Integer ERROR_CODE_START_CODE = 1002003000;
 
     ErrorCode DEPT_NAME_DUPLICATE = new ErrorCode(ERROR_CODE_START_CODE, "已经存在该名字的部门");
     ErrorCode DEPT_PARENT_NOT_EXITS = new ErrorCode(ERROR_CODE_START_CODE + 1,"父级部门不存在");

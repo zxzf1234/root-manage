@@ -8,6 +8,6 @@ import ${basePackage}.framework.common.exception.ErrorCode;
 * ${module.name} ${module.comment}，使用 ${module.sort}段
 */
 public interface ${nameHumpUp}ErrorCode {
-    public static final Integer ERROR_CODE_START_CODE = ${module.sort};
+    Integer ERROR_CODE_START_CODE = ${module.sort};
 
 }

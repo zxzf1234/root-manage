@@ -70,10 +70,6 @@ public interface ErrorCodeConstants {
     ErrorCode DICT_NO_EXISTS = new ErrorCode(1001008000, "当前字典编号不存在");
     ErrorCode DICT_NO_NOT_EXISTS = new ErrorCode(1001008001, "当前字典编号已存在");
 
-    // ========== 错误码模块 1001013000 ==========
-    ErrorCode ERROR_CODE_NOT_EXISTS = new ErrorCode(1001013000, "错误码不存在");
-    ErrorCode ERROR_CODE_DUPLICATE = new ErrorCode(1001013001, "已经存在编码为【{}】的错误码");
-
     // ========== OAuth2 客户端 1001016000 =========
     ErrorCode OAUTH2_CLIENT_NOT_EXISTS = new ErrorCode(1001016000, "OAuth2 客户端不存在");
     ErrorCode OAUTH2_CLIENT_EXISTS = new ErrorCode(1001016001, "OAuth2 客户端编号已存在");

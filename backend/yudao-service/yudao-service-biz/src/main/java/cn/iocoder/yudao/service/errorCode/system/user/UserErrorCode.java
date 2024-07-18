@@ -6,7 +6,7 @@ import cn.iocoder.yudao.framework.common.exception.ErrorCode;
  * user 用户管理 错误码枚举类
  */
 public interface UserErrorCode {
-    public static final Integer ERROR_CODE_START_CODE = 1002002000;
+    Integer ERROR_CODE_START_CODE = 1002002000;
 
     ErrorCode USER_USERNAME_EXISTS = new ErrorCode(ERROR_CODE_START_CODE, "用户账号已经存在");
     ErrorCode USER_MOBILE_EXISTS = new ErrorCode(ERROR_CODE_START_CODE + 1, "手机号已经存在");

@@ -6,7 +6,7 @@ import cn.iocoder.yudao.framework.common.exception.ErrorCode;
  * post 岗位管理 错误码枚举类
  */
 public interface PostErrorCode {
-    public static final Integer ERROR_CODE_START_CODE = 1002000000;
+    Integer ERROR_CODE_START_CODE = 1002000000;
 
     ErrorCode POST_NOT_FOUND = new ErrorCode(ERROR_CODE_START_CODE, "当前岗位不存在");
     ErrorCode POST_NOT_ENABLE = new ErrorCode(ERROR_CODE_START_CODE + 1, "岗位({}) 不处于开启状态，不允许选择");

@@ -6,7 +6,7 @@ import cn.iocoder.yudao.framework.common.exception.ErrorCode;
  * role 角色管理 错误码枚举类
  */
 public interface RoleErrorCode {
-    public static final Integer ERROR_CODE_START_CODE = 1002001000;
+    Integer ERROR_CODE_START_CODE = 1002001000;
 
     ErrorCode ROLE_NOT_EXISTS = new ErrorCode(ERROR_CODE_START_CODE, "角色不存在");
     ErrorCode ROLE_NAME_DUPLICATE = new ErrorCode(ERROR_CODE_START_CODE + 1, "已经存在名为【{}】的角色");
