@@ -66,7 +66,7 @@ public class InterfaceModuleServiceImpl implements InterfaceModuleService{
                 InfraInterfaceModule secondParentModule = findSecondParent(optionalParentModule.get());
                 Long count = infraInterfaceModuleRepository.countByTypeAndSort(1, secondParentModule.sort(), secondParentModule.sort() + 1000000);
                 module = InfraInterfaceModuleDraft.$.produce(module, draft -> {
-                    draft.setSort(secondParentModule.sort() + (count + 1) * 1000000L);
+                    draft.setSort(secondParentModule.sort() + (count + 1) * 1000L);
                 });
             }
 

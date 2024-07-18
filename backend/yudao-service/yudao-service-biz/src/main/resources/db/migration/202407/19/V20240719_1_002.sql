@@ -1,0 +1,1 @@
+update INFRA_INTERFACE_MODULE set UPDATER_ID = '-1', NAME = 'user', COMMENT = '用户管理', PARENT_ID = 'ee94e964-4126-4c98-8536-ceb3076d9a81', TYPE = '1', SORT = '1001002000', DELETED_TIME = NULL where ID = 'b22c7c13-0ff7-4a8e-bd8d-fbf9c951daba';
