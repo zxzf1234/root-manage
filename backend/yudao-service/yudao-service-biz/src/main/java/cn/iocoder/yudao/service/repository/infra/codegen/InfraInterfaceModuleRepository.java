@@ -6,6 +6,7 @@ import cn.iocoder.yudao.service.vo.infra.codegen.interfaceModule.InterfaceModule
 import org.babyfish.jimmer.spring.repository.JRepository;
 import org.springframework.util.StringUtils;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -26,6 +27,15 @@ public interface InfraInterfaceModuleRepository extends JRepository<InfraInterfa
                 .orderBy(infraInterfaceModuleTable.sort())
                 .select(infraInterfaceModuleTable)
                 .execute();
+    }
+
+    default @NotNull Long countByTypeAndSort(Integer type, Long beginSort, Long endSort){
+        return sql().createQuery(infraInterfaceModuleTable)
+                .where(infraInterfaceModuleTable.type().eq(type))
+                .where(infraInterfaceModuleTable.sort().gt(beginSort))
+                .where(infraInterfaceModuleTable.sort().lt(endSort))
+                .select(infraInterfaceModuleTable.count())
+                .fetchOne();
     }
 
     int countByParentId(String parentId);

@@ -64,6 +64,10 @@ public class InterfaceModuleServiceImpl implements InterfaceModuleService{
         {
             if (module.type() == 1){
                 InfraInterfaceModule secondParentModule = findSecondParent(optionalParentModule.get());
+                Long count = infraInterfaceModuleRepository.countByTypeAndSort(1, secondParentModule.sort(), secondParentModule.sort() + 1000000);
+                module = InfraInterfaceModuleDraft.$.produce(module, draft -> {
+                    draft.setSort(secondParentModule.sort() + (count + 1) * 1000000L);
+                });
             }
 
             if(optionalParentModule.get().id().toString().equals("d6f6f5fc-0c97-4623-97c5-2cb2d3dad0ca") || optionalParentModule.get().id().toString().equals("f2453ed8-4697-45e7-a5fd-ed87ca78f11b")) {
