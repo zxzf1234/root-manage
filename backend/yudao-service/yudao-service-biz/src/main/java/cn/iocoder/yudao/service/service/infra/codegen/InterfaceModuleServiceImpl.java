@@ -2,6 +2,7 @@ package cn.iocoder.yudao.service.service.infra.codegen;
 
 import cn.iocoder.yudao.service.convert.infra.codegen.CodegenConvert;
 import cn.iocoder.yudao.service.model.infra.codegen.InfraInterfaceModule;
+import cn.iocoder.yudao.service.model.infra.codegen.InfraInterfaceModuleDraft;
 import cn.iocoder.yudao.service.repository.infra.codegen.InfraInterfaceModuleRepository;
 import cn.iocoder.yudao.service.service.infra.codegen.inner.CodegenEngine;
 import cn.iocoder.yudao.service.vo.infra.codegen.interfaceModule.*;
@@ -39,10 +40,39 @@ public class InterfaceModuleServiceImpl implements InterfaceModuleService{
         return CodegenConvert.INSTANCE.convertList11(moduleList);
     }
 
+    private InfraInterfaceModule findSecondParent(InfraInterfaceModule module){
+        if(module == null)
+            return null;
+        else{
+            if(module.id().toString().equals("d6f6f5fc-0c97-4623-97c5-2cb2d3dad0ca") || module.id().toString().equals("f2453ed8-4697-45e7-a5fd-ed87ca78f11b")){
+                return module;
+            }else{
+                Optional<InfraInterfaceModule> optionalModule = infraInterfaceModuleRepository.findById(UUID.fromString(module.parentId()));
+                return optionalModule.map(this::findSecondParent).orElse(null);
+            }
+        }
+    }
+
+
     @Override
     @Transactional(rollbackFor = Exception.class)
     public String create(InterfaceModuleCreateReq reqVO){
         InfraInterfaceModule module = CodegenConvert.INSTANCE.convert(reqVO);
+        // 新建的时候自动生成排序，逻辑是 1 admin或app的下一级会有排序 2 模块类型会有排序 模块类型排序序号是计算system、infra这一级下已经有多少个模块类型的接口模块
+        Optional<InfraInterfaceModule> optionalParentModule = infraInterfaceModuleRepository.findById(UUID.fromString(module.parentId()));
+        if(optionalParentModule.isPresent())
+        {
+            if (module.type() == 1){
+                InfraInterfaceModule secondParentModule = findSecondParent(optionalParentModule.get());
+            }
+
+            if(optionalParentModule.get().id().toString().equals("d6f6f5fc-0c97-4623-97c5-2cb2d3dad0ca") || optionalParentModule.get().id().toString().equals("f2453ed8-4697-45e7-a5fd-ed87ca78f11b")) {
+                int count = infraInterfaceModuleRepository.countByParentId(module.parentId());
+                module = InfraInterfaceModuleDraft.$.produce(module, draft -> {
+                    draft.setSort(optionalParentModule.get().sort() + count * 1000000L);
+                });
+            }
+        }
         module = infraInterfaceModuleRepository.insert(module);
         if(module.type() == 1)
             codegenEngine.moduleInsertExecute(module);

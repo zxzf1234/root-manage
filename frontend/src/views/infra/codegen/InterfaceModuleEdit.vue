@@ -27,7 +27,7 @@
       <el-form-item label="描述" prop="comment">
         <el-input v-model="formData.comment" placeholder="请输入描述" />
       </el-form-item>
-      <el-form-item label="排序" prop="sort">
+      <el-form-item v-if="formType == 'update'" label="排序" prop="sort">
         <el-input v-model="formData.sort" placeholder="请输入排序" />
       </el-form-item>
       <el-form-item label="菜单类型" prop="type">
