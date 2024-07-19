@@ -1543,8 +1543,11 @@ public class CodegenEngine {
                 .replace(oldHumpName + "Controller", newHumpName + "Controller")
                 .replace("\"" + oldComment + "\"", "\"" + newComment + "\"")
                 .replace("=== " + oldComment + " ", "=== " + newComment + " ")
+                .replace("* " + oldName + " " + oldComment, "* " + newName + " " + newComment)
+                .replace("* " + oldName, "* " + newName)
                 .replace(oldHumpName + "Convert", newHumpName + "Convert")
-                .replace(String.join(".", oldParentNames), String.join(".", mewParentNames));
+                .replace(String.join(".", oldParentNames), String.join(".", mewParentNames))
+                .replace(oldModule.sort().toString(), newModule.sort().toString());
 
         return content;
     }

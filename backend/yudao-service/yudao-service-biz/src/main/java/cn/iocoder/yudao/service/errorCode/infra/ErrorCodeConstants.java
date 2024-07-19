@@ -45,6 +45,8 @@ public interface ErrorCodeConstants {
     ErrorCode CODEGEN_DATABASE_MAPPING_NOT_EXITS = new ErrorCode(1001004019, "数据库表映射不存在");
     ErrorCode CODEGEN_DATABASE_TABLE_COLUMN_DISTINCT = new ErrorCode(1001004020, "数据库表字段重复");
     ErrorCode CODEGEN_INTERFACE_MODULE_TYPE_NOT_CHANGE = new ErrorCode(1001004013, "接口模块的模块类型不能修改，请删除后重新添加");
+    ErrorCode CODEGEN_INTERFACE_MODULE_RANGE_ILLEGALITY = new ErrorCode(1001004014, "此接口模块的排序范围必须在{}到{}之间");
+    ErrorCode CODEGEN_INTERFACE_MODULE_RANGE_MOD = new ErrorCode(1001004015, "此接口模块的排序范围必须是{}的整数");
 
     // ========== 字典类型 1001005000 ==========
     ErrorCode DICT_TYPE_NOT_EXISTS = new ErrorCode(1001005000, "当前字典类型不存在");

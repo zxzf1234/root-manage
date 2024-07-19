@@ -90,9 +90,35 @@ public class InterfaceModuleServiceImpl implements InterfaceModuleService{
         if (!opModule.isPresent())
             throw exception(CODEGEN_INTERFACE_MODULE_NOT_EXITS);
         InfraInterfaceModule oldModule = opModule.get();
+
+
+        // 排序校验，逻辑是 1 admin或app的下一级排序不能为空，并且排序有范围限制 2 模块类型会有排序 模块类型排序序号范围不能超过system、infra这一级
+        Optional<InfraInterfaceModule> optionalParentModule = infraInterfaceModuleRepository.findById(UUID.fromString(reqVO.getParentId()));
+        if(optionalParentModule.isPresent()){
+            if(optionalParentModule.get().id().toString().equals("d6f6f5fc-0c97-4623-97c5-2cb2d3dad0ca") || optionalParentModule.get().id().toString().equals("f2453ed8-4697-45e7-a5fd-ed87ca78f11b")) {
+                if(reqVO.getSort() < optionalParentModule.get().sort() || reqVO.getSort() >= optionalParentModule.get().sort() + 1000000000){
+                    throw exception(CODEGEN_INTERFACE_MODULE_RANGE_ILLEGALITY, optionalParentModule.get().sort(), optionalParentModule.get().sort() + 1000000000);
+                }
+                if (reqVO.getSort() % 1000000  > 0){
+                    throw exception(CODEGEN_INTERFACE_MODULE_RANGE_MOD, 1000000);
+                }
+            }
+
+            if (reqVO.getType() == 1){
+                InfraInterfaceModule secondParentModule = findSecondParent(optionalParentModule.get());
+                if(reqVO.getSort() < secondParentModule.sort() || reqVO.getSort() >= secondParentModule.sort() + 1000000){
+                    throw exception(CODEGEN_INTERFACE_MODULE_RANGE_ILLEGALITY, secondParentModule.sort(), secondParentModule.sort() + 1000000);
+                }
+                if (reqVO.getSort() % 1000  > 0){
+                    throw exception(CODEGEN_INTERFACE_MODULE_RANGE_MOD, 1000);
+                }
+            }
+        }
+
         InfraInterfaceModule newModule = infraInterfaceModuleRepository.update(CodegenConvert.INSTANCE.convert(reqVO));
         if(!Objects.equals(oldModule.type(), newModule.type()))
             throw exception(CODEGEN_INTERFACE_MODULE_TYPE_NOT_CHANGE);
+
         if(oldModule.type() == 1)
             codegenEngine.moduleUpdateExecute(oldModule, newModule);
 
