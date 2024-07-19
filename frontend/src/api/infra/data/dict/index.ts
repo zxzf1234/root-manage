@@ -31,7 +31,7 @@ export const listSimpleDictData = () => {
 
 // 查询字典数据列表
 export const getDictDataByTypeId = (typeId: string) => {
-  return request.get({ url: '/infra/data/dict-data/list?typeId=' + typeId })
+  return request.get({ url: '/infra/data/dict-type/data-list?typeId=' + typeId })
 }
 
 // 查询字典（精简)列表

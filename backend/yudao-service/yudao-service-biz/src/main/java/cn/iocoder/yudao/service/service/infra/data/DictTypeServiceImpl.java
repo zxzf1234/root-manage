@@ -26,7 +26,7 @@ import java.util.*;
 import cn.iocoder.yudao.service.convert.infra.data.DictTypeConvert;
 
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
-import static cn.iocoder.yudao.service.errorCode.infra.ErrorCodeConstants.*;
+import static cn.iocoder.yudao.service.errorCode.infra.data.DictTypeErrorCode.*;
 
 /**
  * 字典类型 Service 实现类

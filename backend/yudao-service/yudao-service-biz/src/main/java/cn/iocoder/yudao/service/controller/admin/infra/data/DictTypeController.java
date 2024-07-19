@@ -50,7 +50,7 @@ public class DictTypeController {
     @DeleteMapping("/delete")
     @Operation(summary = "删除字典类型")
     @PreAuthorize("@ss.hasPermission('infra:data:dict:delete')")
-    @Parameter(name = "id", description = "编号", required = true, example = "1024")
+    @Parameter(name = "id", description = "编号", required = true, example = "1100200200024")
     public CommonResult<Boolean> delete(@RequestParam("id") UUID id) {
         return success(dictTypeService.delete(id));
     }

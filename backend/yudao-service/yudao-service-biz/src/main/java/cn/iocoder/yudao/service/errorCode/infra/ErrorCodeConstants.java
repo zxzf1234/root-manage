@@ -43,18 +43,6 @@ public interface ErrorCodeConstants {
     ErrorCode CODEGEN_INTERFACE_MODULE_RANGE_ILLEGALITY = new ErrorCode(1001004014, "此接口模块的排序范围必须在{}到{}之间");
     ErrorCode CODEGEN_INTERFACE_MODULE_RANGE_MOD = new ErrorCode(1001004015, "此接口模块的排序范围必须是{}的整数");
 
-    // ========== 字典类型 1001005000 ==========
-    ErrorCode DICT_TYPE_NOT_EXISTS = new ErrorCode(1001005000, "当前字典类型不存在");
-    ErrorCode DICT_TYPE_NOT_ENABLE = new ErrorCode(1001005001, "字典类型不处于开启状态，不允许选择");
-    ErrorCode DICT_TYPE_NAME_DUPLICATE = new ErrorCode(1001005002, "已经存在该名字的字典类型");
-    ErrorCode DICT_TYPE_TYPE_DUPLICATE = new ErrorCode(1001005003, "已经存在该类型的字典类型");
-    ErrorCode DICT_TYPE_HAS_CHILDREN = new ErrorCode(1001005004, "无法删除，该字典类型还有字典数据");
-    ErrorCode DICT_TYPE_EXPORT_EXCEPTION = new ErrorCode(1001005005, "无法删除，该字典类型还有字典数据");
-    ErrorCode DICT_DATA_NOT_EXISTS = new ErrorCode(1001005006, "当前字典数据不存在");
-    ErrorCode DICT_DATA_NOT_ENABLE = new ErrorCode(1001005007, "字典数据({})不处于开启状态，不允许选择");
-    ErrorCode DICT_DATA_VALUE_DUPLICATE= new ErrorCode(1001005008, "已经存在该值的字典数据");
-    ErrorCode DICT_DATA_EXPORT_EXCEPTION = new ErrorCode(1001005009, "字段导出异常");
-
     // ========== 文件配置 1001006000 ==========
     ErrorCode FILE_CONFIG_NOT_EXISTS = new ErrorCode(1001006000, "文件配置不存在");
     ErrorCode FILE_CONFIG_DELETE_FAIL_MASTER = new ErrorCode(1001006001, "该文件配置不允许删除，原因：它是主配置，删除会导致无法上传文件");
