@@ -55,15 +55,6 @@
         >
           <Icon icon="ep:plus" /> 新增
         </el-button>
-        <el-button
-          type="success"
-          plain
-          @click="handleExport"
-          :loading="exportLoading"
-          v-hasPermi="['infra:data:config:export']"
-        >
-          <Icon icon="ep:download" /> 导出
-        </el-button>
       </el-form-item>
     </el-form>
   </ContentWrap>
@@ -130,7 +121,6 @@
 <script setup lang="ts" name="InfraConfig">
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
 import { dateFormatter } from '@/utils/formatTime'
-import download from '@/utils/download'
 import * as ConfigApi from '@/api/infra/data/config'
 import ConfigForm from './ConfigForm.vue'
 const message = useMessage() // 消息弹窗
@@ -148,13 +138,12 @@ const queryParams = reactive({
   createTime: []
 })
 const queryFormRef = ref() // 搜索的表单
-const exportLoading = ref(false) // 导出的加载中
 
 /** 查询列表 */
 const getList = async () => {
   loading.value = true
   try {
-    const data = await ConfigApi.getConfigPage(queryParams)
+    const data = await ConfigApi.page(queryParams)
     list.value = data.list
     total.value = data.total
   } finally {
@@ -186,26 +175,11 @@ const handleDelete = async (id: number) => {
     // 删除的二次确认
     await message.delConfirm()
     // 发起删除
-    await ConfigApi.deleteConfig(id)
+    await ConfigApi.deleted(id)
     message.success(t('common.delSuccess'))
     // 刷新列表
     await getList()
   } catch {}
-}
-
-/** 导出按钮操作 */
-const handleExport = async () => {
-  try {
-    // 导出的二次确认
-    await message.exportConfirm()
-    // 发起导出
-    exportLoading.value = true
-    const data = await ConfigApi.exportConfig(queryParams)
-    download.excel(data, '参数配置.xls')
-  } catch {
-  } finally {
-    exportLoading.value = false
-  }
 }
 
 /** 初始化 **/

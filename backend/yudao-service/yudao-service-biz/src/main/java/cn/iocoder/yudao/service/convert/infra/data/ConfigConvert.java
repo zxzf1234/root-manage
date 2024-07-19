@@ -1,5 +1,11 @@
 package cn.iocoder.yudao.service.convert.infra.data;
 
+import cn.iocoder.yudao.service.vo.infra.data.config.ConfigPageOutput;
+import cn.iocoder.yudao.service.vo.infra.data.config.ConfigPageInput;
+import cn.iocoder.yudao.service.vo.infra.data.config.ConfigGetOutput;
+import cn.iocoder.yudao.service.vo.infra.data.config.ConfigUpdateInput;
+import cn.iocoder.yudao.service.vo.infra.data.config.ConfigCreateInput;
+import cn.iocoder.yudao.service.model.infra.data.InfraConfig;
 import java.util.*;
 
 import org.mapstruct.Mapper;
@@ -14,5 +20,13 @@ import cn.iocoder.yudao.service.vo.infra.data.config.*;
 public interface ConfigConvert {
     ConfigConvert INSTANCE = Mappers.getMapper(ConfigConvert.class);
 
+
+    InfraConfig createInputConvert(ConfigCreateInput input);
+
+    InfraConfig updateInputConvert(ConfigUpdateInput input);
+
+    ConfigGetOutput getOutputConvert(InfraConfig output);
+
+    List<ConfigPageOutput> pageOutputConvert(Page<InfraConfig> output);
 
 }

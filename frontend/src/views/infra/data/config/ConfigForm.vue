@@ -43,6 +43,7 @@
 <script lang="ts" name="InfraConfigForm" setup>
 import { DICT_TYPE, getBoolDictOptions } from '@/utils/dict'
 import * as ConfigApi from '@/api/infra/data/config'
+import * as configModel from '@/model/infra/data/InfraConfig'
 
 const { t } = useI18n() // 国际化
 const message = useMessage() // 消息弹窗
@@ -58,7 +59,9 @@ const formData = ref({
   key: '',
   value: '',
   visible: true,
-  remark: ''
+  remark: '',
+  type: 0,
+  configKey: ''
 })
 const formRules = reactive({
   category: [{ required: true, message: '参数分类不能为空', trigger: 'blur' }],
@@ -79,7 +82,7 @@ const open = async (type: string, id?: number) => {
   if (id) {
     formLoading.value = true
     try {
-      formData.value = await ConfigApi.getConfig(id)
+      formData.value = await ConfigApi.get(id)
     } finally {
       formLoading.value = false
     }
@@ -97,12 +100,12 @@ const submitForm = async () => {
   // 提交请求
   formLoading.value = true
   try {
-    const data = formData.value as ConfigApi.ConfigVO
+    const data = formData.value as configModel.InfraConfig
     if (formType.value === 'create') {
-      await ConfigApi.createConfig(data)
+      await ConfigApi.create(data)
       message.success(t('common.createSuccess'))
     } else {
-      await ConfigApi.updateConfig(data)
+      await ConfigApi.update(data)
       message.success(t('common.updateSuccess'))
     }
     dialogVisible.value = false
@@ -122,7 +125,9 @@ const resetForm = () => {
     key: '',
     value: '',
     visible: true,
-    remark: ''
+    remark: '',
+    type: 0,
+    configKey: ''
   }
   formRef.value?.resetFields()
 }
