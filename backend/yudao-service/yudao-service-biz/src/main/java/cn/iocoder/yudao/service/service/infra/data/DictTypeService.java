@@ -1,5 +1,7 @@
 package cn.iocoder.yudao.service.service.infra.data;
 
+import cn.iocoder.yudao.service.vo.infra.data.dictType.DictDataListAllSimpleOutput;
+import cn.iocoder.yudao.service.vo.infra.data.dictType.DictDataListOutput;
 import cn.iocoder.yudao.service.vo.infra.data.dictType.DictTypeUpdateInput;
 import cn.iocoder.yudao.service.vo.infra.data.dictType.DictTypeCreateInput;
 import cn.iocoder.yudao.service.vo.infra.data.dictType.*;
@@ -8,8 +10,6 @@ import cn.iocoder.yudao.service.vo.infra.data.dictType.DictTypeGetOutput;
 import java.util.*;
 
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
-
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * 字典类型 Service 接口
@@ -28,6 +28,8 @@ public interface DictTypeService {
 
     List<DictTypeListAllSimpleOutput> listAllSimple();
 
-    void export(HttpServletResponse response, DictTypeExportInput inputVO);
+    List<DictDataListAllSimpleOutput> listAllData();
+
+    List<DictDataListOutput> dataList(UUID typeId);
 
 }

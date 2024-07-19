@@ -63,16 +63,6 @@
           <Icon icon="ep:plus" />
           新增
         </el-button>
-        <el-button
-          v-hasPermi="['infra:data:dict:export']"
-          :loading="exportLoading"
-          plain
-          type="success"
-          @click="handleExport"
-        >
-          <Icon icon="ep:download" />
-          导出
-        </el-button>
       </el-form-item>
     </el-form>
     <Table
@@ -122,7 +112,6 @@ import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
 
 import * as DictTypeApi from '@/api/infra/data/dict'
 import DictTypeForm from './DictTypeForm.vue'
-import download from '@/utils/download'
 import { formatDate } from '@/utils/formatTime'
 
 const message = useMessage() // 消息弹窗
@@ -216,7 +205,6 @@ const queryParams = reactive({
   createTime: []
 })
 const queryFormRef = ref() // 搜索的表单
-const exportLoading = ref(false) // 导出的加载中
 
 /** 查询字典类型列表 */
 const getList = async () => {
@@ -259,20 +247,6 @@ const handleDelete = async (id: string) => {
   } catch {}
 }
 
-/** 导出按钮操作 */
-const handleExport = async () => {
-  try {
-    // 导出的二次确认
-    await message.exportConfirm()
-    // 发起导出
-    exportLoading.value = true
-    const data = await DictTypeApi.exportDictType(queryParams)
-    download.excel(data, '字典类型.xls')
-  } catch {
-  } finally {
-    exportLoading.value = false
-  }
-}
 /** 处理某一行的点击 */
 const handleRowClick = async (row) => {
   rowDetail.value = await DictTypeApi.getDictDataByTypeId(row.id)

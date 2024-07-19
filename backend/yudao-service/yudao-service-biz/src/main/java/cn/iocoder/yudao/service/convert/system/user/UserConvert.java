@@ -1,6 +1,5 @@
 package cn.iocoder.yudao.service.convert.system.user;
 
-import cn.iocoder.yudao.service.api.system.user.dto.AdminUserRespDTO;
 import cn.iocoder.yudao.service.model.infra.social.SystemSocialUser;
 import cn.iocoder.yudao.service.model.system.dept.SystemDept;
 import cn.iocoder.yudao.service.model.system.dept.SystemPost;
@@ -49,8 +48,6 @@ public interface UserConvert {
 
     SystemUser convertUser(UserProfileUpdateReqVO bean);
 
-    List<AdminUserRespDTO> convertListUser(List<SystemUser> users);
-
     UserProfileResp convert03(SystemUser bean);
 
     List<UserProfileResp.Role> convertList(List<SystemRole> list);
@@ -62,7 +59,5 @@ public interface UserConvert {
 
     List<UserProfileResp.SocialUser> convertList03(List<SystemSocialUser> list);
 
-
-    AdminUserRespDTO convert4(SystemUser bean);
 
 }

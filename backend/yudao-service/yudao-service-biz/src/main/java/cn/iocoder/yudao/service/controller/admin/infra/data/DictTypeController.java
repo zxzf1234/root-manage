@@ -1,5 +1,7 @@
 package cn.iocoder.yudao.service.controller.admin.infra.data;
 
+import cn.iocoder.yudao.service.vo.infra.data.dictType.DictDataListAllSimpleOutput;
+import cn.iocoder.yudao.service.vo.infra.data.dictType.DictDataListOutput;
 import cn.iocoder.yudao.service.vo.infra.data.dictType.DictTypeUpdateInput;
 import cn.iocoder.yudao.service.vo.infra.data.dictType.DictTypeGetOutput;
 import cn.iocoder.yudao.service.vo.infra.data.dictType.DictTypeCreateInput;
@@ -14,7 +16,6 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Operation;
 
 import javax.validation.*;
-import javax.servlet.http.*;
 import java.util.*;
 
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
@@ -75,11 +76,18 @@ public class DictTypeController {
         return success(dictTypeService.listAllSimple());
     }
 
-    @GetMapping("/export")
-    @Operation(summary = "导出数据类型")
-    @PreAuthorize("@ss.hasPermission('system:data:dict:query')")
-    public void export(@Valid DictTypeExportInput inputVO, HttpServletResponse response) {
-        dictTypeService.export(response, inputVO);
+    @GetMapping("/list-all-data")
+    @Operation(summary = "获得全部字典类型列表")
+    public CommonResult<List<DictDataListAllSimpleOutput>> listAllData() {
+        return success(dictTypeService.listAllData());
+    }
+
+    @GetMapping("/data-list")
+    @Operation(summary = "获得字典类型列表")
+    @PreAuthorize("@ss.hasPermission('infra:data:dict:query')")
+    @Parameter(name = "typeId", description = "字典类型id", example = "sys_common_sex")
+    public CommonResult<List<DictDataListOutput>> dataList(@RequestParam("typeId") UUID typeId) {
+        return success(dictTypeService.dataList(typeId));
     }
 
 }

@@ -1,4 +1,4 @@
-package cn.iocoder.yudao.service.vo.infra.data.dictData;
+package cn.iocoder.yudao.service.vo.infra.data.dictType;
 
 import cn.iocoder.yudao.service.vo.infra.data.baseVO.InfraDictDataBase;
 import io.swagger.v3.oas.annotations.media.Schema;

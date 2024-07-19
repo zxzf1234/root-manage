@@ -2,6 +2,8 @@ package cn.iocoder.yudao.service.service.infra.data;
 
 import cn.iocoder.yudao.framework.common.util.entity.EntityUtils;
 import cn.iocoder.yudao.service.model.infra.data.*;
+import cn.iocoder.yudao.service.vo.infra.data.dictType.DictDataListAllSimpleOutput;
+import cn.iocoder.yudao.service.vo.infra.data.dictType.DictDataListOutput;
 import cn.iocoder.yudao.service.vo.infra.data.dictType.DictTypeUpdateInput;
 import cn.iocoder.yudao.service.service.infra.codegen.inner.CodegenEngine;
 import cn.iocoder.yudao.service.vo.infra.data.dictType.DictTypeGetOutput;
@@ -14,14 +16,11 @@ import cn.iocoder.yudao.service.repository.infra.data.InfraDictTypeRepository;
 import org.babyfish.jimmer.DraftObjects;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletResponse;
-import cn.iocoder.yudao.framework.excel.core.util.ExcelUtils;
 
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.data.domain.Page;
 
-import java.io.IOException;
 import java.util.*;
 
 import cn.iocoder.yudao.service.convert.infra.data.DictTypeConvert;
@@ -190,15 +189,17 @@ public class DictTypeServiceImpl implements DictTypeService {
     }
 
     @Override
-    public void export(HttpServletResponse response, DictTypeExportInput inputVO) {
-        List<InfraDictType> list = infraDictTypeRepository.selectList(inputVO);
-        List<DictTypeExcelOutput> data = DictTypeConvert.INSTANCE.listExportOutputConvert(list);
-        try {
-            ExcelUtils.write(response, "字典类型.xls", "类型列表", DictTypeExcelOutput.class, data);
-        }
-        catch (IOException e){
-            throw exception(DICT_TYPE_EXPORT_EXCEPTION);
-        }
+    public List<DictDataListAllSimpleOutput> listAllData() {
+        List<InfraDictData> list = infraDictDataRepository.findSimpleList();
+
+        return DictTypeConvert.INSTANCE.listAllDataListOutputConvert(list);
     }
+
+    @Override
+    public List<DictDataListOutput> dataList(UUID typeId) {
+        List<InfraDictData> dataList = infraDictDataRepository.findByTypeId(typeId);
+        return DictTypeConvert.INSTANCE.listListOutputConvert(dataList);
+    }
+
 
 }

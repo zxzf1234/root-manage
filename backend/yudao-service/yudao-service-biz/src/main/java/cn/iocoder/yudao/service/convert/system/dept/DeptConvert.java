@@ -6,7 +6,6 @@ import cn.iocoder.yudao.service.vo.system.dept.dept.DeptListAllSimpleOutput;
 import cn.iocoder.yudao.service.vo.system.dept.dept.DeptListInput;
 import cn.iocoder.yudao.service.vo.system.dept.dept.DeptListOutput;
 import cn.iocoder.yudao.service.vo.system.dept.dept.DeptUpdateInput;
-import cn.iocoder.yudao.service.api.system.dept.dto.DeptRespDTO;
 import cn.iocoder.yudao.service.vo.system.dept.dept.DeptCreateInput;
 import cn.iocoder.yudao.service.model.system.dept.SystemDept;
 import org.mapstruct.Mapper;
@@ -19,9 +18,6 @@ public interface DeptConvert {
 
     DeptConvert INSTANCE = Mappers.getMapper(DeptConvert.class);
 
-    List<DeptRespDTO> convertList03(List<SystemDept> list);
-
-    DeptRespDTO convert03(SystemDept bean);
 
     SystemDept createInputConvert(DeptCreateInput input);
 
