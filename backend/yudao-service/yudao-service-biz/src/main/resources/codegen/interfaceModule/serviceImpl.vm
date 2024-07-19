@@ -15,7 +15,7 @@ import ${basePackage}.service.convert#foreach ($parentName in $parentNames).$par
 import ${basePackage}.service.vo#foreach ($parentName in $parentNames).$parentName#end.${nameHump}.*;
 
 import static ${ServiceExceptionUtilClassName}.exception;
-import static ${basePackage}.service.errorCode#foreach ($parentName in $parentNames).$parentName#break#end.${nameHump}ErrorCode.*;
+import static ${basePackage}.service.errorCode#foreach ($parentName in $parentNames).$parentName#end.${nameHumpUp}ErrorCode.*;
 
 /**
  * ${module.comment} Service 实现类

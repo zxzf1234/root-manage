@@ -15,7 +15,7 @@ import cn.iocoder.yudao.service.convert.infra.data.ConfigConvert;
 import cn.iocoder.yudao.service.vo.infra.data.config.*;
 
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
-import static cn.iocoder.yudao.service.errorCode.infra.configErrorCode.*;
+import static cn.iocoder.yudao.service.errorCode.infra.data.ConfigErrorCode.*;
 
 /**
  * 配置管理 Service 实现类
