@@ -1,0 +1,2 @@
+update INFRA_INTERFACE_MODULE set UPDATER_ID = '-1', NAME = 'dictNo', COMMENT = '字典编号', PARENT_ID = '0fde120d-ce5d-48e3-ad64-285c8ef82839', TYPE = '1', SORT = '1002003000', DELETED_TIME = NULL where ID = 'a9ce47bc-a3a3-44d3-942a-05ae0dd2a66b';
+insert ignore into INFRA_INTERFACE_MODULE(CREATOR_ID, UPDATER_ID, ID, NAME, COMMENT, PARENT_ID, TYPE, SORT, DELETED_TIME) values('-1', '-1', '3dbb0199-b50c-464b-86c2-0b4dfc875db5', 'menu', '菜单管理', '0fde120d-ce5d-48e3-ad64-285c8ef82839', '1', '1002004000', NULL);

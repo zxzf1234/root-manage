@@ -23,7 +23,7 @@ import cn.iocoder.yudao.service.convert.infra.data.DictNoConvert;
 import java.time.LocalDate;
 
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
-import static cn.iocoder.yudao.service.errorCode.infra.ErrorCodeConstants.*;
+import static cn.iocoder.yudao.service.errorCode.infra.data.DictNoErrorCode.*;
 
 /**
  * 字典编号 Service 实现类

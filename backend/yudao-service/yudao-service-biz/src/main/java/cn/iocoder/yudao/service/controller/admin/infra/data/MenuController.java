@@ -2,8 +2,8 @@ package cn.iocoder.yudao.service.controller.admin.infra.data;
 
 import cn.iocoder.yudao.framework.common.enums.CommonStatusEnum;
 import cn.iocoder.yudao.framework.common.pojo.CommonResult;
-import cn.iocoder.yudao.service.vo.infra.permission.menu.*;
-import cn.iocoder.yudao.service.convert.infra.dict.MenuConvert;
+import cn.iocoder.yudao.service.vo.infra.data.menu.*;
+import cn.iocoder.yudao.service.convert.infra.data.MenuConvert;
 import cn.iocoder.yudao.service.model.infra.data.SystemMenu;
 import cn.iocoder.yudao.service.service.infra.data.MenuService;
 import io.swagger.v3.oas.annotations.tags.Tag;

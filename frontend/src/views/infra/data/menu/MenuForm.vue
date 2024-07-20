@@ -128,6 +128,7 @@ import * as MenuApi from '@/api/infra/data/menu'
 import { CACHE_KEY, useCache } from '@/hooks/web/useCache'
 import { CommonStatusEnum, SystemMenuTypeEnum } from '@/utils/constants'
 import { defaultProps, handleTree } from '@/utils/tree'
+import * as MenuModel from '@/model/infra/data/SystemMenu'
 
 const { wsCache } = useCache()
 const { t } = useI18n() // 国际化
@@ -210,7 +211,7 @@ const submitForm = async () => {
         }
       }
     }
-    const data = formData.value as unknown as MenuApi.MenuVO
+    const data = formData.value as unknown as MenuModel.SystemMenu
     if (formType.value === 'create') {
       await MenuApi.createMenu(data)
       message.success(t('common.createSuccess'))

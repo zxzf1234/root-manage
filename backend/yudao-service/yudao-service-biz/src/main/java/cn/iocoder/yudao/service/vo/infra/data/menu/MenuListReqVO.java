@@ -1,4 +1,4 @@
-package cn.iocoder.yudao.service.vo.infra.permission.menu;
+package cn.iocoder.yudao.service.vo.infra.data.menu;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

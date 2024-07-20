@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { store } from '../index'
 import { CACHE_KEY, useCache } from '@/hooks/web/useCache'
 const { wsCache } = useCache('sessionStorage')
-import * as DictApi from '@/api/infra/data/dict'
+import * as DictApi from '@/api/infra/data/dictType'
 
 export interface DictValueType {
   value: any

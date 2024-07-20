@@ -2,14 +2,14 @@ package cn.iocoder.yudao.service.service.infra.data;
 
 import cn.iocoder.yudao.framework.common.util.collection.CollectionUtils;
 import cn.iocoder.yudao.service.service.system.permission.PermissionService;
-import cn.iocoder.yudao.service.vo.infra.permission.menu.MenuCreateReqVO;
-import cn.iocoder.yudao.service.vo.infra.permission.menu.MenuListReqVO;
-import cn.iocoder.yudao.service.vo.infra.permission.menu.MenuUpdateReqVO;
-import cn.iocoder.yudao.service.convert.infra.dict.MenuConvert;
+import cn.iocoder.yudao.service.vo.infra.data.menu.MenuCreateReqVO;
+import cn.iocoder.yudao.service.vo.infra.data.menu.MenuListReqVO;
+import cn.iocoder.yudao.service.vo.infra.data.menu.MenuUpdateReqVO;
 import cn.iocoder.yudao.service.enums.system.permission.MenuTypeEnum;
 import cn.iocoder.yudao.service.model.infra.data.SystemMenu;
 import cn.iocoder.yudao.service.model.infra.data.SystemMenuDraft;
 import cn.iocoder.yudao.service.repository.infra.data.SystemMenuRepository;
+import cn.iocoder.yudao.service.convert.infra.data.MenuConvert;
 import com.google.common.annotations.VisibleForTesting;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ import java.util.*;
 
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
 import static cn.iocoder.yudao.framework.security.core.util.SecurityFrameworkUtils.getLoginUserId;
-import static cn.iocoder.yudao.service.errorCode.infra.ErrorCodeConstants.*;
+import static cn.iocoder.yudao.service.errorCode.infra.data.MenuErrorCode.*;
 
 /**
  * 菜单 Service 实现

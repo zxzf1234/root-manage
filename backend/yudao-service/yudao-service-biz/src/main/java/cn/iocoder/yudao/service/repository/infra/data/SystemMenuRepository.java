@@ -1,6 +1,6 @@
 package cn.iocoder.yudao.service.repository.infra.data;
 
-import cn.iocoder.yudao.service.vo.infra.permission.menu.MenuListReqVO;
+import cn.iocoder.yudao.service.vo.infra.data.menu.MenuListReqVO;
 import cn.iocoder.yudao.service.model.infra.data.SystemMenu;
 import cn.iocoder.yudao.service.model.infra.data.SystemMenuTable;
 import org.babyfish.jimmer.spring.repository.JRepository;

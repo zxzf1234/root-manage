@@ -51,10 +51,6 @@ public interface ErrorCodeConstants {
     ErrorCode DATA_SOURCE_CONFIG_NOT_EXISTS = new ErrorCode(1001007000, "数据源配置不存在");
     ErrorCode DATA_SOURCE_CONFIG_NOT_OK = new ErrorCode(1001007001, "数据源配置不正确，无法进行连接");
 
-    // ========== 字典编号 1001008000 ==========
-    ErrorCode DICT_NO_EXISTS = new ErrorCode(1001008000, "当前字典编号不存在");
-    ErrorCode DICT_NO_NOT_EXISTS = new ErrorCode(1001008001, "当前字典编号已存在");
-
     // ========== OAuth2 客户端 1001009000 =========
     ErrorCode OAUTH2_CLIENT_NOT_EXISTS = new ErrorCode(1001016000, "OAuth2 客户端不存在");
     ErrorCode OAUTH2_CLIENT_EXISTS = new ErrorCode(1001016001, "OAuth2 客户端编号已存在");
@@ -64,13 +60,6 @@ public interface ErrorCodeConstants {
     ErrorCode OAUTH2_CLIENT_REDIRECT_URI_NOT_MATCH = new ErrorCode(1001016005, "无效 redirect_uri: {}");
     ErrorCode OAUTH2_CLIENT_CLIENT_SECRET_ERROR = new ErrorCode(1001016006, "无效 client_secret: {}");
 
-    // ========== 菜单模块 1001010000 ==========
-    ErrorCode MENU_NAME_DUPLICATE = new ErrorCode(1001022000, "已经存在该名字的菜单");
-    ErrorCode MENU_PARENT_NOT_EXISTS = new ErrorCode(1001022001, "父菜单不存在");
-    ErrorCode MENU_PARENT_ERROR = new ErrorCode(1001022002, "不能设置自己为父菜单");
-    ErrorCode MENU_NOT_EXISTS = new ErrorCode(1001022003, "菜单不存在");
-    ErrorCode MENU_EXISTS_CHILDREN = new ErrorCode(1001022004, "存在子菜单，无法删除");
-    ErrorCode MENU_PARENT_NOT_DIR_OR_MENU = new ErrorCode(1001022005, "父菜单的类型必须是目录或者菜单");
 
     // ========== OAuth2 授权 1001011000 =========
     ErrorCode OAUTH2_GRANT_CLIENT_ID_MISMATCH = new ErrorCode(1001017000, "client_id 不匹配");

@@ -1,18 +1,18 @@
-package cn.iocoder.yudao.service.convert.infra.dict;
+package cn.iocoder.yudao.service.convert.infra.data;
 
-import cn.iocoder.yudao.service.vo.infra.permission.menu.MenuCreateReqVO;
-import cn.iocoder.yudao.service.vo.infra.permission.menu.MenuRespVO;
-import cn.iocoder.yudao.service.vo.infra.permission.menu.MenuSimpleRespVO;
-import cn.iocoder.yudao.service.vo.infra.permission.menu.MenuUpdateReqVO;
+import java.util.*;
+
 import cn.iocoder.yudao.service.model.infra.data.SystemMenu;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
+import org.springframework.data.domain.Page;
+import cn.iocoder.yudao.service.vo.infra.data.menu.*;
 
-import java.util.List;
-
+/**
+ * 菜单管理 Convert
+ */
 @Mapper
 public interface MenuConvert {
-
     MenuConvert INSTANCE = Mappers.getMapper(MenuConvert.class);
 
     List<MenuRespVO> convertList(List<SystemMenu> list);

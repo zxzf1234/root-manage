@@ -104,7 +104,7 @@
 </template>
 <script lang="ts" name="InfraDictTypeForm" setup>
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
-import * as DictTypeApi from '@/api/infra/data/dict'
+import * as DictTypeApi from '@/api/infra/data/dictType'
 import { CommonStatusEnum } from '@/utils/constants'
 
 const { t } = useI18n() // 国际化

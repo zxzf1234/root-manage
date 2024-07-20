@@ -104,6 +104,7 @@
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
 import { handleTree } from '@/utils/tree'
 import * as MenuApi from '@/api/infra/data/menu'
+import * as MenuModel from '@/model/infra/data/SystemMenu'
 
 const dialogVisible = ref(false) // 弹窗的是否展示
 const dialogTitle = ref('') // 弹窗的标题
@@ -116,7 +117,7 @@ const queryParams = reactive({
 const queryFormRef = ref() // 搜索的表单
 const isExpandAll = ref(false) // 是否展开，默认全部折叠
 const refreshTable = ref(true) // 重新渲染表格状态
-const dbSelectdMenuList = ref<MenuApi.MenuVO[]>([]) // 选中的字段列表
+const dbSelectdMenuList = ref<MenuModel.SystemMenu[]>([]) // 选中的字段列表
 let type = 0
 
 const emit = defineEmits(['saveSelect'])

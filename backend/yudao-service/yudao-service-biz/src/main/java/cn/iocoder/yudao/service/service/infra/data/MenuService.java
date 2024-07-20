@@ -1,8 +1,8 @@
 package cn.iocoder.yudao.service.service.infra.data;
 
-import cn.iocoder.yudao.service.vo.infra.permission.menu.MenuCreateReqVO;
-import cn.iocoder.yudao.service.vo.infra.permission.menu.MenuListReqVO;
-import cn.iocoder.yudao.service.vo.infra.permission.menu.MenuUpdateReqVO;
+import cn.iocoder.yudao.service.vo.infra.data.menu.MenuCreateReqVO;
+import cn.iocoder.yudao.service.vo.infra.data.menu.MenuListReqVO;
+import cn.iocoder.yudao.service.vo.infra.data.menu.MenuUpdateReqVO;
 import cn.iocoder.yudao.service.model.infra.data.SystemMenu;
 
 import java.util.Collection;

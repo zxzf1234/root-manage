@@ -1,23 +1,5 @@
 import request from '@/config/axios'
 
-export interface MenuVO {
-  id: string
-  name: string
-  permission: string
-  type: number
-  sort: number
-  parentId: number
-  path: string
-  icon: string
-  component: string
-  componentName?: string
-  status: number
-  visible: boolean
-  keepAlive: boolean
-  alwaysShow?: boolean
-  createTime: Date
-}
-
 // 查询菜单（精简）列表
 export const getSimpleMenusList = () => {
   return request.get({ url: '/infra/data/menu/list-all-simple' })
@@ -34,12 +16,12 @@ export const getMenu = (id: string) => {
 }
 
 // 新增菜单
-export const createMenu = (data: MenuVO) => {
+export const createMenu = (data) => {
   return request.post({ url: '/infra/data/menu/create', data })
 }
 
 // 修改菜单
-export const updateMenu = (data: MenuVO) => {
+export const updateMenu = (data) => {
   return request.put({ url: '/infra/data/menu/update', data })
 }
 
