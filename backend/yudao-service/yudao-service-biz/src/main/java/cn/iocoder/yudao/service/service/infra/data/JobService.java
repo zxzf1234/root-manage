@@ -1,25 +1,24 @@
-package cn.iocoder.yudao.service.service.infra.job;
+package cn.iocoder.yudao.service.service.infra.data;
 
+import java.util.*;
+
+import cn.iocoder.yudao.service.model.infra.job.InfraJob;
+import cn.iocoder.yudao.service.vo.infra.data.job.*;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.service.vo.infra.job.job.JobCreateReqVO;
 import cn.iocoder.yudao.service.vo.infra.job.job.JobExportReqVO;
 import cn.iocoder.yudao.service.vo.infra.job.job.JobPageReqVO;
 import cn.iocoder.yudao.service.vo.infra.job.job.JobUpdateReqVO;
-import cn.iocoder.yudao.service.model.infra.job.InfraJob;
 import org.quartz.SchedulerException;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.io.IOException;
 
 /**
  * 定时任务 Service 接口
- *
- * @author 芋道源码
  */
 public interface JobService {
-
     /**
      * 创建定时任务
      *
@@ -88,5 +87,4 @@ public interface JobService {
      * @return 定时任务分页
      */
     List<InfraJob> getJobList(JobExportReqVO exportReqVO);
-
 }

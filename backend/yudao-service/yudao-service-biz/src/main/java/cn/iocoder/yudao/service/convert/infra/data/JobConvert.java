@@ -1,24 +1,23 @@
-package cn.iocoder.yudao.service.convert.infra.job;
+package cn.iocoder.yudao.service.convert.infra.data;
+
+import java.util.*;
 
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
+import cn.iocoder.yudao.service.model.infra.job.InfraJob;
 import cn.iocoder.yudao.service.vo.infra.job.job.JobCreateReqVO;
 import cn.iocoder.yudao.service.vo.infra.job.job.JobExcelVO;
 import cn.iocoder.yudao.service.vo.infra.job.job.JobRespVO;
 import cn.iocoder.yudao.service.vo.infra.job.job.JobUpdateReqVO;
-import cn.iocoder.yudao.service.model.infra.job.InfraJob;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import cn.iocoder.yudao.service.vo.infra.data.job.*;
 
 /**
  * 定时任务 Convert
- *
- * @author 芋道源码
  */
 @Mapper
 public interface JobConvert {
-
     JobConvert INSTANCE = Mappers.getMapper(JobConvert.class);
 
     InfraJob convert(JobCreateReqVO bean);
@@ -32,5 +31,4 @@ public interface JobConvert {
     PageResult<JobRespVO> convertPage(PageResult<InfraJob> page);
 
     List<JobExcelVO> convertList02(List<InfraJob> list);
-
 }

@@ -210,7 +210,7 @@ const openForm = (type: string, id?: number) => {
 }
 
 /** 修改状态操作 */
-const handleChangeStatus = async (row: JobApi.JobVO) => {
+const handleChangeStatus = async (row) => {
   try {
     // 修改状态的二次确认
     const text = row.status === InfraJobStatusEnum.STOP ? '开启' : '关闭'
@@ -262,7 +262,7 @@ const handleCommand = (command, row) => {
 }
 
 /** 执行一次 */
-const handleRun = async (row: JobApi.JobVO) => {
+const handleRun = async (row) => {
   try {
     // 二次确认
     await message.confirm('确认要立即执行一次' + row.name + '?', t('common.reminder'))

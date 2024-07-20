@@ -1,4 +1,4 @@
-package cn.iocoder.yudao.service.service.infra.job;
+package cn.iocoder.yudao.service.service.infra.data;
 
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.service.enums.infra.job.InfraJobLogStatusEnum;
