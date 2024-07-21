@@ -44,7 +44,7 @@ public class InterfaceModuleServiceImpl implements InterfaceModuleService{
         if(module == null)
             return null;
         else{
-            if(module.id().toString().equals("d6f6f5fc-0c97-4623-97c5-2cb2d3dad0ca") || module.id().toString().equals("f2453ed8-4697-45e7-a5fd-ed87ca78f11b")){
+            if(module.parentId().equals("5aa5cea6-8dbe-47b3-8cfa-02c10c39bc12") || module.parentId().equals("a7de2f1c-278b-4b94-9a74-1bd708f289ed")){
                 return module;
             }else{
                 Optional<InfraInterfaceModule> optionalModule = infraInterfaceModuleRepository.findById(UUID.fromString(module.parentId()));
@@ -70,7 +70,7 @@ public class InterfaceModuleServiceImpl implements InterfaceModuleService{
                 });
             }
 
-            if(optionalParentModule.get().id().toString().equals("d6f6f5fc-0c97-4623-97c5-2cb2d3dad0ca") || optionalParentModule.get().id().toString().equals("f2453ed8-4697-45e7-a5fd-ed87ca78f11b")) {
+            if(optionalParentModule.get().id().toString().equals("5aa5cea6-8dbe-47b3-8cfa-02c10c39bc12") || optionalParentModule.get().id().toString().equals("a7de2f1c-278b-4b94-9a74-1bd708f289ed")) {
                 int count = infraInterfaceModuleRepository.countByParentId(module.parentId());
                 module = InfraInterfaceModuleDraft.$.produce(module, draft -> {
                     draft.setSort(optionalParentModule.get().sort() + count * 1000000L);
@@ -95,7 +95,7 @@ public class InterfaceModuleServiceImpl implements InterfaceModuleService{
         // 排序校验，逻辑是 1 admin或app的下一级排序不能为空，并且排序有范围限制 2 模块类型会有排序 模块类型排序序号范围不能超过system、infra这一级
         Optional<InfraInterfaceModule> optionalParentModule = infraInterfaceModuleRepository.findById(UUID.fromString(reqVO.getParentId()));
         if(optionalParentModule.isPresent()){
-            if(optionalParentModule.get().id().toString().equals("d6f6f5fc-0c97-4623-97c5-2cb2d3dad0ca") || optionalParentModule.get().id().toString().equals("f2453ed8-4697-45e7-a5fd-ed87ca78f11b")) {
+            if(optionalParentModule.get().id().toString().equals("5aa5cea6-8dbe-47b3-8cfa-02c10c39bc12") || optionalParentModule.get().id().toString().equals("a7de2f1c-278b-4b94-9a74-1bd708f289ed")) {
                 if(reqVO.getSort() < optionalParentModule.get().sort() || reqVO.getSort() >= optionalParentModule.get().sort() + 1000000000){
                     throw exception(CODEGEN_INTERFACE_MODULE_RANGE_ILLEGALITY, optionalParentModule.get().sort(), optionalParentModule.get().sort() + 1000000000);
                 }
