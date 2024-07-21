@@ -1,8 +1,8 @@
 package cn.iocoder.yudao.service.service.system.user;
 import cn.iocoder.yudao.framework.common.exception.ServiceException;
-import cn.iocoder.yudao.service.api.infra.file.FileApi;
 import cn.iocoder.yudao.service.repository.system.dept.SystemUserPostRepository;
 import cn.iocoder.yudao.service.repository.system.user.SystemUserRepository;
+import cn.iocoder.yudao.service.service.infra.file.FileService;
 import cn.iocoder.yudao.service.service.system.dept.DeptService;
 import cn.iocoder.yudao.service.service.system.permission.PermissionService;
 import cn.iocoder.yudao.service.service.system.post.PostService;
@@ -77,7 +77,7 @@ public class UserServiceImpl implements UserService {
     private PasswordEncoder passwordEncoder;
 
     @Resource
-    private FileApi fileApi;
+    private FileService fileService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -413,7 +413,7 @@ public class UserServiceImpl implements UserService {
     public String updateUserAvatar(Long id, InputStream avatarFile) throws Exception {
         validateUserExists(id);
         // 存储文件
-        String avatar = fileApi.createFile(IoUtil.readBytes(avatarFile));
+        String avatar = fileService.createFile(null, null, IoUtil.readBytes(avatarFile));
         systemUserRepository.UpdateUserAvatar(id, avatar);
         return avatar;
     }
