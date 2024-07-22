@@ -1,8 +1,8 @@
-package cn.iocoder.yudao.framework.operatelog.config;
+package cn.iocoder.yudao.service.framework.operateLog.config;
 
-import cn.iocoder.yudao.framework.operatelog.core.aop.OperateLogAspect;
-import cn.iocoder.yudao.framework.operatelog.core.service.OperateLogFrameworkService;
-import cn.iocoder.yudao.framework.operatelog.core.service.OperateLogFrameworkServiceImpl;
+import cn.iocoder.yudao.service.framework.operateLog.core.aop.OperateLogAspect;
+import cn.iocoder.yudao.service.framework.operateLog.core.service.OperateLogFrameworkService;
+import cn.iocoder.yudao.service.framework.operateLog.core.service.OperateLogFrameworkServiceImpl;
 import cn.iocoder.yudao.service.api.infra.logger.OperateLogApi;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;

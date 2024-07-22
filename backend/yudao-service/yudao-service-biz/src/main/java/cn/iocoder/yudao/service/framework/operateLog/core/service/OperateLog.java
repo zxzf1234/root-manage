@@ -1,4 +1,4 @@
-package cn.iocoder.yudao.framework.operatelog.core.service;
+package cn.iocoder.yudao.service.framework.operateLog.core.service;
 
 import lombok.Data;
 

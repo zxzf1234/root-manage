@@ -1,6 +1,6 @@
-package cn.iocoder.yudao.framework.operatelog.core.enums;
+package cn.iocoder.yudao.service.framework.operateLog.core.enums;
 
-import cn.iocoder.yudao.framework.operatelog.core.annotations.OperateLog;
+import cn.iocoder.yudao.service.framework.operateLog.core.annotations.OperateLog;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

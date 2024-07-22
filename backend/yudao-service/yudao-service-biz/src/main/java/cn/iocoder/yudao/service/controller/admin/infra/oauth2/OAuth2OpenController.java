@@ -8,7 +8,7 @@ import cn.iocoder.yudao.framework.common.enums.UserTypeEnum;
 import cn.iocoder.yudao.framework.common.pojo.CommonResult;
 import cn.iocoder.yudao.framework.common.util.http.HttpUtils;
 import cn.iocoder.yudao.framework.common.util.json.JsonUtils;
-import cn.iocoder.yudao.framework.operatelog.core.annotations.OperateLog;
+import cn.iocoder.yudao.service.framework.operateLog.core.annotations.OperateLog;
 import cn.iocoder.yudao.service.vo.infra.oauth2.open.OAuth2OpenAccessTokenRespVO;
 import cn.iocoder.yudao.service.vo.infra.oauth2.open.OAuth2OpenAuthorizeInfoRespVO;
 import cn.iocoder.yudao.service.vo.infra.oauth2.open.OAuth2OpenCheckTokenRespVO;

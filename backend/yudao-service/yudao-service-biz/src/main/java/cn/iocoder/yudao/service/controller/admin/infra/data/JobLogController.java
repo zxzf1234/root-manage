@@ -3,7 +3,7 @@ package cn.iocoder.yudao.service.controller.admin.infra.data;
 import cn.iocoder.yudao.framework.common.pojo.CommonResult;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.excel.core.util.ExcelUtils;
-import cn.iocoder.yudao.framework.operatelog.core.annotations.OperateLog;
+import cn.iocoder.yudao.service.framework.operateLog.core.annotations.OperateLog;
 import cn.iocoder.yudao.service.vo.infra.job.log.JobLogExcelVO;
 import cn.iocoder.yudao.service.vo.infra.job.log.JobLogExportReqVO;
 import cn.iocoder.yudao.service.vo.infra.job.log.JobLogPageReqVO;
@@ -29,7 +29,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
-import static cn.iocoder.yudao.framework.operatelog.core.enums.OperateTypeEnum.EXPORT;
+import static cn.iocoder.yudao.service.framework.operateLog.core.enums.OperateTypeEnum.EXPORT;
 
 @Tag(name = "管理后台 - 定时任务日志")
 @RestController

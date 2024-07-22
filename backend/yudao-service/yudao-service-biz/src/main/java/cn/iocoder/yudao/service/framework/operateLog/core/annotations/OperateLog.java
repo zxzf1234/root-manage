@@ -1,6 +1,6 @@
-package cn.iocoder.yudao.framework.operatelog.core.annotations;
+package cn.iocoder.yudao.service.framework.operateLog.core.annotations;
 
-import cn.iocoder.yudao.framework.operatelog.core.enums.OperateTypeEnum;
+import cn.iocoder.yudao.service.framework.operateLog.core.enums.OperateTypeEnum;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 

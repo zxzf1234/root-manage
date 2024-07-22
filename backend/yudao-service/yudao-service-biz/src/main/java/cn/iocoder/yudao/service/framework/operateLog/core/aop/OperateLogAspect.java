@@ -1,4 +1,4 @@
-package cn.iocoder.yudao.framework.operatelog.core.aop;
+package cn.iocoder.yudao.service.framework.operateLog.core.aop;
 
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.exceptions.ExceptionUtil;
@@ -9,9 +9,9 @@ import cn.iocoder.yudao.framework.common.pojo.CommonResult;
 import cn.iocoder.yudao.framework.common.util.json.JsonUtils;
 import cn.iocoder.yudao.framework.common.util.monitor.TracerUtils;
 import cn.iocoder.yudao.framework.common.util.servlet.ServletUtils;
-import cn.iocoder.yudao.framework.operatelog.core.enums.OperateTypeEnum;
-import cn.iocoder.yudao.framework.operatelog.core.service.OperateLog;
-import cn.iocoder.yudao.framework.operatelog.core.service.OperateLogFrameworkService;
+import cn.iocoder.yudao.service.framework.operateLog.core.enums.OperateTypeEnum;
+import cn.iocoder.yudao.service.framework.operateLog.core.service.OperateLog;
+import cn.iocoder.yudao.service.framework.operateLog.core.service.OperateLogFrameworkService;
 import cn.iocoder.yudao.framework.web.core.util.WebFrameworkUtils;
 import com.google.common.collect.Maps;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -73,20 +73,20 @@ public class OperateLogAspect {
     @Around("@annotation(operation)")
     public Object around(ProceedingJoinPoint joinPoint, Operation operation) throws Throwable {
         // 可能也添加了 @ApiOperation 注解
-        cn.iocoder.yudao.framework.operatelog.core.annotations.OperateLog operateLog = getMethodAnnotation(joinPoint,
-                cn.iocoder.yudao.framework.operatelog.core.annotations.OperateLog.class);
+        cn.iocoder.yudao.service.framework.operateLog.core.annotations.OperateLog operateLog = getMethodAnnotation(joinPoint,
+                cn.iocoder.yudao.service.framework.operateLog.core.annotations.OperateLog.class);
         return around0(joinPoint, operateLog, operation);
     }
 
     @Around("!@annotation(io.swagger.v3.oas.annotations.Operation) && @annotation(operateLog)")
     // 兼容处理，只添加 @OperateLog 注解的情况
     public Object around(ProceedingJoinPoint joinPoint,
-                         cn.iocoder.yudao.framework.operatelog.core.annotations.OperateLog operateLog) throws Throwable {
+                         cn.iocoder.yudao.service.framework.operateLog.core.annotations.OperateLog operateLog) throws Throwable {
         return around0(joinPoint, operateLog, null);
     }
 
     private Object around0(ProceedingJoinPoint joinPoint,
-                           cn.iocoder.yudao.framework.operatelog.core.annotations.OperateLog operateLog,
+                           cn.iocoder.yudao.service.framework.operateLog.core.annotations.OperateLog operateLog,
                            Operation operation) throws Throwable {
         // 目前，只有管理员，才记录操作日志！所以非管理员，直接调用，不进行记录
         Integer userType = WebFrameworkUtils.getLoginUserType();
@@ -127,7 +127,7 @@ public class OperateLogAspect {
     }
 
     private void log(ProceedingJoinPoint joinPoint,
-                     cn.iocoder.yudao.framework.operatelog.core.annotations.OperateLog operateLog,
+                     cn.iocoder.yudao.service.framework.operateLog.core.annotations.OperateLog operateLog,
                      Operation operation,
                      LocalDateTime startTime, Object result, Throwable exception) {
         try {
@@ -144,7 +144,7 @@ public class OperateLogAspect {
     }
 
     private void log0(ProceedingJoinPoint joinPoint,
-                      cn.iocoder.yudao.framework.operatelog.core.annotations.OperateLog operateLog,
+                      cn.iocoder.yudao.service.framework.operateLog.core.annotations.OperateLog operateLog,
                       Operation operation,
                       LocalDateTime startTime, Object result, Throwable exception) {
         OperateLog operateLogObj = new OperateLog();
@@ -171,7 +171,7 @@ public class OperateLogAspect {
 
     private static void fillModuleFields(OperateLog operateLogObj,
                                          ProceedingJoinPoint joinPoint,
-                                         cn.iocoder.yudao.framework.operatelog.core.annotations.OperateLog operateLog,
+                                         cn.iocoder.yudao.service.framework.operateLog.core.annotations.OperateLog operateLog,
                                          Operation operation) {
         // module 属性
         if (operateLog != null) {
@@ -226,7 +226,7 @@ public class OperateLogAspect {
 
     private static void fillMethodFields(OperateLog operateLogObj,
                                          ProceedingJoinPoint joinPoint,
-                                         cn.iocoder.yudao.framework.operatelog.core.annotations.OperateLog operateLog,
+                                         cn.iocoder.yudao.service.framework.operateLog.core.annotations.OperateLog operateLog,
                                          LocalDateTime startTime, Object result, Throwable exception) {
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
         operateLogObj.setJavaMethod(methodSignature.toString());
@@ -253,7 +253,7 @@ public class OperateLogAspect {
     }
 
     private static boolean isLogEnable(ProceedingJoinPoint joinPoint,
-                                       cn.iocoder.yudao.framework.operatelog.core.annotations.OperateLog operateLog) {
+                                       cn.iocoder.yudao.service.framework.operateLog.core.annotations.OperateLog operateLog) {
         // 有 @OperateLog 注解的情况下
         if (operateLog != null) {
             return operateLog.enable();

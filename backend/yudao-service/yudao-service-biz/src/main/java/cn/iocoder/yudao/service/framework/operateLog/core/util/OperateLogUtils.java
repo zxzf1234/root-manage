@@ -1,6 +1,6 @@
-package cn.iocoder.yudao.framework.operatelog.core.util;
+package cn.iocoder.yudao.service.framework.operateLog.core.util;
 
-import cn.iocoder.yudao.framework.operatelog.core.aop.OperateLogAspect;
+import cn.iocoder.yudao.service.framework.operateLog.core.aop.OperateLogAspect;
 
 /**
  * 操作日志工具类

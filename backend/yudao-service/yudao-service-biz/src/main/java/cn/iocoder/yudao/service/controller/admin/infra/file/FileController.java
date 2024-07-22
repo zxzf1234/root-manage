@@ -5,7 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.iocoder.yudao.framework.common.pojo.CommonResult;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.common.util.servlet.ServletUtils;
-import cn.iocoder.yudao.framework.operatelog.core.annotations.OperateLog;
+import cn.iocoder.yudao.service.framework.operateLog.core.annotations.OperateLog;
 import cn.iocoder.yudao.service.vo.infra.file.file.FilePageReqVO;
 import cn.iocoder.yudao.service.vo.infra.file.file.FileRespVO;
 import cn.iocoder.yudao.service.vo.infra.file.file.FileUploadReqVO;

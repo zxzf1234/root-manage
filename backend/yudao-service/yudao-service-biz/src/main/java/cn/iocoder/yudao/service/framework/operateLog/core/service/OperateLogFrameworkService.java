@@ -1,4 +1,4 @@
-package cn.iocoder.yudao.framework.operatelog.core.service;
+package cn.iocoder.yudao.service.framework.operateLog.core.service;
 
 /**
  * 操作日志 Framework Service 接口
