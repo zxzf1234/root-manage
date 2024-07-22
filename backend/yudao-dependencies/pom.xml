@@ -313,23 +313,10 @@
             </dependency>
 
             <dependency>
-                <groupId>commons-net</groupId>
-                <artifactId>commons-net</artifactId> <!-- 解决 ftp 连接 -->
-                <version>${commons-net.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.jcraft</groupId>
-                <artifactId>jsch</artifactId> <!-- 解决 sftp 连接 -->
-                <version>${jsch.version}</version>
-            </dependency>
-
-            <dependency>
                 <groupId>com.xingyuv</groupId>
                 <artifactId>spring-boot-starter-captcha-plus</artifactId>
                 <version>${captcha-plus.version}</version>
             </dependency>
-
 
             <dependency>
                 <groupId>org.jsoup</groupId>
@@ -357,6 +344,17 @@
                 <groupId>io.minio</groupId>
                 <artifactId>minio</artifactId>
                 <version>${minio.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-net</groupId>
+                <artifactId>commons-net</artifactId> <!-- 解决 ftp 连接 -->
+                <version>${commons-net.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.jcraft</groupId>
+                <artifactId>jsch</artifactId> <!-- 解决 sftp 连接 -->
+                <version>${jsch.version}</version>
             </dependency>
 
         </dependencies>
