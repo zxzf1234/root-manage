@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
 
 @AutoConfiguration
-public class YudaoOperateLogAutoConfiguration {
+public class OperateLogAutoConfiguration {
 
     @Bean
     public OperateLogAspect operateLogAspect() {
@@ -16,8 +16,8 @@ public class YudaoOperateLogAutoConfiguration {
     }
 
     @Bean
-    public OperateLogFrameworkService operateLogFrameworkService(OperateLogApi operateLogApi) {
-        return new OperateLogFrameworkServiceImpl(operateLogApi);
+    public OperateLogFrameworkService operateLogFrameworkService() {
+        return new OperateLogFrameworkServiceImpl();
     }
 
 }

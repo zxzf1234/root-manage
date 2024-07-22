@@ -6,6 +6,8 @@ import cn.iocoder.yudao.service.api.infra.logger.dto.ApiAccessLogCreateReqDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 
+import javax.annotation.Resource;
+
 /**
  * API 访问日志 Framework Service 实现类
  *
