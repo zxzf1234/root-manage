@@ -1,4 +1,4 @@
-package cn.iocoder.yudao.framework.excel.core.annotations;
+package cn.iocoder.yudao.service.framework.excel.core.annotations;
 
 import java.lang.annotation.*;
 

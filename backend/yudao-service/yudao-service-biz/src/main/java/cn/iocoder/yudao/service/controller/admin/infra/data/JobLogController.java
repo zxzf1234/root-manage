@@ -2,7 +2,7 @@ package cn.iocoder.yudao.service.controller.admin.infra.data;
 
 import cn.iocoder.yudao.framework.common.pojo.CommonResult;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
-import cn.iocoder.yudao.framework.excel.core.util.ExcelUtils;
+import cn.iocoder.yudao.service.framework.excel.core.util.ExcelUtils;
 import cn.iocoder.yudao.service.framework.operateLog.core.annotations.OperateLog;
 import cn.iocoder.yudao.service.vo.infra.job.log.JobLogExcelVO;
 import cn.iocoder.yudao.service.vo.infra.job.log.JobLogExportReqVO;

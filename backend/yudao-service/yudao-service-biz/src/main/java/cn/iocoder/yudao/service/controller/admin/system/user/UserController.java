@@ -25,7 +25,7 @@ import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.common.pojo.CommonResult;
 import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
 
-import cn.iocoder.yudao.framework.excel.core.util.ExcelUtils;
+import cn.iocoder.yudao.service.framework.excel.core.util.ExcelUtils;
 
 import cn.iocoder.yudao.service.service.system.user.UserService;
 import cn.iocoder.yudao.service.vo.system.user.user.*;

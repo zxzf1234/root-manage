@@ -19,8 +19,6 @@
         <module>yudao-spring-boot-starter-monitor</module>
         <module>yudao-spring-boot-starter-job</module>
 
-        <module>yudao-spring-boot-starter-excel</module>
-
         <module>yudao-spring-boot-starter-captcha</module>
         <module>yudao-spring-boot-starter-db</module>
     </modules>

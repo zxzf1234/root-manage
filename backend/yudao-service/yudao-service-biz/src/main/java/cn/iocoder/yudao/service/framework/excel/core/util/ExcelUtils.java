@@ -1,4 +1,4 @@
-package cn.iocoder.yudao.framework.excel.core.util;
+package cn.iocoder.yudao.service.framework.excel.core.util;
 
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.write.style.column.LongestMatchColumnWidthStyleStrategy;
