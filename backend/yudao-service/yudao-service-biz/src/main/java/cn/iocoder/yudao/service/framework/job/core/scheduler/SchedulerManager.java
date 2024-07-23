@@ -1,7 +1,7 @@
-package cn.iocoder.yudao.framework.quartz.core.scheduler;
+package cn.iocoder.yudao.service.framework.job.core.scheduler;
 
-import cn.iocoder.yudao.framework.quartz.core.enums.JobDataKeyEnum;
-import cn.iocoder.yudao.framework.quartz.core.handler.JobHandlerInvoker;
+import cn.iocoder.yudao.service.framework.job.core.enums.JobDataKeyEnum;
+import cn.iocoder.yudao.service.framework.job.core.handler.JobHandlerInvoker;
 import org.quartz.*;
 
 import java.util.UUID;

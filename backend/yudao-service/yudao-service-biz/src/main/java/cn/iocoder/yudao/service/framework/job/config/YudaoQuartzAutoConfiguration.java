@@ -1,6 +1,6 @@
-package cn.iocoder.yudao.framework.quartz.config;
+package cn.iocoder.yudao.service.framework.job.config;
 
-import cn.iocoder.yudao.framework.quartz.core.scheduler.SchedulerManager;
+import cn.iocoder.yudao.service.framework.job.core.scheduler.SchedulerManager;
 import org.quartz.Scheduler;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;

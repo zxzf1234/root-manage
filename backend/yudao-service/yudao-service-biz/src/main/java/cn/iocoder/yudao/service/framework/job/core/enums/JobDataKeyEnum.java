@@ -1,4 +1,4 @@
-package cn.iocoder.yudao.framework.quartz.core.enums;
+package cn.iocoder.yudao.service.framework.job.core.enums;
 
 /**
  * Quartz Job Data 的 key 枚举

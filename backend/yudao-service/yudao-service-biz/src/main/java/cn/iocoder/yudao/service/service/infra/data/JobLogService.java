@@ -1,7 +1,7 @@
 package cn.iocoder.yudao.service.service.infra.data;
 
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
-import cn.iocoder.yudao.framework.quartz.core.service.JobLogFrameworkService;
+import cn.iocoder.yudao.service.framework.job.core.service.JobLogFrameworkService;
 import cn.iocoder.yudao.service.vo.infra.job.log.JobLogExportReqVO;
 import cn.iocoder.yudao.service.vo.infra.job.log.JobLogPageReqVO;
 import cn.iocoder.yudao.service.model.infra.job.InfraJobLog;

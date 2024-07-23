@@ -1,4 +1,4 @@
-package cn.iocoder.yudao.framework.quartz.core.service;
+package cn.iocoder.yudao.service.framework.job.core.service;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;

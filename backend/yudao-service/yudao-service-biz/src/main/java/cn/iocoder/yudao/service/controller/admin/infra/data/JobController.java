@@ -4,7 +4,7 @@ import cn.iocoder.yudao.framework.common.pojo.CommonResult;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.service.framework.excel.core.util.ExcelUtils;
 import cn.iocoder.yudao.service.framework.operateLog.core.annotations.OperateLog;
-import cn.iocoder.yudao.framework.quartz.core.util.CronUtils;
+import cn.iocoder.yudao.service.framework.job.core.util.CronUtils;
 import cn.iocoder.yudao.service.vo.infra.job.job.*;
 import cn.iocoder.yudao.service.convert.infra.data.JobConvert;
 import cn.iocoder.yudao.service.model.infra.job.InfraJob;

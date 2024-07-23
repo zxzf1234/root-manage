@@ -6,3 +6,5 @@ cn.iocoder.yudao.service.framework.redis.config.YudaoCacheAutoConfiguration
 cn.iocoder.yudao.service.framework.redis.config.YudaoRedisAutoConfiguration
 cn.iocoder.yudao.service.framework.monitor.config.YudaoMetricsAutoConfiguration
 cn.iocoder.yudao.service.framework.monitor.config.YudaoTracerAutoConfiguration
+cn.iocoder.yudao.service.framework.job.config.YudaoAsyncAutoConfiguration
+cn.iocoder.yudao.service.framework.job.config.YudaoQuartzAutoConfiguration

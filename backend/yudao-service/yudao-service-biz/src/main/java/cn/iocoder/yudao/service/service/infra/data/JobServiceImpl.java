@@ -1,8 +1,8 @@
 package cn.iocoder.yudao.service.service.infra.data;
 
 import cn.iocoder.yudao.framework.common.util.upgrade.UpgradeUtils;
-import cn.iocoder.yudao.framework.quartz.core.scheduler.SchedulerManager;
-import cn.iocoder.yudao.framework.quartz.core.util.CronUtils;
+import cn.iocoder.yudao.service.framework.job.core.scheduler.SchedulerManager;
+import cn.iocoder.yudao.service.framework.job.core.util.CronUtils;
 import cn.iocoder.yudao.service.enums.infra.job.InfraJobStatusEnum;
 import cn.iocoder.yudao.service.framework.codegen.config.SchemaHistory;
 import cn.iocoder.yudao.service.model.infra.data.QrtzCronTriggers;
@@ -27,11 +27,8 @@ import javax.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.data.domain.Page;
 import java.util.*;
-import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.transaction.annotation.Transactional;
-import java.io.IOException;
-import cn.iocoder.yudao.framework.common.util.entity.EntityUtils;
-import org.babyfish.jimmer.DraftObjects;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;

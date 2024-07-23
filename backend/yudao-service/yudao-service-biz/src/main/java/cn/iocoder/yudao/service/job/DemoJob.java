@@ -1,6 +1,6 @@
 package cn.iocoder.yudao.service.job;
 
-import cn.iocoder.yudao.framework.quartz.core.handler.JobHandler;
+import cn.iocoder.yudao.service.framework.job.core.handler.JobHandler;
 import cn.iocoder.yudao.service.model.system.user.SystemUser;
 import cn.iocoder.yudao.service.repository.system.user.SystemUserRepository;
 import org.springframework.stereotype.Component;

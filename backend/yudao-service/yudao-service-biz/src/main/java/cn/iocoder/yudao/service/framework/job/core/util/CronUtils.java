@@ -1,4 +1,4 @@
-package cn.iocoder.yudao.framework.quartz.core.util;
+package cn.iocoder.yudao.service.framework.job.core.util;
 
 import cn.hutool.core.date.LocalDateTimeUtil;
 import org.quartz.CronExpression;

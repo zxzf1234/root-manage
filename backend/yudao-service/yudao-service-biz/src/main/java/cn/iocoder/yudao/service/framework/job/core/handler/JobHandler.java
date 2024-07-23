@@ -1,4 +1,4 @@
-package cn.iocoder.yudao.framework.quartz.core.handler;
+package cn.iocoder.yudao.service.framework.job.core.handler;
 
 /**
  * 任务处理器

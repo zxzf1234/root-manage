@@ -1,10 +1,10 @@
-package cn.iocoder.yudao.framework.quartz.core.handler;
+package cn.iocoder.yudao.service.framework.job.core.handler;
 
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.thread.ThreadUtil;
-import cn.iocoder.yudao.framework.quartz.core.enums.JobDataKeyEnum;
-import cn.iocoder.yudao.framework.quartz.core.service.JobLogFrameworkService;
+import cn.iocoder.yudao.service.framework.job.core.enums.JobDataKeyEnum;
+import cn.iocoder.yudao.service.framework.job.core.service.JobLogFrameworkService;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.JobExecutionContext;
@@ -15,7 +15,6 @@ import org.springframework.scheduling.quartz.QuartzJobBean;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 
 import static cn.hutool.core.exceptions.ExceptionUtil.getRootCauseMessage;
 

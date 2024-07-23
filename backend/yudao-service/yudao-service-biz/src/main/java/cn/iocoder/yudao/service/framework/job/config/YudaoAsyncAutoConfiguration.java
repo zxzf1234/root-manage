@@ -1,4 +1,4 @@
-package cn.iocoder.yudao.framework.quartz.config;
+package cn.iocoder.yudao.service.framework.job.config;
 
 import com.alibaba.ttl.TtlRunnable;
 import org.springframework.beans.BeansException;
