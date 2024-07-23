@@ -5,7 +5,7 @@ import cn.iocoder.yudao.framework.common.enums.CommonStatusEnum;
 import cn.iocoder.yudao.framework.common.pojo.CommonResult;
 import cn.iocoder.yudao.framework.common.util.collection.SetUtils;
 import cn.iocoder.yudao.service.framework.operateLog.core.annotations.OperateLog;
-import cn.iocoder.yudao.framework.security.config.SecurityProperties;
+import cn.iocoder.yudao.service.framework.security.config.SecurityProperties;
 import cn.iocoder.yudao.service.convert.infra.auth.AuthConvert;
 import cn.iocoder.yudao.service.enums.system.login.SystemLoginTypeEnum;
 import cn.iocoder.yudao.service.enums.system.permission.MenuTypeEnum;
@@ -32,8 +32,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
-import static cn.iocoder.yudao.framework.security.core.util.SecurityFrameworkUtils.getLoginUserId;
-import static cn.iocoder.yudao.framework.security.core.util.SecurityFrameworkUtils.obtainAuthorization;
+import static cn.iocoder.yudao.service.framework.security.core.util.SecurityFrameworkUtils.getLoginUserId;
+import static cn.iocoder.yudao.service.framework.security.core.util.SecurityFrameworkUtils.obtainAuthorization;
 import static java.util.Collections.singleton;
 
 @Tag(name = "管理后台 - 认证")

@@ -4,7 +4,7 @@ import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.iocoder.yudao.framework.common.core.KeyValue;
 import cn.iocoder.yudao.framework.common.enums.UserTypeEnum;
 import cn.iocoder.yudao.framework.common.util.collection.CollectionUtils;
-import cn.iocoder.yudao.framework.security.core.util.SecurityFrameworkUtils;
+import cn.iocoder.yudao.service.framework.security.core.util.SecurityFrameworkUtils;
 import cn.iocoder.yudao.service.vo.infra.oauth2.open.OAuth2OpenAccessTokenRespVO;
 import cn.iocoder.yudao.service.vo.infra.oauth2.open.OAuth2OpenAuthorizeInfoRespVO;
 import cn.iocoder.yudao.service.vo.infra.oauth2.open.OAuth2OpenCheckTokenRespVO;

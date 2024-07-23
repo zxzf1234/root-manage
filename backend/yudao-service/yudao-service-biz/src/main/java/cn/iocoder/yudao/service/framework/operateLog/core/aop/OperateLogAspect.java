@@ -12,7 +12,7 @@ import cn.iocoder.yudao.framework.common.util.servlet.ServletUtils;
 import cn.iocoder.yudao.service.framework.operateLog.core.enums.OperateTypeEnum;
 import cn.iocoder.yudao.service.framework.operateLog.core.service.OperateLog;
 import cn.iocoder.yudao.service.framework.operateLog.core.service.OperateLogFrameworkService;
-import cn.iocoder.yudao.framework.web.core.util.WebFrameworkUtils;
+import cn.iocoder.yudao.service.framework.web.web.core.util.WebFrameworkUtils;
 import com.google.common.collect.Maps;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;

@@ -11,8 +11,6 @@
     <packaging>pom</packaging>
     <modules>
         <module>yudao-common</module>
-        <module>yudao-spring-boot-starter-web</module>
-        <module>yudao-spring-boot-starter-security</module>
     </modules>
 
     <artifactId>yudao-framework</artifactId>

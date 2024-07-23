@@ -8,3 +8,12 @@ cn.iocoder.yudao.service.framework.monitor.config.YudaoMetricsAutoConfiguration
 cn.iocoder.yudao.service.framework.monitor.config.YudaoTracerAutoConfiguration
 cn.iocoder.yudao.service.framework.job.config.YudaoAsyncAutoConfiguration
 cn.iocoder.yudao.service.framework.job.config.YudaoQuartzAutoConfiguration
+cn.iocoder.yudao.service.framework.security.config.YudaoSecurityAutoConfiguration
+cn.iocoder.yudao.service.framework.security.config.YudaoWebSecurityConfigurerAdapter
+
+cn.iocoder.yudao.service.framework.web.apilog.config.YudaoApiLogAutoConfiguration
+cn.iocoder.yudao.service.framework.web.jackson.config.YudaoJacksonAutoConfiguration
+com.github.xiaoymin.knife4j.spring.configuration.Knife4jAutoConfiguration
+cn.iocoder.yudao.service.framework.web.swagger.config.YudaoSwaggerAutoConfiguration
+cn.iocoder.yudao.service.framework.web.web.config.YudaoWebAutoConfiguration
+cn.iocoder.yudao.service.framework.web.xss.config.YudaoXssAutoConfiguration
