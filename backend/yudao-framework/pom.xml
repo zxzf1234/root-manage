@@ -24,7 +24,6 @@
 
         <module>yudao-spring-boot-starter-captcha</module>
         <module>yudao-spring-boot-starter-db</module>
-        <module>yudao-spring-boot-starter-flyway</module>
     </modules>
 
     <artifactId>yudao-framework</artifactId>
