@@ -1,4 +1,4 @@
-package cn.iocoder.yudao.framework.captcha.core.service;
+package cn.iocoder.yudao.service.framework.captcha.core.service;
 
 import com.xingyuv.captcha.service.CaptchaCacheService;
 import lombok.AllArgsConstructor;

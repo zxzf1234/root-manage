@@ -1,15 +1,15 @@
-package cn.iocoder.yudao.framework.captcha.config;
+package cn.iocoder.yudao.service.framework.captcha.config;
 
 import cn.hutool.core.util.ClassUtil;
-import cn.iocoder.yudao.framework.captcha.core.enums.CaptchaRedisKeyConstants;
-import cn.iocoder.yudao.framework.captcha.core.service.RedisCaptchaServiceImpl;
+import cn.iocoder.yudao.service.framework.captcha.core.enums.CaptchaRedisKeyConstants;
+import cn.iocoder.yudao.service.framework.captcha.core.service.RedisCaptchaServiceImpl;
 import com.xingyuv.captcha.service.CaptchaCacheService;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
 @AutoConfiguration
-public class YudaoCaptchaConfiguration {
+public class CaptchaConfiguration {
 
     static {
         // 手动加载 Lock4jRedisKeyConstants 类，因为它不会被使用到

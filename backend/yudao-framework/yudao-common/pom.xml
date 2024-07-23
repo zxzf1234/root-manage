@@ -45,6 +45,10 @@
             <optional>true</optional>
         </dependency>
 
+        <dependency>
+            <groupId>com.xingyuv</groupId>
+            <artifactId>spring-boot-starter-captcha-plus</artifactId>
+        </dependency>
         <!-- Web 相关 -->
         <dependency>
             <groupId>org.springframework</groupId>

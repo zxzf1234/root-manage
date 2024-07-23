@@ -1,4 +1,4 @@
-package cn.iocoder.yudao.framework.captcha.core.enums;
+package cn.iocoder.yudao.service.framework.captcha.core.enums;
 
 import cn.iocoder.yudao.framework.redis.core.RedisKeyDefine;
 import com.xingyuv.captcha.model.vo.PointVO;
