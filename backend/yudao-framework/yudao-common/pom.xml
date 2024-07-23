@@ -149,6 +149,25 @@
             <artifactId>spring-boot-starter-quartz</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>commons-net</groupId>
+            <artifactId>commons-net</artifactId> <!-- 解决 ftp 连接 -->
+        </dependency>
+        <dependency>
+            <groupId>com.jcraft</groupId>
+            <artifactId>jsch</artifactId> <!-- 解决 sftp 连接 -->
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.tika</groupId>
+            <artifactId>tika-core</artifactId> <!-- 文件类型的识别 -->
+        </dependency>
+
+        <!-- 三方云服务相关 -->
+        <dependency>
+            <groupId>io.minio</groupId>
+            <artifactId>minio</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

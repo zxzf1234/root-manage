@@ -1,6 +1,6 @@
 package cn.iocoder.yudao.service.model.infra.file;
 
-import cn.iocoder.yudao.framework.file.core.client.FileClientConfig;
+import cn.iocoder.yudao.service.framework.file.core.client.FileClientConfig;
 import cn.iocoder.yudao.service.model.base.BaseEntity;
 import org.babyfish.jimmer.sql.Entity;
 import org.babyfish.jimmer.sql.GeneratedValue;

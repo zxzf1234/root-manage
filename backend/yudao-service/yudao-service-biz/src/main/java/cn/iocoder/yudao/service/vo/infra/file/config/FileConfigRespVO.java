@@ -1,6 +1,6 @@
 package cn.iocoder.yudao.service.vo.infra.file.config;
 
-import cn.iocoder.yudao.framework.file.core.client.FileClientConfig;
+import cn.iocoder.yudao.service.framework.file.core.client.FileClientConfig;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

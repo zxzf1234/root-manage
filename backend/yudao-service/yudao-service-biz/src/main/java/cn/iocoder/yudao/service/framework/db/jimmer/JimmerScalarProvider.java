@@ -1,6 +1,6 @@
 
 package cn.iocoder.yudao.service.framework.db.jimmer;
-import cn.iocoder.yudao.framework.file.core.client.FileClientConfig;
+import cn.iocoder.yudao.service.framework.file.core.client.FileClientConfig;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.babyfish.jimmer.sql.runtime.ScalarProvider;

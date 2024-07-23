@@ -1,0 +1,1 @@
+UPDATE infra_file_config SET config = REPLACE(config, 'cn.iocoder.yudao.framework.file.core.client.db.DBFileClientConfig', 'cn.iocoder.yudao.service.framework.file.core.client.db.DBFileClientConfig');

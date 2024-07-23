@@ -4,8 +4,8 @@ import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.StrUtil;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.common.util.io.FileUtils;
-import cn.iocoder.yudao.framework.file.core.client.FileClient;
-import cn.iocoder.yudao.framework.file.core.utils.FileTypeUtils;
+import cn.iocoder.yudao.service.framework.file.core.client.FileClient;
+import cn.iocoder.yudao.service.framework.file.core.utils.FileTypeUtils;
 import cn.iocoder.yudao.service.vo.infra.file.file.FilePageReqVO;
 
 import cn.iocoder.yudao.service.model.infra.file.InfraFile;

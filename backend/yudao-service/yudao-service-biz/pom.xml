@@ -95,11 +95,6 @@
             <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
 
-        <!-- 三方云服务相关 -->
-        <dependency>
-            <groupId>cn.iocoder.boot</groupId>
-            <artifactId>yudao-spring-boot-starter-file</artifactId>
-        </dependency>
 
     </dependencies>
 

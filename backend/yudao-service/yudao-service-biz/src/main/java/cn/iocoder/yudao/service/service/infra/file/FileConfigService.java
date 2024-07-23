@@ -1,7 +1,7 @@
 package cn.iocoder.yudao.service.service.infra.file;
 
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
-import cn.iocoder.yudao.framework.file.core.client.FileClient;
+import cn.iocoder.yudao.service.framework.file.core.client.FileClient;
 import cn.iocoder.yudao.service.vo.infra.file.config.FileConfigCreateReqVO;
 import cn.iocoder.yudao.service.vo.infra.file.config.FileConfigPageReqVO;
 import cn.iocoder.yudao.service.vo.infra.file.config.FileConfigUpdateReqVO;
