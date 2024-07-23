@@ -137,13 +137,6 @@
                 <version>${revision}</version>
             </dependency>
 
-            <!-- 监控相关 -->
-            <dependency>
-                <groupId>cn.iocoder.boot</groupId>
-                <artifactId>yudao-spring-boot-starter-monitor</artifactId>
-                <version>${revision}</version>
-            </dependency>
-
             <dependency>
                 <groupId>org.apache.skywalking</groupId>
                 <artifactId>apm-toolkit-trace</artifactId>

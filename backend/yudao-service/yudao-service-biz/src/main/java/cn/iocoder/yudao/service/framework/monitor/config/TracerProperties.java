@@ -1,4 +1,4 @@
-package cn.iocoder.yudao.framework.tracer.config;
+package cn.iocoder.yudao.service.framework.monitor.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

@@ -1,8 +1,8 @@
-package cn.iocoder.yudao.framework.tracer.config;
+package cn.iocoder.yudao.service.framework.monitor.config;
 
 import cn.iocoder.yudao.framework.common.enums.WebFilterOrderEnum;
-import cn.iocoder.yudao.framework.tracer.core.aop.BizTraceAspect;
-import cn.iocoder.yudao.framework.tracer.core.filter.TraceFilter;
+import cn.iocoder.yudao.service.framework.monitor.core.aop.BizTraceAspect;
+import cn.iocoder.yudao.service.framework.monitor.core.filter.TraceFilter;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

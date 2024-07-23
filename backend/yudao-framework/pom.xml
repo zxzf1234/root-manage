@@ -13,8 +13,6 @@
         <module>yudao-common</module>
         <module>yudao-spring-boot-starter-web</module>
         <module>yudao-spring-boot-starter-security</module>
-
-        <module>yudao-spring-boot-starter-monitor</module>
         <module>yudao-spring-boot-starter-job</module>
     </modules>
 

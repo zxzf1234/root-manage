@@ -1,4 +1,4 @@
-package cn.iocoder.yudao.framework.tracer.core.annotation;
+package cn.iocoder.yudao.service.framework.monitor.core.annotation;
 
 import java.lang.annotation.*;
 

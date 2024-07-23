@@ -1,4 +1,4 @@
-package cn.iocoder.yudao.framework.tracer.config;
+package cn.iocoder.yudao.service.framework.monitor.config;
 
 import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.beans.factory.annotation.Value;

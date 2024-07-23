@@ -1,4 +1,4 @@
-package cn.iocoder.yudao.framework.tracer.core.util;
+package cn.iocoder.yudao.service.framework.monitor.core.util;
 
 import io.opentracing.Span;
 import io.opentracing.tag.Tags;
