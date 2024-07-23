@@ -1,11 +1,11 @@
 package cn.iocoder.yudao.service.framework.captcha.core.enums;
 
-import cn.iocoder.yudao.framework.redis.core.RedisKeyDefine;
+import cn.iocoder.yudao.service.framework.redis.core.RedisKeyDefine;
 import com.xingyuv.captcha.model.vo.PointVO;
 
 import java.time.Duration;
 
-import static cn.iocoder.yudao.framework.redis.core.RedisKeyDefine.KeyTypeEnum.STRING;
+import static cn.iocoder.yudao.service.framework.redis.core.RedisKeyDefine.KeyTypeEnum.STRING;
 
 /**
  * 验证码 Redis Key 枚举类

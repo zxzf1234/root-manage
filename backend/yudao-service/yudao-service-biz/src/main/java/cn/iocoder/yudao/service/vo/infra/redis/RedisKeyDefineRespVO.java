@@ -1,6 +1,6 @@
 package cn.iocoder.yudao.service.vo.infra.redis;
 
-import cn.iocoder.yudao.framework.redis.core.RedisKeyDefine;
+import cn.iocoder.yudao.service.framework.redis.core.RedisKeyDefine;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

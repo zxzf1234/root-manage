@@ -1,7 +1,7 @@
 package cn.iocoder.yudao.service.convert.infra.redis;
 
 import cn.hutool.core.util.StrUtil;
-import cn.iocoder.yudao.framework.redis.core.RedisKeyDefine;
+import cn.iocoder.yudao.service.framework.redis.core.RedisKeyDefine;
 import cn.iocoder.yudao.service.vo.infra.redis.RedisKeyDefineRespVO;
 import cn.iocoder.yudao.service.vo.infra.redis.RedisMonitorRespVO;
 import org.mapstruct.Mapper;

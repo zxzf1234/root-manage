@@ -1,4 +1,4 @@
-package cn.iocoder.yudao.framework.redis.config;
+package cn.iocoder.yudao.service.framework.redis.config;
 
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.cache.CacheProperties;
