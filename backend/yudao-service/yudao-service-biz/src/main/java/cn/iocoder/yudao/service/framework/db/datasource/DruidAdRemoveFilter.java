@@ -1,4 +1,4 @@
-package cn.iocoder.yudao.framework.db.datasource;
+package cn.iocoder.yudao.service.framework.db.datasource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.alibaba.druid.util.Utils;

@@ -1,4 +1,4 @@
-package cn.iocoder.yudao.framework.db.datasource;
+package cn.iocoder.yudao.service.framework.db.datasource;
 
 import com.alibaba.druid.spring.boot.autoconfigure.properties.DruidStatProperties;
 import org.springframework.boot.autoconfigure.AutoConfiguration;

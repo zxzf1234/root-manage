@@ -104,11 +104,6 @@
 
             <!-- DB 相关 -->
             <dependency>
-                <groupId>cn.iocoder.boot</groupId>
-                <artifactId>yudao-spring-boot-starter-db</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
                 <version>8.0.22</version>

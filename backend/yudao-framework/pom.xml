@@ -17,7 +17,6 @@
 
         <module>yudao-spring-boot-starter-monitor</module>
         <module>yudao-spring-boot-starter-job</module>
-        <module>yudao-spring-boot-starter-db</module>
     </modules>
 
     <artifactId>yudao-framework</artifactId>

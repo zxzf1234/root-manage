@@ -1,3 +1,4 @@
 cn.iocoder.yudao.service.framework.operateLog.config.OperateLogAutoConfiguration
 cn.iocoder.yudao.service.framework.file.config.FileAutoConfiguration
 cn.iocoder.yudao.service.framework.captcha.config.CaptchaConfiguration
+cn.iocoder.yudao.service.framework.db.datasource.YudaoDataSourceAutoConfiguration
