@@ -8,8 +8,6 @@ import cn.iocoder.yudao.service.framework.web.apiLog.core.service.ApiErrorLogFra
 import cn.iocoder.yudao.framework.common.enums.WebFilterOrderEnum;
 import cn.iocoder.yudao.service.framework.web.web.config.WebProperties;
 import cn.iocoder.yudao.service.framework.web.web.config.WebAutoConfiguration;
-import cn.iocoder.yudao.service.api.infra.logger.ApiAccessLogApi;
-import cn.iocoder.yudao.service.api.infra.logger.ApiErrorLogApi;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -22,13 +20,13 @@ import javax.servlet.Filter;
 public class ApiLogAutoConfiguration {
 
     @Bean
-    public ApiAccessLogFrameworkService apiAccessLogFrameworkService(ApiAccessLogApi apiAccessLogApi) {
-        return new ApiAccessLogFrameworkServiceImpl(apiAccessLogApi);
+    public ApiAccessLogFrameworkService apiAccessLogFrameworkService() {
+        return new ApiAccessLogFrameworkServiceImpl();
     }
 
     @Bean
-    public ApiErrorLogFrameworkService apiErrorLogFrameworkService(ApiErrorLogApi apiErrorLogApi) {
-        return new ApiErrorLogFrameworkServiceImpl(apiErrorLogApi);
+    public ApiErrorLogFrameworkService apiErrorLogFrameworkService() {
+        return new ApiErrorLogFrameworkServiceImpl();
     }
 
     /**
