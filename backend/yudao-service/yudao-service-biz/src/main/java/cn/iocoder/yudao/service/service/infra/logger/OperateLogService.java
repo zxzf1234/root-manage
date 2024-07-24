@@ -1,7 +1,7 @@
 package cn.iocoder.yudao.service.service.infra.logger;
 
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
-import cn.iocoder.yudao.service.api.infra.logger.dto.OperateLogCreateReqDTO;
+import cn.iocoder.yudao.service.vo.infra.logger.operatelog.OperateLogCreateReqVO;
 import cn.iocoder.yudao.service.vo.infra.logger.operatelog.OperateLogExportReqVO;
 import cn.iocoder.yudao.service.vo.infra.logger.operatelog.OperateLogPageReqVO;
 import cn.iocoder.yudao.service.vo.infra.logger.operatelog.OperateLogRespVO;
@@ -21,7 +21,7 @@ public interface OperateLogService {
      *
      * @param createReqDTO 操作日志请求
      */
-    void createOperateLog(OperateLogCreateReqDTO createReqDTO);
+    void createOperateLog(OperateLogCreateReqVO createReqDTO);
 
     /**
      * 获得操作日志分页列表

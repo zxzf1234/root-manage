@@ -1,7 +1,7 @@
 package cn.iocoder.yudao.service.service.infra.logger;
 
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
-import cn.iocoder.yudao.service.api.infra.logger.dto.ApiErrorLogCreateReqDTO;
+import cn.iocoder.yudao.service.vo.infra.logger.apierrorlog.ApiErrorLogCreateReqVO;
 import cn.iocoder.yudao.service.vo.infra.logger.apierrorlog.ApiErrorLogExportReqVO;
 import cn.iocoder.yudao.service.vo.infra.logger.apierrorlog.ApiErrorLogPageReqVO;
 import cn.iocoder.yudao.service.convert.infra.logger.ApiErrorLogConvert;
@@ -35,7 +35,7 @@ public class ApiErrorLogServiceImpl implements ApiErrorLogService {
     private InfraApiErrorLogRepository infraApiErrorLogRepository;
 
     @Override
-    public void createApiErrorLog(ApiErrorLogCreateReqDTO createDTO) {
+    public void createApiErrorLog(ApiErrorLogCreateReqVO createDTO) {
         InfraApiErrorLog apiErrorLog = ApiErrorLogConvert.INSTANCE.convert(createDTO);
         apiErrorLog = InfraApiErrorLogDraft.$.produce(apiErrorLog, draft -> {
             draft.setProcessStatus(InfraApiErrorLogProcessStatusEnum.INIT.getValue());

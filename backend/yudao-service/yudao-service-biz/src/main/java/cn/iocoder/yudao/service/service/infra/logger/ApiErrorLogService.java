@@ -1,7 +1,7 @@
 package cn.iocoder.yudao.service.service.infra.logger;
 
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
-import cn.iocoder.yudao.service.api.infra.logger.dto.ApiErrorLogCreateReqDTO;
+import cn.iocoder.yudao.service.vo.infra.logger.apierrorlog.ApiErrorLogCreateReqVO;
 import cn.iocoder.yudao.service.vo.infra.logger.apierrorlog.ApiErrorLogExportReqVO;
 import cn.iocoder.yudao.service.vo.infra.logger.apierrorlog.ApiErrorLogPageReqVO;
 import cn.iocoder.yudao.service.model.infra.data.InfraApiErrorLog;
@@ -20,7 +20,7 @@ public interface ApiErrorLogService {
      *
      * @param createReqDTO API 错误日志
      */
-    void createApiErrorLog(ApiErrorLogCreateReqDTO createReqDTO);
+    void createApiErrorLog(ApiErrorLogCreateReqVO createReqDTO);
 
     /**
      * 获得 API 错误日志分页

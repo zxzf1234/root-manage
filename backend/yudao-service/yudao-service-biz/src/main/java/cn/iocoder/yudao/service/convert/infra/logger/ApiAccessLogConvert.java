@@ -1,7 +1,7 @@
 package cn.iocoder.yudao.service.convert.infra.logger;
 
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
-import cn.iocoder.yudao.service.api.infra.logger.dto.ApiAccessLogCreateReqDTO;
+import cn.iocoder.yudao.service.vo.infra.logger.apiaccesslog.ApiAccessLogCreateReqVO;
 import cn.iocoder.yudao.service.vo.infra.logger.apiaccesslog.ApiAccessLogExcelVO;
 import cn.iocoder.yudao.service.vo.infra.logger.apiaccesslog.ApiAccessLogRespVO;
 import cn.iocoder.yudao.service.model.infra.data.InfraApiAccessLog;
@@ -28,6 +28,6 @@ public interface ApiAccessLogConvert {
 
     List<ApiAccessLogExcelVO> convertList02(List<InfraApiAccessLog> list);
 
-    InfraApiAccessLog convert(ApiAccessLogCreateReqDTO bean);
+    InfraApiAccessLog convert(ApiAccessLogCreateReqVO bean);
 
 }

@@ -1,7 +1,7 @@
 package cn.iocoder.yudao.service.service.infra.logger;
 
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
-import cn.iocoder.yudao.service.api.infra.logger.dto.ApiAccessLogCreateReqDTO;
+import cn.iocoder.yudao.service.vo.infra.logger.apiaccesslog.ApiAccessLogCreateReqVO;
 import cn.iocoder.yudao.service.vo.infra.logger.apiaccesslog.ApiAccessLogExportReqVO;
 import cn.iocoder.yudao.service.vo.infra.logger.apiaccesslog.ApiAccessLogPageReqVO;
 import cn.iocoder.yudao.service.model.infra.data.InfraApiAccessLog;
@@ -20,7 +20,7 @@ public interface ApiAccessLogService {
      *
      * @param createReqDTO API 访问日志
      */
-    void createApiAccessLog(ApiAccessLogCreateReqDTO createReqDTO);
+    void createApiAccessLog(ApiAccessLogCreateReqVO createReqDTO);
 
     /**
      * 获得 API 访问日志分页

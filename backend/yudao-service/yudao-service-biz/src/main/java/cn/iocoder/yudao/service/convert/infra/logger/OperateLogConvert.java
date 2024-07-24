@@ -1,6 +1,6 @@
 package cn.iocoder.yudao.service.convert.infra.logger;
 
-import cn.iocoder.yudao.service.api.infra.logger.dto.OperateLogCreateReqDTO;
+import cn.iocoder.yudao.service.vo.infra.logger.operatelog.OperateLogCreateReqVO;
 import cn.iocoder.yudao.service.vo.infra.logger.operatelog.OperateLogExcelVO;
 import cn.iocoder.yudao.service.vo.infra.logger.operatelog.OperateLogRespVO;
 import cn.iocoder.yudao.service.model.infra.logger.SystemOperateLog;
@@ -16,7 +16,7 @@ public interface OperateLogConvert {
 
     OperateLogConvert INSTANCE = Mappers.getMapper(OperateLogConvert.class);
 
-    SystemOperateLog convert(OperateLogCreateReqDTO bean);
+    SystemOperateLog convert(OperateLogCreateReqVO bean);
 
     List<OperateLogRespVO> convertPage(Page<SystemOperateLog> page);
 

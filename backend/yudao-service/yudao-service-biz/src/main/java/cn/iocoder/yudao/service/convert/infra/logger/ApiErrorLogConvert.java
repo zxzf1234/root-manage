@@ -1,7 +1,7 @@
 package cn.iocoder.yudao.service.convert.infra.logger;
 
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
-import cn.iocoder.yudao.service.api.infra.logger.dto.ApiErrorLogCreateReqDTO;
+import cn.iocoder.yudao.service.vo.infra.logger.apierrorlog.ApiErrorLogCreateReqVO;
 import cn.iocoder.yudao.service.vo.infra.logger.apierrorlog.ApiErrorLogExcelVO;
 import cn.iocoder.yudao.service.vo.infra.logger.apierrorlog.ApiErrorLogRespVO;
 import cn.iocoder.yudao.service.model.infra.data.InfraApiErrorLog;
@@ -26,6 +26,6 @@ public interface ApiErrorLogConvert {
 
     List<ApiErrorLogExcelVO> convertList02(List<InfraApiErrorLog> list);
 
-    InfraApiErrorLog convert(ApiErrorLogCreateReqDTO bean);
+    InfraApiErrorLog convert(ApiErrorLogCreateReqVO bean);
 
 }

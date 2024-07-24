@@ -1,4 +1,4 @@
-package cn.iocoder.yudao.service.api.infra.logger.dto;
+package cn.iocoder.yudao.service.vo.infra.logger.loginlog;
 
 import lombok.Data;
 
@@ -13,7 +13,7 @@ import javax.validation.constraints.Size;
  * @author 芋道源码
  */
 @Data
-public class LoginLogCreateReqDTO {
+public class LoginLogCreateReqVO {
 
     /**
      * 日志类型

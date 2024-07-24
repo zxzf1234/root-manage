@@ -1,7 +1,7 @@
 package cn.iocoder.yudao.service.service.infra.logger;
 
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
-import cn.iocoder.yudao.service.api.infra.logger.dto.ApiAccessLogCreateReqDTO;
+import cn.iocoder.yudao.service.vo.infra.logger.apiaccesslog.ApiAccessLogCreateReqVO;
 import cn.iocoder.yudao.service.vo.infra.logger.apiaccesslog.ApiAccessLogExportReqVO;
 import cn.iocoder.yudao.service.vo.infra.logger.apiaccesslog.ApiAccessLogPageReqVO;
 import cn.iocoder.yudao.service.convert.infra.logger.ApiAccessLogConvert;
@@ -27,7 +27,7 @@ public class ApiAccessLogServiceImpl implements ApiAccessLogService {
     private InfraApiAccessLogRepository infraApiAccessLogRepository;
 
     @Override
-    public void createApiAccessLog(ApiAccessLogCreateReqDTO createDTO) {
+    public void createApiAccessLog(ApiAccessLogCreateReqVO createDTO) {
         InfraApiAccessLog apiAccessLog = ApiAccessLogConvert.INSTANCE.convert(createDTO);
         infraApiAccessLogRepository.insert(apiAccessLog);
     }

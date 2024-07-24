@@ -1,7 +1,7 @@
 package cn.iocoder.yudao.service.framework.web.apiLog.core.service;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.iocoder.yudao.service.api.infra.logger.dto.ApiAccessLogCreateReqDTO;
+import cn.iocoder.yudao.service.vo.infra.logger.apiaccesslog.ApiAccessLogCreateReqVO;
 import cn.iocoder.yudao.service.service.infra.logger.ApiAccessLogService;
 import org.springframework.scheduling.annotation.Async;
 
@@ -22,7 +22,7 @@ public class ApiAccessLogFrameworkServiceImpl implements ApiAccessLogFrameworkSe
     @Override
     @Async
     public void createApiAccessLog(ApiAccessLog apiAccessLog) {
-        ApiAccessLogCreateReqDTO reqDTO = BeanUtil.copyProperties(apiAccessLog, ApiAccessLogCreateReqDTO.class);
+        ApiAccessLogCreateReqVO reqDTO = BeanUtil.copyProperties(apiAccessLog, ApiAccessLogCreateReqVO.class);
         apiAccessLogService.createApiAccessLog(reqDTO);
     }
 

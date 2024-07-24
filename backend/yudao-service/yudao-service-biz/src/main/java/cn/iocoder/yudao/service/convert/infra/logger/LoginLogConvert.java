@@ -1,6 +1,6 @@
 package cn.iocoder.yudao.service.convert.infra.logger;
 
-import cn.iocoder.yudao.service.api.infra.logger.dto.LoginLogCreateReqDTO;
+import cn.iocoder.yudao.service.vo.infra.logger.loginlog.LoginLogCreateReqVO;
 import cn.iocoder.yudao.service.vo.infra.logger.loginlog.LoginLogExcelVO;
 import cn.iocoder.yudao.service.vo.infra.logger.loginlog.LoginLogRespVO;
 import cn.iocoder.yudao.service.model.infra.logger.SystemLoginLog;
@@ -19,6 +19,6 @@ public interface LoginLogConvert {
 
     List<LoginLogExcelVO> convertList(List<SystemLoginLog> list);
 
-    SystemLoginLog convert(LoginLogCreateReqDTO bean);
+    SystemLoginLog convert(LoginLogCreateReqVO bean);
 
 }

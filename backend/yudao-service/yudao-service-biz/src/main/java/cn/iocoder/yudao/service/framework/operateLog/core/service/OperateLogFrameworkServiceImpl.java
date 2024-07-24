@@ -1,7 +1,7 @@
 package cn.iocoder.yudao.service.framework.operateLog.core.service;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.iocoder.yudao.service.api.infra.logger.dto.OperateLogCreateReqDTO;
+import cn.iocoder.yudao.service.vo.infra.logger.operatelog.OperateLogCreateReqVO;
 import cn.iocoder.yudao.service.service.infra.logger.OperateLogService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
@@ -24,7 +24,7 @@ public class OperateLogFrameworkServiceImpl implements OperateLogFrameworkServic
     @Override
     @Async
     public void createOperateLog(OperateLog operateLog) {
-        OperateLogCreateReqDTO reqDTO = BeanUtil.copyProperties(operateLog, OperateLogCreateReqDTO.class);
+        OperateLogCreateReqVO reqDTO = BeanUtil.copyProperties(operateLog, OperateLogCreateReqVO.class);
         operateLogService.createOperateLog(reqDTO);
     }
 

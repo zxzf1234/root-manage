@@ -6,7 +6,7 @@ import cn.iocoder.yudao.framework.common.enums.UserTypeEnum;
 import cn.iocoder.yudao.framework.common.util.monitor.TracerUtils;
 import cn.iocoder.yudao.framework.common.util.servlet.ServletUtils;
 import cn.iocoder.yudao.framework.common.util.validation.ValidationUtils;
-import cn.iocoder.yudao.service.api.infra.logger.dto.LoginLogCreateReqDTO;
+import cn.iocoder.yudao.service.vo.infra.logger.loginlog.LoginLogCreateReqVO;
 import cn.iocoder.yudao.service.convert.infra.auth.AuthConvert;
 import cn.iocoder.yudao.service.enums.system.login.SystemLoginTypeEnum;
 import cn.iocoder.yudao.service.enums.system.login.SystemLoginResultEnum;
@@ -96,7 +96,7 @@ public class AdminAuthServiceImpl implements AdminAuthService {
     private void createLoginLog(Long userId, String username,
                                 SystemLoginTypeEnum logTypeEnum, SystemLoginResultEnum loginResult) {
         // 插入登录日志
-        LoginLogCreateReqDTO reqDTO = new LoginLogCreateReqDTO();
+        LoginLogCreateReqVO reqDTO = new LoginLogCreateReqVO();
         reqDTO.setLogType(logTypeEnum.getValue());
         reqDTO.setTraceId(TracerUtils.getTraceId());
         reqDTO.setUserId(userId);
@@ -159,7 +159,7 @@ public class AdminAuthServiceImpl implements AdminAuthService {
     }
 
     private void createLogoutLog(Long userId, Integer userType, Integer logType) {
-        LoginLogCreateReqDTO reqDTO = new LoginLogCreateReqDTO();
+        LoginLogCreateReqVO reqDTO = new LoginLogCreateReqVO();
         reqDTO.setLogType(logType);
         reqDTO.setTraceId(TracerUtils.getTraceId());
         reqDTO.setUserId(userId);

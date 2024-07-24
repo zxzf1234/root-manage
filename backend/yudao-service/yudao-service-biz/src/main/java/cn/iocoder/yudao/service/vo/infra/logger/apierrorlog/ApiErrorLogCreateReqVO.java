@@ -1,4 +1,4 @@
-package cn.iocoder.yudao.service.api.infra.logger.dto;
+package cn.iocoder.yudao.service.vo.infra.logger.apierrorlog;
 
 import lombok.Data;
 
@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
  * @author 芋道源码
  */
 @Data
-public class ApiErrorLogCreateReqDTO {
+public class ApiErrorLogCreateReqVO {
 
     /**
      * 链路编号
