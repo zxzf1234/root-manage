@@ -8,11 +8,7 @@
         <version>${revision}</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <modules>
-        <module>yudao-service-biz</module>
-    </modules>
     <artifactId>yudao-service</artifactId>
-    <packaging>pom</packaging>
 
     <name>${project.artifactId}</name>
     <description>
@@ -20,4 +16,10 @@
         例如说：用户、部门、权限、数据字典等等
     </description>
 
+    <dependencies>
+        <dependency>
+            <groupId>cn.iocoder.boot</groupId>
+            <artifactId>yudao-common</artifactId>
+        </dependency>
+    </dependencies>
 </project>

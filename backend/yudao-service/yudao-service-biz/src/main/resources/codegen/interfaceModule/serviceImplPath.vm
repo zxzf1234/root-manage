@@ -1,1 +1,0 @@
-${javaPath}/yudao-service/yudao-service-biz/src/main/java/${basePackage.replaceAll("\.", "/")}/service/service/${modulePath}/${nameHumpUp}ServiceImpl.java

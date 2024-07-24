@@ -23,7 +23,7 @@
     <dependencies>
         <dependency>
             <groupId>cn.iocoder.boot</groupId>
-            <artifactId>yudao-service-biz</artifactId>
+            <artifactId>yudao-service</artifactId>
             <version>${revision}</version>
         </dependency>
 

@@ -1,1 +1,0 @@
-${javaPath}/yudao-service/yudao-service-biz/src/main/java/${basePackage.replaceAll("\.", "/")}/service/controller/${sceneEnum.basePackage}/${modulePath}/${nameHumpUp}Controller.java
