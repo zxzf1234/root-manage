@@ -25,7 +25,7 @@
         <druid.version>1.2.16</druid.version>
         <dynamic-datasource.version>3.6.1</dynamic-datasource.version>
         <redisson.version>3.18.0</redisson.version>
-        <jimmer.version>0.8.16</jimmer.version>
+        <jimmer.version>0.8.148</jimmer.version>
         <flyway.version>8.2.0</flyway.version>
         <!-- 服务保障相关 -->
         <lock4j.version>2.2.3</lock4j.version>
