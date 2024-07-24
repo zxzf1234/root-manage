@@ -34,7 +34,7 @@ import java.util.Set;
  */
 @AutoConfiguration
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
-public class YudaoWebSecurityConfigurerAdapter {
+public class WebSecurityConfigurerAdapter {
 
     @Resource
     private WebProperties webProperties;

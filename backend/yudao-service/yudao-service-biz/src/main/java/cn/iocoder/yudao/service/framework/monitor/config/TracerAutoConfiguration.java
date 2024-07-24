@@ -19,7 +19,7 @@ import org.springframework.context.annotation.Bean;
 @ConditionalOnClass({BizTraceAspect.class})
 @EnableConfigurationProperties(TracerProperties.class)
 @ConditionalOnProperty(prefix = "yudao.tracer", value = "enable", matchIfMissing = true)
-public class YudaoTracerAutoConfiguration {
+public class TracerAutoConfiguration {
 
     // TODO @芋艿：重要。目前 opentracing 版本存在冲突，要么保证 skywalking，要么保证阿里云短信 sdk
 //    @Bean

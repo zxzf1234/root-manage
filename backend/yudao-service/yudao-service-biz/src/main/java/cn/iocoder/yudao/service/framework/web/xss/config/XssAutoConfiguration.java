@@ -17,11 +17,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.util.PathMatcher;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import static cn.iocoder.yudao.service.framework.web.web.config.YudaoWebAutoConfiguration.createFilterBean;
+import static cn.iocoder.yudao.service.framework.web.web.config.WebAutoConfiguration.createFilterBean;
 
 @AutoConfiguration
 @EnableConfigurationProperties(XssProperties.class)
-public class YudaoXssAutoConfiguration implements WebMvcConfigurer {
+public class XssAutoConfiguration implements WebMvcConfigurer {
 
     /**
      * Xss 清理者

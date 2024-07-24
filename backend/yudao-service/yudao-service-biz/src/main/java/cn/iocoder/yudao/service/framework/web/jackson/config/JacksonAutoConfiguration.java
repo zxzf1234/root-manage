@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 
 @AutoConfiguration
 @Slf4j
-public class YudaoJacksonAutoConfiguration {
+public class JacksonAutoConfiguration {
 
     @Bean
     public BeanPostProcessor objectMapperBeanPostProcessor() {

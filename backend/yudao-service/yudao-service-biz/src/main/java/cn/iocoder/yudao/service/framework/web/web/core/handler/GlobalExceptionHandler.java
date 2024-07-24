@@ -2,8 +2,8 @@ package cn.iocoder.yudao.service.framework.web.web.core.handler;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.map.MapUtil;
-import cn.iocoder.yudao.service.framework.web.apilog.core.service.ApiErrorLog;
-import cn.iocoder.yudao.service.framework.web.apilog.core.service.ApiErrorLogFrameworkService;
+import cn.iocoder.yudao.service.framework.web.apiLog.core.service.ApiErrorLog;
+import cn.iocoder.yudao.service.framework.web.apiLog.core.service.ApiErrorLogFrameworkService;
 import cn.iocoder.yudao.framework.common.exception.ServiceException;
 import cn.iocoder.yudao.framework.common.pojo.CommonResult;
 import cn.iocoder.yudao.framework.common.util.json.JsonUtils;

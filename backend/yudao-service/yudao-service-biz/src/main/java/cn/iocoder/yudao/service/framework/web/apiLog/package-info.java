@@ -5,4 +5,4 @@
  *
  * @author 芋道源码
  */
-package cn.iocoder.yudao.service.framework.web.apilog;
+package cn.iocoder.yudao.service.framework.web.apiLog;

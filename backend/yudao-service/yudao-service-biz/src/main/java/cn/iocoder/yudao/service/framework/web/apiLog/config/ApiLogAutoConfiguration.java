@@ -1,13 +1,13 @@
-package cn.iocoder.yudao.service.framework.web.apilog.config;
+package cn.iocoder.yudao.service.framework.web.apiLog.config;
 
-import cn.iocoder.yudao.service.framework.web.apilog.core.filter.ApiAccessLogFilter;
-import cn.iocoder.yudao.service.framework.web.apilog.core.service.ApiAccessLogFrameworkService;
-import cn.iocoder.yudao.service.framework.web.apilog.core.service.ApiAccessLogFrameworkServiceImpl;
-import cn.iocoder.yudao.service.framework.web.apilog.core.service.ApiErrorLogFrameworkService;
-import cn.iocoder.yudao.service.framework.web.apilog.core.service.ApiErrorLogFrameworkServiceImpl;
+import cn.iocoder.yudao.service.framework.web.apiLog.core.filter.ApiAccessLogFilter;
+import cn.iocoder.yudao.service.framework.web.apiLog.core.service.ApiAccessLogFrameworkService;
+import cn.iocoder.yudao.service.framework.web.apiLog.core.service.ApiAccessLogFrameworkServiceImpl;
+import cn.iocoder.yudao.service.framework.web.apiLog.core.service.ApiErrorLogFrameworkService;
+import cn.iocoder.yudao.service.framework.web.apiLog.core.service.ApiErrorLogFrameworkServiceImpl;
 import cn.iocoder.yudao.framework.common.enums.WebFilterOrderEnum;
 import cn.iocoder.yudao.service.framework.web.web.config.WebProperties;
-import cn.iocoder.yudao.service.framework.web.web.config.YudaoWebAutoConfiguration;
+import cn.iocoder.yudao.service.framework.web.web.config.WebAutoConfiguration;
 import cn.iocoder.yudao.service.api.infra.logger.ApiAccessLogApi;
 import cn.iocoder.yudao.service.api.infra.logger.ApiErrorLogApi;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,8 +18,8 @@ import org.springframework.context.annotation.Bean;
 
 import javax.servlet.Filter;
 
-@AutoConfiguration(after = YudaoWebAutoConfiguration.class)
-public class YudaoApiLogAutoConfiguration {
+@AutoConfiguration(after = WebAutoConfiguration.class)
+public class ApiLogAutoConfiguration {
 
     @Bean
     public ApiAccessLogFrameworkService apiAccessLogFrameworkService(ApiAccessLogApi apiAccessLogApi) {

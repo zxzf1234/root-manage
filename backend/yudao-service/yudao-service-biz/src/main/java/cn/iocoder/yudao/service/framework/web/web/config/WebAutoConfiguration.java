@@ -1,6 +1,6 @@
 package cn.iocoder.yudao.service.framework.web.web.config;
 
-import cn.iocoder.yudao.service.framework.web.apilog.core.service.ApiErrorLogFrameworkService;
+import cn.iocoder.yudao.service.framework.web.apiLog.core.service.ApiErrorLogFrameworkService;
 import cn.iocoder.yudao.framework.common.enums.WebFilterOrderEnum;
 import cn.iocoder.yudao.service.framework.web.web.core.filter.CacheRequestBodyFilter;
 import cn.iocoder.yudao.service.framework.web.web.core.filter.DemoFilter;
@@ -26,7 +26,7 @@ import javax.servlet.Filter;
 
 @AutoConfiguration
 @EnableConfigurationProperties(WebProperties.class)
-public class YudaoWebAutoConfiguration implements WebMvcConfigurer {
+public class WebAutoConfiguration implements WebMvcConfigurer {
 
     @Resource
     private WebProperties webProperties;
