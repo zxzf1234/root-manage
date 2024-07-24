@@ -10,10 +10,8 @@ cn.iocoder.yudao.service.framework.job.config.AsyncAutoConfiguration
 cn.iocoder.yudao.service.framework.job.config.QuartzAutoConfiguration
 cn.iocoder.yudao.service.framework.security.config.SecurityAutoConfiguration
 cn.iocoder.yudao.service.framework.security.config.WebSecurityConfigurerAdapter
-
 cn.iocoder.yudao.service.framework.web.apiLog.config.ApiLogAutoConfiguration
 cn.iocoder.yudao.service.framework.web.jackson.config.JacksonAutoConfiguration
-com.github.xiaoymin.knife4j.spring.configuration.Knife4jAutoConfiguration
 cn.iocoder.yudao.service.framework.web.swagger.config.SwaggerAutoConfiguration
 cn.iocoder.yudao.service.framework.web.web.config.WebAutoConfiguration
 cn.iocoder.yudao.service.framework.web.xss.config.XssAutoConfiguration
