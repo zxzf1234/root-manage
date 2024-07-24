@@ -64,10 +64,6 @@ public class PermissionServiceImpl implements PermissionService {
     private RoleService roleService;
     @Resource
     private MenuService menuService;
-    @Resource
-    private DeptService deptService;
-    @Resource
-    private UserService userService;
 
 
     @Override

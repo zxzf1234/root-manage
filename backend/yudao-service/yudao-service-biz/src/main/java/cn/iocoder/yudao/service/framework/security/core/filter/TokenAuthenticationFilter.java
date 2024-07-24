@@ -10,12 +10,13 @@ import cn.iocoder.yudao.service.framework.security.core.LoginUser;
 import cn.iocoder.yudao.service.framework.security.core.util.SecurityFrameworkUtils;
 import cn.iocoder.yudao.service.framework.web.web.core.handler.GlobalExceptionHandler;
 import cn.iocoder.yudao.service.framework.web.web.core.util.WebFrameworkUtils;
-import cn.iocoder.yudao.service.api.infra.oauth2.OAuth2TokenApi;
-import cn.iocoder.yudao.service.api.infra.oauth2.dto.OAuth2AccessTokenCheckRespDTO;
+import cn.iocoder.yudao.service.model.infra.oauth2.SystemOauth2AccessToken;
+import cn.iocoder.yudao.service.service.infra.oauth2.OAuth2TokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import javax.annotation.Resource;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -35,7 +36,8 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
     private final GlobalExceptionHandler globalExceptionHandler;
 
-    private final OAuth2TokenApi oauth2TokenApi;
+    @Resource
+    private OAuth2TokenService oauth2TokenService;
 
     @Override
     @SuppressWarnings("NullableProblems")
@@ -69,16 +71,16 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
     private LoginUser buildLoginUserByToken(String token, Integer userType) {
         try {
-            OAuth2AccessTokenCheckRespDTO accessToken = oauth2TokenApi.checkAccessToken(token);
+            SystemOauth2AccessToken  accessToken = oauth2TokenService.checkAccessToken(token);
             if (accessToken == null) {
                 return null;
             }
             // 用户类型不匹配，无权限
-            if (ObjectUtil.notEqual(accessToken.getUserType(), userType)) {
+            if (ObjectUtil.notEqual(accessToken.userType(), userType)) {
                 throw new AccessDeniedException("错误的用户类型");
             }
             // 构建登录用户
-            return new LoginUser().setId(accessToken.getUserId()).setUserType(accessToken.getUserType());
+            return new LoginUser().setId(accessToken.userId()).setUserType(accessToken.userType());
         } catch (ServiceException serviceException) {
             // 校验 Token 不通过时，考虑到一些接口是无需登录的，所以直接返回 null 即可
             return null;

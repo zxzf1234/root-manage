@@ -8,7 +8,6 @@ import cn.iocoder.yudao.service.framework.security.core.handler.AuthenticationEn
 import cn.iocoder.yudao.service.framework.security.core.service.SecurityFrameworkService;
 import cn.iocoder.yudao.service.framework.security.core.service.SecurityFrameworkServiceImpl;
 import cn.iocoder.yudao.service.framework.web.web.core.handler.GlobalExceptionHandler;
-import cn.iocoder.yudao.service.api.infra.oauth2.OAuth2TokenApi;
 import org.springframework.beans.factory.config.MethodInvokingFactoryBean;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -77,9 +76,8 @@ public class SecurityAutoConfiguration {
      * Token 认证过滤器 Bean
      */
     @Bean
-    public TokenAuthenticationFilter authenticationTokenFilter(GlobalExceptionHandler globalExceptionHandler,
-                                                               OAuth2TokenApi oauth2TokenApi) {
-        return new TokenAuthenticationFilter(securityProperties, globalExceptionHandler, oauth2TokenApi);
+    public TokenAuthenticationFilter authenticationTokenFilter(GlobalExceptionHandler globalExceptionHandler) {
+        return new TokenAuthenticationFilter(securityProperties, globalExceptionHandler);
     }
 
     @Bean("ss") // 使用 Spring Security 的缩写，方便使用
