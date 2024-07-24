@@ -1,6 +1,5 @@
 package cn.iocoder.yudao.service.service.system.permission;
 
-import cn.iocoder.yudao.service.api.system.permission.dto.DeptDataPermissionRespDTO;
 import cn.iocoder.yudao.service.model.infra.data.SystemMenu;
 import org.springframework.lang.Nullable;
 
@@ -126,13 +125,5 @@ public interface PermissionService {
      * @return 是否
      */
     boolean hasAnyRoles(Long userId, String... roles);
-
-    /**
-     * 获得登陆用户的部门数据权限
-     *
-     * @param userId 用户编号
-     * @return 部门数据权限
-     */
-    DeptDataPermissionRespDTO getDeptDataPermission(Long userId);
 
 }

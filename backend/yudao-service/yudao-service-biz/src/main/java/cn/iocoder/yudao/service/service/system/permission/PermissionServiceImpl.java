@@ -7,7 +7,6 @@ import cn.iocoder.yudao.framework.common.enums.CommonStatusEnum;
 import cn.iocoder.yudao.framework.common.util.collection.CollectionUtils;
 import cn.iocoder.yudao.framework.common.util.collection.MapUtils;
 import cn.iocoder.yudao.framework.common.util.json.JsonUtils;
-import cn.iocoder.yudao.service.api.system.permission.dto.DeptDataPermissionRespDTO;
 import cn.iocoder.yudao.service.enums.system.permission.SystemDataScopeEnum;
 import cn.iocoder.yudao.service.model.infra.data.SystemMenu;
 import cn.iocoder.yudao.service.model.system.dept.SystemDept;
@@ -267,62 +266,6 @@ public class PermissionServiceImpl implements PermissionService {
         return CollUtil.containsAny(userRoles, Sets.newHashSet(roles));
     }
 
-    @Override
-    public DeptDataPermissionRespDTO getDeptDataPermission(Long userId) {
-        // 获得用户的角色
-        List<Long> roleIds = getUserRoleIds(userId, singleton(CommonStatusEnum.ENABLE.getStatus()));
-        // 如果角色为空，则只能查看自己
-        DeptDataPermissionRespDTO result = new DeptDataPermissionRespDTO();
-        if (CollUtil.isEmpty(roleIds)) {
-            result.setSelf(true);
-            return result;
-        }
-        List<SystemRole> roles = roleService.getRoleListFrom(roleIds);
-
-        // 获得用户的部门编号的缓存，通过 Guava 的 Suppliers 惰性求值，即有且仅有第一次发起 DB 的查询
-        Supplier<Long> userDeptIdCache = Suppliers.memoize(() -> userService.getUser(userId).get().deptId());
-        // 遍历每个角色，计算
-        for (SystemRole role : roles) {
-            // 为空时，跳过
-            if (role.dataScope() == 0) {
-                continue;
-            }
-            // 情况一，ALL
-            if (Objects.equals(role.dataScope(), SystemDataScopeEnum.ALL.getValue())) {
-                result.setAll(true);
-                continue;
-            }
-            // 情况二，DEPT_CUSTOM
-            if (Objects.equals(role.dataScope(), SystemDataScopeEnum.DEPT_CUSTOM.getValue())) {
-                CollUtil.addAll(result.getDeptIds(), role.dataScopeDeptIds());
-                // 自定义可见部门时，保证可以看到自己所在的部门。否则，一些场景下可能会有问题。
-                // 例如说，登录时，基于 t_user 的 username 查询会可能被 dept_id 过滤掉
-                CollUtil.addAll(result.getDeptIds(), userDeptIdCache.get());
-                continue;
-            }
-            // 情况三，DEPT_ONLY
-            if (Objects.equals(role.dataScope(), SystemDataScopeEnum.DEPT_ONLY.getValue())) {
-                CollectionUtils.addIfNotNull(result.getDeptIds(), userDeptIdCache.get());
-                continue;
-            }
-            // 情况四，DEPT_DEPT_AND_CHILD
-            if (Objects.equals(role.dataScope(), SystemDataScopeEnum.DEPT_AND_CHILD.getValue())) {
-                List<SystemDept> depts = deptService.getDeptListByParentId(userDeptIdCache.get(), true);
-                CollUtil.addAll(result.getDeptIds(), CollectionUtils.convertList(depts, SystemDept::id));
-                // 添加本身部门编号
-                CollUtil.addAll(result.getDeptIds(), userDeptIdCache.get());
-                continue;
-            }
-            // 情况五，SELF
-            if (Objects.equals(role.dataScope(), SystemDataScopeEnum.SELF.getValue())) {
-                result.setSelf(true);
-                continue;
-            }
-            // 未知情况，error log 即可
-            log.error("[getDeptDataPermission][LoginUser({}) role({}) 无法处理]", userId, JsonUtils.toJsonString(result));
-        }
-        return result;
-    }
 
 
 }

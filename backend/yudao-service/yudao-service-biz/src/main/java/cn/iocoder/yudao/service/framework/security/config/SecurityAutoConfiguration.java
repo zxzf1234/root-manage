@@ -9,7 +9,6 @@ import cn.iocoder.yudao.service.framework.security.core.service.SecurityFramewor
 import cn.iocoder.yudao.service.framework.security.core.service.SecurityFrameworkServiceImpl;
 import cn.iocoder.yudao.service.framework.web.web.core.handler.GlobalExceptionHandler;
 import cn.iocoder.yudao.service.api.infra.oauth2.OAuth2TokenApi;
-import cn.iocoder.yudao.service.api.system.permission.PermissionApi;
 import org.springframework.beans.factory.config.MethodInvokingFactoryBean;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -84,8 +83,8 @@ public class SecurityAutoConfiguration {
     }
 
     @Bean("ss") // 使用 Spring Security 的缩写，方便使用
-    public SecurityFrameworkService securityFrameworkService(PermissionApi permissionApi) {
-        return new SecurityFrameworkServiceImpl(permissionApi);
+    public SecurityFrameworkService securityFrameworkService() {
+        return new SecurityFrameworkServiceImpl();
     }
 
     /**
