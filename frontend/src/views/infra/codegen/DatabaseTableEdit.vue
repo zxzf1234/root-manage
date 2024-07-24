@@ -471,7 +471,7 @@
   </Dialog>
 </template>
 <script lang="ts" name="InfraCodegenDatabaseTableEdit" setup>
-import * as DictApi from '@/api/infra/data/dict'
+import * as DictApi from '@/api/infra/data/dictType'
 import * as CodegenApi from '@/api/infra/codegen'
 import { ElTable } from 'element-plus'
 const message = useMessage() // 消息弹窗
