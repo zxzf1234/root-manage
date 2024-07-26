@@ -1,6 +1,6 @@
 package cn.iocoder.yudao.service.framework.monitor.config;
 
-import cn.iocoder.yudao.framework.common.enums.WebFilterOrderEnum;
+import cn.iocoder.yudao.service.enums.common.WebFilterOrderEnum;
 import cn.iocoder.yudao.service.framework.monitor.core.aop.BizTraceAspect;
 import cn.iocoder.yudao.service.framework.monitor.core.filter.TraceFilter;
 import org.springframework.boot.autoconfigure.AutoConfiguration;

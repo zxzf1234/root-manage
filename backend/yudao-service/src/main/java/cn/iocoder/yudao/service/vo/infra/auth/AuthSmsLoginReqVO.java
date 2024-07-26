@@ -1,6 +1,6 @@
 package cn.iocoder.yudao.service.vo.infra.auth;
 
-import cn.iocoder.yudao.framework.common.validation.Mobile;
+import cn.iocoder.yudao.service.framework.validation.Mobile;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -4,7 +4,7 @@ import cn.hutool.core.util.BooleanUtil;
 import cn.iocoder.yudao.service.enums.infra.codegen.InfraCodegenExcludeFunctionEnum;
 import cn.iocoder.yudao.service.enums.infra.codegen.InfraCodegenTableEnum;
 import cn.iocoder.yudao.service.framework.codegen.config.SchemaHistory;
-import cn.iocoder.yudao.framework.common.util.upgrade.UpgradeUtils;
+import cn.iocoder.yudao.service.util.upgrade.UpgradeUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.babyfish.jimmer.sql.runtime.*;
 import org.jetbrains.annotations.NotNull;

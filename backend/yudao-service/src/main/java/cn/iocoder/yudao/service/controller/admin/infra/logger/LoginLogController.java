@@ -1,7 +1,7 @@
 package cn.iocoder.yudao.service.controller.admin.infra.logger;
 
-import cn.iocoder.yudao.framework.common.pojo.CommonResult;
-import cn.iocoder.yudao.framework.common.pojo.PageResult;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.CommonResult;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.PageResult;
 import cn.iocoder.yudao.service.framework.excel.core.util.ExcelUtils;
 import cn.iocoder.yudao.service.framework.operateLog.core.annotations.OperateLog;
 import cn.iocoder.yudao.service.vo.infra.logger.loginlog.LoginLogExcelVO;

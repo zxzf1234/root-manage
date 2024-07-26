@@ -12,7 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import javax.annotation.Resource;
 import java.util.List;
 
-import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
+import static cn.iocoder.yudao.service.framework.exception.util.ServiceExceptionUtil.exception;
 import static cn.iocoder.yudao.service.errorCode.infra.ErrorCodeConstants.DATA_SOURCE_CONFIG_NOT_EXISTS;
 
 /**

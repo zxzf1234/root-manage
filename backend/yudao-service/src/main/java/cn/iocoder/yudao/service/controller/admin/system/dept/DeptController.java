@@ -6,11 +6,7 @@ import cn.iocoder.yudao.service.vo.system.dept.dept.DeptListOutput;
 import cn.iocoder.yudao.service.vo.system.dept.dept.DeptListInput;
 import cn.iocoder.yudao.service.vo.system.dept.dept.DeptUpdateInput;
 import cn.iocoder.yudao.service.vo.system.dept.dept.DeptCreateInput;
-import cn.iocoder.yudao.framework.common.enums.CommonStatusEnum;
-import cn.iocoder.yudao.framework.common.pojo.CommonResult;
-import cn.iocoder.yudao.service.vo.system.dept.dept.*;
-import cn.iocoder.yudao.service.convert.system.dept.DeptConvert;
-import cn.iocoder.yudao.service.model.system.dept.SystemDept;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.CommonResult;
 import cn.iocoder.yudao.service.service.system.dept.DeptService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -21,10 +17,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
-import java.util.Comparator;
 import java.util.List;
 
-import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
+import static cn.iocoder.yudao.service.framework.web.web.core.pojo.CommonResult.success;
 
 @Tag(name = "管理后台 - 部门")
 @RestController

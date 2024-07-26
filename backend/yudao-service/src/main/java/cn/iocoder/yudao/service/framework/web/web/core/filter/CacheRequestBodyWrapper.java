@@ -1,6 +1,6 @@
 package cn.iocoder.yudao.service.framework.web.web.core.filter;
 
-import cn.iocoder.yudao.framework.common.util.servlet.ServletUtils;
+import cn.iocoder.yudao.service.util.servlet.ServletUtils;
 
 import javax.servlet.ReadListener;
 import javax.servlet.ServletInputStream;

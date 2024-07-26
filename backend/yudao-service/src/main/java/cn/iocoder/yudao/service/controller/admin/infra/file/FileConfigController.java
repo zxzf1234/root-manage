@@ -1,7 +1,7 @@
 package cn.iocoder.yudao.service.controller.admin.infra.file;
 
-import cn.iocoder.yudao.framework.common.pojo.CommonResult;
-import cn.iocoder.yudao.framework.common.pojo.PageResult;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.CommonResult;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.PageResult;
 import cn.iocoder.yudao.service.vo.infra.file.config.FileConfigCreateReqVO;
 import cn.iocoder.yudao.service.vo.infra.file.config.FileConfigPageReqVO;
 import cn.iocoder.yudao.service.vo.infra.file.config.FileConfigRespVO;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.validation.Valid;
 
-import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
+import static cn.iocoder.yudao.service.framework.web.web.core.pojo.CommonResult.success;
 
 @Tag(name = "管理后台 - 文件配置")
 @RestController

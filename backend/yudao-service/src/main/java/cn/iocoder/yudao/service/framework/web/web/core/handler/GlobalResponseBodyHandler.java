@@ -1,6 +1,6 @@
 package cn.iocoder.yudao.service.framework.web.web.core.handler;
 
-import cn.iocoder.yudao.framework.common.pojo.CommonResult;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.CommonResult;
 import cn.iocoder.yudao.service.framework.web.web.core.util.WebFrameworkUtils;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;

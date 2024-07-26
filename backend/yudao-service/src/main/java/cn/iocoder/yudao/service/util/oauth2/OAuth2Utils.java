@@ -3,7 +3,7 @@ package cn.iocoder.yudao.service.util.oauth2;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.iocoder.yudao.framework.common.util.http.HttpUtils;
+import cn.iocoder.yudao.service.util.http.HttpUtils;
 import cn.iocoder.yudao.service.framework.security.core.util.SecurityFrameworkUtils;
 
 import java.time.LocalDateTime;

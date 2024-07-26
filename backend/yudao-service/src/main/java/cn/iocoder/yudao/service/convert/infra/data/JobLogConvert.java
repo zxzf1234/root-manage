@@ -1,6 +1,6 @@
 package cn.iocoder.yudao.service.convert.infra.data;
 
-import cn.iocoder.yudao.framework.common.pojo.PageResult;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.PageResult;
 import cn.iocoder.yudao.service.vo.infra.data.job.log.JobLogExcelVO;
 import cn.iocoder.yudao.service.vo.infra.data.job.log.JobLogRespVO;
 import cn.iocoder.yudao.service.model.infra.job.InfraJobLog;

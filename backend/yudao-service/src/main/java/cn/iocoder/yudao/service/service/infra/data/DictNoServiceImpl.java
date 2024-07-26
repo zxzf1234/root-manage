@@ -17,12 +17,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import org.springframework.transaction.annotation.Transactional;
-import cn.iocoder.yudao.framework.common.pojo.PageResult;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.PageResult;
 import cn.iocoder.yudao.service.convert.infra.data.DictNoConvert;
 
 import java.time.LocalDate;
 
-import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
+import static cn.iocoder.yudao.service.framework.exception.util.ServiceExceptionUtil.exception;
 import static cn.iocoder.yudao.service.errorCode.infra.data.DictNoErrorCode.*;
 
 /**

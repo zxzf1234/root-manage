@@ -3,7 +3,7 @@ package cn.iocoder.yudao.service.service.infra.data;
 import java.util.*;
 
 import cn.iocoder.yudao.service.model.infra.job.InfraJob;
-import cn.iocoder.yudao.framework.common.pojo.PageResult;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.PageResult;
 import cn.iocoder.yudao.service.vo.infra.data.job.job.JobCreateReqVO;
 import cn.iocoder.yudao.service.vo.infra.data.job.job.JobExportReqVO;
 import cn.iocoder.yudao.service.vo.infra.data.job.job.JobPageReqVO;

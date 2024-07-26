@@ -1,7 +1,7 @@
 package cn.iocoder.yudao.service.controller.admin.infra.data;
 
-import cn.iocoder.yudao.framework.common.pojo.CommonResult;
-import cn.iocoder.yudao.framework.common.pojo.PageResult;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.CommonResult;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.PageResult;
 import cn.iocoder.yudao.service.framework.excel.core.util.ExcelUtils;
 import cn.iocoder.yudao.service.framework.operateLog.core.annotations.OperateLog;
 import cn.iocoder.yudao.service.framework.job.core.util.CronUtils;
@@ -28,7 +28,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
+import static cn.iocoder.yudao.service.framework.web.web.core.pojo.CommonResult.success;
 import static cn.iocoder.yudao.service.framework.operateLog.core.enums.OperateTypeEnum.EXPORT;
 
 @Tag(name = "管理后台 - 定时任务")

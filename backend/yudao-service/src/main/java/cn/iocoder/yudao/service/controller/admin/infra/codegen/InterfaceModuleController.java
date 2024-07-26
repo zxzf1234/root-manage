@@ -1,6 +1,6 @@
 package cn.iocoder.yudao.service.controller.admin.infra.codegen;
 
-import cn.iocoder.yudao.framework.common.pojo.CommonResult;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.CommonResult;
 import cn.iocoder.yudao.service.service.infra.codegen.InterfaceModuleService;
 import cn.iocoder.yudao.service.vo.infra.codegen.interfaceModule.*;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,7 +14,7 @@ import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.util.List;
 
-import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
+import static cn.iocoder.yudao.service.framework.web.web.core.pojo.CommonResult.success;
 
 @Tag(name = "管理后台 - 接口模块")
 @RestController

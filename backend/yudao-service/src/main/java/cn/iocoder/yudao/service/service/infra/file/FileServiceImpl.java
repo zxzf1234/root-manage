@@ -2,8 +2,8 @@ package cn.iocoder.yudao.service.service.infra.file;
 
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.StrUtil;
-import cn.iocoder.yudao.framework.common.pojo.PageResult;
-import cn.iocoder.yudao.framework.common.util.io.FileUtils;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.PageResult;
+import cn.iocoder.yudao.service.util.io.FileUtils;
 import cn.iocoder.yudao.service.framework.file.core.client.FileClient;
 import cn.iocoder.yudao.service.framework.file.core.utils.FileTypeUtils;
 import cn.iocoder.yudao.service.vo.infra.file.file.FilePageReqVO;
@@ -19,7 +19,7 @@ import javax.annotation.Resource;
 
 import java.util.Optional;
 
-import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
+import static cn.iocoder.yudao.service.framework.exception.util.ServiceExceptionUtil.exception;
 import static cn.iocoder.yudao.service.errorCode.infra.ErrorCodeConstants.FILE_NOT_EXISTS;
 
 /**

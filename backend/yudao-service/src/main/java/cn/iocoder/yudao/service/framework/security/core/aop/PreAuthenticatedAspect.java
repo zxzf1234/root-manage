@@ -7,8 +7,8 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 
-import static cn.iocoder.yudao.framework.common.exception.enums.GlobalErrorCodeConstants.UNAUTHORIZED;
-import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
+import static cn.iocoder.yudao.service.framework.exception.enums.GlobalErrorCodeConstants.UNAUTHORIZED;
+import static cn.iocoder.yudao.service.framework.exception.util.ServiceExceptionUtil.exception;
 
 @Aspect
 @Slf4j

@@ -2,9 +2,9 @@ package cn.iocoder.yudao.service.service.infra.file;
 
 import cn.hutool.core.io.resource.ResourceUtil;
 import cn.hutool.core.util.IdUtil;
-import cn.iocoder.yudao.framework.common.pojo.PageResult;
-import cn.iocoder.yudao.framework.common.util.json.JsonUtils;
-import cn.iocoder.yudao.framework.common.util.validation.ValidationUtils;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.PageResult;
+import cn.iocoder.yudao.service.util.json.JsonUtils;
+import cn.iocoder.yudao.service.util.validation.ValidationUtils;
 import cn.iocoder.yudao.service.framework.file.core.client.FileClient;
 import cn.iocoder.yudao.service.framework.file.core.client.FileClientConfig;
 import cn.iocoder.yudao.service.framework.file.core.client.FileClientFactory;
@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
+import static cn.iocoder.yudao.service.framework.exception.util.ServiceExceptionUtil.exception;
 import static cn.iocoder.yudao.service.errorCode.infra.ErrorCodeConstants.FILE_CONFIG_DELETE_FAIL_MASTER;
 import static cn.iocoder.yudao.service.errorCode.infra.ErrorCodeConstants.FILE_CONFIG_NOT_EXISTS;
 

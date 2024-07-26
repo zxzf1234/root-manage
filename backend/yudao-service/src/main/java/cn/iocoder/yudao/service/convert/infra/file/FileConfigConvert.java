@@ -1,6 +1,6 @@
 package cn.iocoder.yudao.service.convert.infra.file;
 
-import cn.iocoder.yudao.framework.common.pojo.PageResult;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.PageResult;
 import cn.iocoder.yudao.service.vo.infra.file.config.FileConfigCreateReqVO;
 import cn.iocoder.yudao.service.vo.infra.file.config.FileConfigRespVO;
 import cn.iocoder.yudao.service.vo.infra.file.config.FileConfigUpdateReqVO;

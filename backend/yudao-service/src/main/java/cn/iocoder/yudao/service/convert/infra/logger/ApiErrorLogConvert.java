@@ -1,6 +1,6 @@
 package cn.iocoder.yudao.service.convert.infra.logger;
 
-import cn.iocoder.yudao.framework.common.pojo.PageResult;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.PageResult;
 import cn.iocoder.yudao.service.vo.infra.logger.apierrorlog.ApiErrorLogCreateReqVO;
 import cn.iocoder.yudao.service.vo.infra.logger.apierrorlog.ApiErrorLogExcelVO;
 import cn.iocoder.yudao.service.vo.infra.logger.apierrorlog.ApiErrorLogRespVO;

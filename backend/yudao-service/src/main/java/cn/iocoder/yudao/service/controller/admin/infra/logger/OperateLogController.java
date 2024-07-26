@@ -1,7 +1,7 @@
 package cn.iocoder.yudao.service.controller.admin.infra.logger;
 
-import cn.iocoder.yudao.framework.common.pojo.CommonResult;
-import cn.iocoder.yudao.framework.common.pojo.PageResult;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.CommonResult;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.PageResult;
 import cn.iocoder.yudao.service.framework.excel.core.util.ExcelUtils;
 import cn.iocoder.yudao.service.framework.operateLog.core.annotations.OperateLog;
 import cn.iocoder.yudao.service.vo.infra.logger.operatelog.OperateLogExcelVO;
@@ -26,7 +26,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 
-import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
+import static cn.iocoder.yudao.service.framework.web.web.core.pojo.CommonResult.success;
 import static cn.iocoder.yudao.service.framework.operateLog.core.enums.OperateTypeEnum.EXPORT;
 
 @Tag(name = "管理后台 - 操作日志")

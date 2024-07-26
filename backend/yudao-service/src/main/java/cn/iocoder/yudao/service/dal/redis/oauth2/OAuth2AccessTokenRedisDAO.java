@@ -1,8 +1,8 @@
 package cn.iocoder.yudao.service.dal.redis.oauth2;
 
 import cn.hutool.core.date.LocalDateTimeUtil;
-import cn.iocoder.yudao.framework.common.util.collection.CollectionUtils;
-import cn.iocoder.yudao.framework.common.util.json.JsonUtils;
+import cn.iocoder.yudao.service.util.collection.CollectionUtils;
+import cn.iocoder.yudao.service.util.json.JsonUtils;
 import cn.iocoder.yudao.service.model.infra.oauth2.SystemOauth2AccessToken;
 import cn.iocoder.yudao.service.model.infra.oauth2.SystemOauth2AccessTokenDraft;
 import org.springframework.data.redis.core.StringRedisTemplate;

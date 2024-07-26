@@ -9,7 +9,7 @@ import cn.iocoder.yudao.service.vo.infra.data.dictType.DictTypeGetOutput;
 
 import java.util.*;
 
-import cn.iocoder.yudao.framework.common.pojo.PageResult;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.PageResult;
 
 /**
  * 字典类型 Service 接口

@@ -1,6 +1,6 @@
 package cn.iocoder.yudao.service.controller.admin.infra.db;
 
-import cn.iocoder.yudao.framework.common.pojo.CommonResult;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.CommonResult;
 import cn.iocoder.yudao.service.vo.infra.db.DataSourceConfigCreateReqVO;
 import cn.iocoder.yudao.service.vo.infra.db.DataSourceConfigRespVO;
 import cn.iocoder.yudao.service.vo.infra.db.DataSourceConfigUpdateReqVO;
@@ -18,7 +18,7 @@ import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.util.List;
 
-import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
+import static cn.iocoder.yudao.service.framework.web.web.core.pojo.CommonResult.success;
 
 @Tag(name = "管理后台 - 数据源配置")
 @RestController

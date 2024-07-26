@@ -1,6 +1,6 @@
 package cn.iocoder.yudao.service.service.infra.data;
 
-import cn.iocoder.yudao.framework.common.util.entity.EntityUtils;
+import cn.iocoder.yudao.service.util.entity.EntityUtils;
 import cn.iocoder.yudao.service.model.infra.data.*;
 import cn.iocoder.yudao.service.vo.infra.data.dictType.DictDataListAllSimpleOutput;
 import cn.iocoder.yudao.service.vo.infra.data.dictType.DictDataListOutput;
@@ -10,7 +10,7 @@ import cn.iocoder.yudao.service.vo.infra.data.dictType.DictTypeGetOutput;
 import cn.iocoder.yudao.service.vo.infra.data.dictType.DictTypeCreateInput;
 import cn.iocoder.yudao.service.vo.infra.data.dictType.*;
 import cn.hutool.core.util.StrUtil;
-import cn.iocoder.yudao.framework.common.pojo.PageResult;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.PageResult;
 import cn.iocoder.yudao.service.repository.infra.data.InfraDictDataRepository;
 import cn.iocoder.yudao.service.repository.infra.data.InfraDictTypeRepository;
 import org.babyfish.jimmer.DraftObjects;
@@ -25,7 +25,7 @@ import java.util.*;
 
 import cn.iocoder.yudao.service.convert.infra.data.DictTypeConvert;
 
-import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
+import static cn.iocoder.yudao.service.framework.exception.util.ServiceExceptionUtil.exception;
 import static cn.iocoder.yudao.service.errorCode.infra.data.DictTypeErrorCode.*;
 
 /**

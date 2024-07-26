@@ -2,9 +2,9 @@ package cn.iocoder.yudao.service.controller.admin.infra.file;
 
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.iocoder.yudao.framework.common.pojo.CommonResult;
-import cn.iocoder.yudao.framework.common.pojo.PageResult;
-import cn.iocoder.yudao.framework.common.util.servlet.ServletUtils;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.CommonResult;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.PageResult;
+import cn.iocoder.yudao.service.util.servlet.ServletUtils;
 import cn.iocoder.yudao.service.framework.operateLog.core.annotations.OperateLog;
 import cn.iocoder.yudao.service.vo.infra.file.file.FilePageReqVO;
 import cn.iocoder.yudao.service.vo.infra.file.file.FileRespVO;
@@ -28,7 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
+import static cn.iocoder.yudao.service.framework.web.web.core.pojo.CommonResult.success;
 
 @Tag(name = "管理后台 - 文件存储")
 @RestController

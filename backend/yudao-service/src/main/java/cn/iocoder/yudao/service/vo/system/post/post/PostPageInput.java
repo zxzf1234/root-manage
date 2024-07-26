@@ -1,14 +1,8 @@
 package cn.iocoder.yudao.service.vo.system.post.post;
 
-import cn.iocoder.yudao.framework.common.pojo.PageParam;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.PageParam;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
-import java.util.*;
-import javax.validation.constraints.*;
-import org.hibernate.validator.constraints.Length;
-import javax.validation.Valid;
-import cn.iocoder.yudao.framework.common.enums.CommonStatusEnum;
-import cn.iocoder.yudao.framework.common.validation.InEnum;
 
 @Schema(description = "获得岗位分页列表")
 @Data

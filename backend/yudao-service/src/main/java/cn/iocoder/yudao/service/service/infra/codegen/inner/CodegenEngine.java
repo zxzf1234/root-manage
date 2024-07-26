@@ -8,11 +8,11 @@ import cn.hutool.core.util.RuntimeUtil;
 import cn.hutool.extra.template.TemplateConfig;
 import cn.hutool.extra.template.TemplateEngine;
 import cn.hutool.extra.template.engine.velocity.VelocityEngine;
-import cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil;
-import cn.iocoder.yudao.framework.common.pojo.CommonResult;
-import cn.iocoder.yudao.framework.common.pojo.PageParam;
-import cn.iocoder.yudao.framework.common.pojo.PageResult;
-import cn.iocoder.yudao.framework.common.util.date.DateUtils;
+import cn.iocoder.yudao.service.framework.exception.util.ServiceExceptionUtil;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.CommonResult;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.PageParam;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.PageResult;
+import cn.iocoder.yudao.service.util.date.DateUtils;
 import cn.iocoder.yudao.service.framework.excel.core.util.ExcelUtils;
 import cn.iocoder.yudao.service.framework.operateLog.core.annotations.OperateLog;
 import cn.iocoder.yudao.service.framework.operateLog.core.enums.OperateTypeEnum;
@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 
 import static cn.hutool.core.map.MapUtil.getStr;
 import static cn.hutool.core.text.CharSequenceUtil.*;
-import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
+import static cn.iocoder.yudao.service.framework.exception.util.ServiceExceptionUtil.exception;
 
 /**
  * 代码生成的引擎，用于具体生成代码

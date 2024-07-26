@@ -1,7 +1,7 @@
 package cn.iocoder.yudao.service.controller.admin.infra.oauth2;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.iocoder.yudao.framework.common.pojo.CommonResult;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.CommonResult;
 import cn.iocoder.yudao.service.model.system.user.SystemUser;
 import cn.iocoder.yudao.service.service.system.post.PostService;
 import cn.iocoder.yudao.service.vo.infra.oauth2.user.OAuth2UserInfoRespVO;
@@ -23,7 +23,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
-import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
+import static cn.iocoder.yudao.service.framework.web.web.core.pojo.CommonResult.success;
 import static cn.iocoder.yudao.service.framework.security.core.util.SecurityFrameworkUtils.getLoginUserId;
 
 /**

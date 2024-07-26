@@ -1,7 +1,7 @@
 package cn.iocoder.yudao.service.framework.web.web.core.util;
 
-import cn.iocoder.yudao.framework.common.enums.UserTypeEnum;
-import cn.iocoder.yudao.framework.common.pojo.CommonResult;
+import cn.iocoder.yudao.service.enums.common.UserTypeEnum;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.CommonResult;
 import cn.iocoder.yudao.service.framework.web.web.config.WebProperties;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;

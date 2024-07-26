@@ -1,7 +1,7 @@
 package cn.iocoder.yudao.service.service.infra.oauth2;
 
 import cn.hutool.core.util.IdUtil;
-import cn.iocoder.yudao.framework.common.util.date.DateUtils;
+import cn.iocoder.yudao.service.util.date.DateUtils;
 import cn.iocoder.yudao.service.model.infra.oauth2.SystemOauth2Code;
 import cn.iocoder.yudao.service.model.infra.oauth2.SystemOauth2CodeDraft;
 import cn.iocoder.yudao.service.repository.infra.oauth2.SystemOauth2CodeRepository;
@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
+import static cn.iocoder.yudao.service.framework.exception.util.ServiceExceptionUtil.exception;
 import static cn.iocoder.yudao.service.errorCode.infra.ErrorCodeConstants.OAUTH2_CODE_EXPIRE;
 import static cn.iocoder.yudao.service.errorCode.infra.ErrorCodeConstants.OAUTH2_CODE_NOT_EXISTS;
 

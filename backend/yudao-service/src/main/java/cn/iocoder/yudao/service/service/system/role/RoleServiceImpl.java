@@ -3,9 +3,9 @@ package cn.iocoder.yudao.service.service.system.role;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.collection.CollUtil;
 
-import static cn.iocoder.yudao.framework.common.util.collection.CollectionUtils.convertMap;
-import cn.iocoder.yudao.framework.common.enums.CommonStatusEnum;
-import cn.iocoder.yudao.framework.common.util.object.ObjectUtils;
+import static cn.iocoder.yudao.service.util.collection.CollectionUtils.convertMap;
+import cn.iocoder.yudao.service.enums.common.CommonStatusEnum;
+import cn.iocoder.yudao.service.util.object.ObjectUtils;
 import cn.iocoder.yudao.service.framework.excel.core.util.ExcelUtils;
 import cn.iocoder.yudao.service.convert.system.role.RoleConvert;
 import cn.iocoder.yudao.service.enums.system.permission.SystemDataScopeEnum;
@@ -35,10 +35,10 @@ import java.io.IOException;
 import java.util.*;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.transaction.annotation.Transactional;
-import cn.iocoder.yudao.framework.common.pojo.PageResult;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.PageResult;
 import cn.iocoder.yudao.service.vo.system.role.role.*;
 
-import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
+import static cn.iocoder.yudao.service.framework.exception.util.ServiceExceptionUtil.exception;
 import static cn.iocoder.yudao.service.errorCode.system.role.RoleErrorCode.*;
 import static java.util.Collections.singleton;
 

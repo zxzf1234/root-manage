@@ -1,6 +1,6 @@
 package cn.iocoder.yudao.service.service.infra.codegen;
 
-import cn.iocoder.yudao.framework.common.pojo.PageResult;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.PageResult;
 import cn.iocoder.yudao.service.vo.infra.codegen.database.*;
 import java.util.List;
 import java.util.UUID;

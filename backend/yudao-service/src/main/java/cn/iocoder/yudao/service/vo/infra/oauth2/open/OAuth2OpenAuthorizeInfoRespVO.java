@@ -1,12 +1,12 @@
 package cn.iocoder.yudao.service.vo.infra.oauth2.open;
 
-import cn.iocoder.yudao.framework.common.core.KeyValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Map;
 
 @Schema(description = "管理后台 - 授权页的信息 Response VO")
 @Data
@@ -20,7 +20,7 @@ public class OAuth2OpenAuthorizeInfoRespVO {
     private Client client;
 
     @Schema(description = "scope 的选中信息,使用 List 保证有序性，Key 是 scope，Value 为是否选中", required = true)
-    private List<KeyValue<String, Boolean>> scopes;
+    private List<Map<String, Boolean>> scopes;
 
     @Data
     @NoArgsConstructor

@@ -3,7 +3,7 @@ package cn.iocoder.yudao.service.enums.infra.file;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import java.util.Arrays;
-import cn.iocoder.yudao.framework.common.core.IntArrayValuable;
+import cn.iocoder.yudao.service.enums.common.IntArrayValuable;
 
 /**
 * 文件存储器

@@ -1,7 +1,7 @@
 package cn.iocoder.yudao.service.service.infra.file;
 
 import cn.iocoder.yudao.service.vo.infra.file.file.FilePageReqVO;
-import cn.iocoder.yudao.framework.common.pojo.PageResult;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.PageResult;
 import cn.iocoder.yudao.service.model.infra.file.InfraFile;
 
 /**

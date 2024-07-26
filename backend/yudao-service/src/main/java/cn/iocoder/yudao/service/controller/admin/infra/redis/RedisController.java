@@ -2,7 +2,7 @@ package cn.iocoder.yudao.service.controller.admin.infra.redis;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.iocoder.yudao.framework.common.pojo.CommonResult;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.CommonResult;
 import cn.iocoder.yudao.service.framework.redis.core.RedisKeyDefine;
 import cn.iocoder.yudao.service.framework.redis.core.RedisKeyRegistry;
 import cn.iocoder.yudao.service.vo.infra.redis.RedisKeyDefineRespVO;
@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.util.*;
 
-import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
+import static cn.iocoder.yudao.service.framework.web.web.core.pojo.CommonResult.success;
 
 @Tag(name = "管理后台 - Redis 监控")
 @RestController

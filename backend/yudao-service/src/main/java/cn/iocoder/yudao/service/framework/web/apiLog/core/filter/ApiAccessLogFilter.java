@@ -5,10 +5,10 @@ import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.iocoder.yudao.service.framework.web.apiLog.core.service.ApiAccessLog;
 import cn.iocoder.yudao.service.framework.web.apiLog.core.service.ApiAccessLogFrameworkService;
-import cn.iocoder.yudao.framework.common.exception.enums.GlobalErrorCodeConstants;
-import cn.iocoder.yudao.framework.common.pojo.CommonResult;
-import cn.iocoder.yudao.framework.common.util.monitor.TracerUtils;
-import cn.iocoder.yudao.framework.common.util.servlet.ServletUtils;
+import cn.iocoder.yudao.service.framework.exception.enums.GlobalErrorCodeConstants;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.CommonResult;
+import cn.iocoder.yudao.service.util.monitor.TracerUtils;
+import cn.iocoder.yudao.service.util.servlet.ServletUtils;
 import cn.iocoder.yudao.service.framework.web.web.config.WebProperties;
 import cn.iocoder.yudao.service.framework.web.web.core.filter.ApiRequestFilter;
 import cn.iocoder.yudao.service.framework.web.web.core.util.WebFrameworkUtils;
@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Map;
 
-import static cn.iocoder.yudao.framework.common.util.json.JsonUtils.toJsonString;
+import static cn.iocoder.yudao.service.util.json.JsonUtils.toJsonString;
 
 /**
  * API 访问日志 Filter

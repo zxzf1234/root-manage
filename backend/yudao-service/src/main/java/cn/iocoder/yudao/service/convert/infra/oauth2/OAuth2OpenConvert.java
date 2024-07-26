@@ -1,9 +1,8 @@
 package cn.iocoder.yudao.service.convert.infra.oauth2;
 
 import cn.hutool.core.date.LocalDateTimeUtil;
-import cn.iocoder.yudao.framework.common.core.KeyValue;
-import cn.iocoder.yudao.framework.common.enums.UserTypeEnum;
-import cn.iocoder.yudao.framework.common.util.collection.CollectionUtils;
+import cn.iocoder.yudao.service.enums.common.UserTypeEnum;
+import cn.iocoder.yudao.service.util.collection.CollectionUtils;
 import cn.iocoder.yudao.service.framework.security.core.util.SecurityFrameworkUtils;
 import cn.iocoder.yudao.service.vo.infra.oauth2.open.OAuth2OpenAccessTokenRespVO;
 import cn.iocoder.yudao.service.vo.infra.oauth2.open.OAuth2OpenAuthorizeInfoRespVO;
@@ -16,6 +15,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -43,11 +43,13 @@ public interface OAuth2OpenConvert {
 
     default OAuth2OpenAuthorizeInfoRespVO convert(SystemOauth2Client client, List<SystemOauth2Approve> approves) {
         // 构建 scopes
-        List<KeyValue<String, Boolean>> scopes = new ArrayList<>(client.scopes().size());
+        List<Map<String, Boolean>> scopes = new ArrayList<>(client.scopes().size());
         Map<String, SystemOauth2Approve> approveMap = CollectionUtils.convertMap(approves, SystemOauth2Approve::scope);
         client.scopes().forEach(scope -> {
             SystemOauth2Approve approve = approveMap.get(scope);
-            scopes.add(new KeyValue<>(scope, approve != null ? approve.approved() : false));
+            Map<String, Boolean> mapScope = new HashMap<>();
+            mapScope.put(scope, approve != null && approve.approved());
+            scopes.add(mapScope);
         });
         // 拼接返回
         return new OAuth2OpenAuthorizeInfoRespVO(

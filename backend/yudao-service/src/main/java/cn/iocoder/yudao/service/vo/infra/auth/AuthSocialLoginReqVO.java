@@ -1,6 +1,6 @@
 package cn.iocoder.yudao.service.vo.infra.auth;
 
-import cn.iocoder.yudao.framework.common.validation.InEnum;
+import cn.iocoder.yudao.service.framework.validation.InEnum;
 import cn.iocoder.yudao.service.enums.system.social.SocialTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;

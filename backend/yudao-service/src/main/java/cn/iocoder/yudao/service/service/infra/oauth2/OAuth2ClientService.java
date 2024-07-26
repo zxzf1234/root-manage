@@ -1,6 +1,6 @@
 package cn.iocoder.yudao.service.service.infra.oauth2;
 
-import cn.iocoder.yudao.framework.common.pojo.PageResult;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.PageResult;
 import cn.iocoder.yudao.service.vo.infra.oauth2.client.OAuth2ClientCreateReqVO;
 import cn.iocoder.yudao.service.vo.infra.oauth2.client.OAuth2ClientPageReqVO;
 import cn.iocoder.yudao.service.vo.infra.oauth2.client.OAuth2ClientRespVO;

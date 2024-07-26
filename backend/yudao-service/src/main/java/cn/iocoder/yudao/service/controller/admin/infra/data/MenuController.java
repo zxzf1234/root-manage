@@ -1,7 +1,7 @@
 package cn.iocoder.yudao.service.controller.admin.infra.data;
 
-import cn.iocoder.yudao.framework.common.enums.CommonStatusEnum;
-import cn.iocoder.yudao.framework.common.pojo.CommonResult;
+import cn.iocoder.yudao.service.enums.common.CommonStatusEnum;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.CommonResult;
 import cn.iocoder.yudao.service.vo.infra.data.menu.*;
 import cn.iocoder.yudao.service.convert.infra.data.MenuConvert;
 import cn.iocoder.yudao.service.model.infra.data.SystemMenu;
@@ -19,7 +19,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
-import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
+import static cn.iocoder.yudao.service.framework.web.web.core.pojo.CommonResult.success;
 
 @Tag(name = "管理后台 - 菜单")
 @RestController

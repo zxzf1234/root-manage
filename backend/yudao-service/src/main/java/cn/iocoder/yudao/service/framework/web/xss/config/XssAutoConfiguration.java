@@ -1,6 +1,6 @@
 package cn.iocoder.yudao.service.framework.web.xss.config;
 
-import cn.iocoder.yudao.framework.common.enums.WebFilterOrderEnum;
+import cn.iocoder.yudao.service.enums.common.WebFilterOrderEnum;
 import cn.iocoder.yudao.service.framework.web.xss.core.clean.JsoupXssCleaner;
 import cn.iocoder.yudao.service.framework.web.xss.core.clean.XssCleaner;
 import cn.iocoder.yudao.service.framework.web.xss.core.filter.XssFilter;

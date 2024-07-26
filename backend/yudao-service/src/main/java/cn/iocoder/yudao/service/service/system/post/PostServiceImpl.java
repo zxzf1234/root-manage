@@ -1,6 +1,6 @@
 package cn.iocoder.yudao.service.service.system.post;
 
-import cn.iocoder.yudao.framework.common.enums.CommonStatusEnum;
+import cn.iocoder.yudao.service.enums.common.CommonStatusEnum;
 import cn.iocoder.yudao.service.framework.excel.core.util.ExcelUtils;
 import cn.iocoder.yudao.service.convert.system.post.PostConvert;
 import cn.iocoder.yudao.service.model.system.dept.SystemPost;
@@ -21,13 +21,13 @@ import java.util.*;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
-import cn.iocoder.yudao.framework.common.pojo.PageResult;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.PageResult;
 import cn.hutool.core.collection.CollUtil;
-import static cn.iocoder.yudao.framework.common.util.collection.CollectionUtils.convertMap;
+import static cn.iocoder.yudao.service.util.collection.CollectionUtils.convertMap;
 
-import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
+import static cn.iocoder.yudao.service.framework.exception.util.ServiceExceptionUtil.exception;
 import static cn.iocoder.yudao.service.errorCode.system.post.PostErrorCode.*;
-import static cn.iocoder.yudao.framework.common.util.collection.SetUtils.asSet;
+import static cn.iocoder.yudao.service.util.collection.SetUtils.asSet;
 
 /**
  * 岗位管理 Service 实现类

@@ -1,7 +1,7 @@
 package cn.iocoder.yudao.service.vo.infra.oauth2.client;
 
 import cn.hutool.core.util.StrUtil;
-import cn.iocoder.yudao.framework.common.util.json.JsonUtils;
+import cn.iocoder.yudao.service.util.json.JsonUtils;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import org.hibernate.validator.constraints.URL;

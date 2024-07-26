@@ -2,9 +2,9 @@ package cn.iocoder.yudao.service.framework.security.core.filter;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.iocoder.yudao.framework.common.exception.ServiceException;
-import cn.iocoder.yudao.framework.common.pojo.CommonResult;
-import cn.iocoder.yudao.framework.common.util.servlet.ServletUtils;
+import cn.iocoder.yudao.service.framework.exception.ServiceException;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.CommonResult;
+import cn.iocoder.yudao.service.util.servlet.ServletUtils;
 import cn.iocoder.yudao.service.framework.security.config.SecurityProperties;
 import cn.iocoder.yudao.service.framework.security.core.LoginUser;
 import cn.iocoder.yudao.service.framework.security.core.util.SecurityFrameworkUtils;

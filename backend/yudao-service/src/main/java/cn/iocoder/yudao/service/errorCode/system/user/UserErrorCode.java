@@ -1,6 +1,6 @@
 package cn.iocoder.yudao.service.errorCode.system.user;
 
-import cn.iocoder.yudao.framework.common.exception.ErrorCode;
+import cn.iocoder.yudao.service.framework.exception.ErrorCode;
 
 /**
  * user 用户管理 错误码枚举类

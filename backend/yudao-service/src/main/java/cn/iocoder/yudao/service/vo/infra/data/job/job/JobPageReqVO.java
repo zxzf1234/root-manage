@@ -1,6 +1,6 @@
 package cn.iocoder.yudao.service.vo.infra.data.job.job;
 
-import cn.iocoder.yudao.framework.common.pojo.PageParam;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.PageParam;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

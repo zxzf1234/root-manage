@@ -16,7 +16,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
-import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
+import static cn.iocoder.yudao.service.framework.exception.util.ServiceExceptionUtil.exception;
 import static cn.iocoder.yudao.service.errorCode.infra.ErrorCodeConstants.*;
 
 @Service

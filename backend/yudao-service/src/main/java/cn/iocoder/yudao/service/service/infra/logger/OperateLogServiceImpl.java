@@ -2,8 +2,8 @@ package cn.iocoder.yudao.service.service.infra.logger;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.iocoder.yudao.framework.common.pojo.PageResult;
-import cn.iocoder.yudao.framework.common.util.string.StrUtils;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.PageResult;
+import cn.iocoder.yudao.service.util.string.StrUtils;
 import cn.iocoder.yudao.service.vo.infra.logger.operatelog.OperateLogCreateReqVO;
 import cn.iocoder.yudao.service.model.system.user.SystemUser;
 import cn.iocoder.yudao.service.vo.infra.logger.operatelog.OperateLogExportReqVO;
@@ -24,7 +24,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import static cn.iocoder.yudao.framework.common.util.collection.CollectionUtils.convertSet;
+import static cn.iocoder.yudao.service.util.collection.CollectionUtils.convertSet;
 
 @Service
 @Validated

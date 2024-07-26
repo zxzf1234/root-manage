@@ -3,7 +3,7 @@ package cn.iocoder.yudao.service.service.infra.oauth2;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.iocoder.yudao.framework.common.enums.UserTypeEnum;
+import cn.iocoder.yudao.service.enums.common.UserTypeEnum;
 import cn.iocoder.yudao.service.errorCode.infra.ErrorCodeConstants;
 import cn.iocoder.yudao.service.model.infra.oauth2.SystemOauth2AccessToken;
 import cn.iocoder.yudao.service.model.infra.oauth2.SystemOauth2Code;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.List;
 
-import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
+import static cn.iocoder.yudao.service.framework.exception.util.ServiceExceptionUtil.exception;
 
 /**
  * OAuth2 授予 Service 实现类

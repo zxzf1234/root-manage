@@ -19,9 +19,9 @@ import javax.servlet.http.*;
 import java.util.*;
 import java.io.IOException;
 
-import cn.iocoder.yudao.framework.common.pojo.PageResult;
-import cn.iocoder.yudao.framework.common.pojo.CommonResult;
-import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.PageResult;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.CommonResult;
+import static cn.iocoder.yudao.service.framework.web.web.core.pojo.CommonResult.success;
 
 import cn.iocoder.yudao.service.service.system.role.RoleService;
 import cn.iocoder.yudao.service.vo.system.role.role.*;

@@ -2,15 +2,11 @@ package cn.iocoder.yudao.service.controller.admin.infra.db;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.IdUtil;
-import cn.iocoder.yudao.framework.common.util.servlet.ServletUtils;
-import cn.smallbun.screw.core.Configuration;
+import cn.iocoder.yudao.service.util.servlet.ServletUtils;
 import cn.smallbun.screw.core.engine.EngineConfig;
 import cn.smallbun.screw.core.engine.EngineFileType;
 import cn.smallbun.screw.core.engine.EngineTemplateType;
-import cn.smallbun.screw.core.execute.DocumentationExecute;
 import cn.smallbun.screw.core.process.ProcessConfig;
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Operation;
@@ -19,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;

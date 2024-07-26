@@ -2,7 +2,7 @@ package cn.iocoder.yudao.service.framework.file.core.client.sftp;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.extra.ssh.Sftp;
-import cn.iocoder.yudao.framework.common.util.io.FileUtils;
+import cn.iocoder.yudao.service.util.io.FileUtils;
 import cn.iocoder.yudao.service.framework.file.core.client.AbstractFileClient;
 
 import java.io.File;

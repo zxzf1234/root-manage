@@ -1,6 +1,6 @@
 package cn.iocoder.yudao.service.service.infra.data;
 
-import cn.iocoder.yudao.framework.common.util.collection.CollectionUtils;
+import cn.iocoder.yudao.service.util.collection.CollectionUtils;
 import cn.iocoder.yudao.service.service.system.permission.PermissionService;
 import cn.iocoder.yudao.service.vo.infra.data.menu.MenuCreateReqVO;
 import cn.iocoder.yudao.service.vo.infra.data.menu.MenuListReqVO;
@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.util.*;
 
-import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
+import static cn.iocoder.yudao.service.framework.exception.util.ServiceExceptionUtil.exception;
 import static cn.iocoder.yudao.service.framework.security.core.util.SecurityFrameworkUtils.getLoginUserId;
 import static cn.iocoder.yudao.service.errorCode.infra.data.MenuErrorCode.*;
 

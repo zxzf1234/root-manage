@@ -3,7 +3,7 @@ package cn.iocoder.yudao.service.framework.web.jackson.config;
 import cn.iocoder.yudao.service.framework.web.jackson.core.databind.NumberSerializer;
 import cn.iocoder.yudao.service.framework.web.jackson.core.databind.LocalDateTimeDeserializer;
 import cn.iocoder.yudao.service.framework.web.jackson.core.databind.LocalDateTimeSerializer;
-import cn.iocoder.yudao.framework.common.util.json.JsonUtils;
+import cn.iocoder.yudao.service.util.json.JsonUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import lombok.extern.slf4j.Slf4j;

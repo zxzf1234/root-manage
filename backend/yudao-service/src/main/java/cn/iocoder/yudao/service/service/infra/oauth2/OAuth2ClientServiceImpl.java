@@ -3,9 +3,9 @@ package cn.iocoder.yudao.service.service.infra.oauth2;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.iocoder.yudao.framework.common.enums.CommonStatusEnum;
-import cn.iocoder.yudao.framework.common.pojo.PageResult;
-import cn.iocoder.yudao.framework.common.util.string.StrUtils;
+import cn.iocoder.yudao.service.enums.common.CommonStatusEnum;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.PageResult;
+import cn.iocoder.yudao.service.util.string.StrUtils;
 import cn.iocoder.yudao.service.vo.infra.oauth2.client.OAuth2ClientCreateReqVO;
 import cn.iocoder.yudao.service.vo.infra.oauth2.client.OAuth2ClientPageReqVO;
 import cn.iocoder.yudao.service.vo.infra.oauth2.client.OAuth2ClientRespVO;
@@ -24,7 +24,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
+import static cn.iocoder.yudao.service.framework.exception.util.ServiceExceptionUtil.exception;
 import static cn.iocoder.yudao.service.errorCode.infra.ErrorCodeConstants.*;
 
 /**

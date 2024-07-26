@@ -2,7 +2,7 @@ package cn.iocoder.yudao.service.vo.infra.oauth2.client;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
-import cn.iocoder.yudao.framework.common.pojo.PageParam;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.PageParam;
 
 @Schema(description = "管理后台 - OAuth2 客户端分页 Request VO")
 @Data

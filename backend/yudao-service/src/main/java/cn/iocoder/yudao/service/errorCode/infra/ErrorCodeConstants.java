@@ -1,6 +1,6 @@
 package cn.iocoder.yudao.service.errorCode.infra;
 
-import cn.iocoder.yudao.framework.common.exception.ErrorCode;
+import cn.iocoder.yudao.service.framework.exception.ErrorCode;
 
 /**
  * infra 错误码枚举类

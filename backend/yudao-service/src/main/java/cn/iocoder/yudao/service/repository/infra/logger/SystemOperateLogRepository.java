@@ -1,6 +1,6 @@
 package cn.iocoder.yudao.service.repository.infra.logger;
 
-import cn.iocoder.yudao.framework.common.exception.enums.GlobalErrorCodeConstants;
+import cn.iocoder.yudao.service.framework.exception.enums.GlobalErrorCodeConstants;
 import cn.iocoder.yudao.service.vo.infra.logger.operatelog.OperateLogExportReqVO;
 import cn.iocoder.yudao.service.vo.infra.logger.operatelog.OperateLogPageReqVO;
 import cn.iocoder.yudao.service.model.infra.logger.SystemOperateLog;

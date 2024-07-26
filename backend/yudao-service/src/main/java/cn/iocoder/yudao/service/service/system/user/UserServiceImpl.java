@@ -1,5 +1,5 @@
 package cn.iocoder.yudao.service.service.system.user;
-import cn.iocoder.yudao.framework.common.exception.ServiceException;
+import cn.iocoder.yudao.service.framework.exception.ServiceException;
 import cn.iocoder.yudao.service.repository.system.dept.SystemUserPostRepository;
 import cn.iocoder.yudao.service.repository.system.user.SystemUserRepository;
 import cn.iocoder.yudao.service.service.infra.file.FileService;
@@ -11,7 +11,7 @@ import cn.iocoder.yudao.service.vo.system.user.profile.UserProfileUpdateReqVO;
 import com.google.common.annotations.VisibleForTesting;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import cn.iocoder.yudao.framework.common.util.collection.CollectionUtils;
+import cn.iocoder.yudao.service.util.collection.CollectionUtils;
 import cn.iocoder.yudao.service.model.system.dept.SystemUserPost;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.CollectionUtil;
@@ -42,14 +42,14 @@ import java.io.InputStream;
 import java.util.*;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.transaction.annotation.Transactional;
-import cn.iocoder.yudao.framework.common.pojo.PageResult;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.PageResult;
 import cn.iocoder.yudao.service.convert.system.user.UserConvert;
 import cn.iocoder.yudao.service.vo.system.user.user.*;
-import cn.iocoder.yudao.framework.common.enums.CommonStatusEnum;
+import cn.iocoder.yudao.service.enums.common.CommonStatusEnum;
 
-import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
+import static cn.iocoder.yudao.service.framework.exception.util.ServiceExceptionUtil.exception;
 import static cn.iocoder.yudao.service.errorCode.system.user.UserErrorCode.*;
-import static cn.iocoder.yudao.framework.common.util.collection.CollectionUtils.convertList;
+import static cn.iocoder.yudao.service.util.collection.CollectionUtils.convertList;
 
 /**
  * 用户管理 Service 实现类

@@ -3,7 +3,7 @@ package cn.iocoder.yudao.service.enums.infra.api;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import java.util.Arrays;
-import cn.iocoder.yudao.framework.common.core.IntArrayValuable;
+import cn.iocoder.yudao.service.enums.common.IntArrayValuable;
 
 /**
 * API 异常数据的处理状态

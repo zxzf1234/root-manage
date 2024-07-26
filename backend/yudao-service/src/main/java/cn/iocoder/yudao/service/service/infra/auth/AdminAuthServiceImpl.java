@@ -1,11 +1,11 @@
 package cn.iocoder.yudao.service.service.infra.auth;
 
 import cn.hutool.core.util.ObjectUtil;
-import cn.iocoder.yudao.framework.common.enums.CommonStatusEnum;
-import cn.iocoder.yudao.framework.common.enums.UserTypeEnum;
-import cn.iocoder.yudao.framework.common.util.monitor.TracerUtils;
-import cn.iocoder.yudao.framework.common.util.servlet.ServletUtils;
-import cn.iocoder.yudao.framework.common.util.validation.ValidationUtils;
+import cn.iocoder.yudao.service.enums.common.CommonStatusEnum;
+import cn.iocoder.yudao.service.enums.common.UserTypeEnum;
+import cn.iocoder.yudao.service.util.monitor.TracerUtils;
+import cn.iocoder.yudao.service.util.servlet.ServletUtils;
+import cn.iocoder.yudao.service.util.validation.ValidationUtils;
 import cn.iocoder.yudao.service.vo.infra.logger.loginlog.LoginLogCreateReqVO;
 import cn.iocoder.yudao.service.convert.infra.auth.AuthConvert;
 import cn.iocoder.yudao.service.enums.system.login.SystemLoginTypeEnum;
@@ -30,8 +30,8 @@ import javax.validation.Validator;
 import java.util.Objects;
 import java.util.Optional;
 
-import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
-import static cn.iocoder.yudao.framework.common.util.servlet.ServletUtils.getClientIP;
+import static cn.iocoder.yudao.service.framework.exception.util.ServiceExceptionUtil.exception;
+import static cn.iocoder.yudao.service.util.servlet.ServletUtils.getClientIP;
 import static cn.iocoder.yudao.service.errorCode.infra.ErrorCodeConstants.*;
 
 /**

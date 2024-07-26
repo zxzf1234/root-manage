@@ -5,7 +5,7 @@ import cn.iocoder.yudao.service.framework.web.apiLog.core.service.ApiAccessLogFr
 import cn.iocoder.yudao.service.framework.web.apiLog.core.service.ApiAccessLogFrameworkServiceImpl;
 import cn.iocoder.yudao.service.framework.web.apiLog.core.service.ApiErrorLogFrameworkService;
 import cn.iocoder.yudao.service.framework.web.apiLog.core.service.ApiErrorLogFrameworkServiceImpl;
-import cn.iocoder.yudao.framework.common.enums.WebFilterOrderEnum;
+import cn.iocoder.yudao.service.enums.common.WebFilterOrderEnum;
 import cn.iocoder.yudao.service.framework.web.web.config.WebProperties;
 import cn.iocoder.yudao.service.framework.web.web.config.WebAutoConfiguration;
 import org.springframework.beans.factory.annotation.Value;

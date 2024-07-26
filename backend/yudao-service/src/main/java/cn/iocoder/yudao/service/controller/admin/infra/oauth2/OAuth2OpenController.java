@@ -4,10 +4,10 @@ import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.iocoder.yudao.framework.common.enums.UserTypeEnum;
-import cn.iocoder.yudao.framework.common.pojo.CommonResult;
-import cn.iocoder.yudao.framework.common.util.http.HttpUtils;
-import cn.iocoder.yudao.framework.common.util.json.JsonUtils;
+import cn.iocoder.yudao.service.enums.common.UserTypeEnum;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.CommonResult;
+import cn.iocoder.yudao.service.util.http.HttpUtils;
+import cn.iocoder.yudao.service.util.json.JsonUtils;
 import cn.iocoder.yudao.service.framework.operateLog.core.annotations.OperateLog;
 import cn.iocoder.yudao.service.vo.infra.oauth2.open.OAuth2OpenAccessTokenRespVO;
 import cn.iocoder.yudao.service.vo.infra.oauth2.open.OAuth2OpenAuthorizeInfoRespVO;
@@ -37,10 +37,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import static cn.iocoder.yudao.framework.common.exception.enums.GlobalErrorCodeConstants.BAD_REQUEST;
-import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception0;
-import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
-import static cn.iocoder.yudao.framework.common.util.collection.CollectionUtils.convertList;
+import static cn.iocoder.yudao.service.framework.exception.enums.GlobalErrorCodeConstants.BAD_REQUEST;
+import static cn.iocoder.yudao.service.framework.exception.util.ServiceExceptionUtil.exception0;
+import static cn.iocoder.yudao.service.framework.web.web.core.pojo.CommonResult.success;
+import static cn.iocoder.yudao.service.util.collection.CollectionUtils.convertList;
 import static cn.iocoder.yudao.service.framework.security.core.util.SecurityFrameworkUtils.getLoginUserId;
 
 /**

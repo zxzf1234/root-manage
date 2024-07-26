@@ -2,7 +2,7 @@ package cn.iocoder.yudao.service.service.infra.oauth2;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.Assert;
-import cn.iocoder.yudao.framework.common.util.date.DateUtils;
+import cn.iocoder.yudao.service.util.date.DateUtils;
 import cn.iocoder.yudao.service.model.infra.oauth2.SystemOauth2Approve;
 import cn.iocoder.yudao.service.model.infra.oauth2.SystemOauth2ApproveDraft;
 import cn.iocoder.yudao.service.model.infra.oauth2.SystemOauth2Client;
@@ -17,7 +17,7 @@ import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.util.*;
 
-import static cn.iocoder.yudao.framework.common.util.collection.CollectionUtils.convertSet;
+import static cn.iocoder.yudao.service.util.collection.CollectionUtils.convertSet;
 
 /**
  * OAuth2 批准 Service 实现类

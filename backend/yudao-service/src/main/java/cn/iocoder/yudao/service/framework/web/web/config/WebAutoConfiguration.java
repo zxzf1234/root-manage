@@ -1,7 +1,7 @@
 package cn.iocoder.yudao.service.framework.web.web.config;
 
 import cn.iocoder.yudao.service.framework.web.apiLog.core.service.ApiErrorLogFrameworkService;
-import cn.iocoder.yudao.framework.common.enums.WebFilterOrderEnum;
+import cn.iocoder.yudao.service.enums.common.WebFilterOrderEnum;
 import cn.iocoder.yudao.service.framework.web.web.core.filter.CacheRequestBodyFilter;
 import cn.iocoder.yudao.service.framework.web.web.core.filter.DemoFilter;
 import cn.iocoder.yudao.service.framework.web.web.core.handler.GlobalExceptionHandler;

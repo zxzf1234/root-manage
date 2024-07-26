@@ -3,15 +3,14 @@ package cn.iocoder.yudao.service.service.system.post;
 import cn.iocoder.yudao.service.model.system.dept.SystemPost;
 import cn.iocoder.yudao.service.vo.system.post.post.PostPageOutput;
 import cn.iocoder.yudao.service.vo.system.post.post.PostPageInput;
-import cn.iocoder.yudao.service.vo.system.post.post.PostExportedOutput;
 import cn.iocoder.yudao.service.vo.system.post.post.PostExportedInput;
 import cn.iocoder.yudao.service.vo.system.post.post.PostListAllSimpleOutput;
 import cn.iocoder.yudao.service.vo.system.post.post.PostGetOutput;
 import cn.iocoder.yudao.service.vo.system.post.post.PostUpdateInput;
 import cn.iocoder.yudao.service.vo.system.post.post.PostCreateInput;
 import java.util.*;
-import cn.iocoder.yudao.service.vo.system.post.post.*;
-import cn.iocoder.yudao.framework.common.pojo.PageResult;
+
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.PageResult;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 

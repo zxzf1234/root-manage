@@ -1,6 +1,6 @@
 package cn.iocoder.yudao.service.service.infra.data;
 
-import cn.iocoder.yudao.framework.common.util.upgrade.UpgradeUtils;
+import cn.iocoder.yudao.service.util.upgrade.UpgradeUtils;
 import cn.iocoder.yudao.service.framework.job.core.scheduler.SchedulerManager;
 import cn.iocoder.yudao.service.framework.job.core.util.CronUtils;
 import cn.iocoder.yudao.service.enums.infra.job.InfraJobStatusEnum;
@@ -29,10 +29,10 @@ import org.springframework.data.domain.Page;
 import java.util.*;
 
 import org.springframework.transaction.annotation.Transactional;
-import cn.iocoder.yudao.framework.common.pojo.PageResult;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.PageResult;
 
-import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
-import static cn.iocoder.yudao.framework.common.util.collection.CollectionUtils.containsAny;
+import static cn.iocoder.yudao.service.framework.exception.util.ServiceExceptionUtil.exception;
+import static cn.iocoder.yudao.service.util.collection.CollectionUtils.containsAny;
 import static cn.iocoder.yudao.service.errorCode.infra.data.JobErrorCode.*;
 
 /**

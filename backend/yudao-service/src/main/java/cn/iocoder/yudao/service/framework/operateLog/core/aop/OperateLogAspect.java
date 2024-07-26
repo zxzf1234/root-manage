@@ -4,11 +4,11 @@ import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.iocoder.yudao.framework.common.enums.UserTypeEnum;
-import cn.iocoder.yudao.framework.common.pojo.CommonResult;
-import cn.iocoder.yudao.framework.common.util.json.JsonUtils;
-import cn.iocoder.yudao.framework.common.util.monitor.TracerUtils;
-import cn.iocoder.yudao.framework.common.util.servlet.ServletUtils;
+import cn.iocoder.yudao.service.enums.common.UserTypeEnum;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.CommonResult;
+import cn.iocoder.yudao.service.util.json.JsonUtils;
+import cn.iocoder.yudao.service.util.monitor.TracerUtils;
+import cn.iocoder.yudao.service.util.servlet.ServletUtils;
 import cn.iocoder.yudao.service.framework.operateLog.core.enums.OperateTypeEnum;
 import cn.iocoder.yudao.service.framework.operateLog.core.service.OperateLog;
 import cn.iocoder.yudao.service.framework.operateLog.core.service.OperateLogFrameworkService;
@@ -37,8 +37,8 @@ import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.IntStream;
 
-import static cn.iocoder.yudao.framework.common.exception.enums.GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR;
-import static cn.iocoder.yudao.framework.common.exception.enums.GlobalErrorCodeConstants.SUCCESS;
+import static cn.iocoder.yudao.service.framework.exception.enums.GlobalErrorCodeConstants.INTERNAL_SERVER_ERROR;
+import static cn.iocoder.yudao.service.framework.exception.enums.GlobalErrorCodeConstants.SUCCESS;
 
 /**
  * 拦截使用 @OperateLog 注解，如果满足条件，则生成操作日志。

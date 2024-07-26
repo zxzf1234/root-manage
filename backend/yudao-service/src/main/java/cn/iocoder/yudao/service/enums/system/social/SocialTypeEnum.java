@@ -1,7 +1,7 @@
 package cn.iocoder.yudao.service.enums.system.social;
 
 import cn.hutool.core.util.ArrayUtil;
-import cn.iocoder.yudao.framework.common.core.IntArrayValuable;
+import cn.iocoder.yudao.service.enums.common.IntArrayValuable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

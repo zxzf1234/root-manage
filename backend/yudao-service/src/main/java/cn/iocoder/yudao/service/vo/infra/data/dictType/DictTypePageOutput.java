@@ -6,7 +6,7 @@ import lombok.*;
 import java.util.*;
 
 import org.springframework.format.annotation.DateTimeFormat;
-import static cn.iocoder.yudao.framework.common.util.date.DateUtils.FORMAT_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND;
+import static cn.iocoder.yudao.service.util.date.DateUtils.FORMAT_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND;
 import java.time.LocalDateTime;
 
 @Schema(description = "获得字典类型的分页列表")

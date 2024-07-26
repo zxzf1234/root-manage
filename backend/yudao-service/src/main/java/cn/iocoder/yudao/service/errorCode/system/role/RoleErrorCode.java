@@ -1,6 +1,6 @@
 package cn.iocoder.yudao.service.errorCode.system.role;
 
-import cn.iocoder.yudao.framework.common.exception.ErrorCode;
+import cn.iocoder.yudao.service.framework.exception.ErrorCode;
 
 /**
  * role 角色管理 错误码枚举类

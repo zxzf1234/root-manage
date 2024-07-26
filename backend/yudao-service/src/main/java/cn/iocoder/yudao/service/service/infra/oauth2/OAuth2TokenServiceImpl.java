@@ -3,9 +3,9 @@ package cn.iocoder.yudao.service.service.infra.oauth2;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
-import cn.iocoder.yudao.framework.common.exception.enums.GlobalErrorCodeConstants;
-import cn.iocoder.yudao.framework.common.pojo.PageResult;
-import cn.iocoder.yudao.framework.common.util.date.DateUtils;
+import cn.iocoder.yudao.service.framework.exception.enums.GlobalErrorCodeConstants;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.PageResult;
+import cn.iocoder.yudao.service.util.date.DateUtils;
 import cn.iocoder.yudao.service.vo.infra.oauth2.token.OAuth2AccessTokenPageReqVO;
 import cn.iocoder.yudao.service.vo.infra.oauth2.token.OAuth2AccessTokenRespVO;
 import cn.iocoder.yudao.service.convert.infra.auth.OAuth2TokenConvert;
@@ -22,8 +22,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception0;
-import static cn.iocoder.yudao.framework.common.util.collection.CollectionUtils.convertSet;
+import static cn.iocoder.yudao.service.framework.exception.util.ServiceExceptionUtil.exception0;
+import static cn.iocoder.yudao.service.util.collection.CollectionUtils.convertSet;
 
 /**
  * OAuth2.0 Token Service 实现类

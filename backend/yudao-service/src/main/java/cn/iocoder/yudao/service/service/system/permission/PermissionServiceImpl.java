@@ -3,43 +3,27 @@ package cn.iocoder.yudao.service.service.system.permission;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ArrayUtil;
-import cn.iocoder.yudao.framework.common.enums.CommonStatusEnum;
-import cn.iocoder.yudao.framework.common.util.collection.CollectionUtils;
-import cn.iocoder.yudao.framework.common.util.json.JsonUtils;
-import cn.iocoder.yudao.service.enums.system.permission.SystemDataScopeEnum;
+import cn.iocoder.yudao.service.enums.common.CommonStatusEnum;
+import cn.iocoder.yudao.service.util.collection.CollectionUtils;
 import cn.iocoder.yudao.service.model.infra.data.SystemMenu;
-import cn.iocoder.yudao.service.model.system.dept.SystemDept;
 import cn.iocoder.yudao.service.model.system.permission.*;
 import cn.iocoder.yudao.service.model.system.role.SystemRole;
 import cn.iocoder.yudao.service.repository.infra.data.SystemMenuRepository;
 import cn.iocoder.yudao.service.repository.system.permission.SystemRoleMenuRepository;
 import cn.iocoder.yudao.service.repository.system.permission.SystemUserRoleRepository;
 import cn.iocoder.yudao.service.service.infra.data.MenuService;
-import cn.iocoder.yudao.service.service.system.dept.DeptService;
 import cn.iocoder.yudao.service.service.system.role.RoleService;
-import cn.iocoder.yudao.service.service.system.user.UserService;
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Suppliers;
-import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionSynchronization;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.*;
-import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import static cn.iocoder.yudao.framework.common.util.collection.CollectionUtils.convertList;
-import static cn.iocoder.yudao.framework.common.util.collection.CollectionUtils.convertSet;
+import static cn.iocoder.yudao.service.util.collection.CollectionUtils.convertList;
+import static cn.iocoder.yudao.service.util.collection.CollectionUtils.convertSet;
 import static java.util.Collections.singleton;
 
 /**

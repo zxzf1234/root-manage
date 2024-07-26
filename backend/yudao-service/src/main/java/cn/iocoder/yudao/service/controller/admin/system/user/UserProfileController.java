@@ -1,7 +1,7 @@
 package cn.iocoder.yudao.service.controller.admin.system.user;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.iocoder.yudao.framework.common.pojo.CommonResult;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.CommonResult;
 import cn.iocoder.yudao.service.model.system.role.SystemRole;
 import cn.iocoder.yudao.service.model.system.user.SystemUser;
 import cn.iocoder.yudao.service.service.system.post.PostService;
@@ -25,8 +25,8 @@ import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.util.List;
 
-import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
-import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
+import static cn.iocoder.yudao.service.framework.exception.util.ServiceExceptionUtil.exception;
+import static cn.iocoder.yudao.service.framework.web.web.core.pojo.CommonResult.success;
 import static cn.iocoder.yudao.service.framework.security.core.util.SecurityFrameworkUtils.getLoginUserId;
 import static cn.iocoder.yudao.service.errorCode.infra.ErrorCodeConstants.FILE_IS_EMPTY;
 

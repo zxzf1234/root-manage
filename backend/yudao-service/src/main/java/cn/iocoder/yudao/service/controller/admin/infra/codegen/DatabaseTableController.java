@@ -1,7 +1,7 @@
 package cn.iocoder.yudao.service.controller.admin.infra.codegen;
 
-import cn.iocoder.yudao.framework.common.pojo.CommonResult;
-import cn.iocoder.yudao.framework.common.pojo.PageResult;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.CommonResult;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.PageResult;
 import cn.iocoder.yudao.service.service.infra.codegen.DatabaseTableService;
 import cn.iocoder.yudao.service.vo.infra.codegen.database.*;
 import io.swagger.v3.oas.annotations.Operation;
@@ -15,7 +15,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
-import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
+import static cn.iocoder.yudao.service.framework.web.web.core.pojo.CommonResult.success;
 
 @Tag(name = "管理后台 - 数据库表管理")
 @RestController

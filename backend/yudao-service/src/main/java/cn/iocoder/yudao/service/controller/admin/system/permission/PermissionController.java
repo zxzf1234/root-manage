@@ -1,6 +1,6 @@
 package cn.iocoder.yudao.service.controller.admin.system.permission;
 
-import cn.iocoder.yudao.framework.common.pojo.CommonResult;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.CommonResult;
 import cn.iocoder.yudao.service.vo.infra.permission.permission.PermissionAssignRoleDataScopeReqVO;
 import cn.iocoder.yudao.service.vo.infra.permission.permission.PermissionAssignRoleMenuReqVO;
 import cn.iocoder.yudao.service.vo.infra.permission.permission.PermissionAssignUserRoleReqVO;
@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
+import static cn.iocoder.yudao.service.framework.web.web.core.pojo.CommonResult.success;
 
 /**
  * 权限 Controller，提供赋予用户、角色的权限的 API 接口

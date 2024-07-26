@@ -24,7 +24,6 @@
         <!-- DB 相关 -->
         <druid.version>1.2.16</druid.version>
         <dynamic-datasource.version>3.6.1</dynamic-datasource.version>
-        <redisson.version>3.18.0</redisson.version>
         <jimmer.version>0.8.10</jimmer.version>
         <flyway.version>8.2.0</flyway.version>
         <!-- 服务保障相关 -->
@@ -69,7 +68,6 @@
                 <scope>import</scope>
             </dependency>
 
-
             <!-- Spring 核心 -->
             <dependency>
                 <!-- 用于生成自定义的 Spring @ConfigurationProperties 配置类的说明文件 -->
@@ -111,13 +109,6 @@
                 <artifactId>druid-spring-boot-starter</artifactId>
                 <version>${druid.version}</version>
             </dependency>
-
-            <dependency>
-                <groupId>org.redisson</groupId>
-                <artifactId>redisson-spring-boot-starter</artifactId>
-                <version>${redisson.version}</version>
-            </dependency>
-
 
             <dependency>
                 <groupId>org.apache.skywalking</groupId>

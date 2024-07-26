@@ -1,6 +1,6 @@
 package cn.iocoder.yudao.service.convert.infra.auth;
 
-import cn.iocoder.yudao.framework.common.util.collection.CollectionUtils;
+import cn.iocoder.yudao.service.util.collection.CollectionUtils;
 import cn.iocoder.yudao.service.model.infra.data.SystemMenu;
 import cn.iocoder.yudao.service.model.infra.oauth2.SystemOauth2AccessToken;
 import cn.iocoder.yudao.service.model.system.role.SystemRole;
@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
-import static cn.iocoder.yudao.framework.common.util.collection.CollectionUtils.filterList;
+import static cn.iocoder.yudao.service.util.collection.CollectionUtils.filterList;
 
 @Mapper
 public interface AuthConvert {

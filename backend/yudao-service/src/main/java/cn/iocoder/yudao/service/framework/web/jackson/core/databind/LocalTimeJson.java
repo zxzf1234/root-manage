@@ -6,7 +6,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
-import static cn.iocoder.yudao.framework.common.util.date.DateUtils.FORMAT_HOUR_MINUTE_SECOND;
+import static cn.iocoder.yudao.service.util.date.DateUtils.FORMAT_HOUR_MINUTE_SECOND;
 
 public class LocalTimeJson {
 

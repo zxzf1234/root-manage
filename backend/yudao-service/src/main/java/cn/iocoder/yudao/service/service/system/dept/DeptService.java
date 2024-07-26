@@ -7,7 +7,7 @@ import cn.iocoder.yudao.service.vo.system.dept.dept.DeptListInput;
 import cn.iocoder.yudao.service.vo.system.dept.dept.DeptUpdateInput;
 import cn.iocoder.yudao.service.vo.system.dept.dept.DeptCreateInput;
 import cn.hutool.core.collection.CollUtil;
-import cn.iocoder.yudao.framework.common.util.collection.CollectionUtils;
+import cn.iocoder.yudao.service.util.collection.CollectionUtils;
 import cn.iocoder.yudao.service.model.system.dept.SystemDept;
 
 import java.util.Collection;

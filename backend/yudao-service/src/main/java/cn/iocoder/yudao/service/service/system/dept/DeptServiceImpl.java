@@ -7,7 +7,7 @@ import cn.iocoder.yudao.service.vo.system.dept.dept.DeptListInput;
 import cn.iocoder.yudao.service.vo.system.dept.dept.DeptUpdateInput;
 import cn.iocoder.yudao.service.vo.system.dept.dept.DeptCreateInput;
 import cn.hutool.core.collection.CollUtil;
-import cn.iocoder.yudao.framework.common.enums.CommonStatusEnum;
+import cn.iocoder.yudao.service.enums.common.CommonStatusEnum;
 import cn.iocoder.yudao.service.convert.system.dept.DeptConvert;
 import cn.iocoder.yudao.service.enums.system.dept.DeptIdEnum;
 import cn.iocoder.yudao.service.model.system.dept.SystemDept;
@@ -21,7 +21,7 @@ import org.springframework.validation.annotation.Validated;
 import javax.annotation.Resource;
 import java.util.*;
 
-import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
+import static cn.iocoder.yudao.service.framework.exception.util.ServiceExceptionUtil.exception;
 import static cn.iocoder.yudao.service.errorCode.system.dept.DeptErrorCode.*;
 
 /**

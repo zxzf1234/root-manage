@@ -3,7 +3,7 @@ package cn.iocoder.yudao.service.enums.infra.errorcode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import java.util.Arrays;
-import cn.iocoder.yudao.framework.common.core.IntArrayValuable;
+import cn.iocoder.yudao.service.enums.common.IntArrayValuable;
 
 /**
 * 错误码的类型
