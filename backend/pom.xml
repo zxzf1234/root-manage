@@ -9,15 +9,11 @@
     <packaging>pom</packaging>
     <modules>
         <module>yudao-dependencies</module>
-        <module>yudao-framework</module>
-        <!-- Server 主项目 -->
         <module>yudao-server</module>
-        <!-- 各种 module 拓展 -->
         <module>yudao-service</module>
     </modules>
 
     <name>${project.artifactId}</name>
-    <description>芋道项目基础脚手架</description>
     <url>https://github.com/YunaiV/ruoyi-vue-pro</url>
 
     <properties>
