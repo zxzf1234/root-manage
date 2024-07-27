@@ -8,7 +8,7 @@ import java.util.*;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
-import ${basePackage}.framework.common.util.entity.EntityUtils;
+import ${basePackage}.util.entity.EntityUtils;
 import org.babyfish.jimmer.DraftObjects;
 import ${PageResultClassName};
 import ${basePackage}.service.convert#foreach ($parentName in $parentNames).$parentName#end.${nameHumpUp}Convert;

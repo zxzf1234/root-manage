@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 #if($isNumber == 1)
 import java.util.Arrays;
-import ${basePackage}.framework.common.core.IntArrayValuable;
+import ${basePackage}.service.enums.common.IntArrayValuable;
 #end
 
 /**
