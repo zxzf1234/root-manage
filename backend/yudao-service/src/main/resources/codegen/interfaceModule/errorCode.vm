@@ -1,6 +1,6 @@
 package ${basePackage}.service.errorCode#foreach ($parentName in $parentNames).$parentName#end;
 
-import ${basePackage}.framework.common.exception.ErrorCode;
+import ${basePackage}.service.framework.exception.ErrorCode;
 
 /**
 * ${module.name} 错误码枚举类
