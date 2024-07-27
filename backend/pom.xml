@@ -14,8 +14,6 @@
     </modules>
 
     <name>${project.artifactId}</name>
-    <url>https://github.com/YunaiV/ruoyi-vue-pro</url>
-
     <properties>
         <revision>1.7.2-snapshot</revision>
         <!-- Maven 相关 -->
@@ -84,7 +82,6 @@
                         </annotationProcessorPaths>
                     </configuration>
                 </plugin>
-
             </plugins>
         </pluginManagement>
     </build>
