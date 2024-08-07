@@ -643,7 +643,7 @@ const open = async (type: string, id?: string) => {
           dataType: 'DATETIME',
           columnComment: '删除时间',
           nullable: true,
-          defaultValue: '0',
+          defaultValue: 'NULL',
           javaType: 'LocalDateTime',
           dictType: '',
           example: '',
