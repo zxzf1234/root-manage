@@ -224,6 +224,7 @@
                     'deleted_time'
                   ].includes(scope.row.columnName)
                 "
+                @change="javaTypeChange(scope)"
               >
                 <el-option label="Long" value="Long" />
                 <el-option label="String" value="String" />
@@ -749,6 +750,11 @@ const autoAddValidation = (scope, fieldLength, validation, tip, validationCondit
     }
     if (scope.row.validations == undefined) scope.row.validations = [newValidation]
     else scope.row.validations.push(newValidation)
+  }
+}
+const javaTypeChange = (scope) => {
+  if (scope.row.javaType.includes('Boolean')) {
+    scope.row.validations = scope.row.validations.filter((element) => element.validation != 'Range')
   }
 }
 
