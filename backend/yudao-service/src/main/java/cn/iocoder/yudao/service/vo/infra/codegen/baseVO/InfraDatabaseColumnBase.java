@@ -25,7 +25,7 @@ public class InfraDatabaseColumnBase {
 
     @Schema(description = "字段类型", requiredMode = Schema.RequiredMode.REQUIRED, example = "int(11)")
     @NotEmpty(message = "物理类型不能为空")
-    @Pattern(regexp = "^(BIT|TINYINT|SMALLINT|MEDIUMINT|INT|BIGINT|FLOAT|DOUBLE|DECIMAL|DATE|TIME|YEAR|DATETIME|TIMESTAMP|VARCHAR|CHAR|TEXT)[0-9(),]*$", message = "物理类型不合法")
+    @Pattern(regexp = "^(BIT|TINYINT|SMALLINT|MEDIUMINT|INT|BIGINT|FLOAT|DOUBLE|DECIMAL|DATE|TIME|YEAR|DATETIME|TIMESTAMP|VARCHAR|CHAR|TEXT|BLOB|LONGBLOB|LONGTEXT)[0-9(),]*$", message = "物理类型不合法")
     private String dataType;
 
     @Schema(description = "字段描述", requiredMode = Schema.RequiredMode.REQUIRED, example = "年龄")

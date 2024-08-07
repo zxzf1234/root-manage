@@ -205,6 +205,10 @@
                 <el-option value="VARCHAR(255)" leable="VARCHAR(255)" />
                 <el-option value="VARCHAR(1024)" leable="VARCHAR(1024)" />
                 <el-option value="DECIMAL(19,4)" leable="DECIMAL(19,4)" />
+                <el-option value="BLOB" leable="BLOB" />
+                <el-option value="TEXT" leable="TEXT" />
+                <el-option value="LONGBLOB" leable="LONGBLOB" />
+                <el-option value="LONGTEXT" leable="LONGTEXT" />
                 <el-option value="DATETIME" leable="DATETIME" />
                 <el-option value="TIMESTAMP" leable="TIMESTAMP" />
               </el-select>
@@ -760,7 +764,11 @@ const javaTypeChange = (scope) => {
 
 const dataTypeBlur = (scope) => {
   scope.row.dataType = scope.row.dataType.toUpperCase().trim()
-  if (scope.row.dataType.includes('CHAR') || scope.row.dataType.includes('TEXT')) {
+  if (
+    scope.row.dataType.includes('CHAR') ||
+    scope.row.dataType.includes('TEXT') ||
+    scope.row.dataType.includes('BLOB')
+  ) {
     scope.row.javaType = 'String'
     scope.row.defaultValue = "''"
     if (
