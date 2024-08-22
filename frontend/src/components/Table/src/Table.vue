@@ -283,7 +283,7 @@ export default defineComponent({
     })
     const menuOption = ref({
       show: false,
-      option: { zIndex: 3, minWidth: 130, x: 500, y: 200, theme: 'flat' }
+      option: { zIndex: 3000, minWidth: 130, x: 500, y: 200, theme: 'flat' }
     })
     let menuSlot = slots?.['menu']?.({ row: {} })
     function showMouseMenu(row, _column, event) {
