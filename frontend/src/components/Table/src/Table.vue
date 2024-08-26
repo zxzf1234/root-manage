@@ -13,7 +13,7 @@ export default defineComponent({
   name: 'Table',
   props,
   emits: ['page-change'],
-  setup(props, { slots, attrs, emit }) {
+  setup(props, { slots, attrs, emit, expose }) {
     const {
       columns,
       pagination,
@@ -173,6 +173,15 @@ export default defineComponent({
       checkedColumns.value = getKeyList(cloneDeep(unref(columns)), 'label')
       saveColumns()
     }
+    const tableRef = ref<Element | null>(null)
+    const getTableRef = () => {
+      if (tableRef == null) return null
+      else return tableRef.value?.getTableRef()
+    }
+    expose({
+      /** 获取表格实例 */
+      getTableRef
+    })
 
     let settingHeader = () => {
       return (
@@ -298,6 +307,7 @@ export default defineComponent({
     return () => (
       <>
         <PureTable
+          ref={tableRef}
           {...props}
           {...attrs}
           columns={columnsCom()}
