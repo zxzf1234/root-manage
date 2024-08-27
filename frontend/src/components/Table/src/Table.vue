@@ -304,6 +304,10 @@ export default defineComponent({
       menuOption.value.option.y = y
       menuSlot = slots?.['menu']?.({ row: row })
     }
+    function disableContextMenu(event) {
+      event.preventDefault()
+    }
+
     return () => (
       <>
         <PureTable
@@ -321,10 +325,15 @@ export default defineComponent({
           {slots}
         </PureTable>
         <ContextMenu v-model:show={menuOption.value.show} options={menuOption.value.option}>
-          {menuSlot}
+          <div onContextmenu={disableContextMenu}>{menuSlot}</div>
         </ContextMenu>
       </>
     )
   }
 })
 </script>
+<style>
+.mx-context-menu {
+  padding: 0 !important;
+}
+</style>
