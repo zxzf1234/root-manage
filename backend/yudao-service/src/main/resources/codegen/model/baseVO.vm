@@ -19,6 +19,12 @@ import ${basePackage}.framework.common.enums.*;
 #break
 #end
 #end
+#foreach ($column in $columns)
+#if (${column.validation} == "Email")
+import javax.validation.constraints.Email;
+#break
+#end
+#end
 ## 处理 Date 字段的引入
 #foreach ($column in $columns)
 #if (${column.humpName} != "id" && ${column.humpName} != "createTime" && ${column.humpName} != "updateTime" && ${column.humpName} != "creatorId" && ${column.humpName} != "updaterId" && ${column.javaType} == "LocalDateTime")## 时间类型
