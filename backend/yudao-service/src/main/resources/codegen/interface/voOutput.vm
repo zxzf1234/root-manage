@@ -12,15 +12,16 @@ import java.math.BigDecimal;
 ## 处理 Date 字段的引入
 #foreach ($param in $outputParams)
     #if (${param.variableType} == "LocalDateTime" || ${param.variableType} == "LocalDateTime[]")## 时间类型
-import org.springframework.format.annotation.DateTimeFormat;
-import static ${DateUtilsClassName}.FORMAT_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND;
-import java.time.LocalDateTime;
+    import org.springframework.format.annotation.DateTimeFormat;
+    import static ${DateUtilsClassName}.FORMAT_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND;
+    import java.time.LocalDateTime;
         #break
     #end
 #end
 
 @Schema(description = "${interface.comment}")
 @Data
+@AllArgsConstructor
 public class ${moduleNameHumpUp}${interfaceNameHumpUp}Output #if(${interface.outputExtendClass} != "")extends ${interface.outputExtendClass}#end {
 #foreach ($param in $outputParams)
     #parse("codegen/interface/param.vm")

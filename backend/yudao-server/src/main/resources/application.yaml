@@ -99,6 +99,10 @@ yudao:
   web:
     admin-ui:
       url: http://dashboard.yudao.iocoder.cn # Admin 管理后台 UI 的地址
+  websocket:
+    enable: true # websocket的开关
+    path: /ws # 路径
+    sender-type: local # 消息发送的类型，可选值为 local、redis、rocketmq、kafka、rabbitmq
   swagger:
     title: ${spring.application.name}
     description: 提供管理后台、用户 App 的所有功能

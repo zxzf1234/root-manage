@@ -1,0 +1,10 @@
+backend/yudao-service/src/main/java/cn/iocoder/yudao/service/framework/postOffice/protocol/ImapProtocol.java
+backend/yudao-service/src/main/java/cn/iocoder/yudao/service/framework/postOffice/protocol/PopProtocol.java
+backend/yudao-service/src/main/java/cn/iocoder/yudao/service/framework/postOffice/protocol/ReceiveProtocol.java
+backend/yudao-service/src/main/java/cn/iocoder/yudao/service/framework/postOffice/protocol/SendProtocol.java
+backend/yudao-service/src/main/java/cn/iocoder/yudao/service/framework/postOffice/protocol/SmtpProtocol.java
+backend/yudao-service/src/main/java/cn/iocoder/yudao/service/framework/postOffice/service/PostOfficeFrameWorkService.java
+backend/yudao-service/src/main/java/cn/iocoder/yudao/service/framework/postOffice/sync/SyncDownloadMailHeader.java
+backend/yudao-service/src/main/java/cn/iocoder/yudao/service/framework/postOffice/template/AbstractPostOfficeTemplate.java
+backend/yudao-service/src/main/java/cn/iocoder/yudao/service/framework/postOffice/template/CommonPostOfficeTemplate.java
+backend/yudao-service/src/main/java/cn/iocoder/yudao/service/framework/postOffice/template/QQPostOfficeTemplate.java

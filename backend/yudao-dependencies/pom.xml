@@ -26,8 +26,9 @@
         <mysql-connector.version>8.0.22</mysql-connector.version>
         <!-- 监控相关 -->
         <skywalking.version>8.12.0</skywalking.version>
-        <spring-boot-admin.version>2.7.10</spring-boot-admin.version>
+        <spring.boot.websocket.version>3.3.4</spring.boot.websocket.version>
         <opentracing.version>0.33.0</opentracing.version>
+        <spring-boot-admin.version>2.7.15</spring-boot-admin.version>
         <!-- 工具类相关 -->
         <captcha-plus.version>1.0.2</captcha-plus.version>
         <jsoup.version>1.15.4</jsoup.version>
@@ -82,6 +83,11 @@
                 <groupId>org.springdoc</groupId>
                 <artifactId>springdoc-openapi-ui</artifactId>
                 <version>${springdoc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-websocket</artifactId>
+                <version>${spring.boot.websocket.version}</version>
             </dependency>
 
             <!-- DB 相关 -->
@@ -579,6 +585,16 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
     </dependencies>
     <repositories>
