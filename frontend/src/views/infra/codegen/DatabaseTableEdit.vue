@@ -205,6 +205,10 @@
                 <el-option value="VARCHAR(255)" leable="VARCHAR(255)" />
                 <el-option value="VARCHAR(1024)" leable="VARCHAR(1024)" />
                 <el-option value="DECIMAL(19,4)" leable="DECIMAL(19,4)" />
+                <el-option value="BLOB" leable="BLOB" />
+                <el-option value="TEXT" leable="TEXT" />
+                <el-option value="LONGBLOB" leable="LONGBLOB" />
+                <el-option value="LONGTEXT" leable="LONGTEXT" />
                 <el-option value="DATETIME" leable="DATETIME" />
                 <el-option value="TIMESTAMP" leable="TIMESTAMP" />
               </el-select>
@@ -224,6 +228,7 @@
                     'deleted_time'
                   ].includes(scope.row.columnName)
                 "
+                @change="javaTypeChange(scope)"
               >
                 <el-option label="Long" value="Long" />
                 <el-option label="String" value="String" />
@@ -643,7 +648,7 @@ const open = async (type: string, id?: string) => {
           dataType: 'DATETIME',
           columnComment: '删除时间',
           nullable: true,
-          defaultValue: '0',
+          defaultValue: 'NULL',
           javaType: 'LocalDateTime',
           dictType: '',
           example: '',
@@ -751,10 +756,19 @@ const autoAddValidation = (scope, fieldLength, validation, tip, validationCondit
     else scope.row.validations.push(newValidation)
   }
 }
+const javaTypeChange = (scope) => {
+  if (scope.row.javaType.includes('Boolean')) {
+    scope.row.validations = scope.row.validations.filter((element) => element.validation != 'Range')
+  }
+}
 
 const dataTypeBlur = (scope) => {
   scope.row.dataType = scope.row.dataType.toUpperCase().trim()
-  if (scope.row.dataType.includes('CHAR') || scope.row.dataType.includes('TEXT')) {
+  if (
+    scope.row.dataType.includes('CHAR') ||
+    scope.row.dataType.includes('TEXT') ||
+    scope.row.dataType.includes('BLOB')
+  ) {
     scope.row.javaType = 'String'
     scope.row.defaultValue = "''"
     if (

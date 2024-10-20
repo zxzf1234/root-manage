@@ -1179,25 +1179,21 @@ public class CodegenEngine {
     private void errorCodeFileInsert(StringBuilder fileContent, String interfaceContent, Map<String, Object> bindingMap){
 
         InfraInterfaceModule module = (InfraInterfaceModule) bindingMap.get("module");
-        if(fileContent.indexOf(module.comment()) == -1)
-            return;
         if(bindingMap.get("duplicateErrorCode") == null && bindingMap.get("notExistErrorCode") == null
                 && bindingMap.get("subDuplicateErrorCode") == null && bindingMap.get("subNotExistErrorCode") == null)
             return;
-        String moduleCode = fileContent.substring(fileContent.indexOf(module.comment()) + module.comment().length() +1,
-                fileContent.indexOf(module.comment()) + module.comment().length() + 8);
         String duplicateErrorCode = bindingMap.get("duplicateErrorCode") == null? "": bindingMap.get("duplicateErrorCode").toString();
         String notExistErrorCode = bindingMap.get("notExistErrorCode") == null? "": bindingMap.get("notExistErrorCode").toString();
         String subDuplicateErrorCode = bindingMap.get("subDuplicateErrorCode") == null? "": bindingMap.get("subDuplicateErrorCode").toString();
         String subNotExistErrorCode = bindingMap.get("subNotExistErrorCode") == null? "": bindingMap.get("subNotExistErrorCode").toString();
         // 查找插入位置
-        int insertIndex = fileContent.lastIndexOf(moduleCode);
+        int insertIndex = fileContent.lastIndexOf("}") - 2;
         insertIndex = fileContent.indexOf("\r\n", insertIndex) + 2;
         String[] errorCodes = interfaceContent.split("\r\n");
-        int count = fileContent.toString().split(moduleCode).length - 2;
+        int count = fileContent.toString().split("new ErrorCode").length;
         if((!duplicateErrorCode.isEmpty() && fileContent.indexOf(duplicateErrorCode) == -1)){
             errorCodes[0] = errorCodes[0].replace("${duplicateErrorNumber}",
-                    moduleCode + String.format("%03d",count++));
+                    "ERROR_CODE_START_CODE + " + count++);
             if(fileContent.indexOf(errorCodes[0]) < 0) {
                 fileContent.insert(insertIndex, errorCodes[0] + "\r\n");
                 insertIndex = insertIndex + errorCodes[0].length() + 2;
@@ -1206,7 +1202,7 @@ public class CodegenEngine {
 
         if(!notExistErrorCode.isEmpty() && fileContent.indexOf(notExistErrorCode) == -1){
             errorCodes[1] = errorCodes[1].replace("${notExistErrorNumber}",
-                    moduleCode + String.format("%03d",count++));
+                    "ERROR_CODE_START_CODE + " + count++);
             if(fileContent.indexOf(errorCodes[1]) < 0) {
                 fileContent.insert(insertIndex, errorCodes[1] + "\r\n");
                 insertIndex = insertIndex + errorCodes[1].length() + 2;
@@ -1215,7 +1211,7 @@ public class CodegenEngine {
 
         if((!subDuplicateErrorCode.isEmpty() && fileContent.indexOf(subDuplicateErrorCode) == -1)){
             errorCodes[2] = errorCodes[2].replace("${subDuplicateErrorNumber}",
-                    moduleCode + String.format("%03d",count++));
+                    "ERROR_CODE_START_CODE + " + count++);
             if(fileContent.indexOf(errorCodes[2]) < 0) {
                 fileContent.insert(insertIndex, errorCodes[2] + "\r\n");
                 insertIndex = insertIndex + errorCodes[2].length() + 2;
@@ -1224,7 +1220,7 @@ public class CodegenEngine {
 
         if(!subNotExistErrorCode.isEmpty() && fileContent.indexOf(subNotExistErrorCode) == -1){
             errorCodes[3] = errorCodes[3].replace("${subNotExistErrorNumber}",
-                    moduleCode + String.format("%03d",count++));
+                    "ERROR_CODE_START_CODE + " + count++);
             if(fileContent.indexOf(errorCodes[3]) < 0) {
                 fileContent.insert(insertIndex, errorCodes[3] + "\r\n");
                 insertIndex = insertIndex + errorCodes[3].length() + 2;

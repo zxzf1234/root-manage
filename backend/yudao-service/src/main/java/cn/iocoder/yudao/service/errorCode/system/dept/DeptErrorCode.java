@@ -16,4 +16,5 @@ public interface DeptErrorCode {
     ErrorCode DEPT_EXISTS_USER = new ErrorCode(ERROR_CODE_START_CODE + 5, "部门中存在员工，无法删除");
     ErrorCode DEPT_NOT_ENABLE = new ErrorCode(ERROR_CODE_START_CODE + 6, "部门({})不处于开启状态，不允许选择");
     ErrorCode DEPT_PARENT_IS_CHILD = new ErrorCode(ERROR_CODE_START_CODE + 7, "不能设置自己的子部门为父部门");
+
 }

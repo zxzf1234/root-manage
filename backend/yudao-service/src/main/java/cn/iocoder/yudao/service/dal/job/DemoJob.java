@@ -1,4 +1,4 @@
-package cn.iocoder.yudao.service.job;
+package cn.iocoder.yudao.service.dal.job;
 
 import cn.iocoder.yudao.service.framework.job.core.handler.JobHandler;
 import cn.iocoder.yudao.service.model.system.user.SystemUser;

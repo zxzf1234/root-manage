@@ -67,7 +67,7 @@ public class AuthController {
     @Operation(summary = "登出系统")
     @OperateLog(enable = false) // 避免 Post 请求被记录操作日志
     public CommonResult<Boolean> logout(HttpServletRequest request) {
-        String token = obtainAuthorization(request, securityProperties.getTokenHeader());
+        String token = obtainAuthorization(request, securityProperties.getTokenHeader(), securityProperties.getTokenParameter());
         if (StrUtil.isNotBlank(token)) {
             authService.logout(token, SystemLoginTypeEnum.LOGOUT_SELF.getValue());
         }

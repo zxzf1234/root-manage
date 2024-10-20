@@ -158,8 +158,8 @@ const loginData = reactive({
   // 登陆后，是否图片验证
   captchaEnable: import.meta.env.VITE_APP_CAPTCHA_ENABLE,
   loginForm: {
-    username: 'admin',
-    password: 'admin123',
+    username: import.meta.env.VITE_DEFAULT_USERNAME,
+    password: import.meta.env.VITE_DEFAULT_PASSWORD,
     captchaVerification: '',
     rememberMe: false
   }

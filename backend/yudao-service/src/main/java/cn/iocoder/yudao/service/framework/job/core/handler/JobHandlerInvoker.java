@@ -3,6 +3,7 @@ package cn.iocoder.yudao.service.framework.job.core.handler;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.thread.ThreadUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.iocoder.yudao.service.framework.job.core.enums.JobDataKeyEnum;
 import cn.iocoder.yudao.service.framework.job.core.service.JobLogFrameworkService;
 import lombok.extern.slf4j.Slf4j;
@@ -67,6 +68,7 @@ public class JobHandlerInvoker extends QuartzJobBean {
 
     private String executeInternal(String jobHandlerName, String jobHandlerParam) throws Exception {
         // 获得 JobHandler 对象
+        jobHandlerName = StrUtil.lowerFirst(jobHandlerName);
         JobHandler jobHandler = applicationContext.getBean(jobHandlerName, JobHandler.class);
         Assert.notNull(jobHandler, "JobHandler 不会为空");
         // 执行任务

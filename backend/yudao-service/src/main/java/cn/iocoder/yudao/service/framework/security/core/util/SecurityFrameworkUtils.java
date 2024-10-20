@@ -1,5 +1,6 @@
 package cn.iocoder.yudao.service.framework.security.core.util;
 
+import cn.hutool.core.util.StrUtil;
 import cn.iocoder.yudao.service.framework.security.core.LoginUser;
 import cn.iocoder.yudao.service.framework.web.web.core.util.WebFrameworkUtils;
 import org.springframework.lang.Nullable;
@@ -31,16 +32,16 @@ public class SecurityFrameworkUtils {
      * @param header 认证 Token 对应的 Header 名字
      * @return 认证 Token
      */
-    public static String obtainAuthorization(HttpServletRequest request, String header) {
-        String authorization = request.getHeader(header);
-        if (!StringUtils.hasText(authorization)) {
+    public static String obtainAuthorization(HttpServletRequest request, String header, String parameterName) {
+        String token = request.getHeader(header);
+        if (StrUtil.isEmpty(token)) {
+            token = request.getParameter(parameterName);
+        }
+        if (!StringUtils.hasText(token)) {
             return null;
         }
-        int index = authorization.indexOf(AUTHORIZATION_BEARER + " ");
-        if (index == -1) { // 未找到
-            return null;
-        }
-        return authorization.substring(index + 7).trim();
+        int index = token.indexOf(AUTHORIZATION_BEARER + " ");
+        return index >= 0 ? token.substring(index + 7).trim() : token;
     }
 
     /**

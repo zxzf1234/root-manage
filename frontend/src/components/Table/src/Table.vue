@@ -13,7 +13,7 @@ export default defineComponent({
   name: 'Table',
   props,
   emits: ['page-change'],
-  setup(props, { slots, attrs, emit }) {
+  setup(props, { slots, attrs, emit, expose }) {
     const {
       columns,
       pagination,
@@ -173,6 +173,15 @@ export default defineComponent({
       checkedColumns.value = getKeyList(cloneDeep(unref(columns)), 'label')
       saveColumns()
     }
+    const tableRef = ref<Element | null>(null)
+    const getTableRef = () => {
+      if (tableRef == null) return null
+      else return tableRef.value?.getTableRef()
+    }
+    expose({
+      /** 获取表格实例 */
+      getTableRef
+    })
 
     let settingHeader = () => {
       return (
@@ -283,7 +292,7 @@ export default defineComponent({
     })
     const menuOption = ref({
       show: false,
-      option: { zIndex: 3, minWidth: 130, x: 500, y: 200, theme: 'flat' }
+      option: { zIndex: 3000, minWidth: 130, x: 500, y: 200, theme: 'flat' }
     })
     let menuSlot = slots?.['menu']?.({ row: {} })
     function showMouseMenu(row, _column, event) {
@@ -295,9 +304,14 @@ export default defineComponent({
       menuOption.value.option.y = y
       menuSlot = slots?.['menu']?.({ row: row })
     }
+    function disableContextMenu(event) {
+      event.preventDefault()
+    }
+
     return () => (
       <>
         <PureTable
+          ref={tableRef}
           {...props}
           {...attrs}
           columns={columnsCom()}
@@ -311,10 +325,15 @@ export default defineComponent({
           {slots}
         </PureTable>
         <ContextMenu v-model:show={menuOption.value.show} options={menuOption.value.option}>
-          {menuSlot}
+          <div onContextmenu={disableContextMenu}>{menuSlot}</div>
         </ContextMenu>
       </>
     )
   }
 })
 </script>
+<style>
+.mx-context-menu {
+  padding: 0 !important;
+}
+</style>

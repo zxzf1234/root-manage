@@ -16,12 +16,6 @@
           :inline="true"
           label-width="auto"
         >
-          <el-date-picker
-            v-model="queryParams.createTime"
-            placeholder="请输入创建时间"
-            :clearable="true"
-            type="daterange"
-          />
           <el-form-item label="用户名称" prop="username">
             <el-input
               v-model="queryParams.username"
