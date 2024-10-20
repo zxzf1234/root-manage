@@ -58,6 +58,7 @@ public class JobServiceImpl implements JobService {
     @Resource
     private QrtzJobDetailsRepository qrtzJobDetailsRepository;
 
+
     @Resource
     private SchemaHistory schemaHistory;
 
@@ -90,24 +91,13 @@ public class JobServiceImpl implements JobService {
         Integer curGitUserVersion = schemaHistory.getCurGitUserVersion();
         Integer curGitUserId = schemaHistory.getCurGitUserId();
 
-        Optional<QrtzCronTriggers> optionalQrtzCronTriggers = qrtzCronTriggersRepository.findByTriggerName(job.handlerName());
-        if(optionalQrtzCronTriggers.isPresent()){
-            String sql = "INSERT IGNORE INTO qrtz_cron_triggers(SCHED_NAME, TRIGGER_NAME, TRIGGER_GROUP, CRON_EXPRESSION, TIME_ZONE_ID)VALUES ("
-                    + "'" +  optionalQrtzCronTriggers.get().schedName() + "',"
-                    + "'" +  optionalQrtzCronTriggers.get().triggerName() + "',"
-                    + "'" +  optionalQrtzCronTriggers.get().triggerGroup() + "',"
-                    + "'" +  optionalQrtzCronTriggers.get().cronExpression() + "',"
-                    + "'" +  optionalQrtzCronTriggers.get().timeZoneId() + "');\r\n";
-            UpgradeUtils.upgradeSql(sql, curGitUserVersion, curGitUserId);
-        }
-
         Optional<QrtzJobDetails> optionalQrtzJobDetails = qrtzJobDetailsRepository.findById(job.handlerName());
         if(optionalQrtzJobDetails.isPresent()){
             String sql = "INSERT IGNORE INTO qrtz_job_details(SCHED_NAME, JOB_NAME, JOB_GROUP, DESCRIPTION, JOB_CLASS_NAME, IS_DURABLE, IS_NONCONCURRENT, IS_UPDATE_DATA, REQUESTS_RECOVERY, JOB_DATA)VALUES ("
                     + "'" +  optionalQrtzJobDetails.get().schedName() + "',"
                     + "'" +  optionalQrtzJobDetails.get().jobName() + "',"
                     + "'" +  optionalQrtzJobDetails.get().jobGroup() + "',"
-                    + "'" +  optionalQrtzJobDetails.get().description() + "',"
+                    + (optionalQrtzJobDetails.get().description() == null ? optionalQrtzJobDetails.get().description() : ("'" + optionalQrtzJobDetails.get().description() + "'")) + ","
                     + "'" +  optionalQrtzJobDetails.get().jobClassName() + "',"
                     + "'" +  optionalQrtzJobDetails.get().isDurable() + "',"
                     + "'" +  optionalQrtzJobDetails.get().isNonconcurrent() + "',"
@@ -127,18 +117,30 @@ public class JobServiceImpl implements JobService {
                     + "'" +  optionalQrtzTriggers.get().triggerGroup() + "',"
                     + "'" +  optionalQrtzTriggers.get().jobName() + "',"
                     + "'" +  optionalQrtzTriggers.get().jobGroup() + "',"
-                    + "'" +  optionalQrtzTriggers.get().description() + "',"
-                    + "'" +  optionalQrtzTriggers.get().nextFireTime() + "',"
-                    + "'" +  optionalQrtzTriggers.get().prevFireTime() + "',"
-                    + "'" +  optionalQrtzTriggers.get().priority() + "',"
+                    + (optionalQrtzTriggers.get().description() == null ? optionalQrtzTriggers.get().description() : ("'" + optionalQrtzTriggers.get().description() + "'")) + ","
+                    + (optionalQrtzTriggers.get().nextFireTime() == null ? optionalQrtzTriggers.get().nextFireTime() : ("'" + optionalQrtzTriggers.get().nextFireTime() + "'")) + ","
+                    + (optionalQrtzTriggers.get().prevFireTime() == null ? optionalQrtzTriggers.get().prevFireTime() : ("'" + optionalQrtzTriggers.get().prevFireTime() + "'")) + ","
+                    + (optionalQrtzTriggers.get().priority() == null ? optionalQrtzTriggers.get().priority() : ("'" + optionalQrtzTriggers.get().priority() + "'")) + ","
                     + "'" +  optionalQrtzTriggers.get().triggerState() + "',"
                     + "'" +  optionalQrtzTriggers.get().triggerType() + "',"
                     + "'" +  optionalQrtzTriggers.get().startTime() + "',"
-                    + "'" +  optionalQrtzTriggers.get().endTime() + "',"
-                    + "'" +  optionalQrtzTriggers.get().calendarName() + "',"
-                    + "'" +  optionalQrtzTriggers.get().misfireInstr() + "',"
+                    + (optionalQrtzTriggers.get().endTime() == null ? optionalQrtzTriggers.get().endTime() : ("'" + optionalQrtzTriggers.get().endTime() + "'")) + ","
+                    + (optionalQrtzTriggers.get().calendarName() == null ? optionalQrtzTriggers.get().calendarName() : ("'" + optionalQrtzTriggers.get().calendarName() + "'")) + ","
+                    + (optionalQrtzTriggers.get().misfireInstr() == null ? optionalQrtzTriggers.get().misfireInstr() : ("'" + optionalQrtzTriggers.get().misfireInstr() + "'")) + ","
                     + "UNHEX('" +  bytesToHex(optionalQrtzTriggers.get().jobData()) + "'));\r\n";
             UpgradeUtils.upgradeSql(sql, curGitUserVersion, curGitUserId);
+        }
+
+        Optional<QrtzCronTriggers> optionalQrtzCronTriggers = qrtzCronTriggersRepository.findByTriggerName(job.handlerName());
+        if(optionalQrtzCronTriggers.isPresent()){
+            String sql = "INSERT IGNORE INTO qrtz_cron_triggers(SCHED_NAME, TRIGGER_NAME, TRIGGER_GROUP, CRON_EXPRESSION, TIME_ZONE_ID)VALUES ("
+                    + "'" +  optionalQrtzCronTriggers.get().schedName() + "',"
+                    + "'" +  optionalQrtzCronTriggers.get().triggerName() + "',"
+                    + "'" +  optionalQrtzCronTriggers.get().triggerGroup() + "',"
+                    + "'" +  optionalQrtzCronTriggers.get().cronExpression() + "',"
+                    + "'" +  optionalQrtzCronTriggers.get().timeZoneId() + "');\r\n";
+            UpgradeUtils.upgradeSql(sql, curGitUserVersion, curGitUserId);
+
         }
 
         // 返回
@@ -160,6 +162,11 @@ public class JobServiceImpl implements JobService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateJob(JobUpdateReqVO updateReqVO) throws SchedulerException {
+        Optional<InfraJob> optionalOldJob = infraJobRepository.findById(updateReqVO.getId());
+        if(!optionalOldJob.isPresent()){
+            throw exception(JOB_NOT_EXISTS);
+        }
+
         validateCronExpression(updateReqVO.getCronExpression());
         // 校验存在
         InfraJob job = validateJobExists(updateReqVO.getId());
@@ -171,10 +178,22 @@ public class JobServiceImpl implements JobService {
         InfraJob updateObj = JobConvert.INSTANCE.convert(updateReqVO);
         updateObj = fillJobMonitorTimeoutEmpty(updateObj);
         infraJobRepository.update(updateObj);
+        updateObj = infraJobRepository.findNullable(updateReqVO.getId());
 
         // 更新 Job 到 Quartz 中
         schedulerManager.updateJob(job.handlerName(), updateReqVO.getHandlerParam(), updateReqVO.getCronExpression(),
                 updateReqVO.getRetryCount(), updateReqVO.getRetryInterval());
+
+        Integer curGitUserVersion = schemaHistory.getCurGitUserVersion();
+        Integer curGitUserId = schemaHistory.getCurGitUserId();
+        String cronTriggersSql = "UPDATE qrtz_cron_triggers SET TRIGGER_NAME = '" + updateObj.handlerName() + "', CRON_EXPRESSION = '" + updateObj.cronExpression() + "'  WHERE TRIGGER_NAME =  '" + optionalOldJob.get().handlerName() + "';\r\n";
+        UpgradeUtils.upgradeSql(cronTriggersSql, curGitUserVersion, curGitUserId);
+
+        String triggersSql =  "UPDATE qrtz_triggers SET TRIGGER_NAME = '" + updateObj.handlerName() + "'  WHERE TRIGGER_NAME =  '" + optionalOldJob.get().handlerName() + "';\r\n";
+        UpgradeUtils.upgradeSql(triggersSql, curGitUserVersion, curGitUserId);
+
+        String jobDetailsSql = "UPDATE qrtz_job_details SET JOB_NAME = '" + updateObj.handlerName() + "'  WHERE JOB_NAME =  '" + optionalOldJob.get().handlerName() + "';\r\n";
+        UpgradeUtils.upgradeSql(jobDetailsSql, curGitUserVersion, curGitUserId);
     }
 
     @Override
@@ -224,6 +243,17 @@ public class JobServiceImpl implements JobService {
 
         // 删除 Job 到 Quartz 中
         schedulerManager.deleteJob(job.handlerName());
+
+        Integer curGitUserVersion = schemaHistory.getCurGitUserVersion();
+        Integer curGitUserId = schemaHistory.getCurGitUserId();
+        String cronTriggersSql = "DELETE FROM qrtz_cron_triggers WHERE TRIGGER_NAME =  '" + job.handlerName() + "';\r\n";
+        UpgradeUtils.upgradeSql(cronTriggersSql, curGitUserVersion, curGitUserId);
+
+        String triggersSql = "DELETE FROM qrtz_triggers WHERE TRIGGER_NAME =  '" + job.handlerName() + "';\r\n";
+        UpgradeUtils.upgradeSql(triggersSql, curGitUserVersion, curGitUserId);
+
+        String jobDetailsSql = "DELETE FROM qrtz_job_details WHERE JOB_NAME =  '" + job.handlerName() + "';\r\n";
+        UpgradeUtils.upgradeSql(jobDetailsSql, curGitUserVersion, curGitUserId);
     }
 
     private InfraJob validateJobExists(UUID id) {
