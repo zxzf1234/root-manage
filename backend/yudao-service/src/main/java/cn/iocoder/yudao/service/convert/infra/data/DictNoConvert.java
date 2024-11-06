@@ -10,7 +10,7 @@ import java.util.*;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
-import org.springframework.data.domain.Page;
+import org.babyfish.jimmer.Page;
 import cn.iocoder.yudao.service.vo.infra.data.dictNo.*;
 
 /**
@@ -24,7 +24,7 @@ public interface DictNoConvert {
 
     InfraDictNo createInputConvert(DictNoCreateInput input);
 
-    List<DictNoQueryOutput> queryPageOutputConvert(Page<InfraDictNo> output);
+    List<DictNoQueryOutput> queryPageOutputConvert(List<InfraDictNo> output);
 
     InfraDictNo updateInputConvert(DictNoUpdateInput input);
 

@@ -8,7 +8,7 @@ import cn.iocoder.yudao.service.repository.infra.codegen.*;
 import cn.iocoder.yudao.service.service.infra.codegen.inner.CodegenEngine;
 import cn.iocoder.yudao.service.vo.infra.codegen.interfaceModule.*;
 import org.babyfish.jimmer.sql.ast.mutation.DeleteMode;
-import org.springframework.data.domain.Page;
+import org.babyfish.jimmer.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,8 +42,8 @@ public class InterfaceServiceImpl implements InterfaceService{
     @Override
     public PageResult<InterfaceResp> getList(InterfaceListReqVO reqVO){
         Page<InfraInterface> infraInterfaces = infraInterfaceRepository.getList(reqVO);
-        List<InterfaceResp> interfaceRespList = CodegenConvert.INSTANCE.convertList12(infraInterfaces);
-        return new PageResult<>(interfaceRespList, infraInterfaces.getTotalElements());
+        List<InterfaceResp> interfaceRespList = CodegenConvert.INSTANCE.convertList12(infraInterfaces.getRows());
+        return new PageResult<>(interfaceRespList, infraInterfaces.getTotalRowCount());
     }
 
     @Override

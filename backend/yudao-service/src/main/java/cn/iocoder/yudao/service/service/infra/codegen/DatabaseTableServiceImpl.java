@@ -12,7 +12,7 @@ import cn.iocoder.yudao.service.service.infra.db.DataSourceConfigService;
 import cn.iocoder.yudao.service.vo.infra.codegen.baseVO.InfraDatabaseColumnBase;
 import cn.iocoder.yudao.service.vo.infra.codegen.database.*;
 import org.babyfish.jimmer.sql.ast.mutation.DeleteMode;
-import org.springframework.data.domain.Page;
+import org.babyfish.jimmer.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,8 +52,8 @@ public class DatabaseTableServiceImpl implements DatabaseTableService {
     @Override
     public PageResult<DatabaseTableResp> getDatabaseTableList(DatabaseTableListReqVO list) {
         Page<InfraDatabaseTable> tables = infraDatabaseTableRepository.selectList(list);
-        List<DatabaseTableResp> databaseTableReps = CodegenConvert.INSTANCE.convertList05(tables);
-        return new PageResult<>(databaseTableReps, tables.getTotalElements());
+        List<DatabaseTableResp> databaseTableReps = CodegenConvert.INSTANCE.convertList05(tables.getRows());
+        return new PageResult<>(databaseTableReps, tables.getTotalRowCount());
     }
 
     @Override

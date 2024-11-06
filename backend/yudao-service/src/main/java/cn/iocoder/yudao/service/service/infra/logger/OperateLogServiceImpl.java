@@ -15,7 +15,7 @@ import cn.iocoder.yudao.service.model.infra.logger.SystemOperateLogDraft;
 import cn.iocoder.yudao.service.repository.infra.logger.SystemOperateLogRepository;
 import cn.iocoder.yudao.service.service.system.user.UserService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
+import org.babyfish.jimmer.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -64,8 +64,8 @@ public class OperateLogServiceImpl implements OperateLogService {
         }
         // 查询分页
         Page<SystemOperateLog> postPage = systemOperateLogRepository.selectPage(reqVO);
-        List<OperateLogRespVO> postList =  OperateLogConvert.INSTANCE.convertPage(postPage);
-        return new PageResult<>(postList, postPage.getTotalElements());
+        List<OperateLogRespVO> postList =  OperateLogConvert.INSTANCE.convertPage(postPage.getRows());
+        return new PageResult<>(postList, postPage.getTotalRowCount());
     }
 
     @Override

@@ -13,7 +13,7 @@ import cn.iocoder.yudao.service.dal.redis.oauth2.OAuth2AccessTokenRedisDAO;
 import cn.iocoder.yudao.service.model.infra.oauth2.*;
 import cn.iocoder.yudao.service.repository.infra.oauth2.SystemOauth2AccessTokenRepository;
 import cn.iocoder.yudao.service.repository.infra.oauth2.SystemOauth2RefreshTokenRepository;
-import org.springframework.data.domain.Page;
+import org.babyfish.jimmer.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -131,8 +131,8 @@ public class OAuth2TokenServiceImpl implements OAuth2TokenService {
     @Override
     public PageResult<OAuth2AccessTokenRespVO> getAccessTokenPage(OAuth2AccessTokenPageReqVO reqVO) {
         Page<SystemOauth2AccessToken> postPage = systemOauth2AccessTokenRepository.selectPage(reqVO);
-        List<OAuth2AccessTokenRespVO> listPage = OAuth2TokenConvert.INSTANCE.convert(postPage);
-        return new PageResult<>(listPage, postPage.getTotalElements());
+        List<OAuth2AccessTokenRespVO> listPage = OAuth2TokenConvert.INSTANCE.convert(postPage.getRows());
+        return new PageResult<>(listPage, postPage.getTotalRowCount());
     }
 
     private SystemOauth2AccessToken createOAuth2AccessToken(SystemOauth2RefreshToken refreshTokenDO, SystemOauth2Client clientDO) {

@@ -15,7 +15,7 @@ import cn.iocoder.yudao.service.model.infra.oauth2.SystemOauth2Client;
 import cn.iocoder.yudao.service.repository.infra.oauth2.SystemOauth2ClientRepository;
 import com.google.common.annotations.VisibleForTesting;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
+import org.babyfish.jimmer.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -99,8 +99,8 @@ public class OAuth2ClientServiceImpl implements OAuth2ClientService {
     @Override
     public PageResult<OAuth2ClientRespVO> getOAuth2ClientPage(OAuth2ClientPageReqVO pageReqVO) {
         Page<SystemOauth2Client> postPage = systemOauth2ClientRepository.selectPage(pageReqVO);
-        List<OAuth2ClientRespVO> postList = OAuth2ClientConvert.INSTANCE.convertPage(postPage);
-        return new PageResult<>(postList, postPage.getTotalElements());
+        List<OAuth2ClientRespVO> postList = OAuth2ClientConvert.INSTANCE.convertPage(postPage.getRows());
+        return new PageResult<>(postList, postPage.getTotalRowCount());
     }
 
     @Override

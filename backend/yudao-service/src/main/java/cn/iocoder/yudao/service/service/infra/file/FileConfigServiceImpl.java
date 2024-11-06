@@ -18,7 +18,7 @@ import cn.iocoder.yudao.service.model.infra.file.InfraFileConfigDraft;
 import cn.iocoder.yudao.service.repository.infra.file.InfraFileConfigRepository;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
+import org.babyfish.jimmer.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -154,7 +154,7 @@ public class FileConfigServiceImpl implements FileConfigService {
     @Override
     public PageResult<InfraFileConfig> getFileConfigPage(FileConfigPageReqVO pageReqVO) {
         Page<InfraFileConfig> postPage = infraFileConfigRepository.selectPage(pageReqVO);
-        return new PageResult<>(postPage.toList(), postPage.getTotalElements());
+        return new PageResult<>(postPage.getRows(), postPage.getTotalRowCount());
     }
 
     @Override

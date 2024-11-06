@@ -4,7 +4,7 @@ import java.util.*;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
-import org.springframework.data.domain.Page;
+import org.babyfish.jimmer.Page;
 
 /**
  * 测试 Convert

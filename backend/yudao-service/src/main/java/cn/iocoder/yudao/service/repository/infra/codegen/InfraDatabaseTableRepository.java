@@ -3,7 +3,7 @@ package cn.iocoder.yudao.service.repository.infra.codegen;
 import cn.iocoder.yudao.service.model.infra.codegen.*;
 import cn.iocoder.yudao.service.vo.infra.codegen.database.DatabaseTableListReqVO;
 import org.babyfish.jimmer.spring.repository.JRepository;
-import org.springframework.data.domain.Page;
+import org.babyfish.jimmer.Page;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
@@ -14,15 +14,13 @@ public interface InfraDatabaseTableRepository extends JRepository<InfraDatabaseT
     InfraDatabaseTableTable infraDatabaseTableTable = InfraDatabaseTableTable.$;
 
     default Page<InfraDatabaseTable> selectList(DatabaseTableListReqVO listReqVO){
-        return pager(listReqVO.getPageNo() - 1, listReqVO.getPageSize()).execute(
-                sql().createQuery(infraDatabaseTableTable)
+        return sql().createQuery(infraDatabaseTableTable)
                         .whereIf(StringUtils.hasText(listReqVO.getComment()), infraDatabaseTableTable.comment().like(listReqVO.getComment()))
                         .whereIf(StringUtils.hasText(listReqVO.getName()), infraDatabaseTableTable.name().like(listReqVO.getName()))
                         .whereIf(StringUtils.hasText(listReqVO.getFirstModule()), infraDatabaseTableTable.firstModule().like(listReqVO.getFirstModule()))
                         .whereIf(StringUtils.hasText(listReqVO.getSecondModule()), infraDatabaseTableTable.secondModule().like(listReqVO.getSecondModule()))
                         .orderBy(infraDatabaseTableTable.createTime().desc())
-                        .select(infraDatabaseTableTable)
-        );
+                        .select(infraDatabaseTableTable).fetchPage(listReqVO.getPageNo() - 1, listReqVO.getPageSize());
 
     }
 

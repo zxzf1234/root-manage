@@ -7,7 +7,7 @@ import cn.iocoder.yudao.service.model.system.user.SystemUser;
 import cn.iocoder.yudao.service.model.system.user.SystemUserFetcher;
 import cn.iocoder.yudao.service.model.system.user.SystemUserTable;
 import org.babyfish.jimmer.spring.repository.JRepository;
-import org.springframework.data.domain.Page;
+import org.babyfish.jimmer.Page;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
@@ -20,15 +20,14 @@ public interface SystemUserRepository extends JRepository<SystemUser, Long>{
     SystemUserTable systemUsersTable = SystemUserTable.$;
 
     default Page<SystemUser> getUserPage(UserPageInput reqVO){
-        return pager(reqVO.getPageNo() - 1, reqVO.getPageSize()).execute(
-                sql().createQuery(systemUsersTable)
-                        .whereIf(StringUtils.hasText(reqVO.getUsername()), systemUsersTable.username().like(reqVO.getUsername()))
-                        .whereIf(StringUtils.hasText(reqVO.getMobile()), systemUsersTable.mobile().like(reqVO.getMobile()))
-                        .whereIf(reqVO.getStatus() != null, systemUsersTable.status().eq(reqVO.getStatus()))
-                        .whereIf(reqVO.getCreateTime() != null,  () -> systemUsersTable.createTime().between(reqVO.getCreateTime()[0], reqVO.getCreateTime()[1]))
-                        .where(systemUsersTable.id().ge(0L))
-                        .select(systemUsersTable.fetch(SystemUserFetcher.$.allScalarFields().dept(SystemDeptFetcher.$.allScalarFields())))
-        );
+        return sql().createQuery(systemUsersTable)
+                .whereIf(StringUtils.hasText(reqVO.getUsername()), systemUsersTable.username().like(reqVO.getUsername()))
+                .whereIf(StringUtils.hasText(reqVO.getMobile()), systemUsersTable.mobile().like(reqVO.getMobile()))
+                .whereIf(reqVO.getStatus() != null, systemUsersTable.status().eq(reqVO.getStatus()))
+                .whereIf(reqVO.getCreateTime() != null,  () -> systemUsersTable.createTime().between(reqVO.getCreateTime()[0], reqVO.getCreateTime()[1]))
+                .where(systemUsersTable.id().ge(0L))
+                .select(systemUsersTable.fetch(SystemUserFetcher.$.allScalarFields().dept(SystemDeptFetcher.$.allScalarFields())))
+                .fetchPage(reqVO.getPageNo() - 1, reqVO.getPageSize());
     }
 
     default List<SystemUser> getExportUserList(UserExportedInput reqVO){

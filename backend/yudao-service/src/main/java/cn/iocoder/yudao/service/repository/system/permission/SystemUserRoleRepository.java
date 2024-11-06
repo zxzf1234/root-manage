@@ -12,7 +12,7 @@ public interface SystemUserRoleRepository extends JRepository<SystemUserRole, Lo
     default void insertBatch(List<SystemUserRole> userRoleList){
         sql()
                 .getEntities()
-                .batchSave(userRoleList);
+                .saveEntities(userRoleList);
     }
 
     void deleteByUserIdAndRoleIdIn(Long userId, Collection<Long> deleteMenuIds);

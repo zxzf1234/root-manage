@@ -35,7 +35,7 @@ import cn.iocoder.yudao.service.model.system.dept.SystemUserPostDraft;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 
-import org.springframework.data.domain.Page;
+import org.babyfish.jimmer.Page;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -198,8 +198,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public PageResult<UserPageOutput> page(UserPageInput inputVO) {
         Page<SystemUser> pageResult = systemUserRepository.getUserPage(inputVO);
-        List<UserPageOutput> userList = UserConvert.INSTANCE.pagePageOutputConvert(pageResult);
-        return new PageResult<>(userList, pageResult.getTotalElements());
+        List<UserPageOutput> userList = UserConvert.INSTANCE.pagePageOutputConvert(pageResult.getRows());
+        return new PageResult<>(userList, pageResult.getTotalRowCount());
     }
 
     @Override

@@ -555,13 +555,13 @@ public class CodegenEngine {
             //生成代码 Page<InfraDictNo> pageNo = infraDictNoRepository.query(inputVO);
             functionContent.append("        Page<").append(outputTableName).append("> page").append(outputTableName)
                     .append(" = ").append(outputRepositoryName).append(".").append(infraInterface.name()).append("(inputVO);\r\n");
-            //生成代码 List<DictNoQueryOutput> listNo = DictNoConvert.INSTANCE.queryPageOutputConvert(pageNo);
+            //生成代码 List<DictNoQueryOutput> listNo = DictNoConvert.INSTANCE.queryPageOutputConvert(pageNo.getRows());
             functionContent.append("        List<").append(interfaceOutput).append("> list").append(outputTableName)
                     .append(" = ").append(convertClass).append(".INSTANCE.").append(convertName)
-                    .append("(page").append(outputTableName).append(");\r\n");
-            //生成代码 return new PageResult<>(listNo, pageNo.getTotalElements());
+                    .append("(page").append(outputTableName).append(".getRows());\r\n");
+            //生成代码 return new PageResult<>(listNo, pageNo.getTotalRowCount());
             functionContent.append("        return new PageResult<>(list").append(outputTableName).append(", page")
-                    .append(outputTableName).append(".getTotalElements());");
+                    .append(outputTableName).append(".getTotalRowCount());");
         }else if(infraInterface.name().toLowerCase().contains("singleget")){
             convertName = convertName + "OutputConvert";
             String notExistErrorCode = bindingMap.get("notExistErrorCode").toString();

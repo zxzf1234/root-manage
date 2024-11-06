@@ -5,7 +5,7 @@ import cn.iocoder.yudao.service.model.system.dept.SystemPostTable;
 import cn.iocoder.yudao.service.vo.system.post.post.PostExportedInput;
 import cn.iocoder.yudao.service.vo.system.post.post.PostPageInput;
 import org.babyfish.jimmer.spring.repository.JRepository;
-import org.springframework.data.domain.Page;
+import org.babyfish.jimmer.Page;
 import org.springframework.util.StringUtils;
 
 import java.util.Collection;
@@ -15,14 +15,12 @@ import java.util.Optional;
 public interface SystemPostRepository extends JRepository<SystemPost, Long> {
     SystemPostTable systemPostTable = SystemPostTable.$;
     default Page<SystemPost> selectPage(PostPageInput reqVO){
-        return pager(reqVO.getPageNo() - 1, reqVO.getPageSize()).execute(
-                sql()
-                        .createQuery(systemPostTable)
-                        .whereIf(StringUtils.hasText(reqVO.getCode()),systemPostTable.code().like(reqVO.getCode()))
-                        .whereIf(StringUtils.hasText(reqVO.getName()),systemPostTable.name().like(reqVO.getName()))
-                        .whereIf(reqVO.getStatus()!= null, systemPostTable.status().eq(reqVO.getStatus()))
-                        .select(systemPostTable)
-        );
+        return sql()
+                .createQuery(systemPostTable)
+                .whereIf(StringUtils.hasText(reqVO.getCode()),systemPostTable.code().like(reqVO.getCode()))
+                .whereIf(StringUtils.hasText(reqVO.getName()),systemPostTable.name().like(reqVO.getName()))
+                .whereIf(reqVO.getStatus()!= null, systemPostTable.status().eq(reqVO.getStatus()))
+                .select(systemPostTable).fetchPage(reqVO.getPageNo() - 1, reqVO.getPageSize());
     }
 
     default List<SystemPost> selectList(PostExportedInput reqVO){

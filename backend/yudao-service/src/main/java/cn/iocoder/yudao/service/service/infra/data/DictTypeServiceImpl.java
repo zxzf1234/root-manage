@@ -19,7 +19,7 @@ import javax.annotation.Resource;
 
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.data.domain.Page;
+import org.babyfish.jimmer.Page;
 
 import java.util.*;
 
@@ -174,8 +174,8 @@ public class DictTypeServiceImpl implements DictTypeService {
     @Override
     public PageResult<DictTypePageOutput> page(DictTypePageInput inputVO) {
         Page<InfraDictType> postPage = infraDictTypeRepository.selectPage(inputVO);
-        List<DictTypePageOutput> postList =  DictTypeConvert.INSTANCE.pagePageOutputConvert(postPage);
-        return new PageResult<>(postList, postPage.getTotalElements());
+        List<DictTypePageOutput> postList =  DictTypeConvert.INSTANCE.pagePageOutputConvert(postPage.getRows());
+        return new PageResult<>(postList, postPage.getTotalRowCount());
     }
 
     @Override

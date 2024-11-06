@@ -3,7 +3,7 @@ package ${basePackage}.service.repository.${table.firstModule}.${table.secondMod
 import ${basePackage}.service.model.${table.firstModule}.${table.secondModule}.${classNameHump};
 import ${basePackage}.service.model.${table.firstModule}.${table.secondModule}.${classNameHump}Table;
 import org.babyfish.jimmer.spring.repository.JRepository;
-import org.springframework.data.domain.Page;
+import org.babyfish.jimmer.Page;
 import org.springframework.util.StringUtils;
 import java.util.Optional;
 import java.util.List;

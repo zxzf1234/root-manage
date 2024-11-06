@@ -9,7 +9,7 @@ import cn.iocoder.yudao.service.enums.infra.api.InfraApiErrorLogProcessStatusEnu
 import cn.iocoder.yudao.service.model.infra.data.InfraApiErrorLog;
 import cn.iocoder.yudao.service.model.infra.data.InfraApiErrorLogDraft;
 import cn.iocoder.yudao.service.repository.infra.data.InfraApiErrorLogRepository;
-import org.springframework.data.domain.Page;
+import org.babyfish.jimmer.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -46,7 +46,7 @@ public class ApiErrorLogServiceImpl implements ApiErrorLogService {
     @Override
     public PageResult<InfraApiErrorLog> getApiErrorLogPage(ApiErrorLogPageReqVO pageReqVO) {
         Page<InfraApiErrorLog> postPage = infraApiErrorLogRepository.selectPage(pageReqVO);
-        return new PageResult<>(postPage.toList(), postPage.getTotalElements());
+        return new PageResult<>(postPage.getRows(), postPage.getTotalRowCount());
     }
 
     @Override

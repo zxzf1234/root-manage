@@ -9,7 +9,7 @@ import cn.iocoder.yudao.service.model.infra.job.InfraJobLog;
 import cn.iocoder.yudao.service.model.infra.job.InfraJobLogDraft;
 import cn.iocoder.yudao.service.repository.infra.job.InfraJobLogRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
+import org.babyfish.jimmer.Page;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
@@ -77,7 +77,7 @@ public class JobLogServiceImpl implements JobLogService {
     @Override
     public PageResult<InfraJobLog> getJobLogPage(JobLogPageReqVO pageReqVO) {
         Page<InfraJobLog> postPage = infraJobLogRepository.selectPage(pageReqVO);
-        return new PageResult<>(postPage.toList(), postPage.getTotalElements());
+        return new PageResult<>(postPage.getRows(), postPage.getTotalRowCount());
     }
 
     @Override

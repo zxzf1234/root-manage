@@ -21,7 +21,7 @@
         <knife4j.version>4.1.0</knife4j.version>
         <!-- DB 相关 -->
         <druid.version>1.2.16</druid.version>
-        <jimmer.version>0.8.10</jimmer.version>
+        <jimmer.version>0.9.9</jimmer.version>
         <flyway.version>8.2.0</flyway.version>
         <mysql-connector.version>8.0.22</mysql-connector.version>
         <!-- 监控相关 -->

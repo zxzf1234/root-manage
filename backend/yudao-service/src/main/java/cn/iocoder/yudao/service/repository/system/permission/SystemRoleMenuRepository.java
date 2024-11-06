@@ -15,9 +15,7 @@ public interface SystemRoleMenuRepository extends JRepository<SystemRoleMenu, Lo
 
 
     default void insertBatch(List<SystemRoleMenu> systemRoleMenuList){
-        sql()
-                .getEntities()
-                .batchSave(systemRoleMenuList);
+        sql().getEntities().saveEntities(systemRoleMenuList);
     };
 
     List<SystemRoleMenu> findByRoleId(Long roleId);

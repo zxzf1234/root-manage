@@ -6,7 +6,7 @@ import cn.iocoder.yudao.service.vo.infra.oauth2.client.OAuth2ClientUpdateReqVO;
 import cn.iocoder.yudao.service.model.infra.oauth2.SystemOauth2Client;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
-import org.springframework.data.domain.Page;
+import org.babyfish.jimmer.Page;
 
 import java.util.List;
 
@@ -28,6 +28,6 @@ public interface OAuth2ClientConvert {
 
     List<OAuth2ClientRespVO> convertList(List<SystemOauth2Client> list);
 
-    List<OAuth2ClientRespVO> convertPage(Page<SystemOauth2Client> page);
+    List<OAuth2ClientRespVO> convertPage(List<SystemOauth2Client> page);
 
 }

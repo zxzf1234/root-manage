@@ -14,7 +14,7 @@ import java.util.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
-import org.springframework.data.domain.Page;
+import org.babyfish.jimmer.Page;
 
 /**
  * 字典类型 Convert
@@ -30,7 +30,7 @@ public interface DictTypeConvert {
 
     InfraDictData updateInputDataConvert(DictTypeUpdateInput.data input);
 
-    List<DictTypePageOutput> pagePageOutputConvert(Page<InfraDictType> output);
+    List<DictTypePageOutput> pagePageOutputConvert(List<InfraDictType> output);
 
     DictTypeGetOutput getOutputConvert(InfraDictType output);
 

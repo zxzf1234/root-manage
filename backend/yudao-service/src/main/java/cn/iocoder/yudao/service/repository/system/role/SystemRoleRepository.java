@@ -5,7 +5,7 @@ import cn.iocoder.yudao.service.model.system.role.SystemRoleTable;
 import cn.iocoder.yudao.service.vo.system.role.role.RoleExportedInput;
 import cn.iocoder.yudao.service.vo.system.role.role.RolePageInput;
 import org.babyfish.jimmer.spring.repository.JRepository;
-import org.springframework.data.domain.Page;
+import org.babyfish.jimmer.Page;
 import org.springframework.util.StringUtils;
 
 import java.util.Collection;
@@ -27,16 +27,14 @@ public interface SystemRoleRepository extends JRepository<SystemRole, Long> {
     }
 
     default Page<SystemRole> pageSelect(RolePageInput reqVO){
-        return pager(reqVO.getPageNo() - 1, reqVO.getPageSize()).execute(
-                sql()
-                        .createQuery(systemRoleTable)
-                        .where(systemRoleTable.id().ge(0L))
-                        .whereIf(reqVO.getStatus() != null, systemRoleTable.status().eq(reqVO.getStatus()))
-                        .whereIf(StringUtils.hasText(reqVO.getCode()), systemRoleTable.code().eq(reqVO.getCode()))
-                        .whereIf(StringUtils.hasText(reqVO.getName()), systemRoleTable.name().eq(reqVO.getName()))
-                        .whereIf(reqVO.getCreateTime() != null, ()-> systemRoleTable.createTime().between(reqVO.getCreateTime()[0], reqVO.getCreateTime()[1]))
-                        .select(systemRoleTable)
-        );
+        return sql()
+                .createQuery(systemRoleTable)
+                .where(systemRoleTable.id().ge(0L))
+                .whereIf(reqVO.getStatus() != null, systemRoleTable.status().eq(reqVO.getStatus()))
+                .whereIf(StringUtils.hasText(reqVO.getCode()), systemRoleTable.code().eq(reqVO.getCode()))
+                .whereIf(StringUtils.hasText(reqVO.getName()), systemRoleTable.name().eq(reqVO.getName()))
+                .whereIf(reqVO.getCreateTime() != null, ()-> systemRoleTable.createTime().between(reqVO.getCreateTime()[0], reqVO.getCreateTime()[1]))
+                .select(systemRoleTable).fetchPage(reqVO.getPageNo() - 1, reqVO.getPageSize());
     }
 
     List<SystemRole> findByStatusIn(Collection<Integer> statuses);

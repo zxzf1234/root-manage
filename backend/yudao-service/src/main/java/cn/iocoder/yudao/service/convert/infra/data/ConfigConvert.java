@@ -10,7 +10,7 @@ import java.util.*;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
-import org.springframework.data.domain.Page;
+import org.babyfish.jimmer.Page;
 import cn.iocoder.yudao.service.vo.infra.data.config.*;
 
 /**
@@ -27,6 +27,6 @@ public interface ConfigConvert {
 
     ConfigGetOutput getOutputConvert(InfraConfig output);
 
-    List<ConfigPageOutput> pageOutputConvert(Page<InfraConfig> output);
+    List<ConfigPageOutput> pageOutputConvert(List<InfraConfig> output);
 
 }

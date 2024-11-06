@@ -43,7 +43,7 @@ spring:
 # jimmer配置
 jimmer:
   show-sql: true
-  inline-sql-variables: true
+#  inline-sql-variables: true
   executor-context-prefixes:
     - cn.iocoder.yudao.service.controller
   dialect: org.babyfish.jimmer.sql.dialect.MySqlDialect

@@ -5,7 +5,7 @@ import cn.iocoder.yudao.service.vo.infra.data.job.job.JobPageReqVO;
 import cn.iocoder.yudao.service.model.infra.job.InfraJob;
 import cn.iocoder.yudao.service.model.infra.job.InfraJobTable;
 import org.babyfish.jimmer.spring.repository.JRepository;
-import org.springframework.data.domain.Page;
+import org.babyfish.jimmer.Page;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
@@ -16,14 +16,12 @@ public interface InfraJobRepository extends JRepository<InfraJob, UUID> {
     InfraJobTable infraJobTable = InfraJobTable.$;
 
     default Page<InfraJob> selectPage(JobPageReqVO reqVO){
-        return pager(reqVO.getPageNo() - 1, reqVO.getPageSize()).execute(
-                sql()
-                        .createQuery(infraJobTable)
-                        .whereIf(reqVO.getStatus() != null, infraJobTable.status().eq(reqVO.getStatus()))
-                        .whereIf(StringUtils.hasText(reqVO.getHandlerName()), infraJobTable.handlerName().eq(reqVO.getHandlerName()))
-                        .whereIf(StringUtils.hasText(reqVO.getName()), infraJobTable.name().eq(reqVO.getName()))
-                        .select(infraJobTable)
-        );
+        return sql()
+                .createQuery(infraJobTable)
+                .whereIf(reqVO.getStatus() != null, infraJobTable.status().eq(reqVO.getStatus()))
+                .whereIf(StringUtils.hasText(reqVO.getHandlerName()), infraJobTable.handlerName().eq(reqVO.getHandlerName()))
+                .whereIf(StringUtils.hasText(reqVO.getName()), infraJobTable.name().eq(reqVO.getName()))
+                .select(infraJobTable).fetchPage(reqVO.getPageNo() - 1, reqVO.getPageSize());
     }
 
     default List<InfraJob> selectList(JobExportReqVO reqVO){

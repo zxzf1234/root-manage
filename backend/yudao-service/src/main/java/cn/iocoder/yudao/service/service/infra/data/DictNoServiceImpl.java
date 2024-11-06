@@ -11,7 +11,7 @@ import cn.iocoder.yudao.service.vo.infra.data.dictNo.DictNoGetOutput;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.data.domain.Page;
+import org.babyfish.jimmer.Page;
 
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -72,8 +72,8 @@ public class DictNoServiceImpl implements DictNoService {
     @Override
     public PageResult<DictNoQueryOutput> query(DictNoQueryInput inputVO) {
         Page<InfraDictNo> pageNo = infraDictNoRepository.query(inputVO);
-        List<DictNoQueryOutput> listNo = DictNoConvert.INSTANCE.queryPageOutputConvert(pageNo);
-        return new PageResult<>(listNo, pageNo.getTotalElements());
+        List<DictNoQueryOutput> listNo = DictNoConvert.INSTANCE.queryPageOutputConvert(pageNo.getRows());
+        return new PageResult<>(listNo, pageNo.getTotalRowCount());
     }
 
     @Override

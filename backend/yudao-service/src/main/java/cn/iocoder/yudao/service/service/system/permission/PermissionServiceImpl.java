@@ -113,12 +113,13 @@ public class PermissionServiceImpl implements PermissionService {
         Collection<UUID> deleteMenuIds = CollUtil.subtract(dbMenuIds, menuIds);
         // 执行新增和删除。对于已经授权的菜单，不用做任何处理
         if (!CollectionUtil.isEmpty(createMenuIds)) {
-            systemRoleMenuRepository.insertBatch(CollectionUtils.convertList(createMenuIds, menuId -> {
-                SystemRoleMenu roleMenu = SystemRoleMenuDraft.$.produce(SystemRoleMenu->{
+            List<SystemRoleMenu> systemRoleMenuList = CollectionUtils.convertList(createMenuIds, menuId -> {
+                return SystemRoleMenuDraft.$.produce(SystemRoleMenu->{
                     SystemRoleMenu.setRoleId(roleId).setMenuId(menuId);
                 });
-                return roleMenu;
-            }));
+            });
+
+            systemRoleMenuRepository.insertBatch(systemRoleMenuList);
         }
         if (!CollectionUtil.isEmpty(deleteMenuIds)) {
             systemRoleMenuRepository.deleteByRoleIdAndMenuIdIn(roleId, deleteMenuIds);
@@ -148,12 +149,15 @@ public class PermissionServiceImpl implements PermissionService {
         Collection<Long> deleteMenuIds = CollUtil.subtract(dbRoleIds, roleIds);
         // 执行新增和删除。对于已经授权的角色，不用做任何处理
         if (!CollectionUtil.isEmpty(createRoleIds)) {
-            systemUserRoleRepository.insertBatch(CollectionUtils.convertList(createRoleIds, roleId -> {
-                SystemUserRole entity = SystemUserRoleDraft.$.produce(SystemUserRole->{
+            List<SystemUserRole> userRoleList = CollectionUtils.convertList(createRoleIds, roleId -> {
+                return SystemUserRoleDraft.$.produce(SystemUserRole->{
                     SystemUserRole.setUserId(userId).setRoleId(roleId);
                 });
-                return entity;
-            }));
+            });
+
+            systemUserRoleRepository.insertBatch(userRoleList);
+
+
         }
         if (!CollectionUtil.isEmpty(deleteMenuIds)) {
             systemUserRoleRepository.deleteByUserIdAndRoleIdIn(userId, deleteMenuIds);

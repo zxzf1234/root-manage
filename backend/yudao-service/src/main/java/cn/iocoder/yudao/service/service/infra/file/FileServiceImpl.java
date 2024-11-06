@@ -12,7 +12,7 @@ import cn.iocoder.yudao.service.model.infra.file.InfraFile;
 import cn.iocoder.yudao.service.model.infra.file.InfraFileDraft;
 import cn.iocoder.yudao.service.repository.infra.file.InfraFileRepository;
 import lombok.SneakyThrows;
-import org.springframework.data.domain.Page;
+import org.babyfish.jimmer.Page;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -39,7 +39,7 @@ public class FileServiceImpl implements FileService {
     @Override
     public PageResult<InfraFile> getFilePage(FilePageReqVO pageReqVO) {
         Page<InfraFile> postPage = infraFileRepository.selectPage(pageReqVO);
-        return new PageResult<>(postPage.toList(), postPage.getTotalElements());
+        return new PageResult<>(postPage.getRows(), postPage.getTotalRowCount());
     }
 
     @Override

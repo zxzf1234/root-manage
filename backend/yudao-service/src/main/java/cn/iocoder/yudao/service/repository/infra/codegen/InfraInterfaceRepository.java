@@ -4,7 +4,7 @@ import cn.iocoder.yudao.service.model.infra.codegen.*;
 import cn.iocoder.yudao.service.vo.infra.codegen.interfaceModule.InterfaceListReqVO;
 import org.babyfish.jimmer.spring.repository.JRepository;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.data.domain.Page;
+import org.babyfish.jimmer.Page;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
@@ -15,12 +15,12 @@ public interface InfraInterfaceRepository extends JRepository<InfraInterface, UU
     InfraInterfaceTable infraInterfaceTable = InfraInterfaceTable.$;
 
     default Page<InfraInterface> getList(InterfaceListReqVO reqVO){
-        return pager(reqVO.getPageNo() - 1, reqVO.getPageSize()).execute(sql().createQuery(infraInterfaceTable)
-                        .whereIf(StringUtils.hasText(reqVO.getName()), infraInterfaceTable.name().like(reqVO.getName()))
-                        .whereIf(StringUtils.hasText(reqVO.getModuleName()), ()-> infraInterfaceTable.module().id().eq(UUID.fromString(reqVO.getModuleName())))
-                        .orderBy(infraInterfaceTable.createTime().desc())
-                        .select(infraInterfaceTable.fetch(InfraInterfaceFetcher.$.allScalarFields().module(InfraInterfaceModuleFetcher.$.name())))
-        );
+        return sql().createQuery(infraInterfaceTable)
+                .whereIf(StringUtils.hasText(reqVO.getName()), infraInterfaceTable.name().like(reqVO.getName()))
+                .whereIf(StringUtils.hasText(reqVO.getModuleName()), ()-> infraInterfaceTable.module().id().eq(UUID.fromString(reqVO.getModuleName())))
+                .orderBy(infraInterfaceTable.createTime().desc())
+                .select(infraInterfaceTable.fetch(InfraInterfaceFetcher.$.allScalarFields().module(InfraInterfaceModuleFetcher.$.name())))
+                .fetchPage(reqVO.getPageNo() - 1, reqVO.getPageSize());
     }
     default Optional<InfraInterface> findDetailById(UUID id){
         return sql().createQuery(infraInterfaceTable)

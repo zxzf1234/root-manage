@@ -25,7 +25,7 @@ import org.quartz.SchedulerException;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.data.domain.Page;
+import org.babyfish.jimmer.Page;
 import java.util.*;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -283,7 +283,7 @@ public class JobServiceImpl implements JobService {
     @Override
     public PageResult<InfraJob> getJobPage(JobPageReqVO pageReqVO) {
         Page<InfraJob> postPage = infraJobRepository.selectPage(pageReqVO);
-        return new PageResult<>(postPage.toList(), postPage.getTotalElements());
+        return new PageResult<>(postPage.getRows(), postPage.getTotalRowCount());
     }
 
     @Override

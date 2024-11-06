@@ -11,7 +11,7 @@ import cn.iocoder.yudao.service.vo.infra.data.config.ConfigCreateInput;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.data.domain.Page;
+import org.babyfish.jimmer.Page;
 import java.util.*;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -132,7 +132,7 @@ public class ConfigServiceImpl implements ConfigService {
     public PageResult<ConfigPageOutput> page(ConfigPageInput inputVO) {
         Page<InfraConfig> postPage = infraConfigRepository.selectPage(inputVO);
 
-        return new PageResult<>(ConfigConvert.INSTANCE.pageOutputConvert(postPage), postPage.getTotalElements());
+        return new PageResult<>(ConfigConvert.INSTANCE.pageOutputConvert(postPage.getRows()), postPage.getTotalRowCount());
     }
 
 }

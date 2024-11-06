@@ -5,7 +5,7 @@ import cn.iocoder.yudao.service.vo.infra.logger.apiaccesslog.ApiAccessLogPageReq
 import cn.iocoder.yudao.service.model.infra.data.InfraApiAccessLog;
 import cn.iocoder.yudao.service.model.infra.data.InfraApiAccessLogTable;
 import org.babyfish.jimmer.spring.repository.JRepository;
-import org.springframework.data.domain.Page;
+import org.babyfish.jimmer.Page;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
@@ -14,9 +14,7 @@ public interface InfraApiAccessLogRepository extends JRepository<InfraApiAccessL
     InfraApiAccessLogTable infraApiAccessLogTable = InfraApiAccessLogTable.$;
 
     default Page<InfraApiAccessLog> selectPage(ApiAccessLogPageReqVO reqVO){
-        return pager(reqVO.getPageNo() - 1, reqVO.getPageSize()).execute(
-                sql()
-                        .createQuery(infraApiAccessLogTable)
+        return sql().createQuery(infraApiAccessLogTable)
                         .whereIf(reqVO.getDuration() != null, infraApiAccessLogTable.duration().eq(reqVO.getDuration()))
                         .whereIf(StringUtils.hasText(reqVO.getApplicationName()), infraApiAccessLogTable.applicationName().eq(reqVO.getApplicationName()))
                         .whereIf(StringUtils.hasText(reqVO.getRequestUrl()), infraApiAccessLogTable.requestUrl().eq(reqVO.getRequestUrl()))
@@ -24,8 +22,7 @@ public interface InfraApiAccessLogRepository extends JRepository<InfraApiAccessL
                         .whereIf(reqVO.getResultCode() != null, infraApiAccessLogTable.resultCode().eq(reqVO.getResultCode()))
                         .whereIf(reqVO.getUserId() != null, infraApiAccessLogTable.userId().eq(reqVO.getUserId()))
                         .whereIf(reqVO.getUserType() != null, infraApiAccessLogTable.userType().eq(reqVO.getUserType()))
-                        .select(infraApiAccessLogTable)
-        );
+                        .select(infraApiAccessLogTable).fetchPage(reqVO.getPageNo() - 1, reqVO.getPageSize());
     }
 
     default List<InfraApiAccessLog> selectList(ApiAccessLogExportReqVO reqVO){

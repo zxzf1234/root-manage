@@ -13,7 +13,7 @@ import java.util.*;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
-import org.springframework.data.domain.Page;
+import org.babyfish.jimmer.Page;
 import cn.iocoder.yudao.service.vo.system.post.post.*;
 
 /**
@@ -30,7 +30,7 @@ public interface PostConvert {
 
     PostGetOutput getOutputConvert(SystemPost output);
 
-    List<PostPageOutput> pagePageOutputConvert(Page<SystemPost> output);
+    List<PostPageOutput> pagePageOutputConvert(List<SystemPost> output);
 
     List<PostListAllSimpleOutput> listAllSimpleOutputConvert(List<SystemPost> output);
 

@@ -7,7 +7,7 @@ import cn.iocoder.yudao.service.model.infra.data.InfraDictTypeTable;
 import cn.iocoder.yudao.service.vo.infra.data.dictType.DictTypeExportInput;
 import cn.iocoder.yudao.service.vo.infra.data.dictType.DictTypePageInput;
 import org.babyfish.jimmer.spring.repository.JRepository;
-import org.springframework.data.domain.Page;
+import org.babyfish.jimmer.Page;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
@@ -22,15 +22,12 @@ public interface InfraDictTypeRepository extends JRepository<InfraDictType, UUID
     Optional<InfraDictType> findByType(String type);
 
     default Page<InfraDictType> selectPage(DictTypePageInput reqVO){
-        return pager(reqVO.getPageNo() - 1, reqVO.getPageSize()).execute(
-                sql()
-                        .createQuery(infraDictTypeTable)
+        return sql().createQuery(infraDictTypeTable)
                         .whereIf(StringUtils.hasText(reqVO.getName()),infraDictTypeTable.name().like(reqVO.getName()))
                         .whereIf(StringUtils.hasText(reqVO.getType()),infraDictTypeTable.type().like(reqVO.getType()))
                         .whereIf(reqVO.getCreateTime() != null,  () -> infraDictTypeTable.createTime().between(reqVO.getCreateTime()[0], reqVO.getCreateTime()[1]))
                         .orderBy(infraDictTypeTable.createTime().desc())
-                        .select(infraDictTypeTable)
-        );
+                        .select(infraDictTypeTable).fetchPage(reqVO.getPageNo() - 1, reqVO.getPageSize());
     }
 
     default List<InfraDictType> selectList(DictTypeExportInput reqVO){

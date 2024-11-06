@@ -29,7 +29,7 @@ import javax.annotation.Resource;
 
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.data.domain.Page;
+import org.babyfish.jimmer.Page;
 
 import java.io.IOException;
 import java.util.*;
@@ -172,8 +172,8 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public PageResult<RolePageOutput> page(RolePageInput inputVO) {
         Page<SystemRole> postPage = systemRoleRepository.pageSelect(inputVO);
-        List<RolePageOutput> listOutputs = RoleConvert.INSTANCE.pagePageOutputConvert(postPage);
-        return new PageResult<>(listOutputs, postPage.getTotalElements());
+        List<RolePageOutput> listOutputs = RoleConvert.INSTANCE.pagePageOutputConvert(postPage.getRows());
+        return new PageResult<>(listOutputs, postPage.getTotalRowCount());
     }
 
     @Override

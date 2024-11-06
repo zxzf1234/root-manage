@@ -6,12 +6,15 @@ import cn.iocoder.yudao.service.enums.infra.codegen.InfraCodegenTableEnum;
 import cn.iocoder.yudao.service.framework.codegen.config.SchemaHistory;
 import cn.iocoder.yudao.service.util.upgrade.UpgradeUtils;
 import org.apache.commons.lang.StringEscapeUtils;
+import org.babyfish.jimmer.meta.ImmutableProp;
 import org.babyfish.jimmer.sql.runtime.*;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.Resource;
+import java.sql.Connection;
 import java.util.List;
 import java.util.regex.Matcher;
 
@@ -35,6 +38,17 @@ public class JimmerExecutor {
                 return DefaultExecutor
                         .INSTANCE
                         .execute(args);
+            }
+
+            @Override
+            public BatchContext executeBatch(@NotNull Connection con, @NotNull String sql, @Nullable ImmutableProp generatedIdProp, @NotNull ExecutionPurpose purpose, @NotNull JSqlClientImplementor sqlClient) {
+                return DefaultExecutor.INSTANCE.executeBatch(
+                        con,
+                        sql,
+                        generatedIdProp,
+                        purpose,
+                        sqlClient
+                );
             }
         };
 

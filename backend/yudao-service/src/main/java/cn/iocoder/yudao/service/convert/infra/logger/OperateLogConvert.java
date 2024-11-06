@@ -7,7 +7,7 @@ import cn.iocoder.yudao.service.model.infra.logger.SystemOperateLog;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
-import org.springframework.data.domain.Page;
+import org.babyfish.jimmer.Page;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ public interface OperateLogConvert {
 
     SystemOperateLog convert(OperateLogCreateReqVO bean);
 
-    List<OperateLogRespVO> convertPage(Page<SystemOperateLog> page);
+    List<OperateLogRespVO> convertPage(List<SystemOperateLog> page);
 
     @Mapping(source = "user.nickname", target = "userNickname")
     OperateLogRespVO convert(SystemOperateLog bean);

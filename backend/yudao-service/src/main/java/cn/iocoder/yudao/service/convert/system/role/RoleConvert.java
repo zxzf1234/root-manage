@@ -10,7 +10,7 @@ import java.util.*;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
-import org.springframework.data.domain.Page;
+import org.babyfish.jimmer.Page;
 
 /**
  * 角色管理 Convert
@@ -26,7 +26,7 @@ public interface RoleConvert {
 
     RoleGetOutput getOutputConvert(SystemRole output);
 
-    List<RolePageOutput> pagePageOutputConvert(Page<SystemRole> output);
+    List<RolePageOutput> pagePageOutputConvert(List<SystemRole> output);
 
     List<RoleListAllSimpleOutput> listAllSimpleOutPutConvert(List<SystemRole> output);
 

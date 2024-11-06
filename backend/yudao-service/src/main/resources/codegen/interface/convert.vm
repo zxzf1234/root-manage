@@ -13,5 +13,5 @@
     ${interfaceOutput} ${interfaceNameHump}OutputConvert(List<${outputSrcExtendClass}> output);
 #elseif(${interface.outputType}=="VOClassPage" && ${outputSrcExtendClass} != "")
 
-    ${interfaceOutput.replace("PageResult","List")} ${interfaceNameHump}OutputConvert(Page<${outputSrcExtendClass}> output);
+    ${interfaceOutput.replace("PageResult","List")} ${interfaceNameHump}OutputConvert(List<${outputSrcExtendClass}> output);
 #end

@@ -16,7 +16,7 @@ import cn.iocoder.yudao.service.vo.system.post.post.PostCreateInput;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.data.domain.Page;
+import org.babyfish.jimmer.Page;
 import java.util.*;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.transaction.annotation.Transactional;
@@ -102,8 +102,8 @@ public class PostServiceImpl implements PostService {
     @Override
     public PageResult<PostPageOutput> page(PostPageInput inputVO) {
         Page<SystemPost> postPage = systemPostRepository.selectPage(inputVO);
-        List<PostPageOutput> postList =  PostConvert.INSTANCE.pagePageOutputConvert(postPage);
-        return new PageResult<>(postList, postPage.getTotalElements());
+        List<PostPageOutput> postList =  PostConvert.INSTANCE.pagePageOutputConvert(postPage.getRows());
+        return new PageResult<>(postList, postPage.getTotalRowCount());
     }
 
     private void validatePostForCreateOrUpdate(Long id, String name, String code) {

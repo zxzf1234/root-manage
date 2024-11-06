@@ -7,7 +7,7 @@ import cn.iocoder.yudao.service.vo.infra.logger.apiaccesslog.ApiAccessLogPageReq
 import cn.iocoder.yudao.service.convert.infra.logger.ApiAccessLogConvert;
 import cn.iocoder.yudao.service.model.infra.data.InfraApiAccessLog;
 import cn.iocoder.yudao.service.repository.infra.data.InfraApiAccessLogRepository;
-import org.springframework.data.domain.Page;
+import org.babyfish.jimmer.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -35,7 +35,7 @@ public class ApiAccessLogServiceImpl implements ApiAccessLogService {
     @Override
     public PageResult<InfraApiAccessLog> getApiAccessLogPage(ApiAccessLogPageReqVO pageReqVO) {
         Page<InfraApiAccessLog> postPage = infraApiAccessLogRepository.selectPage(pageReqVO);
-        return new PageResult<>(postPage.toList(), postPage.getTotalElements());
+        return new PageResult<>(postPage.getRows(), postPage.getTotalRowCount());
     }
 
     @Override

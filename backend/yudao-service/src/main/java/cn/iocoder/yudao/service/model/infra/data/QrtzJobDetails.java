@@ -18,11 +18,11 @@ public interface QrtzJobDetails {
 
     String jobClassName();
 
-    String isDurable();
+    Boolean isDurable();
 
-    String isNonconcurrent();
+    Boolean isNonconcurrent();
 
-    String  isUpdateData();
+    Boolean isUpdateData();
 
     String requestsRecovery();
 

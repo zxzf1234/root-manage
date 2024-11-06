@@ -13,7 +13,7 @@ import cn.iocoder.yudao.service.vo.infra.codegen.interfaceModule.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
-import org.springframework.data.domain.Page;
+import org.babyfish.jimmer.Page;
 
 import java.util.List;
 
@@ -22,8 +22,6 @@ import java.util.List;
 public interface CodegenConvert {
 
     CodegenConvert INSTANCE = Mappers.getMapper(CodegenConvert.class);
-
-    List<DatabaseTableResp> convertList05(Page<InfraDatabaseTable> list);
 
     List<DatabaseTableResp> convertList05(List<InfraDatabaseTable> list);
 
@@ -78,7 +76,7 @@ public interface CodegenConvert {
 
     List<InterfaceModuleSimpleRespVO> convertList11(List<InfraInterfaceModule> columns);
 
-    List<InterfaceResp> convertList12(Page<InfraInterface> columns);
+    List<InterfaceResp> convertList12(List<InfraInterface> columns);
 
     List<DatabaseTableColumnResp> convertList13(List<InfraDatabaseTable> columns);
 

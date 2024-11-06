@@ -6,7 +6,7 @@ import cn.iocoder.yudao.service.vo.infra.config.ConfigExportReqVO;
 import cn.iocoder.yudao.service.vo.infra.config.ConfigPageReqVO;
 import cn.iocoder.yudao.service.vo.infra.data.config.ConfigPageInput;
 import org.babyfish.jimmer.spring.repository.JRepository;
-import org.springframework.data.domain.Page;
+import org.babyfish.jimmer.Page;
 import org.springframework.util.StringUtils;
 import java.util.Optional;
 import java.util.List;
@@ -27,14 +27,12 @@ public interface InfraConfigRepository extends JRepository<InfraConfig, UUID> {
     }
 
     default Page<InfraConfig> selectPage(ConfigPageInput reqVO){
-        return pager(reqVO.getPageNo() - 1, reqVO.getPageSize()).execute(
-                sql().createQuery(infraConfigTable)
-                        .whereIf(reqVO.getType() != null, infraConfigTable.type().eq(reqVO.getType()))
-                        .whereIf(StringUtils.hasText(reqVO.getConfigKey()), infraConfigTable.configKey().eq(reqVO.getConfigKey()))
-                        .whereIf(StringUtils.hasText(reqVO.getName()), infraConfigTable.name().eq(reqVO.getName()))
-                        .whereIf(reqVO.getCreateTime()!=null, ()-> infraConfigTable.createTime().between(reqVO.getCreateTime()[0], reqVO.getCreateTime()[1]))
-                        .select(infraConfigTable)
-        );
+        return sql().createQuery(infraConfigTable)
+                .whereIf(reqVO.getType() != null, infraConfigTable.type().eq(reqVO.getType()))
+                .whereIf(StringUtils.hasText(reqVO.getConfigKey()), infraConfigTable.configKey().eq(reqVO.getConfigKey()))
+                .whereIf(StringUtils.hasText(reqVO.getName()), infraConfigTable.name().eq(reqVO.getName()))
+                .whereIf(reqVO.getCreateTime()!=null, ()-> infraConfigTable.createTime().between(reqVO.getCreateTime()[0], reqVO.getCreateTime()[1]))
+                .select(infraConfigTable).fetchPage(reqVO.getPageNo() - 1, reqVO.getPageSize());
     }
 
     Optional<InfraConfig> findByConfigKey(String key);

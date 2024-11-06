@@ -5,7 +5,7 @@ import java.util.*;
 import cn.iocoder.yudao.service.model.infra.data.SystemMenu;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
-import org.springframework.data.domain.Page;
+import org.babyfish.jimmer.Page;
 import cn.iocoder.yudao.service.vo.infra.data.menu.*;
 
 /**
