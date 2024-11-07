@@ -98,9 +98,13 @@ public class InterfaceServiceImpl implements InterfaceService{
                 .setInputSubclasses(Collections.emptyList())
                 .setOutputSubclasses(Collections.emptyList()));
         newInterface = infraInterfaceRepository.insert(newInterface);
+        codegenEngine.saveInsertSql(newInterface);
         infraInterfaceSubclassRepository.saveAll(newSubclasses);
+        newSubclasses.forEach(subClass -> codegenEngine.saveInsertSql(subClass));
         infraInterfaceParamRepository.saveAll(newParams);
+        newParams.forEach(param -> codegenEngine.saveInsertSql(param));
         infraInterfaceValidationRepository.saveAll(newValidations);
+        newValidations.forEach(validation -> codegenEngine.saveInsertSql(validation));
         codegenEngine.interfaceInsert(newInterface.id());
         return newInterface.id().toString();
     }
@@ -153,8 +157,11 @@ public class InterfaceServiceImpl implements InterfaceService{
                 Optional<InfraInterfaceSubclass> opOldSubclass = infraInterfaceSubclassRepository.findById(inputSubclass.getId());
                 if(!opOldSubclass.isPresent())
                     throw exception(CODEGEN_INTERFACE_SUBCLASS_NOT_EXITS);
-                if(!EntityUtils.isEquals(opOldSubclass.get(), updateSubclass))
+                if(!EntityUtils.isEquals(opOldSubclass.get(), updateSubclass)){
                     infraInterfaceSubclassRepository.update(updateSubclass);
+                    codegenEngine.saveUpdateSql(updateSubclass);
+                }
+
             }
         }
 
@@ -193,8 +200,10 @@ public class InterfaceServiceImpl implements InterfaceService{
                 Optional<InfraInterfaceSubclass> opOldSubclass = infraInterfaceSubclassRepository.findById(outputSubclass.getId());
                 if(!opOldSubclass.isPresent())
                     throw exception(CODEGEN_INTERFACE_SUBCLASS_NOT_EXITS);
-                if(!EntityUtils.isEquals(opOldSubclass.get(), updateSubclass))
+                if(!EntityUtils.isEquals(opOldSubclass.get(), updateSubclass)){
                     infraInterfaceSubclassRepository.update(updateSubclass);
+                    codegenEngine.saveUpdateSql(updateSubclass);
+                }
             }
         }
         for(InterfaceEditInput.inputParam inputParam : reqVO.getInputParams()){
@@ -216,8 +225,11 @@ public class InterfaceServiceImpl implements InterfaceService{
                 }
                 InfraInterfaceParam updateParam = CodegenConvert.INSTANCE.convert(inputParam);
                 updateParam = InfraInterfaceParamDraft.$.produce(updateParam, draft -> draft.setValidations(Collections.emptyList()));
-                if (!EntityUtils.isEquals(opOldParam.get(), updateParam))
+                if (!EntityUtils.isEquals(opOldParam.get(), updateParam)){
                     infraInterfaceParamRepository.update(updateParam);
+                    codegenEngine.saveUpdateSql(updateParam);
+                }
+
             }
         }
 
@@ -240,21 +252,37 @@ public class InterfaceServiceImpl implements InterfaceService{
                 }
                 InfraInterfaceParam updateParam = CodegenConvert.INSTANCE.convert(outputParam);
                 updateParam = InfraInterfaceParamDraft.$.produce(updateParam, draft -> draft.setValidations(Collections.emptyList()));
-                if (!EntityUtils.isEquals(opOldParam.get(), updateParam))
+                if (!EntityUtils.isEquals(opOldParam.get(), updateParam)){
                     infraInterfaceParamRepository.update(updateParam);
+                    codegenEngine.saveUpdateSql(updateParam);
+                }
+
             }
         }
 
         infraInterfaceSubclassRepository.saveAll(newSubclasses);
-        infraInterfaceParamRepository.saveAll(newParams);
-        infraInterfaceValidationRepository.saveAll(newValidations);
+        newSubclasses.forEach(subClass -> codegenEngine.saveInsertSql(subClass));
 
-        if (!deleteValidations.isEmpty())
-            infraInterfaceValidationRepository.deleteByIds(deleteValidations);
-        if (!deleteParams.isEmpty())
-            infraInterfaceParamRepository.deleteByIds(deleteParams);
-        if (!deleteSubclasses.isEmpty())
-            infraInterfaceSubclassRepository.deleteByIds(deleteSubclasses);
+        infraInterfaceParamRepository.saveAll(newParams);
+        newParams.forEach(param -> codegenEngine.saveInsertSql(param));
+
+        infraInterfaceValidationRepository.saveAll(newValidations);
+        newValidations.forEach(validation -> codegenEngine.saveInsertSql(validation));
+
+        if (!deleteValidations.isEmpty()){
+            infraInterfaceValidationRepository.deleteByIds(deleteValidations, DeleteMode.PHYSICAL);
+            deleteValidations.forEach(validation -> codegenEngine.saveDeleteSql(InfraInterfaceValidation.class.getName(), validation.toString()));
+        }
+
+        if (!deleteParams.isEmpty()){
+            infraInterfaceParamRepository.deleteByIds(deleteParams, DeleteMode.PHYSICAL);
+            deleteParams.forEach(param -> codegenEngine.saveDeleteSql(InfraInterfaceParam.class.getName(), param.toString()));
+        }
+
+        if (!deleteSubclasses.isEmpty()){
+            infraInterfaceSubclassRepository.deleteByIds(deleteSubclasses, DeleteMode.PHYSICAL);
+            deleteSubclasses.forEach(subClass -> codegenEngine.saveDeleteSql(InfraInterfaceSubclass.class.getName(), subClass.toString()));
+        }
 
         InfraInterface updateInterface = CodegenConvert.INSTANCE.convert(reqVO);
         Optional<InfraInterface> opOldInterface = infraInterfaceRepository.findById(reqVO.getId());
@@ -266,8 +294,10 @@ public class InterfaceServiceImpl implements InterfaceService{
                         .setInputSubclasses(Collections.emptyList())
                         .setOutputSubclasses(Collections.emptyList()));
 
-        if(!EntityUtils.isEquals(opOldInterface.get(), updateInterface))
+        if(!EntityUtils.isEquals(opOldInterface.get(), updateInterface)){
             infraInterfaceRepository.update(updateInterface);
+            codegenEngine.saveUpdateSql(updateInterface);
+        }
         codegenEngine.interfaceUpdate(updateInterface.id(), oldInterface);
         return updateInterface.id().toString();
     }
@@ -284,8 +314,11 @@ public class InterfaceServiceImpl implements InterfaceService{
                 Optional<InfraInterfaceValidation> opOldValidation = infraInterfaceValidationRepository.findById(validation.getId());
                 if (!opOldValidation.isPresent())
                     throw exception(CODEGEN_INTERFACE_VALIDATION_NOT_EXITS);
-                if(!EntityUtils.isEquals(opOldValidation.get(), updateValidation))
+                if(!EntityUtils.isEquals(opOldValidation.get(), updateValidation)){
                     infraInterfaceValidationRepository.update(updateValidation);
+                    codegenEngine.saveUpdateSql(updateValidation);
+                }
+
             }
         }
 
@@ -313,8 +346,11 @@ public class InterfaceServiceImpl implements InterfaceService{
                 Optional<InfraInterfaceParam> opOldParam = infraInterfaceParamRepository.findById(subclassParam.getId());
                 if (!opOldParam.isPresent())
                     throw exception(CODEGEN_INTERFACE_PARAM_NOT_EXITS);
-                if (!EntityUtils.isEquals(opOldParam.get(), updateParam))
+                if (!EntityUtils.isEquals(opOldParam.get(), updateParam)){
                     infraInterfaceParamRepository.update(updateParam);
+                    codegenEngine.saveUpdateSql(updateParam);
+                }
+
             }
         }
     }
@@ -337,9 +373,18 @@ public class InterfaceServiceImpl implements InterfaceService{
     public void deleted(String id){
         UUID interfaceId = UUID.fromString(id);
         codegenEngine.interfaceDelete(interfaceId);
+        saveDeletedSql(interfaceId);
         infraInterfaceParamRepository.deleteByParentId(interfaceId);
         infraInterfaceSubclassRepository.deleteByParentId(interfaceId);
         infraInterfaceRepository.deleteById(interfaceId, DeleteMode.PHYSICAL);
+    }
+
+    private void saveDeletedSql(UUID interfaceId){
+        List<InfraInterfaceParam> params = infraInterfaceParamRepository.findByParentId(interfaceId);
+        params.forEach(param -> codegenEngine.saveDeleteSql(InfraInterfaceParam.class.getName(), param.id().toString()));
+        List<InfraInterfaceSubclass> subclasses = infraInterfaceSubclassRepository.findByParentId(interfaceId);
+        subclasses.forEach(subClass -> codegenEngine.saveDeleteSql(InfraInterfaceSubclass.class.getName(), subClass.id().toString()));
+        codegenEngine.saveDeleteSql(InfraInterface.class.getName(), interfaceId.toString());
     }
 
 }

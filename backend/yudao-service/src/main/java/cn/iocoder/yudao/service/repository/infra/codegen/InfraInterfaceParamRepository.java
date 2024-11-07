@@ -3,6 +3,7 @@ package cn.iocoder.yudao.service.repository.infra.codegen;
 import cn.iocoder.yudao.service.model.infra.codegen.InfraInterfaceParam;
 import cn.iocoder.yudao.service.model.infra.codegen.InfraInterfaceParamTable;
 import org.babyfish.jimmer.spring.repository.JRepository;
+import org.babyfish.jimmer.sql.ast.mutation.DeleteMode;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,7 +12,13 @@ import java.util.UUID;
 public interface InfraInterfaceParamRepository extends JRepository<InfraInterfaceParam, UUID> {
     InfraInterfaceParamTable infraInterfaceParamTable = InfraInterfaceParamTable.$;
 
-    void deleteByParentId(UUID interfaceId);
+    default void deleteByParentId(UUID interfaceId){
+        sql().createDelete(infraInterfaceParamTable)
+                .where(infraInterfaceParamTable.parentId().eq(interfaceId))
+                .setMode(DeleteMode.PHYSICAL)
+                .execute();
+    };
 
+    List<InfraInterfaceParam> findByParentId(UUID parentId);
 
 }
