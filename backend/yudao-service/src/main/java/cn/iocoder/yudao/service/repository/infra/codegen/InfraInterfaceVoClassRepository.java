@@ -29,7 +29,7 @@ public interface InfraInterfaceVoClassRepository extends JRepository<InfraInterf
     default void deleteByParentId(String parentId){
         sql().createDelete(infraInterfaceVoClassTable)
                 .where(infraInterfaceVoClassTable.parentId().eq(parentId))
-                .setMode(DeleteMode.LOGICAL)
+                .setMode(DeleteMode.PHYSICAL)
                 .execute();
     };
 

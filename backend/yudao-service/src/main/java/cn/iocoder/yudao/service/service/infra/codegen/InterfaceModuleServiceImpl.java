@@ -78,6 +78,7 @@ public class InterfaceModuleServiceImpl implements InterfaceModuleService{
             }
         }
         module = infraInterfaceModuleRepository.insert(module);
+        codegenEngine.saveInsertSql(module);
         if(module.type() == 1)
             codegenEngine.moduleInsertExecute(module);
         return module.id().toString();
@@ -116,6 +117,7 @@ public class InterfaceModuleServiceImpl implements InterfaceModuleService{
         }
 
         InfraInterfaceModule newModule = infraInterfaceModuleRepository.update(CodegenConvert.INSTANCE.convert(reqVO));
+        codegenEngine.saveUpdateSql(newModule);
         if(!Objects.equals(oldModule.type(), newModule.type()))
             throw exception(CODEGEN_INTERFACE_MODULE_TYPE_NOT_CHANGE);
 
@@ -147,5 +149,6 @@ public class InterfaceModuleServiceImpl implements InterfaceModuleService{
         if(module.type() == 1)
             codegenEngine.moduleDeleteExecute(module);
         infraInterfaceModuleRepository.deleteById(UUID.fromString(id), DeleteMode.PHYSICAL);
+        codegenEngine.saveDeleteSql(InfraInterfaceModule.class.getName(), id);
     }
 }

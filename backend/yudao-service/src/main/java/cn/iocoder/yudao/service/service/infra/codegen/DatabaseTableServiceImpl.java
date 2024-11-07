@@ -397,13 +397,13 @@ public class DatabaseTableServiceImpl implements DatabaseTableService {
         columnList.forEach(column -> codegenEngine.saveDeleteSql(InfraDatabaseColumn.class.getName(), column.id().toString()));
 
         List<InfraDatabaseIndex> indexList = infraDatabaseIndexRepository.findByTableId(tableId);
-        indexList.forEach(index -> codegenEngine.saveDeleteSql(InfraDatabaseColumn.class.getName(), index.id().toString()));
+        indexList.forEach(index -> codegenEngine.saveDeleteSql(InfraDatabaseIndex.class.getName(), index.id().toString()));
 
         List<InfraDatabaseMapping> mappingList = infraDatabaseMappingRepository.findByTableId(tableId);
-        mappingList.forEach(mapping -> codegenEngine.saveDeleteSql(InfraDatabaseColumn.class.getName(), mapping.id().toString()));
+        mappingList.forEach(mapping -> codegenEngine.saveDeleteSql(InfraDatabaseMapping.class.getName(), mapping.id().toString()));
 
         List<InfraInterfaceVoClass> voClassList = infraInterfaceVoClassRepository.findByParentId(tableId.toString());
-        voClassList.forEach(voClass -> codegenEngine.saveDeleteSql(InfraDatabaseColumn.class.getName(), voClass.id().toString()));
+        voClassList.forEach(voClass -> codegenEngine.saveDeleteSql(InfraInterfaceVoClass.class.getName(), voClass.id().toString()));
 
         codegenEngine.saveDeleteSql(InfraDatabaseTable.class.getName(), tableId.toString());
     }

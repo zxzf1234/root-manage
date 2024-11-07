@@ -14,30 +14,7 @@ public enum InfraCodegenTableEnum {
     * 菜单
     */
     SYSTEM_MENU("SYSTEM_MENU"),
-    /**
-    * 数据库表字段
-    */
-    INFRA_DATABASE_COLUMN("INFRA_DATABASE_COLUMN"),
-    /**
-    * 数据库表
-    */
-    INFRA_DATABASE_TABLE("INFRA_DATABASE_TABLE"),
-    /**
-    * 数据库表索引
-    */
-    INFRA_DATABASE_INDEX("INFRA_DATABASE_INDEX"),
-    /**
-    * 数据库表映射
-    */
-    INFRA_DATABASE_MAPPING("INFRA_DATABASE_MAPPING"),
-    /**
-    * 接口校验
-    */
-    INFRA_INTERFACE_VALIDATION("INFRA_INTERFACE_VALIDATION"),
-    /**
-    * 接口子类
-    */
-    INFRA_INTERFACE_VO_CLASS("INFRA_INTERFACE_VO_CLASS"),
+
     /**
     * 接口模块
     */

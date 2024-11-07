@@ -15,7 +15,7 @@ public interface InfraDatabaseIndexRepository extends JRepository<InfraDatabaseI
     default void deleteByTableId(UUID tableId){
         sql().createDelete(infraDatabaseIndexTable)
                 .where(infraDatabaseIndexTable.tableId().eq(tableId))
-                .setMode(DeleteMode.LOGICAL)
+                .setMode(DeleteMode.PHYSICAL)
                 .execute();
     };
 
