@@ -3,6 +3,7 @@ package cn.iocoder.yudao.service.service.infra.data;
 import cn.iocoder.yudao.service.model.infra.data.InfraDictNo;
 import cn.iocoder.yudao.service.model.infra.data.InfraDictNoDraft;
 import cn.iocoder.yudao.service.repository.infra.data.InfraDictNoRepository;
+import cn.iocoder.yudao.service.service.infra.codegen.inner.CodegenEngine;
 import cn.iocoder.yudao.service.vo.infra.data.dictNo.DictNoQueryOutput;
 import cn.iocoder.yudao.service.vo.infra.data.dictNo.DictNoQueryInput;
 import cn.iocoder.yudao.service.vo.infra.data.dictNo.DictNoUpdateInput;
@@ -35,6 +36,9 @@ public class DictNoServiceImpl implements DictNoService {
     @Resource
     InfraDictNoRepository infraDictNoRepository;
 
+    @Resource
+    private CodegenEngine codegenEngine;
+
     @Override
     public DictNoGetOutput get(String id) {
         Optional<InfraDictNo> opNo = infraDictNoRepository.findById(UUID.fromString(id));
@@ -56,6 +60,7 @@ public class DictNoServiceImpl implements DictNoService {
             draft.setLastDate(LocalDate.now().atStartOfDay()).setPostfixVal(0);
         });
         newNo = infraDictNoRepository.insert(newNo);
+        codegenEngine.saveInsertSql(newNo);
         return newNo.id().toString();
     }
 
@@ -66,6 +71,7 @@ public class DictNoServiceImpl implements DictNoService {
         if(infraDictNoRepository.findByKeyName(updateNo.keyName()).isPresent())
             throw exception(DICT_NO_EXISTS);
         infraDictNoRepository.update(updateNo);
+        codegenEngine.saveUpdateSql(updateNo);
         return updateNo.id().toString();
     }
 

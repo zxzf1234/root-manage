@@ -88,13 +88,19 @@ public class DatabaseTableServiceImpl implements DatabaseTableService {
             if(!column.getValidations().isEmpty()){
                 List<InfraInterfaceValidation> validations = CodegenConvert.INSTANCE.convertList17(column.getValidations());
                 infraInterfaceValidationRepository.saveAll(validations);
+                validations.forEach(validation -> {codegenEngine.saveInsertSql(validation);});
             }
             column.setValidations(Collections.emptyList());
         }
         InfraDatabaseTable newDatabaseTable = CodegenConvert.INSTANCE.convert(reqVo);
 
         // 保存数据库表
+        codegenEngine.saveInsertSql(newDatabaseTable);
+        newDatabaseTable.columns().forEach(column -> {codegenEngine.saveInsertSql(column);});
+        newDatabaseTable.indexes().forEach(index -> {codegenEngine.saveInsertSql(index);});
+        newDatabaseTable.mappings().forEach(mapping -> {codegenEngine.saveInsertSql(mapping);});
         newDatabaseTable = infraDatabaseTableRepository.insert(newDatabaseTable);
+
 
         // 保存数据库表对应的接口参数类
         InfraDatabaseTable finalNewDatabaseTable = newDatabaseTable;
@@ -104,7 +110,8 @@ public class DatabaseTableServiceImpl implements DatabaseTableService {
                     .setParentId(finalNewDatabaseTable.id().toString())
                     .setComment(reqVo.getComment());
         });
-        infraInterfaceVoClassRepository.insert(newParamClass);
+        newParamClass = infraInterfaceVoClassRepository.insert(newParamClass);
+        codegenEngine.saveInsertSql(newParamClass);
         // 重新获取完整的table信息
         newDatabaseTable = infraDatabaseTableRepository.findDetailById(newDatabaseTable.id()).get();
         codegenEngine.tableInsertExecute(newDatabaseTable);
@@ -145,13 +152,15 @@ public class DatabaseTableServiceImpl implements DatabaseTableService {
         List<DatabaseUpdateReq.mapping> reqVoMappingList = reqVo.getMappings();
         for(DatabaseUpdateReq.mapping reqVoMapping : reqVoMappingList){
             if(Objects.equals(reqVoMapping.getOperateType(), "delete")){
-                infraDatabaseMappingRepository.deleteById(reqVoMapping.getId());
+                infraDatabaseMappingRepository.deleteById(reqVoMapping.getId(), DeleteMode.PHYSICAL);
+                codegenEngine.saveDeleteSql(InfraDatabaseMapping.class.getName(), reqVoMapping.getId().toString());
             }else if(Objects.equals(reqVoMapping.getOperateType(), "new")){
                 InfraDatabaseMapping newMapping = CodegenConvert.INSTANCE.convert(reqVoMapping);
                 newMapping = InfraDatabaseMappingDraft.$.produce(newMapping, draft -> {
                     draft.setTableId(reqVo.getId());
                 });
-                infraDatabaseMappingRepository.insert(newMapping);
+                newMapping = infraDatabaseMappingRepository.insert(newMapping);
+                codegenEngine.saveInsertSql(newMapping);
             }else{
                 InfraDatabaseMapping updateMapping = CodegenConvert.INSTANCE.convert(reqVoMapping);
                 updateMapping = InfraDatabaseMappingDraft.$.produce(updateMapping, draft -> {
@@ -160,8 +169,11 @@ public class DatabaseTableServiceImpl implements DatabaseTableService {
                 Optional<InfraDatabaseMapping> opOldMapping = infraDatabaseMappingRepository.findById(reqVoMapping.getId());
                 if (!opOldMapping.isPresent())
                     throw exception(CODEGEN_DATABASE_MAPPING_NOT_EXITS);
-                if (!EntityUtils.isEquals(opOldMapping.get(), updateMapping))
+                if (!EntityUtils.isEquals(opOldMapping.get(), updateMapping)){
                     infraDatabaseMappingRepository.update(updateMapping);
+                    codegenEngine.saveUpdateSql(updateMapping);
+                }
+
             }
         }
 
@@ -175,6 +187,17 @@ public class DatabaseTableServiceImpl implements DatabaseTableService {
                 draft.setName(reqVo.getName()).setFirstModule(reqVo.getFirstModule()).setSecondModule(reqVo.getSecondModule()).setComment(reqVo.getComment()).setRemark(reqVo.getRemark()).setId(reqVo.getId());
             });
             infraDatabaseTableRepository.updateById(reqVo.getId(), updateDatabaseTable);
+            codegenEngine.saveUpdateSql(updateDatabaseTable);
+            // 更新VoClass
+            Optional<InfraInterfaceVoClass>  opUpdateVoClass = infraInterfaceVoClassRepository.findFirstByParentId(reqVo.getId().toString());
+            if(opUpdateVoClass.isPresent()) {
+                InfraInterfaceVoClass updateVoClass = InfraInterfaceVoClassDraft.$.produce(opUpdateVoClass.get(), draft -> {
+                    draft.setComment(reqVo.getComment())
+                            .setName(upperFirst(StrUtil.toCamelCase(reqVo.getName())) + "Base");
+                });
+                infraInterfaceVoClassRepository.update(updateVoClass);
+                codegenEngine.saveUpdateSql(updateVoClass);
+            }
         }
         // 将最后一个，改成；
         if(updateSql.lastIndexOf(",") > 0)
@@ -185,16 +208,6 @@ public class DatabaseTableServiceImpl implements DatabaseTableService {
         if(!Objects.equals(tableOptional.get().name(), reqVo.getName()))
             updateSql.append("ALTER TABLE ").append(tableOptional.get().name())
                     .append(" RENAME TO ").append(reqVo.getName()).append(";\n");
-
-        // 更新VoClass
-        Optional<InfraInterfaceVoClass>  opUpdateVoClass = infraInterfaceVoClassRepository.findFirstByParentId(reqVo.getId().toString());
-        if(opUpdateVoClass.isPresent()) {
-            InfraInterfaceVoClass updateVoClass = InfraInterfaceVoClassDraft.$.produce(opUpdateVoClass.get(), draft -> {
-                draft.setComment(reqVo.getComment())
-                        .setName(upperFirst(StrUtil.toCamelCase(reqVo.getName())) + "Base");
-            });
-            infraInterfaceVoClassRepository.update(updateVoClass);
-        }
 
         // 执行代码生成
         InfraDatabaseTable updateDatabaseTable = infraDatabaseTableRepository.findDetailById(reqVo.getId()).get();
@@ -208,19 +221,25 @@ public class DatabaseTableServiceImpl implements DatabaseTableService {
             return "";
         // 删除校验
         List<InfraInterfaceValidation> validationList = infraInterfaceValidationRepository.findByParentId(reqVoColumn.getId());
-        for(InfraInterfaceValidation validation : validationList)
-            infraInterfaceValidationRepository.deleteById(validation.id());
+        for(InfraInterfaceValidation validation : validationList){
+            infraInterfaceValidationRepository.deleteById(validation.id(), DeleteMode.PHYSICAL);
+            codegenEngine.saveDeleteSql(InfraInterfaceValidation.class.getName(), validation.id().toString());
+        }
+
         // 删除字段
-        infraDatabaseColumnRepository.deleteById(reqVoColumn.getId());
+        infraDatabaseColumnRepository.deleteById(reqVoColumn.getId(), DeleteMode.PHYSICAL);
+        codegenEngine.saveDeleteSql(InfraDatabaseColumn.class.getName(), reqVoColumn.getId().toString());
         return "DROP COLUMN `" + reqVoColumn.getColumnName() + "`,\n";
     }
 
     private String newColumn(DatabaseUpdateReq.Column reqVoColumn){
         List<InfraInterfaceValidation> validations = CodegenConvert.INSTANCE.convertList17(reqVoColumn.getValidations());
         infraInterfaceValidationRepository.saveAll(validations);
+        validations.forEach(validation -> codegenEngine.saveInsertSql(validation));
         reqVoColumn.setValidations(Collections.emptyList());
         InfraDatabaseColumn newColumn = CodegenConvert.INSTANCE.convert(reqVoColumn);
         infraDatabaseColumnRepository.insert(newColumn);
+        codegenEngine.saveInsertSql(newColumn);
         return "ADD COLUMN `" + newColumn.columnName() + "`"
                 + " " + newColumn.dataType()
                 + " " + (newColumn.nullable() ? "": "NOT NULL")
@@ -243,10 +262,11 @@ public class DatabaseTableServiceImpl implements DatabaseTableService {
                         draft.setParentId(reqVoColumn.getId());
                     });
                     infraInterfaceValidationRepository.insert(newValidation);
+                    codegenEngine.saveInsertSql(newValidation);
                 }
                 else if (Objects.equals(validation.getOperateType(), "delete")) {
-                    infraInterfaceValidationRepository.deleteById(validation.getId());
-
+                    infraInterfaceValidationRepository.deleteById(validation.getId(), DeleteMode.PHYSICAL);
+                    codegenEngine.saveDeleteSql(InfraInterfaceValidation.class.getName(), validation.getId().toString());
                 }else {
                     InfraInterfaceValidation oldValidation = infraInterfaceValidationRepository.findById(validation.getId()).get();
                     if(!Objects.equals(oldValidation.validation(), validation.getValidation())
@@ -257,6 +277,7 @@ public class DatabaseTableServiceImpl implements DatabaseTableService {
                             draft.setParentId(reqVoColumn.getId());
                         });
                         infraInterfaceValidationRepository.update(updateValidation);
+                        codegenEngine.saveUpdateSql(updateValidation);
                     }
                 }
             }
@@ -280,6 +301,7 @@ public class DatabaseTableServiceImpl implements DatabaseTableService {
         ) {
             isColumnChange = true;
             infraDatabaseColumnRepository.updateColumn(updateColumn);
+            codegenEngine.saveUpdateSql(updateColumn);
         }
 
 
@@ -296,7 +318,8 @@ public class DatabaseTableServiceImpl implements DatabaseTableService {
     }
 
     private String deleteIndex(DatabaseUpdateReq.Index reqVoIndex){
-        infraDatabaseIndexRepository.deleteById(reqVoIndex.getId());
+        infraDatabaseIndexRepository.deleteById(reqVoIndex.getId(), DeleteMode.PHYSICAL);
+        codegenEngine.saveDeleteSql(InfraDatabaseIndex.class.getName(), reqVoIndex.getId().toString());
         return "DROP INDEX `" + reqVoIndex.getIndexName() + "`,\n";
     }
 
@@ -309,6 +332,7 @@ public class DatabaseTableServiceImpl implements DatabaseTableService {
             return "";
 
         infraDatabaseIndexRepository.insert(newIndex);
+        codegenEngine.saveInsertSql(newIndex);
         return "ADD " + reqVoIndex.getIndexType()
                 + " " +" `" + reqVoIndex.getIndexName() + "`"
                 + " " + "(" + reqVoIndex.getColumnNames().stream().map((name) -> "`" + name + "`").collect(Collectors.joining(","))+ ")"
@@ -335,6 +359,7 @@ public class DatabaseTableServiceImpl implements DatabaseTableService {
             draft.setTableId(tableId);
         });
         infraDatabaseIndexRepository.update(updateIndex);
+        codegenEngine.saveUpdateSql(updateIndex);
         return "DROP INDEX `" + oldIndex.indexName() + "`,\n"
                 + "ADD " + reqVoIndex.getIndexType()
                 + " " +" `" + reqVoIndex.getIndexName() + "`"
@@ -359,10 +384,27 @@ public class DatabaseTableServiceImpl implements DatabaseTableService {
         UUID tableId = UUID.fromString(id);
         InfraDatabaseTable deleteTable = infraDatabaseTableRepository.findDetailById(tableId).get();
         codegenEngine.tableDeleteExecute(deleteTable, "DROP TABLE IF EXISTS "+deleteTable.name() + ";\n");
+        deletedTableSaveDeleteSql(tableId);
         infraDatabaseColumnRepository.deleteByTableId(tableId);
         infraDatabaseIndexRepository.deleteByTableId(tableId);
         infraDatabaseMappingRepository.deleteByTableId(tableId);
         infraInterfaceVoClassRepository.deleteByParentId(id);
         infraDatabaseTableRepository.deleteById(tableId, DeleteMode.PHYSICAL);
+    }
+
+    private void deletedTableSaveDeleteSql(UUID tableId){
+        List<InfraDatabaseColumn> columnList = infraDatabaseColumnRepository.findByTableId(tableId);
+        columnList.forEach(column -> codegenEngine.saveDeleteSql(InfraDatabaseColumn.class.getName(), column.id().toString()));
+
+        List<InfraDatabaseIndex> indexList = infraDatabaseIndexRepository.findByTableId(tableId);
+        indexList.forEach(index -> codegenEngine.saveDeleteSql(InfraDatabaseColumn.class.getName(), index.id().toString()));
+
+        List<InfraDatabaseMapping> mappingList = infraDatabaseMappingRepository.findByTableId(tableId);
+        mappingList.forEach(mapping -> codegenEngine.saveDeleteSql(InfraDatabaseColumn.class.getName(), mapping.id().toString()));
+
+        List<InfraInterfaceVoClass> voClassList = infraInterfaceVoClassRepository.findByParentId(tableId.toString());
+        voClassList.forEach(voClass -> codegenEngine.saveDeleteSql(InfraDatabaseColumn.class.getName(), voClass.id().toString()));
+
+        codegenEngine.saveDeleteSql(InfraDatabaseTable.class.getName(), tableId.toString());
     }
 }

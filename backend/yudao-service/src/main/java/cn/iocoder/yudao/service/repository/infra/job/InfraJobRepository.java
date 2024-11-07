@@ -18,9 +18,9 @@ public interface InfraJobRepository extends JRepository<InfraJob, UUID> {
     default Page<InfraJob> selectPage(JobPageReqVO reqVO){
         return sql()
                 .createQuery(infraJobTable)
-                .whereIf(reqVO.getStatus() != null, infraJobTable.status().eq(reqVO.getStatus()))
-                .whereIf(StringUtils.hasText(reqVO.getHandlerName()), infraJobTable.handlerName().eq(reqVO.getHandlerName()))
-                .whereIf(StringUtils.hasText(reqVO.getName()), infraJobTable.name().eq(reqVO.getName()))
+                .whereIf(reqVO.getStatus() != null, () -> infraJobTable.status().eq(reqVO.getStatus()))
+                .whereIf(StringUtils.hasText(reqVO.getHandlerName()), () -> infraJobTable.handlerName().eq(reqVO.getHandlerName()))
+                .whereIf(StringUtils.hasText(reqVO.getName()), () -> infraJobTable.name().eq(reqVO.getName()))
                 .select(infraJobTable).fetchPage(reqVO.getPageNo() - 1, reqVO.getPageSize());
     }
 

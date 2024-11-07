@@ -5,6 +5,7 @@ import cn.iocoder.yudao.service.model.infra.codegen.InfraInterfaceVoClass;
 import cn.iocoder.yudao.service.model.infra.codegen.InfraInterfaceVoClassTable;
 import cn.iocoder.yudao.service.vo.infra.codegen.interfaceModule.InterfaceListReqVO;
 import org.babyfish.jimmer.spring.repository.JRepository;
+import org.babyfish.jimmer.sql.ast.mutation.DeleteMode;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
@@ -25,6 +26,13 @@ public interface InfraInterfaceVoClassRepository extends JRepository<InfraInterf
 
     Optional<InfraInterfaceVoClass> findFirstByParentId(String parentId);
 
-    void deleteByParentId(String parentId);
+    default void deleteByParentId(String parentId){
+        sql().createDelete(infraInterfaceVoClassTable)
+                .where(infraInterfaceVoClassTable.parentId().eq(parentId))
+                .setMode(DeleteMode.LOGICAL)
+                .execute();
+    };
+
+    List<InfraInterfaceVoClass> findByParentId(String parentId);
 
 }

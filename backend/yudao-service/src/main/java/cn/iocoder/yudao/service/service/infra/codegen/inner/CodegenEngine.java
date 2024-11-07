@@ -22,6 +22,8 @@ import cn.iocoder.yudao.service.framework.codegen.config.SchemaHistory;
 import cn.iocoder.yudao.service.model.infra.codegen.*;
 import cn.iocoder.yudao.service.model.infra.data.*;
 import cn.iocoder.yudao.service.repository.infra.codegen.*;
+import cn.iocoder.yudao.service.util.entity.EntityUtils;
+import cn.iocoder.yudao.service.util.upgrade.UpgradeUtils;
 import org.jsoup.internal.StringUtil;
 import org.springframework.stereotype.Component;
 
@@ -1997,6 +1999,34 @@ public class CodegenEngine {
 
     private static String templatePath(String path) {
         return "codegen/" + path + ".vm";
+    }
+
+    public void saveInsertSql(Object tableEntity){
+        String sql = EntityUtils.getExecSql(tableEntity, "insert");
+//        saveDMLSql(sql);
+    }
+
+    public void saveUpdateSql(Object tableEntity){
+        String sql = EntityUtils.getExecSql(tableEntity, "update");
+//        saveDMLSql(sql);
+    }
+
+    public void saveDeleteSql(String className, String id){
+        String tableName;
+        if(className.lastIndexOf(".") > 0){
+            tableName = toSymbolCase(className.substring(className.lastIndexOf(".") + 1), '_');
+        }else{
+            return ;
+        }
+        String sql = "delete from " + tableName  + " where id = '" + id + "';\r\n";
+        System.out.println(sql);
+//        saveDMLSql(sql);
+    }
+
+    private void saveDMLSql(String sql){
+        Integer curGitUserVersion = schemaHistory.getCurGitUserVersion();
+        Integer curGitUserId = schemaHistory.getCurGitUserId();
+        UpgradeUtils.upgradeSql(sql, curGitUserVersion, curGitUserId);
     }
 
 

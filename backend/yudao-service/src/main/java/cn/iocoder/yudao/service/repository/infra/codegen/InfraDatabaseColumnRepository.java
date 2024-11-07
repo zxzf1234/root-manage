@@ -4,6 +4,7 @@ import cn.hutool.core.text.CharSequenceUtil;
 import cn.iocoder.yudao.service.model.infra.codegen.InfraDatabaseColumn;
 import cn.iocoder.yudao.service.model.infra.codegen.InfraDatabaseColumnTable;
 import org.babyfish.jimmer.spring.repository.JRepository;
+import org.babyfish.jimmer.sql.ast.mutation.DeleteMode;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,6 +31,13 @@ public interface InfraDatabaseColumnRepository extends JRepository<InfraDatabase
 
     int countByTableIdAndColumnNameIn(UUID tableId, List<String> columnNameList);
 
-    void deleteByTableId(UUID tableId);
+    default void deleteByTableId(UUID tableId){
+        sql().createDelete(infradatabaseColumnTable)
+                .where(infradatabaseColumnTable.tableId().eq(tableId))
+                .setMode(DeleteMode.PHYSICAL)
+                .execute();
+    };
+
+    List<InfraDatabaseColumn> findByTableId(UUID tableId);
 
 }

@@ -1,6 +1,5 @@
 package cn.iocoder.yudao.service.repository.system.user;
 
-import cn.iocoder.yudao.service.vo.system.user.user.UserPageQueryInput;
 import cn.iocoder.yudao.service.vo.system.user.user.*;
 import cn.iocoder.yudao.service.model.system.dept.SystemDeptFetcher;
 import cn.iocoder.yudao.service.model.system.dept.SystemUserPostTable;
