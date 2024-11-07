@@ -16,33 +16,10 @@ public enum InfraCodegenTableEnum {
     SYSTEM_MENU("SYSTEM_MENU"),
 
     /**
-    * 接口模块
-    */
-    INFRA_INTERFACE_MODULE("INFRA_INTERFACE_MODULE"),
-    /**
-    * 接口VO类
-    */
-    INFRA_INTERFACE("INFRA_INTERFACE"),
-    /**
-    * 接口参数
-    */
-    INFRA_INTERFACE_PARAM("INFRA_INTERFACE_PARAM"),
-    /**
-    * 接口子类
-    */
-    INFRA_INTERFACE_SUBCLASS("INFRA_INTERFACE_SUBCLASS"),
-    /**
     * 定时任务
     */
     INFRA_JOB("INFRA_JOB"),
-    /**
-    * 字典类型
-    */
-    INFRA_DICT_TYPE("INFRA_DICT_TYPE"),
-    /**
-    * 字典数据
-    */
-    INFRA_DICT_DATA("INFRA_DICT_DATA"),
+
     /**
     * blog类型triggers
     */
@@ -86,11 +63,8 @@ public enum InfraCodegenTableEnum {
     /**
     * 记录每个触发器的详细信息
     */
-    QRTZ_TRIGGERS("QRTZ_TRIGGERS"),
-    /**
-    * 字典编号
-    */
-    INFRA_DICT_NO("INFRA_DICT_NO");
+    QRTZ_TRIGGERS("QRTZ_TRIGGERS");
+
 
     private final String value;
 

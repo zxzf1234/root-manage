@@ -2,6 +2,7 @@ package cn.iocoder.yudao.service.repository.infra.data;
 
 import cn.iocoder.yudao.service.model.infra.data.*;
 import org.babyfish.jimmer.spring.repository.JRepository;
+import org.babyfish.jimmer.sql.ast.mutation.DeleteMode;
 import org.springframework.util.StringUtils;
 
 import java.util.Collection;
@@ -25,7 +26,12 @@ public interface InfraDictDataRepository extends JRepository<InfraDictData, UUID
 
 
 
-    void deleteByTypeId(UUID typeId);
+    default void deleteByTypeId(UUID typeId){
+        sql().createDelete(infraDictDataTable)
+                .where(infraDictDataTable.typeId().eq(typeId))
+                .setMode(DeleteMode.PHYSICAL)
+                .execute();
+    };
 
 
 

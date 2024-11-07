@@ -14,6 +14,7 @@ import cn.iocoder.yudao.service.framework.web.web.core.pojo.PageResult;
 import cn.iocoder.yudao.service.repository.infra.data.InfraDictDataRepository;
 import cn.iocoder.yudao.service.repository.infra.data.InfraDictTypeRepository;
 import org.babyfish.jimmer.DraftObjects;
+import org.babyfish.jimmer.sql.ast.mutation.DeleteMode;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 
@@ -55,6 +56,8 @@ public class DictTypeServiceImpl implements DictTypeService {
         InfraDictType dictType = DictTypeConvert.INSTANCE.createInputConvert(inputVO);
         dictType = infraDictTypeRepository.insert(dictType);
         codegenEngine.dictInsertExecute(dictType);
+        dictType.datas().forEach(data-> codegenEngine.saveInsertSql(data));
+        codegenEngine.saveInsertSql(dictType);
         return dictType.id();
     }
 
@@ -125,7 +128,8 @@ public class DictTypeServiceImpl implements DictTypeService {
                 if(!optionalDeleteInfraDictData.isPresent()){
                     throw exception(DICT_DATA_NOT_EXISTS);
                 }
-                infraDictDataRepository.deleteById(data.getId());
+                infraDictDataRepository.deleteById(data.getId(), DeleteMode.PHYSICAL);
+                codegenEngine.saveDeleteSql(InfraDictData.class.getName(), data.getId().toString());
             }else if(Objects.equals(data.getOperateType(), "new")){
                 Optional<InfraDictData> optionalDuplicateInfraDictData = infraDictDataRepository.findByTypeIdAndValue(data.getTypeId(), data.getValue());
                 if(optionalDuplicateInfraDictData.isPresent()){
@@ -133,6 +137,7 @@ public class DictTypeServiceImpl implements DictTypeService {
                 }
                 InfraDictData newData = DictTypeConvert.INSTANCE.updateInputDataConvert(data);
                 infraDictDataRepository.insert(newData);
+                codegenEngine.saveInsertSql(newData);
             }else {
                 Optional<InfraDictData> optionalOldInfraDictData = infraDictDataRepository.findById(data.getId());
                 if(!optionalOldInfraDictData.isPresent()) {
@@ -143,8 +148,11 @@ public class DictTypeServiceImpl implements DictTypeService {
                     throw exception(DICT_DATA_VALUE_DUPLICATE);
                 }
                 InfraDictData updateInfraDictData = DictTypeConvert.INSTANCE.updateInputDataConvert(data);
-                if (!EntityUtils.isEquals(optionalOldInfraDictData.get(), updateInfraDictData))
+                if (!EntityUtils.isEquals(optionalOldInfraDictData.get(), updateInfraDictData)){
                     infraDictDataRepository.update(updateInfraDictData);
+                    codegenEngine.saveUpdateSql(updateInfraDictData);
+                }
+
             }
         }
 
@@ -153,8 +161,10 @@ public class DictTypeServiceImpl implements DictTypeService {
         updateType = InfraDictTypeDraft.$.produce(updateType, draft -> {
             DraftObjects.unload(draft, InfraDictTypeProps.DATAS);
         });
-        if (!EntityUtils.isEquals(opOldType.get(), updateType))
+        if (!EntityUtils.isEquals(opOldType.get(), updateType)){
             infraDictTypeRepository.update(updateType);
+            codegenEngine.saveUpdateSql(updateType);
+        }
         updateType = infraDictTypeRepository.findByDetailId(inputVO.getId()).get();
         codegenEngine.dictUpdateExecute(opOldTypeDetail.get(), updateType);
         return true;
@@ -164,11 +174,17 @@ public class DictTypeServiceImpl implements DictTypeService {
     public Boolean delete(UUID id) {
         // 校验是否存在
         validateDictTypeExists(id);
+        saveDeletedSql(id);
         infraDictDataRepository.deleteByTypeId(id);
-
         // 删除字典类型
-        infraDictTypeRepository.deleteById(id);
+        infraDictTypeRepository.deleteById(id, DeleteMode.PHYSICAL);
         return true;
+    }
+
+    private void saveDeletedSql(UUID id){
+        List<InfraDictData> dataList = infraDictDataRepository.findByTypeId(id);
+        dataList.forEach(data-> codegenEngine.saveDeleteSql(InfraDictData.class.getName(), data.id().toString()));
+        codegenEngine.saveDeleteSql(InfraDictType.class.getName(), id.toString());
     }
 
     @Override
