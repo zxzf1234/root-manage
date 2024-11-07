@@ -17,8 +17,8 @@ public interface SystemPostRepository extends JRepository<SystemPost, Long> {
     default Page<SystemPost> selectPage(PostPageInput reqVO){
         return sql()
                 .createQuery(systemPostTable)
-                .whereIf(StringUtils.hasText(reqVO.getCode()),systemPostTable.code().like(reqVO.getCode()))
-                .whereIf(StringUtils.hasText(reqVO.getName()),systemPostTable.name().like(reqVO.getName()))
+                .whereIf(StringUtils.hasText(reqVO.getCode()),() -> systemPostTable.code().like(reqVO.getCode()))
+                .whereIf(StringUtils.hasText(reqVO.getName()),() -> systemPostTable.name().like(reqVO.getName()))
                 .whereIf(reqVO.getStatus()!= null, systemPostTable.status().eq(reqVO.getStatus()))
                 .select(systemPostTable).fetchPage(reqVO.getPageNo() - 1, reqVO.getPageSize());
     }
@@ -26,8 +26,8 @@ public interface SystemPostRepository extends JRepository<SystemPost, Long> {
     default List<SystemPost> selectList(PostExportedInput reqVO){
         return sql()
                 .createQuery(systemPostTable)
-                .whereIf(StringUtils.hasText(reqVO.getCode()),systemPostTable.code().like(reqVO.getCode()))
-                .whereIf(StringUtils.hasText(reqVO.getName()),systemPostTable.name().like(reqVO.getName()))
+                .whereIf(StringUtils.hasText(reqVO.getCode()),() -> systemPostTable.code().like(reqVO.getCode()))
+                .whereIf(StringUtils.hasText(reqVO.getName()),() -> systemPostTable.name().like(reqVO.getName()))
                 .whereIf(reqVO.getStatus()!= null, systemPostTable.status().eq(reqVO.getStatus()))
                 .select(systemPostTable).execute();
     }

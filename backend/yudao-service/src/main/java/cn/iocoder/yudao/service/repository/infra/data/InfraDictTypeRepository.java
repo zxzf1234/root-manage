@@ -23,8 +23,8 @@ public interface InfraDictTypeRepository extends JRepository<InfraDictType, UUID
 
     default Page<InfraDictType> selectPage(DictTypePageInput reqVO){
         return sql().createQuery(infraDictTypeTable)
-                        .whereIf(StringUtils.hasText(reqVO.getName()),infraDictTypeTable.name().like(reqVO.getName()))
-                        .whereIf(StringUtils.hasText(reqVO.getType()),infraDictTypeTable.type().like(reqVO.getType()))
+                        .whereIf(StringUtils.hasText(reqVO.getName()), () -> infraDictTypeTable.name().like(reqVO.getName()))
+                        .whereIf(StringUtils.hasText(reqVO.getType()), () -> infraDictTypeTable.type().like(reqVO.getType()))
                         .whereIf(reqVO.getCreateTime() != null,  () -> infraDictTypeTable.createTime().between(reqVO.getCreateTime()[0], reqVO.getCreateTime()[1]))
                         .orderBy(infraDictTypeTable.createTime().desc())
                         .select(infraDictTypeTable).fetchPage(reqVO.getPageNo() - 1, reqVO.getPageSize());
@@ -33,8 +33,8 @@ public interface InfraDictTypeRepository extends JRepository<InfraDictType, UUID
     default List<InfraDictType> selectList(DictTypeExportInput reqVO){
         return sql()
                 .createQuery(infraDictTypeTable)
-                .whereIf(StringUtils.hasText(reqVO.getName()),infraDictTypeTable.name().like(reqVO.getName()))
-                .whereIf(StringUtils.hasText(reqVO.getType()),infraDictTypeTable.type().like(reqVO.getType()))
+                .whereIf(StringUtils.hasText(reqVO.getName()), () -> infraDictTypeTable.name().like(reqVO.getName()))
+                .whereIf(StringUtils.hasText(reqVO.getType()), () -> infraDictTypeTable.type().like(reqVO.getType()))
                 .whereIf(reqVO.getCreateTime() != null,  () -> infraDictTypeTable.createTime().between(reqVO.getCreateTime()[0], reqVO.getCreateTime()[1]))
                 .select(infraDictTypeTable).execute();
     }

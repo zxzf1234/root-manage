@@ -697,13 +697,9 @@ public class CodegenEngine {
                 List<InfraDatabaseColumn> columnList = outputTable.columns().stream()
                         .filter(column -> column.id().toString().equals(param.relatedId())).collect(Collectors.toList());
                 if(!columnList.isEmpty()){
-                    if(infraInterface.name().toLowerCase().contains("pagequery")) {
-                        where.append("                        .whereIf(");
-                    }else{
-                        where.append("                .whereIf(");
-                    }
+                    where.append("                .whereIf(");
                     if(param.variableType().equals("String")){
-                        where.append("StringUtils.hasText(inputVO.get").append(upperFirst(param.name())).append("()), ")
+                        where.append("StringUtils.hasText(inputVO.get").append(upperFirst(param.name())).append("()), () -> ")
                                 .append(outputTableTable).append(".").append(param.name()).append("().like(inputVO.get")
                                 .append(upperFirst(param.name())).append("()))");
                     }else {
@@ -725,11 +721,11 @@ public class CodegenEngine {
             function.append("    default Page<").append(upperFirst(toCamelCase(outputTable.name()))).append("> ")
                     .append(infraInterface.name())
                     .append("(") .append(inputClass)
-                    .append((" inputVO){\r\n        return pager(inputVO.getPageNo() - 1, inputVO.getPageSize()).execute(\r\n                sql().createQuery("))
+                    .append((" inputVO){\r\n        return sql().createQuery("))
                     .append(outputTableTable).append(")\r\n")
                     .append(where)
                     .append("                        .orderBy(").append(outputTableTable).append(".id().desc())\r\n")
-                    .append("                        .select(").append(outputTableTable).append(")\r\n        );\r\n    }\r\n");
+                    .append("                        .select(").append(outputTableTable).append(").fetchPage(inputVO.getPageNo() - 1, inputVO.getPageSize());\r\n    }\r\n");
         }
         if(infraInterface.name().toLowerCase().contains("listquery")){
             function.append("    default List<").append(upperFirst(toCamelCase(outputTable.name()))).append("> ")

@@ -16,7 +16,7 @@ public interface InfraInterfaceVoClassRepository extends JRepository<InfraInterf
 
     default List<InfraInterfaceVoClass> findList(InterfaceListReqVO reqVO){
         return sql().createQuery(infraInterfaceVoClassTable)
-                .whereIf(StringUtils.hasText(reqVO.getName()), infraInterfaceVoClassTable.name().like(reqVO.getName()))
+                .whereIf(StringUtils.hasText(reqVO.getName()), () -> infraInterfaceVoClassTable.name().like(reqVO.getName()))
                 .select(infraInterfaceVoClassTable)
                 .execute();
     }

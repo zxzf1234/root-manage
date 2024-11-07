@@ -1,5 +1,6 @@
 package cn.iocoder.yudao.service.repository.system.user;
 
+import cn.iocoder.yudao.service.vo.system.user.user.UserPageQueryInput;
 import cn.iocoder.yudao.service.vo.system.user.user.*;
 import cn.iocoder.yudao.service.model.system.dept.SystemDeptFetcher;
 import cn.iocoder.yudao.service.model.system.dept.SystemUserPostTable;
@@ -17,55 +18,55 @@ import java.util.Optional;
 
 public interface SystemUserRepository extends JRepository<SystemUser, Long>{
 
-    SystemUserTable systemUsersTable = SystemUserTable.$;
+    SystemUserTable systemUserTable = SystemUserTable.$;
 
     default Page<SystemUser> getUserPage(UserPageInput reqVO){
-        return sql().createQuery(systemUsersTable)
-                .whereIf(StringUtils.hasText(reqVO.getUsername()), systemUsersTable.username().like(reqVO.getUsername()))
-                .whereIf(StringUtils.hasText(reqVO.getMobile()), systemUsersTable.mobile().like(reqVO.getMobile()))
-                .whereIf(reqVO.getStatus() != null, systemUsersTable.status().eq(reqVO.getStatus()))
-                .whereIf(reqVO.getCreateTime() != null,  () -> systemUsersTable.createTime().between(reqVO.getCreateTime()[0], reqVO.getCreateTime()[1]))
-                .where(systemUsersTable.id().ge(0L))
-                .select(systemUsersTable.fetch(SystemUserFetcher.$.allScalarFields().dept(SystemDeptFetcher.$.allScalarFields())))
+        return sql().createQuery(systemUserTable)
+                .whereIf(StringUtils.hasText(reqVO.getUsername()), () -> systemUserTable.username().like(reqVO.getUsername()))
+                .whereIf(StringUtils.hasText(reqVO.getMobile()), () -> systemUserTable.mobile().like(reqVO.getMobile()))
+                .whereIf(reqVO.getStatus() != null, systemUserTable.status().eq(reqVO.getStatus()))
+                .whereIf(reqVO.getCreateTime() != null,  () -> systemUserTable.createTime().between(reqVO.getCreateTime()[0], reqVO.getCreateTime()[1]))
+                .where(systemUserTable.id().ge(0L))
+                .select(systemUserTable.fetch(SystemUserFetcher.$.allScalarFields().dept(SystemDeptFetcher.$.allScalarFields())))
                 .fetchPage(reqVO.getPageNo() - 1, reqVO.getPageSize());
     }
 
     default List<SystemUser> getExportUserList(UserExportedInput reqVO){
         return sql()
-                .createQuery(systemUsersTable)
-                .whereIf(StringUtils.hasText(reqVO.getUsername()), systemUsersTable.username().like(reqVO.getUsername()))
-                .whereIf(StringUtils.hasText(reqVO.getMobile()), systemUsersTable.mobile().like(reqVO.getMobile()))
-                .whereIf(reqVO.getStatus() != null, systemUsersTable.status().eq(reqVO.getStatus()))
-                .whereIf(reqVO.getCreateTime() != null,  () -> systemUsersTable.createTime().between(reqVO.getCreateTime()[0], reqVO.getCreateTime()[1]))
-                .select(systemUsersTable.fetch(SystemUserFetcher.$.allScalarFields().dept(SystemDeptFetcher.$.allScalarFields().leaderUser(SystemUserFetcher.$.nickname())))).execute();
+                .createQuery(systemUserTable)
+                .whereIf(StringUtils.hasText(reqVO.getUsername()), systemUserTable.username().like(reqVO.getUsername()))
+                .whereIf(StringUtils.hasText(reqVO.getMobile()), systemUserTable.mobile().like(reqVO.getMobile()))
+                .whereIf(reqVO.getStatus() != null, systemUserTable.status().eq(reqVO.getStatus()))
+                .whereIf(reqVO.getCreateTime() != null,  () -> systemUserTable.createTime().between(reqVO.getCreateTime()[0], reqVO.getCreateTime()[1]))
+                .select(systemUserTable.fetch(SystemUserFetcher.$.allScalarFields().dept(SystemDeptFetcher.$.allScalarFields().leaderUser(SystemUserFetcher.$.nickname())))).execute();
     }
 
     default Optional<SystemUser> GetUser(long id){
         return sql()
-                .createQuery(systemUsersTable)
-                .where(systemUsersTable.id().eq(id))
-                .select(systemUsersTable.fetch(SystemUserFetcher.$.allScalarFields().dept(SystemDeptFetcher.$.allScalarFields())))
+                .createQuery(systemUserTable)
+                .where(systemUserTable.id().eq(id))
+                .select(systemUserTable.fetch(SystemUserFetcher.$.allScalarFields().dept(SystemDeptFetcher.$.allScalarFields())))
                 .fetchOptional();
     }
 
     default List<SystemUser> GetUserListByStatus(Integer status){
-        return sql().createQuery(systemUsersTable).where(systemUsersTable.status().eq(status)).select(systemUsersTable).execute();
+        return sql().createQuery(systemUserTable).where(systemUserTable.status().eq(status)).select(systemUserTable).execute();
     }
 
     default void UpdateUserPassword(long id, String password){
-        sql().createUpdate(systemUsersTable).set(systemUsersTable.password(), password).where(systemUsersTable.id().eq(id)).execute();
+        sql().createUpdate(systemUserTable).set(systemUserTable.password(), password).where(systemUserTable.id().eq(id)).execute();
     }
 
     default void UpdateUserStatus(long id,int status){
-        sql().createUpdate(systemUsersTable).set(systemUsersTable.status(), status).where(systemUsersTable.id().eq(id)).execute();
+        sql().createUpdate(systemUserTable).set(systemUserTable.status(), status).where(systemUserTable.id().eq(id)).execute();
     }
 
     default void UpdateUserLogin(long id, String loginIp){
-        sql().createUpdate(systemUsersTable).set(systemUsersTable.loginIp(), loginIp).set(systemUsersTable.loginDate(), LocalDateTime.now()).where(systemUsersTable.id().eq(id)).execute();
+        sql().createUpdate(systemUserTable).set(systemUserTable.loginIp(), loginIp).set(systemUserTable.loginDate(), LocalDateTime.now()).where(systemUserTable.id().eq(id)).execute();
     }
 
     default void UpdateUserAvatar(long id, String avatar){
-        sql().createUpdate(systemUsersTable).set(systemUsersTable.avatar(), avatar).set(systemUsersTable.loginDate(), LocalDateTime.now()).where(systemUsersTable.id().eq(id)).execute();
+        sql().createUpdate(systemUserTable).set(systemUserTable.avatar(), avatar).set(systemUserTable.loginDate(), LocalDateTime.now()).where(systemUserTable.id().eq(id)).execute();
     }
 
     default List<SystemUser> getUserListByPostIds(Collection<Long> postIds){
@@ -81,8 +82,6 @@ public interface SystemUserRepository extends JRepository<SystemUser, Long>{
     List<SystemUser> findByNickname(String nickname);
 
     List<SystemUser> findByDeptIdIn(Collection<Long> deptIds);
-
-
 
 
 }

@@ -16,7 +16,7 @@ public interface SystemDeptRepository extends JRepository<SystemDept, Long> {
     {
         return sql().
                 createQuery(systemDeptTable).
-                whereIf(StringUtils.hasText(reqVO.getName()), systemDeptTable.name().like(reqVO.getName())).
+                whereIf(StringUtils.hasText(reqVO.getName()), () -> systemDeptTable.name().like(reqVO.getName())).
                 whereIf(reqVO.getStatus() != null, systemDeptTable.status().eq(reqVO.getStatus())).
                 select(systemDeptTable).
                 execute();
