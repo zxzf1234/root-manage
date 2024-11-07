@@ -16,8 +16,8 @@ public interface SystemMenuRepository extends JRepository<SystemMenu, UUID> {
     default List<SystemMenu> selectList(MenuListReqVO reqVO, Long userId){
         return sql()
                 .createQuery(systemMenuTable)
-                .whereIf(reqVO.getStatus() != null, systemMenuTable.status().eq(reqVO.getStatus()))
-                .whereIf(StringUtils.hasText(reqVO.getName()), systemMenuTable.name().eq(reqVO.getName()))
+                .whereIf(reqVO.getStatus() != null, ()-> systemMenuTable.status().eq(reqVO.getStatus()))
+                .whereIf(StringUtils.hasText(reqVO.getName()), ()-> systemMenuTable.name().eq(reqVO.getName()))
                 .whereIf(userId != -1, systemMenuTable.backShow().eq(false))
                 .select(systemMenuTable)
                 .execute();

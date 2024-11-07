@@ -1,5 +1,6 @@
 package cn.iocoder.yudao.service.service.infra.data;
 
+import cn.iocoder.yudao.service.service.infra.codegen.inner.CodegenEngine;
 import cn.iocoder.yudao.service.util.collection.CollectionUtils;
 import cn.iocoder.yudao.service.service.system.permission.PermissionService;
 import cn.iocoder.yudao.service.vo.infra.data.menu.MenuCreateReqVO;
@@ -12,6 +13,7 @@ import cn.iocoder.yudao.service.repository.infra.data.SystemMenuRepository;
 import cn.iocoder.yudao.service.convert.infra.data.MenuConvert;
 import com.google.common.annotations.VisibleForTesting;
 import lombok.extern.slf4j.Slf4j;
+import org.babyfish.jimmer.sql.ast.mutation.DeleteMode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,6 +47,9 @@ public class MenuServiceImpl implements MenuService {
     @Resource
     private PermissionService permissionService;
 
+    @Resource
+    private CodegenEngine codegenEngine;
+
     @Override
     public UUID createMenu(MenuCreateReqVO reqVO) {
         // 校验父菜单存在
@@ -56,7 +61,7 @@ public class MenuServiceImpl implements MenuService {
         SystemMenu menu = MenuConvert.INSTANCE.convert(reqVO);
         menu = initMenuProperty(menu);
         menu = systemMenuRepository.insert(menu);
-
+        codegenEngine.saveInsertSql(menu);
         // 返回
         return menu.id();
     }
@@ -76,6 +81,7 @@ public class MenuServiceImpl implements MenuService {
         SystemMenu updateObject = MenuConvert.INSTANCE.convert(reqVO);
         updateObject = initMenuProperty(updateObject);
         systemMenuRepository.update(updateObject);
+        codegenEngine.saveUpdateSql(updateObject);
 
     }
 
@@ -91,7 +97,8 @@ public class MenuServiceImpl implements MenuService {
             throw exception(MENU_NOT_EXISTS);
         }
         // 标记删除
-        systemMenuRepository.deleteById(menuId);
+        systemMenuRepository.deleteById(menuId, DeleteMode.PHYSICAL);
+        codegenEngine.saveDeleteSql(SystemMenu.class.getName(), menuId.toString());
         // 删除授予给角色的权限
         permissionService.processMenuDeleted(menuId);
 

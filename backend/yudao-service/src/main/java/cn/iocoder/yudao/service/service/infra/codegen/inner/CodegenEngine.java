@@ -2003,12 +2003,12 @@ public class CodegenEngine {
 
     public void saveInsertSql(Object tableEntity){
         String sql = EntityUtils.getExecSql(tableEntity, "insert");
-//        saveDMLSql(sql);
+        saveDMLSql(sql);
     }
 
     public void saveUpdateSql(Object tableEntity){
         String sql = EntityUtils.getExecSql(tableEntity, "update");
-//        saveDMLSql(sql);
+        saveDMLSql(sql);
     }
 
     public void saveDeleteSql(String className, String id){
@@ -2019,8 +2019,7 @@ public class CodegenEngine {
             return ;
         }
         String sql = "delete from " + tableName  + " where id = '" + id + "';\r\n";
-        System.out.println(sql);
-//        saveDMLSql(sql);
+        saveDMLSql(sql);
     }
 
     private void saveDMLSql(String sql){

@@ -1,5 +1,6 @@
 package cn.iocoder.yudao.service.service.infra.data;
 
+import cn.iocoder.yudao.service.service.infra.codegen.inner.CodegenEngine;
 import cn.iocoder.yudao.service.util.upgrade.UpgradeUtils;
 import cn.iocoder.yudao.service.framework.job.core.scheduler.SchedulerManager;
 import cn.iocoder.yudao.service.framework.job.core.util.CronUtils;
@@ -21,6 +22,7 @@ import cn.iocoder.yudao.service.vo.infra.data.job.job.JobExportReqVO;
 import cn.iocoder.yudao.service.vo.infra.data.job.job.JobPageReqVO;
 import cn.iocoder.yudao.service.vo.infra.data.job.job.JobUpdateReqVO;
 import org.babyfish.jimmer.ImmutableObjects;
+import org.babyfish.jimmer.sql.ast.mutation.DeleteMode;
 import org.quartz.SchedulerException;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
@@ -62,6 +64,9 @@ public class JobServiceImpl implements JobService {
     @Resource
     private SchemaHistory schemaHistory;
 
+    @Resource
+    private CodegenEngine codegenEngine;
+
     @Override
     @Transactional(rollbackFor = Exception.class)
     public String createJob(JobCreateReqVO createReqVO) throws SchedulerException {
@@ -83,10 +88,12 @@ public class JobServiceImpl implements JobService {
                 createReqVO.getRetryCount(), createReqVO.getRetryInterval());
         // 更新
         InfraJob finalJob = job;
-        InfraJob updateObj = InfraJobDraft.$.produce(draft -> {
+        InfraJob updateObj = InfraJobDraft.$.produce(finalJob, draft -> {
             draft.setId(finalJob.id()).setStatus(InfraJobStatusEnum.NORMAL.getValue());
         });
         infraJobRepository.update(updateObj);
+
+        codegenEngine.saveInsertSql(updateObj);
 
         Integer curGitUserVersion = schemaHistory.getCurGitUserVersion();
         Integer curGitUserId = schemaHistory.getCurGitUserId();
@@ -105,6 +112,7 @@ public class JobServiceImpl implements JobService {
                     + "'" +  optionalQrtzJobDetails.get().requestsRecovery() + "',"
                     + "UNHEX('" +  bytesToHex(optionalQrtzJobDetails.get().jobData()) + "'));\r\n";
             UpgradeUtils.upgradeSql(sql, curGitUserVersion, curGitUserId);
+            codegenEngine.saveInsertSql(optionalQrtzJobDetails.get());
         }
 
         Optional<QrtzTriggers> optionalQrtzTriggers = qrtzTriggersRepository.findById(job.handlerName());
@@ -129,6 +137,7 @@ public class JobServiceImpl implements JobService {
                     + (optionalQrtzTriggers.get().misfireInstr() == null ? optionalQrtzTriggers.get().misfireInstr() : ("'" + optionalQrtzTriggers.get().misfireInstr() + "'")) + ","
                     + "UNHEX('" +  bytesToHex(optionalQrtzTriggers.get().jobData()) + "'));\r\n";
             UpgradeUtils.upgradeSql(sql, curGitUserVersion, curGitUserId);
+            codegenEngine.saveInsertSql(optionalQrtzTriggers.get());
         }
 
         Optional<QrtzCronTriggers> optionalQrtzCronTriggers = qrtzCronTriggersRepository.findByTriggerName(job.handlerName());
@@ -140,6 +149,7 @@ public class JobServiceImpl implements JobService {
                     + "'" +  optionalQrtzCronTriggers.get().cronExpression() + "',"
                     + "'" +  optionalQrtzCronTriggers.get().timeZoneId() + "');\r\n";
             UpgradeUtils.upgradeSql(sql, curGitUserVersion, curGitUserId);
+            codegenEngine.saveInsertSql(optionalQrtzCronTriggers.get());
 
         }
 
@@ -178,6 +188,7 @@ public class JobServiceImpl implements JobService {
         InfraJob updateObj = JobConvert.INSTANCE.convert(updateReqVO);
         updateObj = fillJobMonitorTimeoutEmpty(updateObj);
         infraJobRepository.update(updateObj);
+        codegenEngine.saveUpdateSql(updateObj);
         updateObj = infraJobRepository.findNullable(updateReqVO.getId());
 
         // 更新 Job 到 Quartz 中
@@ -239,8 +250,8 @@ public class JobServiceImpl implements JobService {
         // 校验存在
         InfraJob job = validateJobExists(id);
         // 更新
-        infraJobRepository.deleteById(id);
-
+        infraJobRepository.deleteById(id, DeleteMode.PHYSICAL);
+        codegenEngine.saveDeleteSql(InfraJob.class.getName(), id.toString());
         // 删除 Job 到 Quartz 中
         schedulerManager.deleteJob(job.handlerName());
 

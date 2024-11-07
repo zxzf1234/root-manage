@@ -9,12 +9,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum InfraCodegenTableEnum {
-
-    /**
-    * 菜单
-    */
-    SYSTEM_MENU("SYSTEM_MENU"),
-
     /**
     * 定时任务
     */

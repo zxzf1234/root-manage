@@ -72,7 +72,6 @@ public class EntityUtils {
                 }
             }
             sql = sql + "(" + columnNames + ") VALUES (" + columnValues + ");\r\n";
-            System.out.println(sql);
         }else{
             StringBuilder updateSql = new StringBuilder("UPDATE " + tableName + " SET ") ;
             String whereSql = "";
@@ -96,7 +95,6 @@ public class EntityUtils {
                     }
             }
             sql = updateSql + whereSql + ";\r\n";
-            System.out.println(sql);
         }
         return sql;
     }
