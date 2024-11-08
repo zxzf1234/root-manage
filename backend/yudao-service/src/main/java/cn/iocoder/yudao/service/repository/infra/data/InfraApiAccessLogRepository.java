@@ -15,26 +15,26 @@ public interface InfraApiAccessLogRepository extends JRepository<InfraApiAccessL
 
     default Page<InfraApiAccessLog> selectPage(ApiAccessLogPageReqVO reqVO){
         return sql().createQuery(infraApiAccessLogTable)
-                        .whereIf(reqVO.getDuration() != null, infraApiAccessLogTable.duration().eq(reqVO.getDuration()))
-                        .whereIf(StringUtils.hasText(reqVO.getApplicationName()), infraApiAccessLogTable.applicationName().eq(reqVO.getApplicationName()))
-                        .whereIf(StringUtils.hasText(reqVO.getRequestUrl()), infraApiAccessLogTable.requestUrl().eq(reqVO.getRequestUrl()))
+                        .where(infraApiAccessLogTable.duration().eqIf(reqVO.getDuration()))
+                        .where(infraApiAccessLogTable.applicationName().eqIf(reqVO.getApplicationName()))
+                        .where(infraApiAccessLogTable.requestUrl().eqIf(reqVO.getRequestUrl()))
                         .whereIf(reqVO.getBeginTime() != null, ()-> infraApiAccessLogTable.beginTime().between(reqVO.getBeginTime()[0], reqVO.getBeginTime()[1]))
-                        .whereIf(reqVO.getResultCode() != null, infraApiAccessLogTable.resultCode().eq(reqVO.getResultCode()))
-                        .whereIf(reqVO.getUserId() != null, infraApiAccessLogTable.userId().eq(reqVO.getUserId()))
-                        .whereIf(reqVO.getUserType() != null, infraApiAccessLogTable.userType().eq(reqVO.getUserType()))
+                        .where(infraApiAccessLogTable.resultCode().eqIf(reqVO.getResultCode()))
+                        .where(infraApiAccessLogTable.userId().eqIf(reqVO.getUserId()))
+                        .where(infraApiAccessLogTable.userType().eqIf(reqVO.getUserType()))
                         .select(infraApiAccessLogTable).fetchPage(reqVO.getPageNo() - 1, reqVO.getPageSize());
     }
 
     default List<InfraApiAccessLog> selectList(ApiAccessLogExportReqVO reqVO){
         return sql()
                 .createQuery(infraApiAccessLogTable)
-                .whereIf(reqVO.getDuration() != null, infraApiAccessLogTable.duration().eq(reqVO.getDuration()))
-                .whereIf(StringUtils.hasText(reqVO.getApplicationName()), infraApiAccessLogTable.applicationName().eq(reqVO.getApplicationName()))
-                .whereIf(StringUtils.hasText(reqVO.getRequestUrl()), infraApiAccessLogTable.requestUrl().eq(reqVO.getRequestUrl()))
+                .where(infraApiAccessLogTable.duration().eqIf(reqVO.getDuration()))
+                .where(infraApiAccessLogTable.applicationName().eqIf(reqVO.getApplicationName()))
+                .where(infraApiAccessLogTable.requestUrl().eqIf(reqVO.getRequestUrl()))
                 .whereIf(reqVO.getBeginTime() != null, ()-> infraApiAccessLogTable.beginTime().between(reqVO.getBeginTime()[0], reqVO.getBeginTime()[1]))
-                .whereIf(reqVO.getResultCode() != null, infraApiAccessLogTable.resultCode().eq(reqVO.getResultCode()))
-                .whereIf(reqVO.getUserId() != null, infraApiAccessLogTable.userId().eq(reqVO.getUserId()))
-                .whereIf(reqVO.getUserType() != null, infraApiAccessLogTable.userType().eq(reqVO.getUserType()))
+                .where(infraApiAccessLogTable.resultCode().eqIf(reqVO.getResultCode()))
+                .where(infraApiAccessLogTable.userId().eqIf(reqVO.getUserId()))
+                .where(infraApiAccessLogTable.userType().eqIf(reqVO.getUserType()))
                 .select(infraApiAccessLogTable)
                 .execute();
     }

@@ -15,22 +15,21 @@ public interface InfraJobLogRepository extends JRepository<InfraJobLog, Long> {
 
     default Page<InfraJobLog> selectPage(JobLogPageReqVO reqVO){
         return sql().createQuery(infraJobLogTable)
-                .whereIf(reqVO.getJobId() != null, infraJobLogTable.jobId().eq(reqVO.getJobId()))
-                .whereIf(StringUtils.hasText(reqVO.getHandlerName()), infraJobLogTable.handlerName().eq(reqVO.getHandlerName()))
-                .whereIf(reqVO.getStatus() != null, infraJobLogTable.status().eq(reqVO.getStatus()))
-                .whereIf(reqVO.getBeginTime() != null, infraJobLogTable.beginTime().eq(reqVO.getBeginTime()))
-                .whereIf(reqVO.getEndTime() !=null, infraJobLogTable.endTime().eq(reqVO.getEndTime()))
+                .where(infraJobLogTable.jobId().eqIf(reqVO.getJobId()))
+                .where(infraJobLogTable.handlerName().eqIf(reqVO.getHandlerName()))
+                .where(infraJobLogTable.status().eqIf(reqVO.getStatus()))
+                .where(infraJobLogTable.beginTime().eqIf(reqVO.getBeginTime()))
+                .where(infraJobLogTable.endTime().eqIf(reqVO.getEndTime()))
                 .select(infraJobLogTable).fetchPage(reqVO.getPageNo() - 1, reqVO.getPageSize());
     }
 
     default List<InfraJobLog> selectList(JobLogExportReqVO reqVO) {
-        return sql()
-                .createQuery(infraJobLogTable)
-                .whereIf(reqVO.getJobId() != null, infraJobLogTable.jobId().eq(reqVO.getJobId()))
-                .whereIf(StringUtils.hasText(reqVO.getHandlerName()), infraJobLogTable.handlerName().eq(reqVO.getHandlerName()))
-                .whereIf(reqVO.getStatus() != null, infraJobLogTable.status().eq(reqVO.getStatus()))
-                .whereIf(reqVO.getBeginTime() != null, infraJobLogTable.beginTime().eq(reqVO.getBeginTime()))
-                .whereIf(reqVO.getEndTime() !=null, infraJobLogTable.endTime().eq(reqVO.getEndTime()))
+        return sql().createQuery(infraJobLogTable)
+                .where(infraJobLogTable.jobId().eqIf(reqVO.getJobId()))
+                .where(infraJobLogTable.handlerName().eqIf(reqVO.getHandlerName()))
+                .where(infraJobLogTable.status().eqIf(reqVO.getStatus()))
+                .where(infraJobLogTable.beginTime().eqIf(reqVO.getBeginTime()))
+                .where(infraJobLogTable.endTime().eqIf(reqVO.getEndTime()))
                 .select(infraJobLogTable)
                 .execute();
     }

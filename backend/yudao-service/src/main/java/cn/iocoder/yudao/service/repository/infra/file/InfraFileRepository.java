@@ -12,8 +12,8 @@ public interface InfraFileRepository extends JRepository<InfraFile, Long> {
 
     default Page<InfraFile> selectPage(FilePageReqVO reqVO){
         return sql().createQuery(infraFileTable)
-                .whereIf(StringUtils.hasText(reqVO.getPath()), infraFileTable.path().eq(reqVO.getPath()))
-                .whereIf(StringUtils.hasText(reqVO.getType()), infraFileTable.type().eq(reqVO.getType()))
+                .where(infraFileTable.path().eqIf(reqVO.getPath()))
+                .where(infraFileTable.type().eqIf(reqVO.getType()))
                 .whereIf(reqVO.getCreateTime() != null, ()-> infraFileTable.createTime().between(reqVO.getCreateTime()[0], reqVO.getCreateTime()[1]))
                 .select(infraFileTable).fetchPage(reqVO.getPageNo() - 1, reqVO.getPageSize());
     }

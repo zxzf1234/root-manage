@@ -18,9 +18,9 @@ public interface InfraConfigRepository extends JRepository<InfraConfig, UUID> {
     default List<InfraConfig> selectList(ConfigExportReqVO reqVO){
         return sql()
                 .createQuery(infraConfigTable)
-                .whereIf(reqVO.getType() != null, infraConfigTable.type().eq(reqVO.getType()))
-                .whereIf(StringUtils.hasText(reqVO.getKey()), infraConfigTable.configKey().eq(reqVO.getKey()))
-                .whereIf(StringUtils.hasText(reqVO.getName()), infraConfigTable.name().eq(reqVO.getName()))
+                .where(infraConfigTable.type().eqIf(reqVO.getType()))
+                .where(infraConfigTable.configKey().eqIf(reqVO.getKey()))
+                .where(infraConfigTable.name().eqIf(reqVO.getName()))
                 .whereIf(reqVO.getCreateTime()!=null, ()-> infraConfigTable.createTime().between(reqVO.getCreateTime()[0], reqVO.getCreateTime()[1]))
                 .select(infraConfigTable)
                 .execute();
@@ -28,9 +28,9 @@ public interface InfraConfigRepository extends JRepository<InfraConfig, UUID> {
 
     default Page<InfraConfig> selectPage(ConfigPageInput reqVO){
         return sql().createQuery(infraConfigTable)
-                .whereIf(reqVO.getType() != null, infraConfigTable.type().eq(reqVO.getType()))
-                .whereIf(StringUtils.hasText(reqVO.getConfigKey()), infraConfigTable.configKey().eq(reqVO.getConfigKey()))
-                .whereIf(StringUtils.hasText(reqVO.getName()), infraConfigTable.name().eq(reqVO.getName()))
+                .where(infraConfigTable.type().eqIf(reqVO.getType()))
+                .where(infraConfigTable.configKey().eqIf(reqVO.getConfigKey()))
+                .where(infraConfigTable.name().eqIf(reqVO.getName()))
                 .whereIf(reqVO.getCreateTime()!=null, ()-> infraConfigTable.createTime().between(reqVO.getCreateTime()[0], reqVO.getCreateTime()[1]))
                 .select(infraConfigTable).fetchPage(reqVO.getPageNo() - 1, reqVO.getPageSize());
     }

@@ -19,8 +19,8 @@ public interface SystemLoginLogRepository extends JRepository<SystemLoginLog, Lo
                 .createQuery(systemLoginLogTable)
                 .whereIf(reqVO.getStatus() != null && Boolean.TRUE.equals(reqVO.getStatus()), systemLoginLogTable.result().eq(SystemLoginResultEnum.SUCCESS.getValue()))
                 .whereIf(reqVO.getStatus() != null && !Boolean.TRUE.equals(reqVO.getStatus()), systemLoginLogTable.result().gt(SystemLoginResultEnum.SUCCESS.getValue()))
-                .whereIf(StringUtils.hasText(reqVO.getUsername()), systemLoginLogTable.username().eq(reqVO.getUsername()))
-                .whereIf(StringUtils.hasText(reqVO.getUserIp()), systemLoginLogTable.userIp().eq(reqVO.getUserIp()))
+                .where(systemLoginLogTable.username().eqIf(reqVO.getUsername()))
+                .where(systemLoginLogTable.userIp().eqIf(reqVO.getUserIp()))
                 .whereIf(reqVO.getCreateTime() != null, ()-> systemLoginLogTable.createTime().between(reqVO.getCreateTime()[0], reqVO.getCreateTime()[1]))
                 .select(systemLoginLogTable).fetchPage(reqVO.getPageNo() - 1, reqVO.getPageSize());
     }
@@ -30,8 +30,8 @@ public interface SystemLoginLogRepository extends JRepository<SystemLoginLog, Lo
                 .createQuery(systemLoginLogTable)
                 .whereIf(reqVO.getStatus() != null && Boolean.TRUE.equals(reqVO.getStatus()), systemLoginLogTable.result().eq(SystemLoginResultEnum.SUCCESS.getValue()))
                 .whereIf(reqVO.getStatus() != null && !Boolean.TRUE.equals(reqVO.getStatus()), systemLoginLogTable.result().gt(SystemLoginResultEnum.SUCCESS.getValue()))
-                .whereIf(StringUtils.hasText(reqVO.getUsername()), systemLoginLogTable.username().eq(reqVO.getUsername()))
-                .whereIf(StringUtils.hasText(reqVO.getUserIp()), systemLoginLogTable.userIp().eq(reqVO.getUserIp()))
+                .where(systemLoginLogTable.username().eqIf(reqVO.getUsername()))
+                .where(systemLoginLogTable.userIp().eqIf(reqVO.getUserIp()))
                 .whereIf(reqVO.getCreateTime() != null, ()-> systemLoginLogTable.createTime().between(reqVO.getCreateTime()[0], reqVO.getCreateTime()[1]))
                 .select(systemLoginLogTable)
                 .execute();

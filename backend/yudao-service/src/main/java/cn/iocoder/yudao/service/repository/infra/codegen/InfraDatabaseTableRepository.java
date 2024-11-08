@@ -15,21 +15,21 @@ public interface InfraDatabaseTableRepository extends JRepository<InfraDatabaseT
 
     default Page<InfraDatabaseTable> selectList(DatabaseTableListReqVO listReqVO){
         return sql().createQuery(infraDatabaseTableTable)
-                        .whereIf(StringUtils.hasText(listReqVO.getComment()), () -> infraDatabaseTableTable.comment().like(listReqVO.getComment()))
-                        .whereIf(StringUtils.hasText(listReqVO.getName()), () -> infraDatabaseTableTable.name().like(listReqVO.getName()))
-                        .whereIf(StringUtils.hasText(listReqVO.getFirstModule()), () -> infraDatabaseTableTable.firstModule().like(listReqVO.getFirstModule()))
-                        .whereIf(StringUtils.hasText(listReqVO.getSecondModule()), () -> infraDatabaseTableTable.secondModule().like(listReqVO.getSecondModule()))
-                        .orderBy(infraDatabaseTableTable.createTime().desc())
-                        .select(infraDatabaseTableTable).fetchPage(listReqVO.getPageNo() - 1, listReqVO.getPageSize());
+                .where(infraDatabaseTableTable.comment().likeIf(listReqVO.getComment()))
+                .where(infraDatabaseTableTable.name().likeIf(listReqVO.getName()))
+                .where(infraDatabaseTableTable.firstModule().likeIf(listReqVO.getFirstModule()))
+                .where(infraDatabaseTableTable.secondModule().likeIf(listReqVO.getSecondModule()))
+                .orderBy(infraDatabaseTableTable.createTime().desc())
+                .select(infraDatabaseTableTable).fetchPage(listReqVO.getPageNo() - 1, listReqVO.getPageSize());
 
     }
 
     default List<InfraDatabaseTable> selectColumnList(DatabaseTableListReqVO listReqVO){
         return sql().createQuery(infraDatabaseTableTable)
-                .whereIf(StringUtils.hasText(listReqVO.getComment()), () -> infraDatabaseTableTable.comment().like(listReqVO.getComment()))
-                .whereIf(StringUtils.hasText(listReqVO.getName()), () -> infraDatabaseTableTable.name().like(listReqVO.getName()))
-                .whereIf(StringUtils.hasText(listReqVO.getFirstModule()), () -> infraDatabaseTableTable.firstModule().like(listReqVO.getFirstModule()))
-                .whereIf(StringUtils.hasText(listReqVO.getSecondModule()), () -> infraDatabaseTableTable.secondModule().like(listReqVO.getSecondModule()))
+                .where(infraDatabaseTableTable.comment().likeIf(listReqVO.getComment()))
+                .where(infraDatabaseTableTable.name().likeIf(listReqVO.getName()))
+                .where(infraDatabaseTableTable.firstModule().likeIf(listReqVO.getFirstModule()))
+                .where(infraDatabaseTableTable.secondModule().likeIf(listReqVO.getSecondModule()))
                 .select(infraDatabaseTableTable.fetch(InfraDatabaseTableFetcher.$.allScalarFields()
                         .columns(InfraDatabaseColumnFetcher.$.allTableFields())))
                 .execute();

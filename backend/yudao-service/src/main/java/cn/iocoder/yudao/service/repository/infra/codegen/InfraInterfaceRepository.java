@@ -16,8 +16,8 @@ public interface InfraInterfaceRepository extends JRepository<InfraInterface, UU
 
     default Page<InfraInterface> getList(InterfaceListReqVO reqVO){
         return sql().createQuery(infraInterfaceTable)
-                .whereIf(StringUtils.hasText(reqVO.getName()), () -> infraInterfaceTable.name().like(reqVO.getName()))
-                .whereIf(StringUtils.hasText(reqVO.getModuleName()), ()-> infraInterfaceTable.module().id().eq(UUID.fromString(reqVO.getModuleName())))
+                .where(infraInterfaceTable.name().likeIf(reqVO.getName()))
+                .where(infraInterfaceTable.module().id().eqIf(UUID.fromString(reqVO.getModuleName())))
                 .orderBy(infraInterfaceTable.createTime().desc())
                 .select(infraInterfaceTable.fetch(InfraInterfaceFetcher.$.allScalarFields().module(InfraInterfaceModuleFetcher.$.name())))
                 .fetchPage(reqVO.getPageNo() - 1, reqVO.getPageSize());

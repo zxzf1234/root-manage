@@ -21,9 +21,9 @@ public interface SystemUserRepository extends JRepository<SystemUser, Long>{
 
     default Page<SystemUser> getUserPage(UserPageInput reqVO){
         return sql().createQuery(systemUserTable)
-                .whereIf(StringUtils.hasText(reqVO.getUsername()), () -> systemUserTable.username().like(reqVO.getUsername()))
-                .whereIf(StringUtils.hasText(reqVO.getMobile()), () -> systemUserTable.mobile().like(reqVO.getMobile()))
-                .whereIf(reqVO.getStatus() != null, systemUserTable.status().eq(reqVO.getStatus()))
+                .where(systemUserTable.username().likeIf(reqVO.getUsername()))
+                .where(systemUserTable.mobile().likeIf(reqVO.getMobile()))
+                .where( systemUserTable.status().eqIf(reqVO.getStatus()))
                 .whereIf(reqVO.getCreateTime() != null,  () -> systemUserTable.createTime().between(reqVO.getCreateTime()[0], reqVO.getCreateTime()[1]))
                 .where(systemUserTable.id().ge(0L))
                 .select(systemUserTable.fetch(SystemUserFetcher.$.allScalarFields().dept(SystemDeptFetcher.$.allScalarFields())))
@@ -33,9 +33,9 @@ public interface SystemUserRepository extends JRepository<SystemUser, Long>{
     default List<SystemUser> getExportUserList(UserExportedInput reqVO){
         return sql()
                 .createQuery(systemUserTable)
-                .whereIf(StringUtils.hasText(reqVO.getUsername()), systemUserTable.username().like(reqVO.getUsername()))
-                .whereIf(StringUtils.hasText(reqVO.getMobile()), systemUserTable.mobile().like(reqVO.getMobile()))
-                .whereIf(reqVO.getStatus() != null, systemUserTable.status().eq(reqVO.getStatus()))
+                .where(systemUserTable.username().likeIf(reqVO.getUsername()))
+                .where(systemUserTable.mobile().likeIf(reqVO.getMobile()))
+                .where( systemUserTable.status().eqIf(reqVO.getStatus()))
                 .whereIf(reqVO.getCreateTime() != null,  () -> systemUserTable.createTime().between(reqVO.getCreateTime()[0], reqVO.getCreateTime()[1]))
                 .select(systemUserTable.fetch(SystemUserFetcher.$.allScalarFields().dept(SystemDeptFetcher.$.allScalarFields().leaderUser(SystemUserFetcher.$.nickname())))).execute();
     }

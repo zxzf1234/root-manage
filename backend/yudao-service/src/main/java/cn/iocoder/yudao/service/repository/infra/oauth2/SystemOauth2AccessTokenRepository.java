@@ -15,9 +15,9 @@ public interface SystemOauth2AccessTokenRepository extends JRepository<SystemOau
 
     default Page<SystemOauth2AccessToken> selectPage(OAuth2AccessTokenPageReqVO reqVO){
         return sql().createQuery(systemOauth2AccessTokenTable)
-                .whereIf(reqVO.getUserId() != null, systemOauth2AccessTokenTable.userId().eq(reqVO.getUserId()))
-                .whereIf(reqVO.getUserType() != null, systemOauth2AccessTokenTable.userType().eq(reqVO.getUserType()))
-                .whereIf(StringUtils.hasText(reqVO.getClientId()), systemOauth2AccessTokenTable.clientId().eq(reqVO.getClientId()))
+                .where(systemOauth2AccessTokenTable.userId().eqIf(reqVO.getUserId()))
+                .where(systemOauth2AccessTokenTable.userType().eqIf(reqVO.getUserType()))
+                .where(systemOauth2AccessTokenTable.clientId().eqIf(reqVO.getClientId()))
                 .select(systemOauth2AccessTokenTable)
                 .fetchPage(reqVO.getPageNo() - 1, reqVO.getPageSize());
     }

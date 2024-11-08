@@ -12,8 +12,8 @@ public interface InfraFileConfigRepository extends JRepository<InfraFileConfig, 
 
     default Page<InfraFileConfig> selectPage(FileConfigPageReqVO reqVO){
         return sql().createQuery(infraFileConfigTable)
-                        .whereIf(reqVO.getStorage() != null, infraFileConfigTable.storage().eq(reqVO.getStorage()))
-                        .whereIf(StringUtils.hasText(reqVO.getName()), infraFileConfigTable.name().eq(reqVO.getName()))
+                        .where(infraFileConfigTable.storage().eqIf(reqVO.getStorage()))
+                        .where(infraFileConfigTable.name().eqIf(reqVO.getName()))
                         .whereIf(reqVO.getCreateTime() != null, ()-> infraFileConfigTable.createTime().between(reqVO.getCreateTime()[0], reqVO.getCreateTime()[1]))
                         .select(infraFileConfigTable).fetchPage(reqVO.getPageNo() - 1, reqVO.getPageSize())
         ;

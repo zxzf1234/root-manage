@@ -18,8 +18,8 @@ public interface SystemRoleRepository extends JRepository<SystemRole, Long> {
     default List<SystemRole> selectList(RoleExportedInput reqVO){
         return sql()
                 .createQuery(systemRoleTable)
-                .whereIf(reqVO.getStatus() != null, systemRoleTable.status().eq(reqVO.getStatus()))
-                .whereIf(StringUtils.hasText(reqVO.getCode()), systemRoleTable.code().eq(reqVO.getCode()))
+                .where(systemRoleTable.status().eqIf(reqVO.getStatus()))
+                .where(systemRoleTable.code().eqIf(reqVO.getCode()))
 //                .whereIf(StringUtils.hasText(reqVO.getName()), systemRoleTable.name().eq(reqVO.getName()))
                 .whereIf(reqVO.getCreateTime() != null, ()-> systemRoleTable.createTime().between(reqVO.getCreateTime()[0], reqVO.getCreateTime()[1]))
                 .select(systemRoleTable)
@@ -30,9 +30,9 @@ public interface SystemRoleRepository extends JRepository<SystemRole, Long> {
         return sql()
                 .createQuery(systemRoleTable)
                 .where(systemRoleTable.id().ge(0L))
-                .whereIf(reqVO.getStatus() != null, systemRoleTable.status().eq(reqVO.getStatus()))
-                .whereIf(StringUtils.hasText(reqVO.getCode()), systemRoleTable.code().eq(reqVO.getCode()))
-                .whereIf(StringUtils.hasText(reqVO.getName()), systemRoleTable.name().eq(reqVO.getName()))
+                .where(systemRoleTable.status().eqIf(reqVO.getStatus()))
+                .where(systemRoleTable.code().eqIf(reqVO.getCode()))
+                .where(systemRoleTable.name().eqIf(reqVO.getName()))
                 .whereIf(reqVO.getCreateTime() != null, ()-> systemRoleTable.createTime().between(reqVO.getCreateTime()[0], reqVO.getCreateTime()[1]))
                 .select(systemRoleTable).fetchPage(reqVO.getPageNo() - 1, reqVO.getPageSize());
     }

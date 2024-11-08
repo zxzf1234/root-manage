@@ -15,24 +15,23 @@ public interface InfraApiErrorLogRepository extends JRepository<InfraApiErrorLog
 
     default Page<InfraApiErrorLog> selectPage(ApiErrorLogPageReqVO reqVO){
         return sql().createQuery(infraApiErrorLogTable)
-                        .whereIf(reqVO.getProcessStatus() != null, infraApiErrorLogTable.processStatus().eq(reqVO.getProcessStatus()))
-                        .whereIf(StringUtils.hasText(reqVO.getApplicationName()), infraApiErrorLogTable.applicationName().eq(reqVO.getApplicationName()))
-                        .whereIf(StringUtils.hasText(reqVO.getRequestUrl()), infraApiErrorLogTable.requestUrl().eq(reqVO.getRequestUrl()))
-                        .whereIf(reqVO.getExceptionTime() != null, ()-> infraApiErrorLogTable.exceptionTime().between(reqVO.getExceptionTime()[0], reqVO.getExceptionTime()[1]))
-                        .whereIf(reqVO.getUserId() != null, infraApiErrorLogTable.userId().eq(reqVO.getUserId()))
-                        .whereIf(reqVO.getUserType() != null, infraApiErrorLogTable.userType().eq(reqVO.getUserType()))
-                        .select(infraApiErrorLogTable).fetchPage(reqVO.getPageNo() - 1, reqVO.getPageSize());
+                .where(infraApiErrorLogTable.processStatus().eqIf(reqVO.getProcessStatus()))
+                .where(infraApiErrorLogTable.applicationName().eqIf(reqVO.getApplicationName()))
+                .where(infraApiErrorLogTable.requestUrl().eqIf(reqVO.getRequestUrl()))
+                .whereIf(reqVO.getExceptionTime() != null, ()-> infraApiErrorLogTable.exceptionTime().between(reqVO.getExceptionTime()[0], reqVO.getExceptionTime()[1]))
+                .where(infraApiErrorLogTable.userId().eqIf(reqVO.getUserId()))
+                .where(infraApiErrorLogTable.userType().eqIf(reqVO.getUserType()))
+                .select(infraApiErrorLogTable).fetchPage(reqVO.getPageNo() - 1, reqVO.getPageSize());
     }
 
     default List<InfraApiErrorLog> selectList(ApiErrorLogExportReqVO reqVO){
-        return sql()
-                .createQuery(infraApiErrorLogTable)
-                .whereIf(reqVO.getProcessStatus() != null, infraApiErrorLogTable.processStatus().eq(reqVO.getProcessStatus()))
-                .whereIf(StringUtils.hasText(reqVO.getApplicationName()), infraApiErrorLogTable.applicationName().eq(reqVO.getApplicationName()))
-                .whereIf(StringUtils.hasText(reqVO.getRequestUrl()), infraApiErrorLogTable.requestUrl().eq(reqVO.getRequestUrl()))
+        return sql().createQuery(infraApiErrorLogTable)
+                .where(infraApiErrorLogTable.processStatus().eqIf(reqVO.getProcessStatus()))
+                .where(infraApiErrorLogTable.applicationName().eqIf(reqVO.getApplicationName()))
+                .where(infraApiErrorLogTable.requestUrl().eqIf(reqVO.getRequestUrl()))
                 .whereIf(reqVO.getExceptionTime() != null, ()-> infraApiErrorLogTable.exceptionTime().between(reqVO.getExceptionTime()[0], reqVO.getExceptionTime()[1]))
-                .whereIf(reqVO.getUserId() != null, infraApiErrorLogTable.userId().eq(reqVO.getUserId()))
-                .whereIf(reqVO.getUserType() != null, infraApiErrorLogTable.userType().eq(reqVO.getUserType()))
+                .where(infraApiErrorLogTable.userId().eqIf(reqVO.getUserId()))
+                .where(infraApiErrorLogTable.userType().eqIf(reqVO.getUserType()))
                 .select(infraApiErrorLogTable)
                 .execute();
     }

@@ -18,18 +18,18 @@ public interface InfraJobRepository extends JRepository<InfraJob, UUID> {
     default Page<InfraJob> selectPage(JobPageReqVO reqVO){
         return sql()
                 .createQuery(infraJobTable)
-                .whereIf(reqVO.getStatus() != null, () -> infraJobTable.status().eq(reqVO.getStatus()))
-                .whereIf(StringUtils.hasText(reqVO.getHandlerName()), () -> infraJobTable.handlerName().eq(reqVO.getHandlerName()))
-                .whereIf(StringUtils.hasText(reqVO.getName()), () -> infraJobTable.name().eq(reqVO.getName()))
+                .where(infraJobTable.status().eqIf(reqVO.getStatus()))
+                .where(infraJobTable.handlerName().eqIf(reqVO.getHandlerName()))
+                .where(infraJobTable.name().eqIf(reqVO.getName()))
                 .select(infraJobTable).fetchPage(reqVO.getPageNo() - 1, reqVO.getPageSize());
     }
 
     default List<InfraJob> selectList(JobExportReqVO reqVO){
         return sql()
                 .createQuery(infraJobTable)
-                .whereIf(reqVO.getStatus() != null, infraJobTable.status().eq(reqVO.getStatus()))
-                .whereIf(StringUtils.hasText(reqVO.getHandlerName()), infraJobTable.handlerName().eq(reqVO.getHandlerName()))
-                .whereIf(StringUtils.hasText(reqVO.getName()), infraJobTable.name().eq(reqVO.getName()))
+                .where(infraJobTable.status().eqIf(reqVO.getStatus()))
+                .where(infraJobTable.handlerName().eqIf(reqVO.getHandlerName()))
+                .where(infraJobTable.name().eqIf(reqVO.getName()))
                 .select(infraJobTable)
                 .execute();
 
