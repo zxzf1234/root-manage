@@ -23,4 +23,6 @@ public interface InfraFile extends BaseEntity {
     String type();
 
     int size();
+
+    String uniqueCode();
 }

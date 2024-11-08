@@ -1,7 +1,9 @@
 package cn.iocoder.yudao.service.service.infra.file;
 
 import cn.hutool.core.lang.Assert;
+import cn.hutool.core.util.HexUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.crypto.digest.DigestUtil;
 import cn.iocoder.yudao.service.framework.web.web.core.pojo.PageResult;
 import cn.iocoder.yudao.service.util.io.FileUtils;
 import cn.iocoder.yudao.service.framework.file.core.client.FileClient;
@@ -45,6 +47,15 @@ public class FileServiceImpl implements FileService {
     @Override
     @SneakyThrows
     public String createFile(String name, String path, byte[] content) {
+        byte[] md5Hash = DigestUtil.md5(content);
+        // 将字节数组转换为十六进制字符串
+        String md5String = HexUtil.encodeHexStr(md5Hash);
+
+        Optional<InfraFile> optionalExistsFile = infraFileRepository.findFirstByUniqueCode(md5String);
+        if(optionalExistsFile.isPresent()){
+            return optionalExistsFile.get().url();
+        }
+
         // 计算默认的 path 名
         String type = FileTypeUtils.getMineType(content, name);
         if (StrUtil.isEmpty(path)) {
@@ -64,12 +75,8 @@ public class FileServiceImpl implements FileService {
         String finalName = name;
         String finalPath = path;
         InfraFile file = InfraFileDraft.$.produce(draft -> {
-            draft.setConfigId(client.getId())
-                    .setName(finalName)
-                    .setPath(finalPath)
-                    .setUrl(url)
-                    .setType(type)
-                    .setSize(content.length);
+            draft.setConfigId(client.getId()).setName(finalName).setPath(finalPath).setUrl(url)
+                    .setType(type).setSize(content.length).setUniqueCode(md5String);
         });
         infraFileRepository.insert(file);
         return url;
