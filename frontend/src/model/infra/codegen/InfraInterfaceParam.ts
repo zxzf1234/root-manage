@@ -1,5 +1,5 @@
 export type InfraInterfaceParam = {
-  id: string
+  id: string | undefined
   name: string
   comment: string
   isList: boolean
@@ -11,4 +11,5 @@ export type InfraInterfaceParam = {
   parentId: string
   parentType: number
   inoutType: number
+  relatedColumn: string
 }

@@ -5,13 +5,19 @@ import cn.iocoder.yudao.service.vo.infra.data.baseVO.InfraDictDataBase;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import java.util.*;
-
-import org.springframework.format.annotation.DateTimeFormat;
-import static cn.iocoder.yudao.service.util.date.DateUtils.FORMAT_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND;
-import java.time.LocalDateTime;
+import javax.validation.constraints.*;
+import org.hibernate.validator.constraints.Length;
+import javax.validation.Valid;
+import cn.iocoder.yudao.service.enums.common.CommonStatusEnum;
+import cn.iocoder.yudao.service.framework.validation.InEnum;
+import java.math.BigDecimal;
+    import org.springframework.format.annotation.DateTimeFormat;
+    import static cn.iocoder.yudao.service.util.date.DateUtils.FORMAT_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND;
+    import java.time.LocalDateTime;
 
 @Schema(description = "查询字典类型详细")
 @Data
+@AllArgsConstructor
 public class DictTypeGetOutput extends InfraDictTypeBase {
 
     @Schema(description = "字典类型编号", requiredMode = Schema.RequiredMode.REQUIRED, example = "1024")
@@ -22,7 +28,8 @@ public class DictTypeGetOutput extends InfraDictTypeBase {
     private LocalDateTime createTime;
 
     @Schema(description = "字典数据", example = "字典数据")
-    private List<data> datas;
+    @Valid
+    private List<data> data;
 
     @Schema(description = "字典数据")
     @Data

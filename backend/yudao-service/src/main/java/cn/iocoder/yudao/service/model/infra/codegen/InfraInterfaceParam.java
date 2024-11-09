@@ -40,6 +40,8 @@ public interface InfraInterfaceParam extends BaseEntity {
     @Key
     Integer inoutType();
 
+    String relatedColumn();
+
     @Nullable
     @LogicalDeleted("now")
     LocalDateTime deletedTime();

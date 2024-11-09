@@ -1,0 +1,1 @@
+UPDATE infra_interface_param SET name='data',comment='字典数据',is_list=true,variable_type='Subclass',related_id='ccc698f7-606b-4624-beb0-c6b26d8146d1',related_type=3,example='字典数据',required=false,parent_id='d97f8b54-8ddb-4012-bf56-bdccf5349447',parent_type=0,inout_type=1,related_column='data' WHERE id = 'bbc49b19-1af6-4fe2-bd4c-0c4f22ea650e';

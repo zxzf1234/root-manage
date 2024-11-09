@@ -3,8 +3,12 @@ package cn.iocoder.yudao.service.vo.infra.codegen.baseVO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import java.util.*;
-
+import javax.validation.constraints.*;
+import org.hibernate.validator.constraints.*;
+import javax.validation.constraints.NotEmpty;
+import org.springframework.format.annotation.DateTimeFormat;
 import static cn.iocoder.yudao.service.util.date.DateUtils.FORMAT_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND;
+import java.time.LocalDateTime;
 
 /**
  * 接口参数 Base VO，提供给添加、修改、详细的子 VO 使用
@@ -45,5 +49,9 @@ public class InfraInterfaceParamBase {
 
     @Schema(description = "出参入参 0 入参 1出参", example = "0")
     private Integer inoutType;
+
+    @Schema(description = "关联字段")
+    @Size(max = 255, message = "关联字段长度不能超过255")
+    private String relatedColumn;
 
 }

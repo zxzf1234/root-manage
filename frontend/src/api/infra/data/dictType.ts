@@ -63,3 +63,10 @@ export const updateDictType = (data: DictTypeVO) => {
 export const deleteDictType = (id: string) => {
   return request.delete({ url: '/infra/data/dict-type/delete?id=' + id })
 }
+
+/**
+ * 查询字典类型详细
+ */
+export const get = (id) => {
+  return request.get({ url: '/infra/data/dict-type/get?id=' + id })
+}
