@@ -770,7 +770,7 @@ const dataTypeBlur = (scope) => {
     scope.row.dataType.includes('BLOB')
   ) {
     scope.row.javaType = 'String'
-    scope.row.defaultValue = "''"
+
     if (
       scope.row.dataType.includes('(') &&
       scope.row.dataType.includes(')') &&
@@ -781,7 +781,10 @@ const dataTypeBlur = (scope) => {
         scope.row.dataType.indexOf(')')
       )
       let validation = 'Size'
+      scope.row.defaultValue = "''"
       autoAddValidation(scope, fieldLength, validation, '长度不能超过', 'max = ' + fieldLength)
+    } else {
+      scope.row.defaultValue = ''
     }
   } else if (scope.row.dataType.includes('TINYINT')) {
     scope.row.javaType = 'Integer'

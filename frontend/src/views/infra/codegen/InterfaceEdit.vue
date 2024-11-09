@@ -519,8 +519,9 @@
           </el-table-column>
           <el-table-column label="继承类" min-width="20%">
             <template #default="scopeClass">
-              <el-input v-model="scopeClass.row.inheritClass" disabled style="width: 70%" />
+              <el-input v-model="scopeClass.row.inheritClass" disabled style="width: 60%" />
               <el-button @click="handleAddRelatedColumn(scopeClass)"> 添加 </el-button>
+              <el-button @click="handleSetEmptyColumn(scopeClass)"> 置空 </el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -634,8 +635,9 @@
 
                 <el-table-column label="关联字段" min-width="20%">
                   <template #default="scope">
-                    <el-input v-model="scope.row.relatedColumn" disabled style="width: 70%" />
+                    <el-input v-model="scope.row.relatedColumn" disabled style="width: 60%" />
                     <el-button @click="handleAddRelatedColumn(scope)"> 添加 </el-button>
+                    <el-button @click="handleSetEmptyColumn(scopeClass)"> 置空 </el-button>
                   </template>
                 </el-table-column>
                 <el-table-column label="示例" min-width="10%">
@@ -1259,6 +1261,11 @@ const handleAddRelatedColumn = (scope) => {
     isBatchAdd: 0
   }
   relatedParamRef.value.open(params)
+}
+
+const handleSetEmptyColumn = (scope) => {
+  scope.row.inheritClass = ''
+  scope.row.inheritType = 0
 }
 
 const handleBatchRelatedParam = (dbSelectdColumnList) => {
