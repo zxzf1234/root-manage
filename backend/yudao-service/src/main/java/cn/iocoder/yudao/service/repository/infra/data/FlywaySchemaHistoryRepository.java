@@ -11,12 +11,12 @@ import java.util.Optional;
 public interface FlywaySchemaHistoryRepository extends JRepository<FlywaySchemaHistory, Integer> {
      FlywaySchemaHistoryTable flywaySchemaHistoryTable = FlywaySchemaHistoryTable.$;
 
-     default Optional<FlywaySchemaHistory> findFirstByVersionLikeOrderByInstalledRankDesc(String version){
+     default List<FlywaySchemaHistory> findFirstByVersionLikeOrderByInstalledRankDesc(String version){
           return sql().createQuery(flywaySchemaHistoryTable)
-                  .where(flywaySchemaHistoryTable.version().eq(version))
-                  .orderBy(flywaySchemaHistoryTable.installedRank())
+                  .where(flywaySchemaHistoryTable.version().like(version))
+                  .orderBy(flywaySchemaHistoryTable.installedRank().desc())
                   .select(flywaySchemaHistoryTable)
                   .limit(1)
-                  .fetchOptional();
+                  .execute();
      };
 }

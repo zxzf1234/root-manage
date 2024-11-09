@@ -22,6 +22,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.xml.xpath.XPathConstants;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -50,10 +51,10 @@ public class SchemaHistoryServiceImpl implements SchemaHistoryService{
             return;
         int gitUserId = Convert.toInt(obGitUserId);
         schemaHistory.setCurGitUserId(gitUserId);
-        Optional<FlywaySchemaHistory> opInfraSchemaHistory = flywaySchemaHistoryRepository.findFirstByVersionLikeOrderByInstalledRankDesc(version + "." + gitUserId + ".");
-        if (!opInfraSchemaHistory.isPresent())
+        List<FlywaySchemaHistory> infraSchemaHistoryList = flywaySchemaHistoryRepository.findFirstByVersionLikeOrderByInstalledRankDesc(version + "." + gitUserId + ".");
+        if (infraSchemaHistoryList.size() == 0)
             schemaHistory.setCurGitUserVersion(0);
         else
-            schemaHistory.setCurGitUserVersion(Convert.toInt(Objects.requireNonNull(opInfraSchemaHistory.get().version()).replace( version + "." + gitUserId + "." , "")));
+            schemaHistory.setCurGitUserVersion(Convert.toInt(Objects.requireNonNull(infraSchemaHistoryList.get(0).version()).replace( version + "." + gitUserId + "." , "")));
     }
 }
