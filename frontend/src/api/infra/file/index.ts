@@ -15,3 +15,7 @@ export const getFilePage = (params: FilePageReqVO) => {
 export const deleteFile = (id: number) => {
   return request.delete({ url: '/infra/file/delete?id=' + id })
 }
+
+export const updateFile = (data: any) => {
+  return request.upload({ url: '/infra/file/upload', data })
+}

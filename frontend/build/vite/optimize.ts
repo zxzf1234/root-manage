@@ -27,8 +27,6 @@ const include = [
   'echarts/components',
   'echarts/renderers',
   'echarts-wordcloud',
-  '@wangeditor/editor',
-  '@wangeditor/editor-for-vue',
   'element-plus',
   'element-plus/es',
   'element-plus/es/locale/lang/zh-cn',
@@ -91,7 +89,9 @@ const include = [
   'element-plus/es/components/drawer/style/css',
   'element-plus/es/components/image-viewer/style/css',
   'element-plus/es/components/upload/style/css',
-  'element-plus/es/components/switch/style/css'
+  'element-plus/es/components/switch/style/css',
+  '@pureadmin/table',
+  '@pureadmin/utils'
 ]
 
 const exclude = ['@iconify/json']
