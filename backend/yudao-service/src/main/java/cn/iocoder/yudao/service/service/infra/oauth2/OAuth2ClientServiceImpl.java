@@ -71,7 +71,7 @@ public class OAuth2ClientServiceImpl implements OAuth2ClientService {
     }
 
     private void validateOAuth2ClientExists(Long id) {
-        if (!systemOauth2ClientRepository.findById(id).isPresent()) {
+        if (systemOauth2ClientRepository.findById(id).isEmpty()) {
             throw exception(OAUTH2_CLIENT_NOT_EXISTS);
         }
     }
@@ -79,7 +79,7 @@ public class OAuth2ClientServiceImpl implements OAuth2ClientService {
     @VisibleForTesting
     void validateClientIdExists(Long id, String clientId) {
         Optional<SystemOauth2Client> opClient = systemOauth2ClientRepository.findByClientId(clientId);
-        if (!opClient.isPresent()) {
+        if (opClient.isEmpty()) {
             return;
         }
         // 如果 id 为空，说明不用比较是否为相同 id 的客户端
@@ -108,7 +108,7 @@ public class OAuth2ClientServiceImpl implements OAuth2ClientService {
                                                     String authorizedGrantType, Collection<String> scopes, String redirectUri) {
         // 校验客户端存在、且开启
         Optional<SystemOauth2Client> opClient = systemOauth2ClientRepository.findByClientId(clientId);
-        if(!opClient.isPresent()){
+        if(opClient.isEmpty()){
             throw exception(OAUTH2_CLIENT_NOT_EXISTS);
         }
         SystemOauth2Client client = opClient.get();

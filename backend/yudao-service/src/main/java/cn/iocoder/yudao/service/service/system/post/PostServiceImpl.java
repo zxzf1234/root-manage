@@ -76,7 +76,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostGetOutput get(Long id) {
         Optional<SystemPost> opPost = systemPostRepository.findById(id);
-        if(!opPost.isPresent()){
+        if(opPost.isEmpty()){
             throw exception(POST_NOT_FOUND);
         }
         return PostConvert.INSTANCE.getOutputConvert(opPost.get());
@@ -119,14 +119,14 @@ public class PostServiceImpl implements PostService {
         if (id == null) {
             return;
         }
-        if (!systemPostRepository.findById(id).isPresent()) {
+        if (systemPostRepository.findById(id).isEmpty()) {
             throw exception(POST_NOT_FOUND);
         }
     }
 
     private void validatePostNameUnique(Long id, String name) {
         Optional<SystemPost> opPost = systemPostRepository.findByName(name);
-        if (!opPost.isPresent()) {
+        if (opPost.isEmpty()) {
             return;
         }
         // 如果 id 为空，说明不用比较是否为相同 id 的岗位
@@ -140,7 +140,7 @@ public class PostServiceImpl implements PostService {
 
     private void validatePostCodeUnique(Long id, String code) {
         Optional<SystemPost> opPost = systemPostRepository.findByCode(code);
-        if (!opPost.isPresent()) {
+        if (opPost.isEmpty()) {
             return;
         }
         // 如果 id 为空，说明不用比较是否为相同 id 的岗位

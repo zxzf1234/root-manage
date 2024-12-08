@@ -74,10 +74,8 @@ public class FileServiceImpl implements FileService {
         // 保存到数据库
         String finalName = name;
         String finalPath = path;
-        InfraFile file = InfraFileDraft.$.produce(draft -> {
-            draft.setConfigId(client.getId()).setName(finalName).setPath(finalPath).setUrl(url)
-                    .setType(type).setSize(content.length).setUniqueCode(md5String);
-        });
+        InfraFile file = InfraFileDraft.$.produce(draft -> draft.setConfigId(client.getId()).setName(finalName).setPath(finalPath).setUrl(url)
+                .setType(type).setSize(content.length).setUniqueCode(md5String));
         infraFileRepository.insert(file);
         return url;
     }
@@ -98,7 +96,7 @@ public class FileServiceImpl implements FileService {
 
     private InfraFile validateFileExists(Long id) {
         Optional<InfraFile>  opFileDO = infraFileRepository.findById(id);
-        if (!opFileDO.isPresent()) {
+        if (opFileDO.isEmpty()) {
             throw exception(FILE_NOT_EXISTS);
         }
         return opFileDO.get();

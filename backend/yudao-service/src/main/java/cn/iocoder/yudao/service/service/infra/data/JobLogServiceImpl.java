@@ -34,14 +34,12 @@ public class JobLogServiceImpl implements JobLogService {
 
     @Override
     public Long createJobLog(String jobId, LocalDateTime beginTime, String jobHandlerName, String jobHandlerParam, Integer executeIndex) {
-        InfraJobLog log = InfraJobLogDraft.$.produce(draft -> {
-            draft.setJobId(jobId)
-                    .setHandlerName(jobHandlerName)
-                    .setHandlerParam(jobHandlerParam)
-                    .setExecuteIndex(executeIndex)
-                    .setBeginTime(beginTime)
-                    .setStatus(InfraJobLogStatusEnum.RUNNING.getValue());
-        });
+        InfraJobLog log = InfraJobLogDraft.$.produce(draft -> draft.setJobId(jobId)
+                .setHandlerName(jobHandlerName)
+                .setHandlerParam(jobHandlerParam)
+                .setExecuteIndex(executeIndex)
+                .setBeginTime(beginTime)
+                .setStatus(InfraJobLogStatusEnum.RUNNING.getValue()));
         log = infraJobLogRepository.insert(log);
         return log.id();
     }
@@ -50,13 +48,11 @@ public class JobLogServiceImpl implements JobLogService {
     @Async
     public void updateJobLogResultAsync(Long logId, LocalDateTime endTime, Integer duration, boolean success, String result) {
         try {
-            InfraJobLog updateObj = InfraJobLogDraft.$.produce(draft -> {
-                draft.setId(logId)
-                        .setEndTime(endTime)
-                        .setDuration(duration)
-                        .setStatus(success ? InfraJobLogStatusEnum.SUCCESS.getValue() : InfraJobLogStatusEnum.FAILURE.getValue())
-                        .setResult(result);
-            });
+            InfraJobLog updateObj = InfraJobLogDraft.$.produce(draft -> draft.setId(logId)
+                    .setEndTime(endTime)
+                    .setDuration(duration)
+                    .setStatus(success ? InfraJobLogStatusEnum.SUCCESS.getValue() : InfraJobLogStatusEnum.FAILURE.getValue())
+                    .setResult(result));
             infraJobLogRepository.update(updateObj);
         } catch (Exception ex) {
             log.error("[updateJobLogResultAsync][logId({}) endTime({}) duration({}) success({}) result({})]",

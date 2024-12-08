@@ -77,9 +77,7 @@ public class JobServiceImpl implements JobService {
         }
         // 插入
         InfraJob job = JobConvert.INSTANCE.convert(createReqVO);
-        job = InfraJobDraft.$.produce(job, draft -> {
-            draft.setStatus(InfraJobStatusEnum.INIT.getValue()).setId(UUID.randomUUID());
-        });
+        job = InfraJobDraft.$.produce(job, draft -> draft.setStatus(InfraJobStatusEnum.INIT.getValue()).setId(UUID.randomUUID()));
         fillJobMonitorTimeoutEmpty(job);
         job = infraJobRepository.insert(job);
 
@@ -88,9 +86,7 @@ public class JobServiceImpl implements JobService {
                 createReqVO.getRetryCount(), createReqVO.getRetryInterval());
         // 更新
         InfraJob finalJob = job;
-        InfraJob updateObj = InfraJobDraft.$.produce(finalJob, draft -> {
-            draft.setId(finalJob.id()).setStatus(InfraJobStatusEnum.NORMAL.getValue());
-        });
+        InfraJob updateObj = InfraJobDraft.$.produce(finalJob, draft -> draft.setId(finalJob.id()).setStatus(InfraJobStatusEnum.NORMAL.getValue()));
         infraJobRepository.update(updateObj);
 
         codegenEngine.saveInsertSql(updateObj);
@@ -173,7 +169,7 @@ public class JobServiceImpl implements JobService {
     @Transactional(rollbackFor = Exception.class)
     public void updateJob(JobUpdateReqVO updateReqVO) throws SchedulerException {
         Optional<InfraJob> optionalOldJob = infraJobRepository.findById(updateReqVO.getId());
-        if(!optionalOldJob.isPresent()){
+        if(optionalOldJob.isEmpty()){
             throw exception(JOB_NOT_EXISTS);
         }
 
@@ -221,9 +217,7 @@ public class JobServiceImpl implements JobService {
             throw exception(JOB_CHANGE_STATUS_EQUALS);
         }
         // 更新 Job 状态
-        InfraJob updateObj = InfraJobDraft.$.produce(draft -> {
-            draft.setId(id).setStatus(status);
-        });
+        InfraJob updateObj = InfraJobDraft.$.produce(draft -> draft.setId(id).setStatus(status));
 
         infraJobRepository.update(updateObj);
 
@@ -269,7 +263,7 @@ public class JobServiceImpl implements JobService {
 
     private InfraJob validateJobExists(UUID id) {
         Optional<InfraJob> opJob = infraJobRepository.findById(id);
-        if (!opJob.isPresent()) {
+        if (opJob.isEmpty()) {
             throw exception(JOB_NOT_EXISTS);
         }
         return opJob.get();
@@ -304,9 +298,7 @@ public class JobServiceImpl implements JobService {
 
     private static InfraJob fillJobMonitorTimeoutEmpty(InfraJob job) {
         if (ImmutableObjects.isLoaded(job, InfraJobProps.MONITOR_TIMEOUT)) {
-            job = InfraJobDraft.$.produce(job, draft -> {
-                draft.setMonitorTimeout(0);
-            });
+            job = InfraJobDraft.$.produce(job, draft -> draft.setMonitorTimeout(0));
         }
         return job;
     }

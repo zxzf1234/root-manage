@@ -9,7 +9,6 @@ import cn.iocoder.yudao.service.framework.codegen.config.SchemaHistory;
 import cn.iocoder.yudao.service.model.infra.data.FlywaySchemaHistory;
 import cn.iocoder.yudao.service.repository.infra.data.FlywaySchemaHistoryRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
@@ -18,13 +17,11 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.xml.xpath.XPathConstants;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 @Slf4j

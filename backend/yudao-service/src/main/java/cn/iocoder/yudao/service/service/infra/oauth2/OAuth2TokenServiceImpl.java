@@ -58,7 +58,7 @@ public class OAuth2TokenServiceImpl implements OAuth2TokenService {
     public SystemOauth2AccessToken refreshAccessToken(String refreshToken, String clientId) {
         // 查询访问令牌
         Optional<SystemOauth2RefreshToken> opRefreshTokenDO = systemOauth2RefreshTokenRepository.findByRefreshToken(refreshToken);
-        if (!opRefreshTokenDO.isPresent()) {
+        if (opRefreshTokenDO.isEmpty()) {
             throw exception0(GlobalErrorCodeConstants.BAD_REQUEST.getCode(), "无效的刷新令牌");
         }
 
@@ -118,7 +118,7 @@ public class OAuth2TokenServiceImpl implements OAuth2TokenService {
     public SystemOauth2AccessToken removeAccessToken(String accessToken) {
         // 删除访问令牌
         Optional<SystemOauth2AccessToken> opAccessTokenDO = systemOauth2AccessTokenRepository.findByAccessToken(accessToken);
-        if (!opAccessTokenDO.isPresent()) {
+        if (opAccessTokenDO.isEmpty()) {
             return null;
         }
         systemOauth2AccessTokenRepository.deleteById(opAccessTokenDO.get().id());
@@ -136,12 +136,10 @@ public class OAuth2TokenServiceImpl implements OAuth2TokenService {
     }
 
     private SystemOauth2AccessToken createOAuth2AccessToken(SystemOauth2RefreshToken refreshTokenDO, SystemOauth2Client clientDO) {
-        SystemOauth2AccessToken accessTokenDO = SystemOauth2AccessTokenDraft.$.produce(SystemOauth2AccessToken->{
-            SystemOauth2AccessToken.setAccessToken(generateAccessToken())
-                    .setUserId(refreshTokenDO.userId()).setUserType(refreshTokenDO.userType())
-                    .setClientId(clientDO.clientId()).setScopes(refreshTokenDO.scopes())
-                    .setRefreshToken(refreshTokenDO.refreshToken()).setExpiresTime(LocalDateTime.now().plusSeconds(clientDO.accessTokenValiditySeconds()));
-        });
+        SystemOauth2AccessToken accessTokenDO = SystemOauth2AccessTokenDraft.$.produce(SystemOauth2AccessToken-> SystemOauth2AccessToken.setAccessToken(generateAccessToken())
+                .setUserId(refreshTokenDO.userId()).setUserType(refreshTokenDO.userType())
+                .setClientId(clientDO.clientId()).setScopes(refreshTokenDO.scopes())
+                .setRefreshToken(refreshTokenDO.refreshToken()).setExpiresTime(LocalDateTime.now().plusSeconds(clientDO.accessTokenValiditySeconds())));
         accessTokenDO = systemOauth2AccessTokenRepository.insert(accessTokenDO);
         // 记录到 Redis 中
         oauth2AccessTokenRedisDAO.set(accessTokenDO);
@@ -149,12 +147,10 @@ public class OAuth2TokenServiceImpl implements OAuth2TokenService {
     }
 
     private SystemOauth2RefreshToken createOAuth2RefreshToken(Long userId, Integer userType, SystemOauth2Client clientDO, List<String> scopes) {
-        SystemOauth2RefreshToken refreshToken = SystemOauth2RefreshTokenDraft.$.produce(SystemOauth2RefreshToken->{
-            SystemOauth2RefreshToken.setRefreshToken(generateAccessToken())
-                    .setUserId(userId).setUserType(userType)
-                    .setClientId(clientDO.clientId()).setScopes(scopes)
-                    .setRefreshToken(generateRefreshToken()).setExpiresTime(LocalDateTime.now().plusSeconds(clientDO.refreshTokenValiditySeconds()));
-        });
+        SystemOauth2RefreshToken refreshToken = SystemOauth2RefreshTokenDraft.$.produce(SystemOauth2RefreshToken-> SystemOauth2RefreshToken.setRefreshToken(generateAccessToken())
+                .setUserId(userId).setUserType(userType)
+                .setClientId(clientDO.clientId()).setScopes(scopes)
+                .setRefreshToken(generateRefreshToken()).setExpiresTime(LocalDateTime.now().plusSeconds(clientDO.refreshTokenValiditySeconds())));
 
         refreshToken = systemOauth2RefreshTokenRepository.insert(refreshToken);
         return refreshToken;

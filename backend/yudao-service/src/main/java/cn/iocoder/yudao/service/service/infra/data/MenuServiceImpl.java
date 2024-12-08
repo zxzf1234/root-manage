@@ -69,7 +69,7 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public void updateMenu(MenuUpdateReqVO reqVO) {
         // 校验更新的菜单是否存在
-        if (!systemMenuRepository.findById(reqVO.getId()).isPresent()) {
+        if (systemMenuRepository.findById(reqVO.getId()).isEmpty()) {
             throw exception(MENU_NOT_EXISTS);
         }
         // 校验父菜单存在
@@ -93,7 +93,7 @@ public class MenuServiceImpl implements MenuService {
             throw exception(MENU_EXISTS_CHILDREN);
         }
         // 校验删除的菜单是否存在
-        if (!systemMenuRepository.findById(menuId).isPresent()) {
+        if (systemMenuRepository.findById(menuId).isEmpty()) {
             throw exception(MENU_NOT_EXISTS);
         }
         // 标记删除
@@ -160,7 +160,7 @@ public class MenuServiceImpl implements MenuService {
         }
         Optional<SystemMenu> opMenu = systemMenuRepository.findById(uParentId);
         // 父菜单不存在
-        if (!opMenu.isPresent()) {
+        if (opMenu.isEmpty()) {
             throw exception(MENU_PARENT_NOT_EXISTS);
         }
         // 父菜单必须是目录或者菜单类型
@@ -182,7 +182,7 @@ public class MenuServiceImpl implements MenuService {
     @VisibleForTesting
     void validateMenu(String parentId, String name, UUID id) {
         Optional<SystemMenu> opMenu = systemMenuRepository.findByParentIdAndName(parentId, name);
-        if (!opMenu.isPresent()) {
+        if (opMenu.isEmpty()) {
             return;
         }
         // 如果 id 为空，说明不用比较是否为相同 id 的菜单
@@ -204,13 +204,11 @@ public class MenuServiceImpl implements MenuService {
     private SystemMenu initMenuProperty(SystemMenu menu) {
         // 菜单为按钮类型时，无需 component、icon、path 属性，进行置空
         if (MenuTypeEnum.BUTTON.getType().equals(menu.type())) {
-            menu = SystemMenuDraft.$.produce(menu, SystemMenu->{
-                SystemMenu
-                        .setComponent("")
-                        .setComponentName("")
-                        .setIcon("")
-                        .setPath("");
-            });
+            menu = SystemMenuDraft.$.produce(menu, SystemMenu-> SystemMenu
+                    .setComponent("")
+                    .setComponentName("")
+                    .setIcon("")
+                    .setPath(""));
         }
         return menu;
     }

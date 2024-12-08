@@ -37,9 +37,7 @@ public class ApiErrorLogServiceImpl implements ApiErrorLogService {
     @Override
     public void createApiErrorLog(ApiErrorLogCreateReqVO createDTO) {
         InfraApiErrorLog apiErrorLog = ApiErrorLogConvert.INSTANCE.convert(createDTO);
-        apiErrorLog = InfraApiErrorLogDraft.$.produce(apiErrorLog, draft -> {
-            draft.setProcessStatus(InfraApiErrorLogProcessStatusEnum.INIT.getValue());
-        });
+        apiErrorLog = InfraApiErrorLogDraft.$.produce(apiErrorLog, draft -> draft.setProcessStatus(InfraApiErrorLogProcessStatusEnum.INIT.getValue()));
         infraApiErrorLogRepository.insert(apiErrorLog);
     }
 
@@ -57,17 +55,15 @@ public class ApiErrorLogServiceImpl implements ApiErrorLogService {
     @Override
     public void updateApiErrorLogProcess(Long id, Integer processStatus, Long processUserId) {
         Optional<InfraApiErrorLog> opErrorLog = infraApiErrorLogRepository.findById(id);
-        if (!opErrorLog.isPresent()) {
+        if (opErrorLog.isEmpty()) {
             throw exception(API_ERROR_LOG_NOT_FOUND);
         }
         if (!InfraApiErrorLogProcessStatusEnum.INIT.getValue().equals(opErrorLog.get().processStatus())) {
             throw exception(API_ERROR_LOG_PROCESSED);
         }
         // 标记处理
-        InfraApiErrorLog errorLog = InfraApiErrorLogDraft.$.produce(draft -> {
-            draft.setId(id).setProcessStatus(processStatus).setProcessUserId(processUserId)
-                    .setProcessTime(LocalDateTime.now());
-        });
+        InfraApiErrorLog errorLog = InfraApiErrorLogDraft.$.produce(draft -> draft.setId(id).setProcessStatus(processStatus).setProcessUserId(processUserId)
+                .setProcessTime(LocalDateTime.now()));
         infraApiErrorLogRepository.update(errorLog);
     }
 

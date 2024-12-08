@@ -65,16 +65,12 @@ public class InterfaceModuleServiceImpl implements InterfaceModuleService{
             if (module.type() == 1){
                 InfraInterfaceModule secondParentModule = findSecondParent(optionalParentModule.get());
                 Long count = infraInterfaceModuleRepository.countByTypeAndSort(1, secondParentModule.sort(), secondParentModule.sort() + 1000000);
-                module = InfraInterfaceModuleDraft.$.produce(module, draft -> {
-                    draft.setSort(secondParentModule.sort() + (count + 1) * 1000L);
-                });
+                module = InfraInterfaceModuleDraft.$.produce(module, draft -> draft.setSort(secondParentModule.sort() + (count + 1) * 1000L));
             }
 
             if(optionalParentModule.get().id().toString().equals("5aa5cea6-8dbe-47b3-8cfa-02c10c39bc12") || optionalParentModule.get().id().toString().equals("a7de2f1c-278b-4b94-9a74-1bd708f289ed")) {
                 int count = infraInterfaceModuleRepository.countByParentId(module.parentId());
-                module = InfraInterfaceModuleDraft.$.produce(module, draft -> {
-                    draft.setSort(optionalParentModule.get().sort() + (count + 1) * 1000000L);
-                });
+                module = InfraInterfaceModuleDraft.$.produce(module, draft -> draft.setSort(optionalParentModule.get().sort() + (count + 1) * 1000000L));
             }
         }
         module = infraInterfaceModuleRepository.insert(module);
@@ -88,7 +84,7 @@ public class InterfaceModuleServiceImpl implements InterfaceModuleService{
     @Transactional(rollbackFor = Exception.class)
     public String update(InterfaceModuleUpdateReq reqVO){
         Optional<InfraInterfaceModule> opModule = infraInterfaceModuleRepository.findById(reqVO.getId());
-        if (!opModule.isPresent())
+        if (opModule.isEmpty())
             throw exception(CODEGEN_INTERFACE_MODULE_NOT_EXITS);
         InfraInterfaceModule oldModule = opModule.get();
 
@@ -130,7 +126,7 @@ public class InterfaceModuleServiceImpl implements InterfaceModuleService{
     @Override
     public InterfaceModuleResp getModule(String id){
         Optional<InfraInterfaceModule> opModule = infraInterfaceModuleRepository.findById(UUID.fromString(id));
-        if (!opModule.isPresent())
+        if (opModule.isEmpty())
             throw exception(CODEGEN_INTERFACE_MODULE_NOT_EXITS);
         InfraInterfaceModule module = opModule.get();
         return CodegenConvert.INSTANCE.convert(module);
@@ -143,7 +139,7 @@ public class InterfaceModuleServiceImpl implements InterfaceModuleService{
         if(count > 0)
             throw exception(CODEGEN_INTERFACE_MODULE_CHILD_NODE_EXITS);
         Optional<InfraInterfaceModule> opModule = infraInterfaceModuleRepository.findById(UUID.fromString(id));
-        if (!opModule.isPresent())
+        if (opModule.isEmpty())
             throw exception(CODEGEN_INTERFACE_MODULE_NOT_EXITS);
         InfraInterfaceModule module = opModule.get();
         if(module.type() == 1)

@@ -82,10 +82,8 @@ public class FileConfigServiceImpl implements FileConfigService {
     public Long createFileConfig(FileConfigCreateReqVO createReqVO) {
         // 插入
         InfraFileConfig fileConfig = FileConfigConvert.INSTANCE.convert(createReqVO);
-        fileConfig = InfraFileConfigDraft.$.produce(fileConfig, draft -> {
-            draft.setConfig(parseClientConfig(createReqVO.getStorage(), createReqVO.getConfig()))
-                    .setMaster(false);
-        });
+        fileConfig = InfraFileConfigDraft.$.produce(fileConfig, draft -> draft.setConfig(parseClientConfig(createReqVO.getStorage(), createReqVO.getConfig()))
+                .setMaster(false));
         // 默认非 master
         fileConfig = infraFileConfigRepository.insert(fileConfig);
         // 返回
@@ -98,9 +96,7 @@ public class FileConfigServiceImpl implements FileConfigService {
         InfraFileConfig config = validateFileConfigExists(updateReqVO.getId());
         // 更新
         InfraFileConfig updateObj = FileConfigConvert.INSTANCE.convert(updateReqVO);
-        updateObj = InfraFileConfigDraft.$.produce(updateObj, draft -> {
-            draft.setConfig(parseClientConfig(config.storage(), updateReqVO.getConfig()));
-        });
+        updateObj = InfraFileConfigDraft.$.produce(updateObj, draft -> draft.setConfig(parseClientConfig(config.storage(), updateReqVO.getConfig())));
 
         infraFileConfigRepository.update(updateObj);
     }
@@ -111,9 +107,9 @@ public class FileConfigServiceImpl implements FileConfigService {
         // 校验存在
         validateFileConfigExists(id);
         // 更新其它为非 master in new InfraFileConfig().setMaster(false)
-        infraFileConfigRepository.update(InfraFileConfigDraft.$.produce(draft -> {draft.setMaster(false);}));
+        infraFileConfigRepository.update(InfraFileConfigDraft.$.produce(draft -> draft.setMaster(false)));
         // 更新
-        infraFileConfigRepository.update(InfraFileConfigDraft.$.produce(draft -> {draft.setId(id).setMaster(true);}));
+        infraFileConfigRepository.update(InfraFileConfigDraft.$.produce(draft -> draft.setId(id).setMaster(true)));
     }
 
     private FileClientConfig parseClientConfig(Integer storage, Map<String, Object> config) {
@@ -140,7 +136,7 @@ public class FileConfigServiceImpl implements FileConfigService {
 
     private InfraFileConfig validateFileConfigExists(Long id) {
         Optional<InfraFileConfig>  opConfig = infraFileConfigRepository.findById(id);
-        if (!opConfig.isPresent()) {
+        if (opConfig.isEmpty()) {
             throw exception(FILE_CONFIG_NOT_EXISTS);
         }
         return opConfig.get();

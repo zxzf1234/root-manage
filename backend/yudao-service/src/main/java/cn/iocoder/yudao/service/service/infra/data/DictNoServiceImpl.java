@@ -56,9 +56,7 @@ public class DictNoServiceImpl implements DictNoService {
         InfraDictNo newNo = DictNoConvert.INSTANCE.createInputConvert(inputVO);
         if(infraDictNoRepository.findByKeyName(newNo.keyName()).isPresent())
             throw exception(DICT_NO_EXISTS);
-        newNo = InfraDictNoDraft.$.produce(newNo, draft -> {
-            draft.setLastDate(LocalDate.now().atStartOfDay()).setPostfixVal(0);
-        });
+        newNo = InfraDictNoDraft.$.produce(newNo, draft -> draft.setLastDate(LocalDate.now().atStartOfDay()).setPostfixVal(0));
         newNo = infraDictNoRepository.insert(newNo);
         codegenEngine.saveInsertSql(newNo);
         return newNo.id().toString();
@@ -85,16 +83,13 @@ public class DictNoServiceImpl implements DictNoService {
     @Override
     public String produceNo(String keyName){
        Optional<InfraDictNo> opNo =  infraDictNoRepository.findByKeyNameUpdate(keyName);
-       if (!opNo.isPresent())
+       if (opNo.isEmpty())
            return null;
 
-       InfraDictNo updateNo = InfraDictNoDraft.$.produce(opNo.get(), draft -> {
-            draft.setPostfixVal(
-                    draft.lastDate().equals(
-                            LocalDate.now().atStartOfDay()) ||draft.dateForm()== 2 ?
-                            draft.postfixVal() + 1: 1)
-                    .setLastDate(LocalDate.now().atStartOfDay());
-        });
+       InfraDictNo updateNo = InfraDictNoDraft.$.produce(opNo.get(), draft -> draft.setPostfixVal(
+               Objects.equals(draft.lastDate(), LocalDate.now().atStartOfDay()) ||draft.dateForm()== 2 ?
+                       draft.postfixVal() + 1: 1)
+               .setLastDate(LocalDate.now().atStartOfDay()));
        infraDictNoRepository.update(updateNo);
         String postfixStr;
        if(updateNo.postfixVal().toString().length()  > updateNo.postfixVal())

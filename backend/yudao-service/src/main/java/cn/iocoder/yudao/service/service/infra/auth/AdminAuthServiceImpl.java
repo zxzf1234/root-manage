@@ -65,7 +65,7 @@ public class AdminAuthServiceImpl implements AdminAuthService {
         final SystemLoginTypeEnum logTypeEnum = SystemLoginTypeEnum.LOGIN_USERNAME;
         // 校验账号是否存在
         Optional<SystemUser> opUser = userService.getUserByUsername(username);
-        if (!opUser.isPresent()) {
+        if (opUser.isEmpty()) {
             createLoginLog(null, username, logTypeEnum, SystemLoginResultEnum.BAD_CREDENTIALS);
             throw exception(AUTH_LOGIN_BAD_CREDENTIALS);
         }
@@ -178,7 +178,7 @@ public class AdminAuthServiceImpl implements AdminAuthService {
             return null;
         }
         Optional<SystemUser> user = userService.getUser(userId);
-        return user.isPresent() ? user.get().username() : null;
+        return user.map(SystemUser::username).orElse(null);
     }
 
     private UserTypeEnum getUserType() {

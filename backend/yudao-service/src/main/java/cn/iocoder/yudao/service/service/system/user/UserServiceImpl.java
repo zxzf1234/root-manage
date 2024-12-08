@@ -87,11 +87,9 @@ public class UserServiceImpl implements UserService {
                 inputVO.getDeptId(), inputVO.getPostIds());
         SystemUser newUserConvert = UserConvert.INSTANCE.createInputConvert(inputVO);
         String password = passwordEncoder.encode(inputVO.getPassword());
-        SystemUser newUser = SystemUserDraft.$.produce(newUserConvert, SystemUsers ->{
-            SystemUsers
-                    .setStatus(CommonStatusEnum.ENABLE.getStatus())
-                    .setPassword(password);
-        });
+        SystemUser newUser = SystemUserDraft.$.produce(newUserConvert, SystemUsers -> SystemUsers
+                .setStatus(CommonStatusEnum.ENABLE.getStatus())
+                .setPassword(password));
         newUser = systemUserRepository.insert(newUser);
         return newUser.id();
     }
@@ -120,9 +118,7 @@ public class UserServiceImpl implements UserService {
         // 执行新增和删除。对于已经授权的菜单，不用做任何处理
         if (!CollectionUtil.isEmpty(createPostIds)) {
             systemUserPostRepository.saveAll(convertList(createPostIds,
-                    postId -> SystemUserPostDraft.$.produce(SystemUserPost->{
-                        SystemUserPost.setUserId(userId).setPostId(postId);
-                    }))
+                    postId -> SystemUserPostDraft.$.produce(SystemUserPost-> SystemUserPost.setUserId(userId).setPostId(postId)))
             );
 
         }
@@ -163,7 +159,7 @@ public class UserServiceImpl implements UserService {
     @VisibleForTesting
     void validateOldPassword(Long id, String oldPassword) {
         Optional<SystemUser> user = systemUserRepository.findById(id);
-        if (!user.isPresent()) {
+        if (user.isEmpty()) {
             throw exception(USER_NOT_EXISTS);
         }
         if (!isPasswordMatch(oldPassword, user.get().password())) {
@@ -212,7 +208,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserGetOutput get(Long id) {
          Optional<SystemUser> opUser = systemUserRepository.GetUser(id);
-         if(!opUser.isPresent())
+         if(opUser.isEmpty())
              throw exception(USER_NOT_EXISTS);
          return UserConvert.INSTANCE.getOutputConvert(opUser.get());
     }
@@ -257,11 +253,9 @@ public class UserServiceImpl implements UserService {
             }
             // 判断如果不存在，在进行插入
             Optional<SystemUser> existUser = systemUserRepository.findByUsername(importUser.getUsername());
-            if (!existUser.isPresent()) {
+            if (existUser.isEmpty()) {
                 SystemUser newUserConvert = UserConvert.INSTANCE.convertUser(importUser);
-                newUserConvert = SystemUserDraft.$.produce(newUserConvert, SystemUsers ->{
-                    SystemUsers.setPassword(userInitPassword);
-                });
+                newUserConvert = SystemUserDraft.$.produce(newUserConvert, SystemUsers -> SystemUsers.setPassword(userInitPassword));
                 systemUserRepository.insert(newUserConvert);
                 respVO.getCreateUsernames().add(importUser.getUsername());
                 return;
@@ -303,7 +297,7 @@ public class UserServiceImpl implements UserService {
             return;
         }
         Optional<SystemUser> opUser = systemUserRepository.findById(id);
-        if (!opUser.isPresent()) {
+        if (opUser.isEmpty()) {
             throw exception(USER_NOT_EXISTS);
         }
     }
@@ -314,7 +308,7 @@ public class UserServiceImpl implements UserService {
             return;
         }
         Optional<SystemUser> opUser = systemUserRepository.findByUsername(username);
-        if (!opUser.isPresent()) {
+        if (opUser.isEmpty()) {
             return;
         }
         // 如果 id 为空，说明不用比较是否为相同 id 的用户
@@ -332,7 +326,7 @@ public class UserServiceImpl implements UserService {
             return;
         }
         Optional<SystemUser> opUser = systemUserRepository.findByEmail(email);
-        if (!opUser.isPresent()) {
+        if (opUser.isEmpty()) {
             return;
         }
         // 如果 id 为空，说明不用比较是否为相同 id 的用户
@@ -350,7 +344,7 @@ public class UserServiceImpl implements UserService {
             return;
         }
         Optional<SystemUser> opUser = systemUserRepository.findByMobile(mobile);
-        if (!opUser.isPresent()) {
+        if (opUser.isEmpty()) {
             return;
         }
         // 如果 id 为空，说明不用比较是否为相同 id 的用户
@@ -395,10 +389,8 @@ public class UserServiceImpl implements UserService {
         validateMobileUnique(id, reqVO.getMobile());
         // 执行更新
         SystemUser updateUser = UserConvert.INSTANCE.convertUser(reqVO);
-        updateUser = SystemUserDraft.$.produce(updateUser, SystemUsers ->{
-            SystemUsers
-                    .setId(id);
-        });
+        updateUser = SystemUserDraft.$.produce(updateUser, SystemUsers -> SystemUsers
+                .setId(id));
         systemUserRepository.update(updateUser);
     }
 
@@ -410,7 +402,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String updateUserAvatar(Long id, InputStream avatarFile) throws Exception {
+    public String updateUserAvatar(Long id, InputStream avatarFile) {
         validateUserExists(id);
         // 存储文件
         String avatar = fileService.createFile(null, null, IoUtil.readBytes(avatarFile));

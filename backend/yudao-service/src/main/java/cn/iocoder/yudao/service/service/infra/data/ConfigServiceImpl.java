@@ -41,12 +41,10 @@ public class ConfigServiceImpl implements ConfigService {
     @Transactional(rollbackFor = Exception.class)
     public String create(ConfigCreateInput inputVO) {
         // 校验正确性
-        validateConfigForCreateOrUpdate(null, inputVO.getConfigKey());
+        validateConfigForCreateOrUpdate(inputVO.getConfigKey());
         // 插入参数配置
         InfraConfig config = ConfigConvert.INSTANCE.createInputConvert(inputVO);
-        config = InfraConfigDraft.$.produce(config, draft -> {
-            draft.setType(InfraConfigTypeEnum.CUSTOM.getValue());
-        });
+        config = InfraConfigDraft.$.produce(config, draft -> draft.setType(InfraConfigTypeEnum.CUSTOM.getValue()));
         config = infraConfigRepository.insert(config);
         return config.id().toString();
     }
@@ -55,7 +53,7 @@ public class ConfigServiceImpl implements ConfigService {
     @Transactional(rollbackFor = Exception.class)
     public Boolean update(ConfigUpdateInput inputVO) {
         Optional<InfraConfig> optionalOldInfraConfig = infraConfigRepository.findById(inputVO.getId());
-        if(!optionalOldInfraConfig.isPresent()){
+        if(optionalOldInfraConfig.isEmpty()){
             throw exception(CONFIG_NOT_EXISTS);
         }
         InfraConfig updateInfraConfig = ConfigConvert.INSTANCE.updateInputConvert(inputVO);
@@ -64,12 +62,12 @@ public class ConfigServiceImpl implements ConfigService {
         return true;
     }
 
-    private void validateConfigForCreateOrUpdate(UUID id, String key) {
+    private void validateConfigForCreateOrUpdate(String key) {
         // 校验自己存在
-        validateConfigExists(id);
+        validateConfigExists(null);
         // 校验参数配置 key 的唯一性
         if (StrUtil.isNotEmpty(key)) {
-            validateConfigKeyUnique(id, key);
+            validateConfigKeyUnique(null, key);
         }
     }
 
@@ -78,7 +76,7 @@ public class ConfigServiceImpl implements ConfigService {
             return null;
         }
         Optional<InfraConfig> opConfig = infraConfigRepository.findById(id);
-        if (!opConfig.isPresent()) {
+        if (opConfig.isEmpty()) {
             throw exception(CONFIG_NOT_EXISTS);
         }
         return opConfig.get();
@@ -86,7 +84,7 @@ public class ConfigServiceImpl implements ConfigService {
 
     public void validateConfigKeyUnique(UUID id, String key) {
         Optional<InfraConfig> opConfig = infraConfigRepository.findByConfigKey(key);
-        if (!opConfig.isPresent()) {
+        if (opConfig.isEmpty()) {
             return;
         }
         // 如果 id 为空，说明不用比较是否为相同 id 的参数配置
@@ -115,7 +113,7 @@ public class ConfigServiceImpl implements ConfigService {
     @Override
     public ConfigGetOutput get(UUID id) {
         Optional<InfraConfig> optionalConfig = infraConfigRepository.findById(id);
-        if(!optionalConfig.isPresent())
+        if(optionalConfig.isEmpty())
             throw exception(CONFIG_NOT_EXISTS);
         return ConfigConvert.INSTANCE.getOutputConvert(optionalConfig.get());
     }
@@ -123,7 +121,7 @@ public class ConfigServiceImpl implements ConfigService {
     @Override
     public String getValueByKey(String key) {
         Optional<InfraConfig> optionalConfig = infraConfigRepository.findByConfigKey(key);
-        if(!optionalConfig.isPresent())
+        if(optionalConfig.isEmpty())
             throw exception(CONFIG_NOT_EXISTS);
         return optionalConfig.get().value();
     }

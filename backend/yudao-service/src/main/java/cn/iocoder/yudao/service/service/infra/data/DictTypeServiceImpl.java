@@ -72,7 +72,7 @@ public class DictTypeServiceImpl implements DictTypeService {
 
     void validateDictTypeNameUnique(UUID id, String name) {
         Optional<InfraDictType> opDictType = infraDictTypeRepository.findByName(name);
-        if (!opDictType.isPresent()) {
+        if (opDictType.isEmpty()) {
             return;
         }
         // 如果 id 为空，说明不用比较是否为相同 id 的字典类型
@@ -89,7 +89,7 @@ public class DictTypeServiceImpl implements DictTypeService {
             return;
         }
         Optional<InfraDictType> opDictType = infraDictTypeRepository.findByType(type);
-        if (!opDictType.isPresent()) {
+        if (opDictType.isEmpty()) {
             return;
         }
         // 如果 id 为空，说明不用比较是否为相同 id 的字典类型
@@ -106,7 +106,7 @@ public class DictTypeServiceImpl implements DictTypeService {
             return;
         }
         Optional<InfraDictType> opDictType = infraDictTypeRepository.findById(id);
-        if (!opDictType.isPresent()) {
+        if (opDictType.isEmpty()) {
             throw exception(DICT_TYPE_NOT_EXISTS);
         }
     }
@@ -117,15 +117,15 @@ public class DictTypeServiceImpl implements DictTypeService {
         // 校验正确性
         validateDictTypeForCreateOrUpdate(inputVO.getId(), inputVO.getName(), null);
         Optional<InfraDictType> opOldType = infraDictTypeRepository.findById(inputVO.getId());
-        if(!opOldType.isPresent())
+        if(opOldType.isEmpty())
             throw exception(DICT_TYPE_NOT_EXISTS);
         Optional<InfraDictType> opOldTypeDetail = infraDictTypeRepository.findByDetailId(inputVO.getId());
-        if(!opOldTypeDetail.isPresent())
+        if(opOldTypeDetail.isEmpty())
             throw exception(DICT_TYPE_NOT_EXISTS);
         for(DictTypeUpdateInput.data data : inputVO.getDatas()){
             if(Objects.equals(data.getOperateType(), "delete")){
                 Optional<InfraDictData> optionalDeleteInfraDictData = infraDictDataRepository.findById(data.getId());
-                if(!optionalDeleteInfraDictData.isPresent()){
+                if(optionalDeleteInfraDictData.isEmpty()){
                     throw exception(DICT_DATA_NOT_EXISTS);
                 }
                 infraDictDataRepository.deleteById(data.getId(), DeleteMode.PHYSICAL);
@@ -140,7 +140,7 @@ public class DictTypeServiceImpl implements DictTypeService {
                 codegenEngine.saveInsertSql(newData);
             }else {
                 Optional<InfraDictData> optionalOldInfraDictData = infraDictDataRepository.findById(data.getId());
-                if(!optionalOldInfraDictData.isPresent()) {
+                if(optionalOldInfraDictData.isEmpty()) {
                     throw exception(DICT_DATA_NOT_EXISTS);
                 }
                 Optional<InfraDictData> optionalDuplicateInfraDictData = infraDictDataRepository.findByTypeIdAndValue(data.getTypeId(), data.getValue());
@@ -158,9 +158,7 @@ public class DictTypeServiceImpl implements DictTypeService {
 
         // 更新字典类型
         InfraDictType updateType = DictTypeConvert.INSTANCE.updateInputConvert(inputVO);
-        updateType = InfraDictTypeDraft.$.produce(updateType, draft -> {
-            DraftObjects.unload(draft, InfraDictTypeProps.DATAS);
-        });
+        updateType = InfraDictTypeDraft.$.produce(updateType, draft -> DraftObjects.unload(draft, InfraDictTypeProps.DATAS));
         if (!EntityUtils.isEquals(opOldType.get(), updateType)){
             infraDictTypeRepository.update(updateType);
             codegenEngine.saveUpdateSql(updateType);

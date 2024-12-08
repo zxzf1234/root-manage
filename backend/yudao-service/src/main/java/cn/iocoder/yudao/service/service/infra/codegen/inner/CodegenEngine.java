@@ -8,20 +8,20 @@ import cn.hutool.core.util.RuntimeUtil;
 import cn.hutool.extra.template.TemplateConfig;
 import cn.hutool.extra.template.TemplateEngine;
 import cn.hutool.extra.template.engine.velocity.VelocityEngine;
-import cn.iocoder.yudao.service.framework.exception.util.ServiceExceptionUtil;
-import cn.iocoder.yudao.service.framework.web.web.core.pojo.CommonResult;
-import cn.iocoder.yudao.service.framework.web.web.core.pojo.PageParam;
-import cn.iocoder.yudao.service.framework.web.web.core.pojo.PageResult;
-import cn.iocoder.yudao.service.util.date.DateUtils;
-import cn.iocoder.yudao.service.framework.excel.core.util.ExcelUtils;
-import cn.iocoder.yudao.service.framework.operateLog.core.annotations.OperateLog;
-import cn.iocoder.yudao.service.framework.operateLog.core.enums.OperateTypeEnum;
 import cn.iocoder.yudao.service.convert.infra.codegen.CodegenConvert;
 import cn.iocoder.yudao.service.enums.infra.codegen.CodegenSceneEnum;
 import cn.iocoder.yudao.service.framework.codegen.config.SchemaHistory;
+import cn.iocoder.yudao.service.framework.excel.core.util.ExcelUtils;
+import cn.iocoder.yudao.service.framework.exception.util.ServiceExceptionUtil;
+import cn.iocoder.yudao.service.framework.operateLog.core.annotations.OperateLog;
+import cn.iocoder.yudao.service.framework.operateLog.core.enums.OperateTypeEnum;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.CommonResult;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.PageParam;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.PageResult;
 import cn.iocoder.yudao.service.model.infra.codegen.*;
-import cn.iocoder.yudao.service.model.infra.data.*;
+import cn.iocoder.yudao.service.model.infra.data.InfraDictType;
 import cn.iocoder.yudao.service.repository.infra.codegen.*;
+import cn.iocoder.yudao.service.util.date.DateUtils;
 import cn.iocoder.yudao.service.util.entity.EntityUtils;
 import cn.iocoder.yudao.service.util.upgrade.UpgradeUtils;
 import org.jsoup.internal.StringUtil;
@@ -36,7 +36,6 @@ import java.util.stream.Collectors;
 
 import static cn.hutool.core.map.MapUtil.getStr;
 import static cn.hutool.core.text.CharSequenceUtil.*;
-import static cn.iocoder.yudao.service.framework.exception.util.ServiceExceptionUtil.exception;
 
 /**
  * 代码生成的引擎，用于具体生成代码
@@ -173,7 +172,7 @@ public class CodegenEngine {
             param.setClassType(0);
             if(Objects.equals(param.getVariableType(), "VOClass")) {
                 Optional<InfraInterfaceVoClass> optionalInfraInterfaceVoClass = infraInterfaceVoClassRepository.findById(UUID.fromString(param.getRelatedId()));
-                if(!optionalInfraInterfaceVoClass.isPresent())
+                if(optionalInfraInterfaceVoClass.isEmpty())
                     break;
                 InfraInterfaceVoClass voClass = optionalInfraInterfaceVoClass.get();
                 param.setVariableType(voClass.name());
@@ -181,7 +180,7 @@ public class CodegenEngine {
             }
             if(Objects.equals(param.getVariableType(), "Subclass")) {
                 Optional<InfraInterfaceSubclass> optionalInfraInterfaceSubclass = infraInterfaceSubclassRepository.findById(UUID.fromString(param.getRelatedId()));
-                if(!optionalInfraInterfaceSubclass.isPresent())
+                if(optionalInfraInterfaceSubclass.isEmpty())
                     break;
                 InfraInterfaceSubclass subclass = optionalInfraInterfaceSubclass.get();
                 param.setVariableType(subclass.name());
@@ -193,7 +192,7 @@ public class CodegenEngine {
 
     private String srcExtendClass(UUID id){
         Optional<InfraInterfaceVoClass> opVoClass = infraInterfaceVoClassRepository.findById(id);
-        if(!opVoClass.isPresent())
+        if(opVoClass.isEmpty())
             return "";
         if(opVoClass.get().parentId().isEmpty())
             return "";
@@ -207,7 +206,7 @@ public class CodegenEngine {
     private String getExtendClassImport(String extendClass, Map<String, Object> bindingMap){
         StringBuilder extendClassImport;
         Optional<InfraInterfaceVoClass> opVoClass = infraInterfaceVoClassRepository.findByName(extendClass);
-        if(!opVoClass.isPresent())
+        if(opVoClass.isEmpty())
             return "";
         if(opVoClass.get().type() == 0) {
             InfraDatabaseTable table = infraDatabaseTableRepository.findById(UUID.fromString(opVoClass.get().parentId())).get();
@@ -531,7 +530,7 @@ public class CodegenEngine {
             //生成代码 }
             functionContent.append("        }\r\n");
             // infraDictNoRepository.deleteById(id);
-            functionContent.append("        ").append(inputRepositoryName).append(".deleteById(id);\r\n");;
+            functionContent.append("        ").append(inputRepositoryName).append(".deleteById(id);\r\n");
             InfraInterfaceParam firstOutputParam = infraInterface.outputParams().get(0);
             if(firstOutputParam.variableType().equals("Boolean")){
                 //生成代码 return true;
@@ -930,8 +929,8 @@ public class CodegenEngine {
         bindingMap.put("inputSrcExtendClass", inputSrcExtendClass);
 
         String outputSrcExtendClass = "";
-        String outputSrcExtendTableImport = "";
-        String outputExtendClassImport = "";
+        String outputSrcExtendTableImport;
+        String outputExtendClassImport;
         if(!infraInterface.outputExtendClass().isEmpty()) {
             InfraInterfaceVoClass voClass = infraInterfaceVoClassRepository.findByName(infraInterface.outputExtendClass()).get();
             outputSrcExtendClass = srcExtendClass(voClass.id());
@@ -971,7 +970,7 @@ public class CodegenEngine {
 
 
         // input
-        String input = "";
+        String input;
         String inputVar = "inputVO";
         String inputRequest = "";
         String inputValid = "";
@@ -1027,7 +1026,7 @@ public class CodegenEngine {
         bindingMap.put("interfaceInputSingleParam", inputSingleParam);
 
         // output
-        String output = "";
+        String output;
         if(Objects.equals(infraInterface.outputType(), "void")){
             output = "void";
         }else if(Objects.equals(infraInterface.outputType(), "param")){
@@ -1123,7 +1122,7 @@ public class CodegenEngine {
                 newFile = FileUtil.file(filePath);
             }
 
-            String interfaceContent = "";
+            String interfaceContent;
             if(!vmPath.isEmpty()) {
                 interfaceContent = templateEngine.getTemplate(vmPath).render(bindingMap);
 
@@ -1257,7 +1256,7 @@ public class CodegenEngine {
                 }
             }
 
-            String oldInterfaceContent = "";
+            String oldInterfaceContent;
             if(!vmPath.isEmpty()) {
                 oldInterfaceContent = templateEngine.getTemplate(vmPath).render(bindingMap);
                 filePath = templateEngine.getTemplate(filePath).render(bindingMap);
@@ -1391,8 +1390,8 @@ public class CodegenEngine {
                 newFile = FileUtil.file(filePath);
             }
 
-            String newInterfaceContent = "";
-            String oldInterfaceContent = "";
+            String newInterfaceContent;
+            String oldInterfaceContent;
             if(!vmPath.isEmpty()) {
                 newInterfaceContent = templateEngine.getTemplate(vmPath).render(newBindingMap);
                 oldInterfaceContent = templateEngine.getTemplate(vmPath).render(oldBindingMap);
@@ -1623,7 +1622,7 @@ public class CodegenEngine {
                 newFile = FileUtil.file(filePath);
             }
 
-            String content = "";
+            String content;
             if(!vmPath.isEmpty()) {
                 content = templateEngine.getTemplate(vmPath).render(bindingMap);
                 FileUtil.writeUtf8String(content, newFile);
@@ -1749,7 +1748,7 @@ public class CodegenEngine {
         {
             if(!column.getRelatedTable().isEmpty()) {
                 Optional<InfraDatabaseTable> opTable = infraDatabaseTableRepository.findByName(column.getRelatedTable());
-                if(!opTable.isPresent())
+                if(opTable.isEmpty())
                     return null;
                 column.setHumpRelatedTable(upperFirst(toCamelCase(column.getRelatedTable())))
                         .setFirstModule(opTable.get().firstModule())
@@ -1757,7 +1756,7 @@ public class CodegenEngine {
             }
             if(!column.getRelatedTable().isEmpty()) {
                 Optional<InfraDatabaseTable> opTable = infraDatabaseTableRepository.findByName(column.getRelatedTable());
-                if(!opTable.isPresent())
+                if(opTable.isEmpty())
                     return null;
                 column.setHumpRelatedTable(upperFirst(toCamelCase(column.getRelatedTable())))
                         .setFirstModule(opTable.get().firstModule())
@@ -1803,7 +1802,7 @@ public class CodegenEngine {
         for(CodegenDatabaseMapping mapping : codegenMappings)
         {
             Optional<InfraDatabaseTable> opTable = infraDatabaseTableRepository.findByName(mapping.getMappingTable());
-            if(!opTable.isPresent())
+            if(opTable.isEmpty())
                 return null;
             mapping.setHumpMappingTable(upperFirst(toCamelCase(mapping.getMappingTable())))
                     .setFirstModule(opTable.get().firstModule())
@@ -1907,7 +1906,7 @@ public class CodegenEngine {
                 if(vmFilePath.contains("javaTypePath"))
                     firstModuleMatch = "    " + firstModuleMatch;
                 // 查找插入位置 不同的文件 插入位置不同
-                int insertIndex = 0;
+                int insertIndex;
                 if (vmFilePath.contains("javaTypePath")){
                     insertIndex = fileContent.lastIndexOf("}");
                     content = content + "\r\n\r\n";

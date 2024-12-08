@@ -103,7 +103,7 @@ public class DeptServiceImpl implements DeptService {
         }
         // 父岗位不存在
         Optional<SystemDept> opDept = systemDeptRepository.findById(parentId);
-        if (!opDept.isPresent()) {
+        if (opDept.isEmpty()) {
             throw exception(DEPT_PARENT_NOT_EXITS);
         }
         // 父部门被禁用
@@ -122,14 +122,14 @@ public class DeptServiceImpl implements DeptService {
             return;
         }
         Optional<SystemDept> opDept = systemDeptRepository.findById(id);
-        if (!opDept.isPresent()) {
+        if (opDept.isEmpty()) {
             throw exception(DEPT_NOT_FOUND);
         }
     }
 
     private void validateDeptNameUnique(Long id, Long parentId, String name) {
         Optional<SystemDept> opMenu = systemDeptRepository.findByParentIdAndName(parentId, name);
-        if (!opMenu.isPresent()) {
+        if (opMenu.isEmpty()) {
             return;
         }
         // 如果 id 为空，说明不用比较是否为相同 id 的岗位
@@ -230,7 +230,7 @@ public class DeptServiceImpl implements DeptService {
     @Override
     public DeptGetOutput get(Long id) {
         Optional<SystemDept> opDept = systemDeptRepository.findById(id);
-        if(!opDept.isPresent())
+        if(opDept.isEmpty())
             throw exception(DEPT_NOT_FOUND);
         return DeptConvert.INSTANCE.getOutputConvert(opDept.get());
     }

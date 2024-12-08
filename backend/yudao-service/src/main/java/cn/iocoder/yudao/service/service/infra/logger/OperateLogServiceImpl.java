@@ -45,17 +45,15 @@ public class OperateLogServiceImpl implements OperateLogService {
     public void createOperateLog(OperateLogCreateReqVO createReqDTO) {
         SystemOperateLog logDO = OperateLogConvert.INSTANCE.convert(createReqDTO);
         SystemOperateLog finalLogDO = logDO;
-        logDO = SystemOperateLogDraft.$.produce(logDO, draft -> {
-            draft.setJavaMethodArgs(StrUtils.maxLength(finalLogDO.javaMethodArgs(), JAVA_METHOD_ARGS_MAX_LENGTH))
-                    .setResultData(StrUtils.maxLength(finalLogDO.resultData(), RESULT_MAX_LENGTH));
-        });
+        logDO = SystemOperateLogDraft.$.produce(logDO, draft -> draft.setJavaMethodArgs(StrUtils.maxLength(finalLogDO.javaMethodArgs(), JAVA_METHOD_ARGS_MAX_LENGTH))
+                .setResultData(StrUtils.maxLength(finalLogDO.resultData(), RESULT_MAX_LENGTH)));
         systemOperateLogRepository.insert(logDO);
     }
 
     @Override
     public PageResult<OperateLogRespVO> getOperateLogPage(OperateLogPageReqVO reqVO) {
         // 处理基于用户昵称的查询
-        Collection<Long> userIds = null;
+        Collection<Long> userIds;
         if (StrUtil.isNotEmpty(reqVO.getUserNickname())) {
             userIds = convertSet(userService.getUserListByNickname(reqVO.getUserNickname()), SystemUser::id);
             if (CollUtil.isEmpty(userIds)) {
@@ -71,7 +69,7 @@ public class OperateLogServiceImpl implements OperateLogService {
     @Override
     public List<SystemOperateLog> getOperateLogList(OperateLogExportReqVO reqVO) {
         // 处理基于用户昵称的查询
-        Collection<Long> userIds = null;
+        Collection<Long> userIds;
         if (StrUtil.isNotEmpty(reqVO.getUserNickname())) {
             userIds = convertSet(userService.getUserListByNickname(reqVO.getUserNickname()), SystemUser::id);
             if (CollUtil.isEmpty(userIds)) {

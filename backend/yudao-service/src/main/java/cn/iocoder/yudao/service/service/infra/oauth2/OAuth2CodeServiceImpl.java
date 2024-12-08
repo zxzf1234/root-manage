@@ -37,12 +37,10 @@ public class OAuth2CodeServiceImpl implements OAuth2CodeService {
     @Override
     public SystemOauth2Code createAuthorizationCode(Long userId, Integer userType, String clientId,
                                                 List<String> scopes, String redirectUri, String state) {
-        SystemOauth2Code codeDO = SystemOauth2CodeDraft.$.produce(draft -> {
-            draft.setCode(generateCode()).setUserId(userId).setUserType(userType)
-                    .setClientId(clientId).setScopes(scopes)
-                    .setExpiresTime(LocalDateTime.now().plusSeconds(TIMEOUT))
-                    .setRedirectUri(redirectUri).setState(state);
-        });
+        SystemOauth2Code codeDO = SystemOauth2CodeDraft.$.produce(draft -> draft.setCode(generateCode()).setUserId(userId).setUserType(userType)
+                .setClientId(clientId).setScopes(scopes)
+                .setExpiresTime(LocalDateTime.now().plusSeconds(TIMEOUT))
+                .setRedirectUri(redirectUri).setState(state));
         
         systemOauth2CodeRepository.insert(codeDO);
         return codeDO;
@@ -51,7 +49,7 @@ public class OAuth2CodeServiceImpl implements OAuth2CodeService {
     @Override
     public SystemOauth2Code consumeAuthorizationCode(String code) {
         Optional<SystemOauth2Code> opCodeDo = systemOauth2CodeRepository.findByCode(code);
-        if (!opCodeDo.isPresent()) {
+        if (opCodeDo.isEmpty()) {
             throw exception(OAUTH2_CODE_NOT_EXISTS);
         }
         LocalDateTime expiresTime = opCodeDo.get().expiresTime();

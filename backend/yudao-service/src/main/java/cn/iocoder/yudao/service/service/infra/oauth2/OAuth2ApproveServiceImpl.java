@@ -44,7 +44,7 @@ public class OAuth2ApproveServiceImpl implements OAuth2ApproveService {
     public boolean checkForPreApproval(Long userId, Integer userType, String clientId, Collection<String> requestedScopes) {
         // 第一步，基于 Client 的自动授权计算，如果 scopes 都在自动授权中，则返回 true 通过
         Optional<SystemOauth2Client> opClient = systemOauth2ClientRepository.findByClientId(clientId);
-        Assert.notNull(!opClient.isPresent(), "客户端不能为空"); // 防御性编程
+        Assert.notNull(opClient.isEmpty(), "客户端不能为空"); // 防御性编程
         if (CollUtil.containsAll(opClient.get().autoApproveScopes(), requestedScopes)) {
             // gh-877 - if all scopes are auto approved, approvals still need to be added to the approval store.
             LocalDateTime expireTime = LocalDateTime.now().plusSeconds(TIMEOUT);
@@ -93,10 +93,8 @@ public class OAuth2ApproveServiceImpl implements OAuth2ApproveService {
     void saveApprove(Long userId, Integer userType, String clientId,
                      String scope, Boolean approved, LocalDateTime expireTime) {
         // 先更新
-        SystemOauth2Approve approveDO = SystemOauth2ApproveDraft.$.produce(SystemOauth2Approve->{
-            SystemOauth2Approve.setUserId(userId).setUserType(userType)
-                    .setClientId(clientId).setScope(scope).setApproved(approved).setExpiresTime(expireTime);
-        });
+        SystemOauth2Approve approveDO = SystemOauth2ApproveDraft.$.produce(SystemOauth2Approve-> SystemOauth2Approve.setUserId(userId).setUserType(userType)
+                .setClientId(clientId).setScope(scope).setApproved(approved).setExpiresTime(expireTime));
 //                new SystemOauth2Approve().setUserId(userId).setUserType(userType)
 //                .setClientId(clientId).setScope(scope).setApproved(approved).setExpiresTime(expireTime);
 //       不存在就更新

@@ -28,8 +28,6 @@ public class DataSourceConfigServiceImpl implements DataSourceConfigService {
     private InfraDataSourceConfigRepository infraDataSourceConfigRepository;
 
 
-    Long ID_MASTER = 0L;
-
     @Override
     public Long createDataSourceConfig(DataSourceConfigCreateReqVO createReqVO) {
         InfraDataSourceConfig dataSourceConfig = DataSourceConfigConvert.INSTANCE.convert(createReqVO);
@@ -61,7 +59,7 @@ public class DataSourceConfigServiceImpl implements DataSourceConfigService {
     }
 
     private void validateDataSourceConfigExists(Long id) {
-        if (!infraDataSourceConfigRepository.findById(id).isPresent()) {
+        if (infraDataSourceConfigRepository.findById(id).isEmpty()) {
             throw exception(DATA_SOURCE_CONFIG_NOT_EXISTS);
         }
     }
@@ -78,10 +76,9 @@ public class DataSourceConfigServiceImpl implements DataSourceConfigService {
 
     @Override
     public List<InfraDataSourceConfig> getDataSourceConfigList() {
-        List<InfraDataSourceConfig> result = infraDataSourceConfigRepository.findAll();
         // 补充 master 数据源
 //        result.add(0, buildMasterDataSourceConfig());
-        return result;
+        return infraDataSourceConfigRepository.findAll();
     }
 
 //    private void validateConnectionOK(InfraDataSourceConfig config) {

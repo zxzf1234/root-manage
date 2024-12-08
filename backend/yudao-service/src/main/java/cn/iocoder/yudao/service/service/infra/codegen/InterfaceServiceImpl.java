@@ -155,7 +155,7 @@ public class InterfaceServiceImpl implements InterfaceService{
                 updateSubclass = InfraInterfaceSubclassDraft.$.produce(updateSubclass,
                         draft -> draft.setSubclassParams(Collections.emptyList()));
                 Optional<InfraInterfaceSubclass> opOldSubclass = infraInterfaceSubclassRepository.findById(inputSubclass.getId());
-                if(!opOldSubclass.isPresent())
+                if(opOldSubclass.isEmpty())
                     throw exception(CODEGEN_INTERFACE_SUBCLASS_NOT_EXITS);
                 if(!EntityUtils.isEquals(opOldSubclass.get(), updateSubclass)){
                     infraInterfaceSubclassRepository.update(updateSubclass);
@@ -198,7 +198,7 @@ public class InterfaceServiceImpl implements InterfaceService{
                 updateSubclass = InfraInterfaceSubclassDraft.$.produce(updateSubclass,
                         draft -> draft.setSubclassParams(Collections.emptyList()));
                 Optional<InfraInterfaceSubclass> opOldSubclass = infraInterfaceSubclassRepository.findById(outputSubclass.getId());
-                if(!opOldSubclass.isPresent())
+                if(opOldSubclass.isEmpty())
                     throw exception(CODEGEN_INTERFACE_SUBCLASS_NOT_EXITS);
                 if(!EntityUtils.isEquals(opOldSubclass.get(), updateSubclass)){
                     infraInterfaceSubclassRepository.update(updateSubclass);
@@ -220,7 +220,7 @@ public class InterfaceServiceImpl implements InterfaceService{
             }else {
                 updateValidation(inputParam.getValidations(), newValidations, deleteValidations);
                 Optional<InfraInterfaceParam> opOldParam = infraInterfaceParamRepository.findById(inputParam.getId());
-                if(!opOldParam.isPresent()){
+                if(opOldParam.isEmpty()){
                     throw exception(CODEGEN_INTERFACE_PARAM_NOT_EXITS);
                 }
                 InfraInterfaceParam updateParam = CodegenConvert.INSTANCE.convert(inputParam);
@@ -247,7 +247,7 @@ public class InterfaceServiceImpl implements InterfaceService{
             }else {
                 updateValidation(outputParam.getValidations(), newValidations, deleteValidations);
                 Optional<InfraInterfaceParam> opOldParam = infraInterfaceParamRepository.findById(outputParam.getId());
-                if(!opOldParam.isPresent()){
+                if(opOldParam.isEmpty()){
                     throw exception(CODEGEN_INTERFACE_PARAM_NOT_EXITS);
                 }
                 InfraInterfaceParam updateParam = CodegenConvert.INSTANCE.convert(outputParam);
@@ -286,7 +286,7 @@ public class InterfaceServiceImpl implements InterfaceService{
 
         InfraInterface updateInterface = CodegenConvert.INSTANCE.convert(reqVO);
         Optional<InfraInterface> opOldInterface = infraInterfaceRepository.findById(reqVO.getId());
-        if (!opOldInterface.isPresent())
+        if (opOldInterface.isEmpty())
             throw exception(CODEGEN_INTERFACE_NOT_EXITS);
         updateInterface = InfraInterfaceDraft.$.produce(updateInterface,
                 draft -> draft.setInputParams(Collections.emptyList())
@@ -312,7 +312,7 @@ public class InterfaceServiceImpl implements InterfaceService{
             }else {
                 InfraInterfaceValidation updateValidation = CodegenConvert.INSTANCE.convert(validation);
                 Optional<InfraInterfaceValidation> opOldValidation = infraInterfaceValidationRepository.findById(validation.getId());
-                if (!opOldValidation.isPresent())
+                if (opOldValidation.isEmpty())
                     throw exception(CODEGEN_INTERFACE_VALIDATION_NOT_EXITS);
                 if(!EntityUtils.isEquals(opOldValidation.get(), updateValidation)){
                     infraInterfaceValidationRepository.update(updateValidation);
@@ -344,7 +344,7 @@ public class InterfaceServiceImpl implements InterfaceService{
                 updateValidation(subclassParam.getValidations(), newValidations, deleteValidations);
                 updateParam = InfraInterfaceParamDraft.$.produce(updateParam, draft -> draft.setValidations(Collections.emptyList()));
                 Optional<InfraInterfaceParam> opOldParam = infraInterfaceParamRepository.findById(subclassParam.getId());
-                if (!opOldParam.isPresent())
+                if (opOldParam.isEmpty())
                     throw exception(CODEGEN_INTERFACE_PARAM_NOT_EXITS);
                 if (!EntityUtils.isEquals(opOldParam.get(), updateParam)){
                     infraInterfaceParamRepository.update(updateParam);
@@ -358,7 +358,7 @@ public class InterfaceServiceImpl implements InterfaceService{
     @Override
     public InterfaceDetailResp getInterface(UUID id){
         Optional<InfraInterface> optionalInfraInterface = infraInterfaceRepository.findDetailById(id);
-        if(!optionalInfraInterface.isPresent())
+        if(optionalInfraInterface.isEmpty())
             throw exception(CODEGEN_INTERFACE_NOT_EXITS);
         return CodegenConvert.INSTANCE.convert1(optionalInfraInterface.get());
     }

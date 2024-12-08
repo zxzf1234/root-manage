@@ -126,7 +126,7 @@ public class RoleServiceImpl implements RoleService {
     @VisibleForTesting
     void validateRoleForUpdate(Long id) {
         Optional<SystemRole> opSystemRole = systemRoleRepository.findById(id);
-        if (!opSystemRole.isPresent()) {
+        if (opSystemRole.isEmpty()) {
             throw exception(ROLE_NOT_EXISTS);
         }
         // 内置角色，不允许删除
@@ -141,9 +141,7 @@ public class RoleServiceImpl implements RoleService {
         validateRoleForUpdate(inputVO.getId());
 
         // 更新状态
-        SystemRole updateObj = SystemRoleDraft.$.produce(SystemRole->{
-            SystemRole.setId(inputVO.getId()).setStatus(inputVO.getStatus());
-        });
+        SystemRole updateObj = SystemRoleDraft.$.produce(SystemRole-> SystemRole.setId(inputVO.getId()).setStatus(inputVO.getStatus()));
         systemRoleRepository.update(updateObj);
         return true;
     }
@@ -164,7 +162,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public RoleGetOutput get(Long id) {
         Optional<SystemRole> opRole = systemRoleRepository.findById(id);
-        if(!opRole.isPresent())
+        if(opRole.isEmpty())
             throw exception(ROLE_NOT_EXISTS);
         return RoleConvert.INSTANCE.getOutputConvert(opRole.get());
     }
@@ -228,12 +226,10 @@ public class RoleServiceImpl implements RoleService {
         validateRoleForUpdate(id);
 
         // 更新数据范围
-        SystemRole updateObject = SystemRoleDraft.$.produce(SystemRole->{
-            SystemRole
-                    .setId(id)
-                    .setDataScope(dataScope)
-                    .setDataScopeDeptIds(dataScopeDeptIds);
-        });
+        SystemRole updateObject = SystemRoleDraft.$.produce(SystemRole-> SystemRole
+                .setId(id)
+                .setDataScope(dataScope)
+                .setDataScopeDeptIds(dataScopeDeptIds));
         systemRoleRepository.update(updateObject);
     }
 
