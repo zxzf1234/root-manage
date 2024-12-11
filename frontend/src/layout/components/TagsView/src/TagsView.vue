@@ -79,7 +79,7 @@ const closeOthersTags = () => {
 // 重新加载
 const refreshSelectedTag = async (view?: RouteLocationNormalizedLoaded) => {
   if (!view) return
-  tagsViewStore.delCachedView()
+  tagsViewStore.refreshCachedView()
   const { path, query } = view
   await nextTick()
   replace({

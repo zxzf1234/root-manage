@@ -1,4 +1,3 @@
-import router from '@/router'
 import type { RouteLocationNormalizedLoaded } from 'vue-router'
 import { getRawRoute } from '@/utils/routerHelper'
 import { defineStore } from 'pinia'
@@ -27,7 +26,7 @@ export const useTagsViewStore = defineStore('tagsView', {
     // 新增缓存和tag
     addView(view: RouteLocationNormalizedLoaded): void {
       this.addVisitedView(view)
-      this.addCachedView()
+      this.refreshCachedView()
     },
     // 新增tag
     addVisitedView(view: RouteLocationNormalizedLoaded) {
@@ -39,8 +38,7 @@ export const useTagsViewStore = defineStore('tagsView', {
         })
       )
     },
-    // 新增缓存
-    addCachedView() {
+    refreshCachedView() {
       const cacheMap: Set<string> = new Set()
       for (const v of this.visitedViews) {
         const item = getRawRoute(v)
@@ -58,7 +56,7 @@ export const useTagsViewStore = defineStore('tagsView', {
     // 删除某个
     delView(view: RouteLocationNormalizedLoaded) {
       this.delVisitedView(view)
-      this.delCachedView()
+      this.refreshCachedView()
     },
     // 删除tag
     delVisitedView(view: RouteLocationNormalizedLoaded) {
@@ -69,18 +67,10 @@ export const useTagsViewStore = defineStore('tagsView', {
         }
       }
     },
-    // 删除缓存
-    delCachedView() {
-      const route = router.currentRoute.value
-      const index = findIndex<string>(this.getCachedViews, (v) => v === route.name)
-      if (index > -1) {
-        this.cachedViews.delete(this.getCachedViews[index])
-      }
-    },
     // 删除所有缓存和tag
     delAllViews() {
       this.delAllVisitedViews()
-      this.delCachedView()
+      this.refreshCachedView()
     },
     // 删除所有tag
     delAllVisitedViews() {
@@ -90,7 +80,7 @@ export const useTagsViewStore = defineStore('tagsView', {
     // 删除其他
     delOthersViews(view: RouteLocationNormalizedLoaded) {
       this.delOthersVisitedViews(view)
-      this.addCachedView()
+      this.refreshCachedView()
     },
     // 删除其他tag
     delOthersVisitedViews(view: RouteLocationNormalizedLoaded) {
@@ -108,7 +98,7 @@ export const useTagsViewStore = defineStore('tagsView', {
         this.visitedViews = this.visitedViews.filter((v, i) => {
           return v?.meta?.affix || v.path === view.path || i > index
         })
-        this.addCachedView()
+        this.refreshCachedView()
       }
     },
     // 删除右侧
@@ -121,7 +111,7 @@ export const useTagsViewStore = defineStore('tagsView', {
         this.visitedViews = this.visitedViews.filter((v, i) => {
           return v?.meta?.affix || v.path === view.path || i < index
         })
-        this.addCachedView()
+        this.refreshCachedView()
       }
     },
     updateVisitedView(view: RouteLocationNormalizedLoaded) {
