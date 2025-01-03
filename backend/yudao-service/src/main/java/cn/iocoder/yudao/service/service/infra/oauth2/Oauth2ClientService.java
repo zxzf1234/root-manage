@@ -17,7 +17,7 @@ import java.util.Collection;
  *
  * @author 芋道源码
  */
-public interface OAuth2ClientService {
+public interface Oauth2ClientService {
 
     /**
      * 创建 OAuth2 客户端

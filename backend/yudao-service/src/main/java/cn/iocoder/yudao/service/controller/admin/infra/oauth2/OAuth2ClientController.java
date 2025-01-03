@@ -8,7 +8,7 @@ import cn.iocoder.yudao.service.vo.infra.oauth2.client.OAuth2ClientRespVO;
 import cn.iocoder.yudao.service.vo.infra.oauth2.client.OAuth2ClientUpdateReqVO;
 import cn.iocoder.yudao.service.convert.infra.auth.OAuth2ClientConvert;
 import cn.iocoder.yudao.service.model.infra.oauth2.SystemOauth2Client;
-import cn.iocoder.yudao.service.service.infra.oauth2.OAuth2ClientService;
+import cn.iocoder.yudao.service.service.infra.oauth2.Oauth2ClientService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -28,7 +28,7 @@ import static cn.iocoder.yudao.service.framework.web.web.core.pojo.CommonResult.
 public class OAuth2ClientController {
 
     @Resource
-    private OAuth2ClientService oAuth2ClientService;
+    private Oauth2ClientService oAuth2ClientService;
 
     @PostMapping("/create")
     @Operation(summary = "创建 OAuth2 客户端")

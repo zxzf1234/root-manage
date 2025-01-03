@@ -6,7 +6,7 @@ import cn.iocoder.yudao.service.vo.infra.oauth2.token.OAuth2AccessTokenPageReqVO
 import cn.iocoder.yudao.service.vo.infra.oauth2.token.OAuth2AccessTokenRespVO;
 import cn.iocoder.yudao.service.enums.system.login.SystemLoginTypeEnum;
 import cn.iocoder.yudao.service.service.infra.auth.AdminAuthService;
-import cn.iocoder.yudao.service.service.infra.oauth2.OAuth2TokenService;
+import cn.iocoder.yudao.service.service.infra.oauth2.Oauth2TokenService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,7 +24,7 @@ import static cn.iocoder.yudao.service.framework.web.web.core.pojo.CommonResult.
 public class OAuth2TokenController {
 
     @Resource
-    private OAuth2TokenService oauth2TokenService;
+    private Oauth2TokenService oauth2TokenService;
     @Resource
     private AdminAuthService authService;
 

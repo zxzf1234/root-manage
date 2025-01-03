@@ -35,7 +35,7 @@ import static cn.iocoder.yudao.service.errorCode.infra.ErrorCodeConstants.*;
 @Service
 @Validated
 @Slf4j
-public class OAuth2ClientServiceImpl implements OAuth2ClientService {
+public class Oauth2ClientServiceImpl implements Oauth2ClientService {
 
     @Resource
     private SystemOauth2ClientRepository systemOauth2ClientRepository;

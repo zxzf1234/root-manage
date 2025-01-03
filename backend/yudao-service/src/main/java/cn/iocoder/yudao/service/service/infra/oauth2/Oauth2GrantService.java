@@ -16,7 +16,7 @@ import java.util.List;
  *
  * @author 芋道源码
  */
-public interface OAuth2GrantService {
+public interface Oauth2GrantService {
 
     /**
      * 简化模式

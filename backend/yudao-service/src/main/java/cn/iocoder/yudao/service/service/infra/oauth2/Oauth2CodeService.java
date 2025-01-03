@@ -11,7 +11,7 @@ import java.util.List;
  *
  * @author 芋道源码
  */
-public interface OAuth2CodeService {
+public interface Oauth2CodeService {
 
     /**
      * 创建授权码

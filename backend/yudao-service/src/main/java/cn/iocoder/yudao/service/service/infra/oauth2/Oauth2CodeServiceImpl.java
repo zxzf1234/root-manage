@@ -24,7 +24,7 @@ import static cn.iocoder.yudao.service.errorCode.infra.ErrorCodeConstants.OAUTH2
  */
 @Service
 @Validated
-public class OAuth2CodeServiceImpl implements OAuth2CodeService {
+public class Oauth2CodeServiceImpl implements Oauth2CodeService {
 
     /**
      * 授权码的过期时间，默认 5 分钟

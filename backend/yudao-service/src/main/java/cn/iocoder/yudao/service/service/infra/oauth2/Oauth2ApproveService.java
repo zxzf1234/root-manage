@@ -13,7 +13,7 @@ import java.util.Map;
  *
  * @author 芋道源码
  */
-public interface OAuth2ApproveService {
+public interface Oauth2ApproveService {
 
     /**
      * 获得指定用户，针对指定客户端的指定授权，是否通过

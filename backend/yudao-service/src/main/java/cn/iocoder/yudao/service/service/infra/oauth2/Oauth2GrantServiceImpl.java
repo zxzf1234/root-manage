@@ -22,12 +22,12 @@ import static cn.iocoder.yudao.service.framework.exception.util.ServiceException
  * @author 芋道源码
  */
 @Service
-public class OAuth2GrantServiceImpl implements OAuth2GrantService {
+public class Oauth2GrantServiceImpl implements Oauth2GrantService {
 
     @Resource
-    private OAuth2TokenService oauth2TokenService;
+    private Oauth2TokenService oauth2TokenService;
     @Resource
-    private OAuth2CodeService oauth2CodeService;
+    private Oauth2CodeService oauth2CodeService;
     @Resource
     private AdminAuthService adminAuthService;
 

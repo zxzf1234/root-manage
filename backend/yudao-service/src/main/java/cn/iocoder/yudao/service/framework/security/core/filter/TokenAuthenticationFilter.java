@@ -11,8 +11,9 @@ import cn.iocoder.yudao.service.framework.security.core.util.SecurityFrameworkUt
 import cn.iocoder.yudao.service.framework.web.web.core.handler.GlobalExceptionHandler;
 import cn.iocoder.yudao.service.framework.web.web.core.util.WebFrameworkUtils;
 import cn.iocoder.yudao.service.model.infra.oauth2.SystemOauth2AccessToken;
-import cn.iocoder.yudao.service.service.infra.oauth2.OAuth2TokenService;
+import cn.iocoder.yudao.service.service.infra.oauth2.Oauth2TokenService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -36,8 +37,14 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
     private final GlobalExceptionHandler globalExceptionHandler;
 
-    @Resource
-    private OAuth2TokenService oauth2TokenService;
+    private final Oauth2TokenService oauth2TokenService;
+
+    @Autowired
+    public TokenAuthenticationFilter(Oauth2TokenService oauth2TokenService, SecurityProperties securityProperties, GlobalExceptionHandler globalExceptionHandler) {
+        this.oauth2TokenService = oauth2TokenService;
+        this.securityProperties = securityProperties;
+        this.globalExceptionHandler = globalExceptionHandler;
+    }
 
     @Override
     @SuppressWarnings("NullableProblems")

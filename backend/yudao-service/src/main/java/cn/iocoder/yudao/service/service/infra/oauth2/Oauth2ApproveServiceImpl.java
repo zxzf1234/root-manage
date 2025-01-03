@@ -26,7 +26,7 @@ import static cn.iocoder.yudao.service.util.collection.CollectionUtils.convertSe
  */
 @Service
 @Validated
-public class OAuth2ApproveServiceImpl implements OAuth2ApproveService {
+public class Oauth2ApproveServiceImpl implements Oauth2ApproveService {
 
     /**
      * 批准的过期时间，默认 30 天

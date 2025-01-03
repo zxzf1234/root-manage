@@ -8,6 +8,7 @@ import cn.iocoder.yudao.service.framework.security.core.handler.AuthenticationEn
 import cn.iocoder.yudao.service.framework.security.core.service.SecurityFrameworkService;
 import cn.iocoder.yudao.service.framework.security.core.service.SecurityFrameworkServiceImpl;
 import cn.iocoder.yudao.service.framework.web.web.core.handler.GlobalExceptionHandler;
+import cn.iocoder.yudao.service.service.infra.oauth2.Oauth2TokenService;
 import org.springframework.beans.factory.config.MethodInvokingFactoryBean;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -36,6 +37,9 @@ public class SecurityAutoConfiguration {
 
     @Resource
     private SecurityProperties securityProperties;
+
+    @Resource
+    private Oauth2TokenService oauth2TokenService;
 
     /**
      * 处理用户未登录拦截的切面的 Bean
@@ -77,7 +81,7 @@ public class SecurityAutoConfiguration {
      */
     @Bean
     public TokenAuthenticationFilter authenticationTokenFilter(GlobalExceptionHandler globalExceptionHandler) {
-        return new TokenAuthenticationFilter(securityProperties, globalExceptionHandler);
+        return new TokenAuthenticationFilter(oauth2TokenService, securityProperties, globalExceptionHandler);
     }
 
     @Bean("ss") // 使用 Spring Security 的缩写，方便使用

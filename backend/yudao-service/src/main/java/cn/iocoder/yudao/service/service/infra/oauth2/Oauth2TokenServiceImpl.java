@@ -31,7 +31,7 @@ import static cn.iocoder.yudao.service.util.collection.CollectionUtils.convertSe
  * @author 芋道源码
  */
 @Service
-public class OAuth2TokenServiceImpl implements OAuth2TokenService {
+public class Oauth2TokenServiceImpl implements Oauth2TokenService {
 
     @Resource
     private SystemOauth2AccessTokenRepository systemOauth2AccessTokenRepository;
@@ -42,7 +42,7 @@ public class OAuth2TokenServiceImpl implements OAuth2TokenService {
     private OAuth2AccessTokenRedisDAO oauth2AccessTokenRedisDAO;
 
     @Resource
-    private OAuth2ClientService oauth2ClientService;
+    private Oauth2ClientService oauth2ClientService;
 
     @Override
     @Transactional

@@ -14,7 +14,7 @@ import cn.iocoder.yudao.service.enums.infra.oauth2.OAuth2ClientConstants;
 import cn.iocoder.yudao.service.model.infra.oauth2.SystemOauth2AccessToken;
 import cn.iocoder.yudao.service.model.system.user.SystemUser;
 import cn.iocoder.yudao.service.service.infra.logger.LoginLogService;
-import cn.iocoder.yudao.service.service.infra.oauth2.OAuth2TokenService;
+import cn.iocoder.yudao.service.service.infra.oauth2.Oauth2TokenService;
 import cn.iocoder.yudao.service.service.system.user.UserService;
 import cn.iocoder.yudao.service.vo.infra.auth.*;
 import com.xingyuv.captcha.model.common.ResponseModel;
@@ -48,7 +48,7 @@ public class AdminAuthServiceImpl implements AdminAuthService {
     @Resource
     private LoginLogService loginLogService;
     @Resource
-    private OAuth2TokenService oauth2TokenService;
+    private Oauth2TokenService oauth2TokenService;
     @Resource
     private Validator validator;
     @Resource

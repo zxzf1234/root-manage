@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author 芋道源码
  */
-public interface OAuth2TokenService {
+public interface Oauth2TokenService {
 
     /**
      * 创建访问令牌

@@ -17,10 +17,10 @@ import cn.iocoder.yudao.service.enums.infra.oauth2.InfraOauth2GrantTypeEnum;
 import cn.iocoder.yudao.service.model.infra.oauth2.SystemOauth2AccessToken;
 import cn.iocoder.yudao.service.model.infra.oauth2.SystemOauth2Approve;
 import cn.iocoder.yudao.service.model.infra.oauth2.SystemOauth2Client;
-import cn.iocoder.yudao.service.service.infra.oauth2.OAuth2ApproveService;
-import cn.iocoder.yudao.service.service.infra.oauth2.OAuth2ClientService;
-import cn.iocoder.yudao.service.service.infra.oauth2.OAuth2GrantService;
-import cn.iocoder.yudao.service.service.infra.oauth2.OAuth2TokenService;
+import cn.iocoder.yudao.service.service.infra.oauth2.Oauth2ApproveService;
+import cn.iocoder.yudao.service.service.infra.oauth2.Oauth2ClientService;
+import cn.iocoder.yudao.service.service.infra.oauth2.Oauth2GrantService;
+import cn.iocoder.yudao.service.service.infra.oauth2.Oauth2TokenService;
 import cn.iocoder.yudao.service.util.oauth2.OAuth2Utils;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -63,13 +63,13 @@ import static cn.iocoder.yudao.service.framework.security.core.util.SecurityFram
 public class OAuth2OpenController {
 
     @Resource
-    private OAuth2GrantService oauth2GrantService;
+    private Oauth2GrantService oauth2GrantService;
     @Resource
-    private OAuth2ClientService oauth2ClientService;
+    private Oauth2ClientService oauth2ClientService;
     @Resource
-    private OAuth2ApproveService oauth2ApproveService;
+    private Oauth2ApproveService oauth2ApproveService;
     @Resource
-    private OAuth2TokenService oauth2TokenService;
+    private Oauth2TokenService oauth2TokenService;
 
     /**
      * 对应 Spring Security OAuth 的 TokenEndpoint 类的 postAccessToken 方法
