@@ -9,7 +9,6 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 
 import java.util.concurrent.TimeUnit;
 
-@SuppressWarnings("SpringComponentScan")
 @SpringBootApplication(scanBasePackages = {"cn.iocoder.yudao.server", "cn.iocoder.yudao.service"})
 @EnableJimmerRepositories(basePackages= {"cn.iocoder.yudao.service.repository"})
 public class YudaoServerApplication extends SpringBootServletInitializer {
