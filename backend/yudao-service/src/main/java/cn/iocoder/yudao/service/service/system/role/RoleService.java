@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.*;
 
 import cn.iocoder.yudao.service.framework.web.web.core.pojo.PageResult;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * 角色管理 Service 接口

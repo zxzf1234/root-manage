@@ -17,9 +17,9 @@ public class CaptchaConfiguration {
         ClassUtil.loadClass(CaptchaRedisKeyConstants.class.getName());
     }
 
-    @Bean
-    public CaptchaCacheService captchaCacheService(StringRedisTemplate stringRedisTemplate) {
-        return new RedisCaptchaServiceImpl(stringRedisTemplate);
-    }
+//    @Bean
+//    public CaptchaCacheService captchaCacheService(StringRedisTemplate stringRedisTemplate) {
+//        return new RedisCaptchaServiceImpl(stringRedisTemplate);
+//    }
 
 }

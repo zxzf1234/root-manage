@@ -6,7 +6,7 @@ import cn.iocoder.yudao.service.service.infra.logger.OperateLogService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 
 /**
  * 操作日志 Framework Service 实现类

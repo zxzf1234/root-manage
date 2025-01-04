@@ -5,7 +5,7 @@ import cn.iocoder.yudao.service.vo.infra.logger.apierrorlog.ApiErrorLogCreateReq
 import cn.iocoder.yudao.service.service.infra.logger.ApiErrorLogService;
 import org.springframework.scheduling.annotation.Async;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 
 /**
  * API 错误日志 Framework Service 实现类

@@ -17,7 +17,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
+
 import javax.xml.xpath.XPathConstants;
 import java.time.LocalDateTime;
 import java.util.List;

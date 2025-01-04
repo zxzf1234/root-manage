@@ -4,7 +4,7 @@ import cn.iocoder.yudao.service.vo.system.dept.baseVO.SystemPostBase;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
-import javax.validation.constraints.*;
+import jakarta.validation.constraints.*;
 
 import cn.iocoder.yudao.service.framework.validation.InEnum;
 

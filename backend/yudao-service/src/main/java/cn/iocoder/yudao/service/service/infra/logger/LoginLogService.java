@@ -7,7 +7,7 @@ import cn.iocoder.yudao.service.vo.infra.logger.loginlog.LoginLogPageReqVO;
 import cn.iocoder.yudao.service.vo.infra.logger.loginlog.LoginLogRespVO;
 import cn.iocoder.yudao.service.model.infra.logger.SystemLoginLog;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.util.List;
 
 /**

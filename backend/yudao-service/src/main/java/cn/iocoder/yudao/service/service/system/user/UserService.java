@@ -18,7 +18,7 @@ import java.io.InputStream;
 import java.util.*;
 import cn.iocoder.yudao.service.vo.system.user.user.*;
 import cn.iocoder.yudao.service.framework.web.web.core.pojo.PageResult;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * 用户管理 Service 接口

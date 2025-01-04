@@ -3,7 +3,7 @@ package cn.iocoder.yudao.service.service.infra.auth;
 import cn.iocoder.yudao.service.model.system.user.SystemUser;
 import cn.iocoder.yudao.service.vo.infra.auth.*;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 /**
  * 管理后台的认证 Service 接口

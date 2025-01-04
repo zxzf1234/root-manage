@@ -5,8 +5,8 @@ import cn.iocoder.yudao.service.framework.validation.InEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import java.util.*;
-import javax.validation.constraints.*;
-import javax.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotEmpty;
 
 /**
  * 站内信模板表 Base VO，提供给添加、修改、详细的子 VO 使用

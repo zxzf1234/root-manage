@@ -3,9 +3,9 @@ package ${basePackage}.service.vo.${table.firstModule}.${table.secondModule}.bas
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import java.util.*;
-import javax.validation.constraints.*;
+import jakarta.validation.constraints.*;
 import org.hibernate.validator.constraints.*;
-import javax.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotEmpty;
 #foreach ($column in $columns)
 #if (${column.javaType} == "BigDecimal")
 import java.math.BigDecimal;
@@ -21,7 +21,7 @@ import ${basePackage}.framework.common.enums.*;
 #end
 #foreach ($column in $columns)
 #if (${column.validation} == "Email")
-import javax.validation.constraints.Email;
+import jakarta.validation.constraints.Email;
 #break
 #end
 #end

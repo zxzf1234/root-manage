@@ -5,7 +5,7 @@ import cn.iocoder.yudao.service.framework.security.core.LoginUser;
 import cn.iocoder.yudao.service.framework.security.core.util.SecurityFrameworkUtils;
 import cn.iocoder.yudao.service.service.system.permission.PermissionService;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.util.Arrays;
 
 import static cn.iocoder.yudao.service.framework.security.core.util.SecurityFrameworkUtils.getLoginUserId;

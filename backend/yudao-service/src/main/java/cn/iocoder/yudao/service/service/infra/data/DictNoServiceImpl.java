@@ -10,7 +10,7 @@ import cn.iocoder.yudao.service.vo.infra.data.dictNo.DictNoUpdateInput;
 import cn.iocoder.yudao.service.vo.infra.data.dictNo.DictNoCreateInput;
 import cn.iocoder.yudao.service.vo.infra.data.dictNo.DictNoGetOutput;
 import org.springframework.stereotype.Service;
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
 import org.babyfish.jimmer.Page;
 

@@ -10,7 +10,7 @@ import cn.iocoder.yudao.service.vo.infra.data.job.job.JobPageReqVO;
 import cn.iocoder.yudao.service.vo.infra.data.job.job.JobUpdateReqVO;
 import org.quartz.SchedulerException;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 /**
  * 定时任务 Service 接口

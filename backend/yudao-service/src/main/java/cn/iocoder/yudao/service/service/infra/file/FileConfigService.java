@@ -7,7 +7,7 @@ import cn.iocoder.yudao.service.vo.infra.file.config.FileConfigPageReqVO;
 import cn.iocoder.yudao.service.vo.infra.file.config.FileConfigUpdateReqVO;
 import cn.iocoder.yudao.service.model.infra.file.InfraFileConfig;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 /**
  * 文件配置 Service 接口

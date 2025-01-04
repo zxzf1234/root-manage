@@ -9,7 +9,7 @@ import cn.iocoder.yudao.service.model.infra.data.InfraConfig;
 import cn.iocoder.yudao.service.repository.infra.data.InfraConfigRepository;
 import cn.iocoder.yudao.service.vo.infra.data.config.ConfigCreateInput;
 import org.springframework.stereotype.Service;
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
 import org.babyfish.jimmer.Page;
 import java.util.*;

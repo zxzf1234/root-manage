@@ -15,22 +15,21 @@
     <properties>
         <revision>1.7.2-snapshot</revision>
         <!-- 统一依赖管理 -->
-        <spring.boot.version>2.7.10</spring.boot.version>
+        <spring.boot.version>3.4.1</spring.boot.version>
         <!-- Web 相关 -->
-        <springdoc.version>1.6.15</springdoc.version>
-        <knife4j.version>4.1.0</knife4j.version>
+        <knife4j.version>4.4.0</knife4j.version>
         <!-- DB 相关 -->
         <druid.version>1.2.16</druid.version>
         <jimmer.version>0.9.9</jimmer.version>
-        <flyway.version>8.2.0</flyway.version>
-        <mysql-connector.version>8.0.22</mysql-connector.version>
+        <flyway.version>11.1.0</flyway.version>
+        <mysql.connector.version>8.0.22</mysql.connector.version>
         <!-- 监控相关 -->
         <skywalking.version>8.12.0</skywalking.version>
-        <spring.boot.websocket.version>3.3.4</spring.boot.websocket.version>
+        <spring.boot.websocket.version>3.4.1</spring.boot.websocket.version>
         <opentracing.version>0.33.0</opentracing.version>
-        <spring-boot-admin.version>2.7.15</spring-boot-admin.version>
+        <spring.boot.admin.version>3.4.1</spring.boot.admin.version>
         <!-- 工具类相关 -->
-        <captcha-plus.version>1.0.2</captcha-plus.version>
+        <captcha-plus.version>2.0.3</captcha-plus.version>
         <jsoup.version>1.15.4</jsoup.version>
         <lombok.version>1.18.30</lombok.version>
         <mapstruct.version>1.5.3.Final</mapstruct.version>
@@ -44,9 +43,9 @@
         <commons-net.version>3.8.0</commons-net.version>
         <jsch.version>0.1.55</jsch.version>
         <tika-core.version>2.7.0</tika-core.version>
-        <jackson.version>2.13.5</jackson.version>
-        <slf4j.version>1.7.36</slf4j.version>
-        <micrometer-registry-prometheus.version>1.9.9</micrometer-registry-prometheus.version>
+        <jackson.version>2.15.2</jackson.version>
+        <slf4j.version>2.0.16</slf4j.version>
+        <micrometer.registry.prometheus.version>1.9.9</micrometer.registry.prometheus.version>
         <!-- 三方云服务相关 -->
         <okio.version>3.0.0</okio.version>
         <okhttp3.version>4.10.0</okhttp3.version>
@@ -74,15 +73,20 @@
             </dependency>
 
             <!-- Web 相关 -->
+<!--            <dependency>-->
+<!--                <groupId>com.github.xiaoymin</groupId>-->
+<!--                <artifactId>knife4j-openapi3-spring-boot-starter</artifactId>-->
+<!--                <version>${knife4j.version}</version>-->
+<!--            </dependency>-->
             <dependency>
-                <groupId>com.github.xiaoymin</groupId>
-                <artifactId>knife4j-openapi3-spring-boot-starter</artifactId>
-                <version>${knife4j.version}</version>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+                <version>2.7.0</version>
             </dependency>
             <dependency>
                 <groupId>org.springdoc</groupId>
-                <artifactId>springdoc-openapi-ui</artifactId>
-                <version>${springdoc.version}</version>
+                <artifactId>springdoc-openapi-starter-webmvc-api</artifactId>
+                <version>2.7.0</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
@@ -94,7 +98,7 @@
             <dependency>
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
-                <version>${mysql-connector.version}</version>
+                <version>${mysql.connector.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.babyfish.jimmer</groupId>
@@ -104,6 +108,11 @@
             <dependency>
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-core</artifactId>
+                <version>${flyway.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-mysql</artifactId>
                 <version>${flyway.version}</version>
             </dependency>
             <dependency>
@@ -146,12 +155,12 @@
             <dependency>
                 <groupId>de.codecentric</groupId>
                 <artifactId>spring-boot-admin-starter-server</artifactId> <!-- 实现 Spring Boot Admin Server 服务端 -->
-                <version>${spring-boot-admin.version}</version>
+                <version>${spring.boot.admin.version}</version>
             </dependency>
             <dependency>
                 <groupId>de.codecentric</groupId>
                 <artifactId>spring-boot-admin-starter-client</artifactId> <!-- 实现 Spring Boot Admin Server 服务端 -->
-                <version>${spring-boot-admin.version}</version>
+                <version>${spring.boot.admin.version}</version>
             </dependency>
 
 
@@ -305,7 +314,7 @@
             <dependency>
                 <groupId>io.micrometer</groupId>
                 <artifactId>micrometer-registry-prometheus</artifactId>
-                <version>${micrometer-registry-prometheus.version}</version>
+                <version>${micrometer.registry.prometheus.version}</version>
             </dependency>
 
 
@@ -397,13 +406,17 @@
 
 
         <!-- Web 相关 -->
+<!--        <dependency>-->
+<!--            <groupId>com.github.xiaoymin</groupId>-->
+<!--            <artifactId>knife4j-openapi3-spring-boot-starter</artifactId>-->
+<!--        </dependency>-->
         <dependency>
-            <groupId>com.github.xiaoymin</groupId>
-            <artifactId>knife4j-openapi3-spring-boot-starter</artifactId>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-api</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-ui</artifactId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
         </dependency>
 
         <!-- DB 相关 -->
@@ -418,6 +431,10 @@
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-mysql</artifactId>
         </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>

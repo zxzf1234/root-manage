@@ -4,7 +4,7 @@ import cn.iocoder.yudao.service.vo.infra.db.DataSourceConfigCreateReqVO;
 import cn.iocoder.yudao.service.vo.infra.db.DataSourceConfigUpdateReqVO;
 import cn.iocoder.yudao.service.model.infra.db.InfraDataSourceConfig;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.util.List;
 
 /**

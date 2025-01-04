@@ -3,7 +3,7 @@ package cn.iocoder.yudao.service.vo.infra.data.menu;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
 
 @Schema(description = "管理后台 - 菜单更新 Request VO")

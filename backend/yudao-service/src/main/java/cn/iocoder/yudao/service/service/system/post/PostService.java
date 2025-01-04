@@ -11,7 +11,7 @@ import cn.iocoder.yudao.service.vo.system.post.post.PostCreateInput;
 import java.util.*;
 
 import cn.iocoder.yudao.service.framework.web.web.core.pojo.PageResult;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**

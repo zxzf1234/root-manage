@@ -5,7 +5,7 @@ import cn.iocoder.yudao.service.vo.infra.logger.apiaccesslog.ApiAccessLogCreateR
 import cn.iocoder.yudao.service.service.infra.logger.ApiAccessLogService;
 import org.springframework.scheduling.annotation.Async;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 
 /**
  * API 访问日志 Framework Service 实现类

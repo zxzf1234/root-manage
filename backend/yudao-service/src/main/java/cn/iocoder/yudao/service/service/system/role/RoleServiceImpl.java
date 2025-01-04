@@ -25,7 +25,7 @@ import cn.iocoder.yudao.service.vo.system.role.role.RoleUpdateInput;
 import cn.iocoder.yudao.service.vo.system.role.role.RoleCreateInput;
 import com.google.common.annotations.VisibleForTesting;
 import org.springframework.stereotype.Service;
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
@@ -33,7 +33,7 @@ import org.babyfish.jimmer.Page;
 
 import java.io.IOException;
 import java.util.*;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.transaction.annotation.Transactional;
 import cn.iocoder.yudao.service.framework.web.web.core.pojo.PageResult;
 import cn.iocoder.yudao.service.vo.system.role.role.*;

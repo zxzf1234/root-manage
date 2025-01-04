@@ -27,8 +27,8 @@ import cn.iocoder.yudao.service.util.upgrade.UpgradeUtils;
 import org.jsoup.internal.StringUtil;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.Resource;
 import java.io.File;
 import java.time.LocalDateTime;
 import java.util.*;

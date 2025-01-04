@@ -6,7 +6,7 @@ import cn.iocoder.yudao.service.vo.infra.codegen.interfaceModule.InterfaceModule
 import org.babyfish.jimmer.spring.repository.JRepository;
 import org.springframework.util.StringUtils;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;

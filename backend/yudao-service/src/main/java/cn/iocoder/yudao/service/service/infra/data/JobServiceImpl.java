@@ -25,7 +25,7 @@ import org.babyfish.jimmer.ImmutableObjects;
 import org.babyfish.jimmer.sql.ast.mutation.DeleteMode;
 import org.quartz.SchedulerException;
 import org.springframework.stereotype.Service;
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
 import org.babyfish.jimmer.Page;
 import java.util.*;

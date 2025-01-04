@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 @AllArgsConstructor
 public class RedisCaptchaServiceImpl implements CaptchaCacheService {
 
-    @Resource // 保证 aj-captcha 的 SPI 创建时的注入
+    @Resource
     private StringRedisTemplate stringRedisTemplate;
 
     @Override

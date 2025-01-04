@@ -7,7 +7,7 @@ import cn.iocoder.yudao.service.vo.infra.oauth2.client.OAuth2ClientRespVO;
 import cn.iocoder.yudao.service.vo.infra.oauth2.client.OAuth2ClientUpdateReqVO;
 import cn.iocoder.yudao.service.model.infra.oauth2.SystemOauth2Client;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.util.Collection;
 
 /**

@@ -16,7 +16,7 @@ import cn.iocoder.yudao.service.repository.infra.data.InfraDictTypeRepository;
 import org.babyfish.jimmer.DraftObjects;
 import org.babyfish.jimmer.sql.ast.mutation.DeleteMode;
 import org.springframework.stereotype.Service;
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;

@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 public class JacksonAutoConfiguration {
 
     @Bean
-    public BeanPostProcessor objectMapperBeanPostProcessor() {
+    public static BeanPostProcessor objectMapperBeanPostProcessor() {
         return new BeanPostProcessor() {
             @Override
             public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {

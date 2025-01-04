@@ -2,8 +2,8 @@ package cn.iocoder.yudao.service.framework.web.xss.core.filter;
 
 import cn.iocoder.yudao.service.framework.web.xss.core.clean.XssCleaner;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequestWrapper;
 import java.util.LinkedHashMap;
 import java.util.Map;
 

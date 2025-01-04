@@ -33,14 +33,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import cn.iocoder.yudao.service.model.system.user.SystemUserDraft;
 import cn.iocoder.yudao.service.model.system.dept.SystemUserPostDraft;
 import org.springframework.stereotype.Service;
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 
 import org.babyfish.jimmer.Page;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.transaction.annotation.Transactional;
 import cn.iocoder.yudao.service.framework.web.web.core.pojo.PageResult;
 import cn.iocoder.yudao.service.convert.system.user.UserConvert;

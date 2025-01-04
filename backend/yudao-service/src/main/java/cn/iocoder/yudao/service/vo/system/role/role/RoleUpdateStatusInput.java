@@ -5,7 +5,7 @@ import cn.iocoder.yudao.service.framework.validation.InEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
-import javax.validation.constraints.*;
+import jakarta.validation.constraints.*;
 
 @Schema(description = "修改角色状态")
 @Data

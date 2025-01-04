@@ -8,7 +8,7 @@ import cn.iocoder.yudao.service.model.infra.oauth2.SystemOauth2AccessTokenDraft;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Repository;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;

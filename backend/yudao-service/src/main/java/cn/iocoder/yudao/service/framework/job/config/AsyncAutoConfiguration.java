@@ -16,7 +16,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 public class AsyncAutoConfiguration {
 
     @Bean
-    public BeanPostProcessor threadPoolTaskExecutorBeanPostProcessor() {
+    public static  BeanPostProcessor threadPoolTaskExecutorBeanPostProcessor() {
         return new BeanPostProcessor() {
 
             @Override

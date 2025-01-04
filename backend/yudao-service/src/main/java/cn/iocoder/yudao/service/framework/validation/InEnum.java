@@ -2,8 +2,8 @@ package cn.iocoder.yudao.service.framework.validation;
 
 import cn.iocoder.yudao.service.enums.common.IntArrayValuable;
 
-import javax.validation.Constraint;
-import javax.validation.Payload;
+import jakarta.validation.Constraint;
+import jakarta.validation.Payload;
 import java.lang.annotation.*;
 
 @Target({
