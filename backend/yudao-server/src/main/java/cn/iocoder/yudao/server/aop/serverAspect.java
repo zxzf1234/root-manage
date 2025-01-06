@@ -20,8 +20,8 @@ public class serverAspect implements Filter {
         String uri = ((HttpServletRequest) request).getRequestURI();
         System.out.println("uri is " + uri);
         // 解析URL中的版本号
-        String pathInfo = httpRequest.getPathInfo();
-        System.out.println("pathInfo is " + pathInfo);
+//        String pathInfo = httpRequest.getPathInfo();
+//        System.out.println("pathInfo is " + pathInfo);
         chain.doFilter(request, response);
     }
 }
