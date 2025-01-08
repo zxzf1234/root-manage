@@ -7,6 +7,7 @@ import cn.iocoder.yudao.service.framework.web.web.core.filter.DemoFilter;
 import cn.iocoder.yudao.service.framework.web.web.core.handler.GlobalExceptionHandler;
 import cn.iocoder.yudao.service.framework.web.web.core.handler.GlobalResponseBodyHandler;
 import cn.iocoder.yudao.service.framework.web.web.core.util.WebFrameworkUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -26,6 +27,7 @@ import jakarta.servlet.Filter;
 
 @AutoConfiguration
 @EnableConfigurationProperties(WebProperties.class)
+@Slf4j
 public class WebAutoConfiguration implements WebMvcConfigurer {
 
     @Resource
@@ -49,6 +51,7 @@ public class WebAutoConfiguration implements WebMvcConfigurer {
      * @param api        API 配置
      */
     private void configurePathMatch(PathMatchConfigurer configurer, WebProperties.Api api) {
+        log.info("******* this is configurePathMatch version is 0.0.1  api is " + api.getPrefix() + " *******");
         AntPathMatcher antPathMatcher = new AntPathMatcher(".");
         configurer.addPathPrefix(api.getPrefix(), clazz -> clazz.isAnnotationPresent(RestController.class)
                 && antPathMatcher.match(api.getController(), clazz.getPackage().getName())); // 仅仅匹配 controller 包

@@ -35,6 +35,23 @@ spring:
     type: REDIS
     redis:
       time-to-live: 1h # 设置过期时间为 1 小时
+  flyway:
+    enabled: false
+    encoding: utf-8
+    # 对执行迁移时基准版本的描述
+    baseline-description: BaseLineInitialize
+    # 若连接的数据库非空库，是否初始化
+    # 当迁移时发现目标schema非空，而且带有没有元数据的表时，是否自动执行基准迁移，默认false.
+    baseline-on-migrate: true
+    # 指定 baseline 的版本号,缺省值为 1, 低于该版本号的 SQL 文件, migrate 的时候被忽略
+    # 开始执行基准迁移时对现有的schema的版本打标签，默认值为1.
+    baseline-version: 20230606
+    # 是否开启校验
+    # 迁移时是否校验，默认为 true
+    validate-on-migrate: true
+    # 开发环境最好开启 outOfOrder, 生产环境关闭 outOfOrder
+    # 是否允许无序的迁移，默认 false
+    out-of-order: true
 
 --- #################### 接口文档配置 ####################
 
@@ -50,27 +67,6 @@ springdoc:
 #  enable: true
 #  setting:
 #    language: zh_cn
-
-# flyway的配置项
-flyway:
-  # 字符编码
-  encoding: utf-8
-  # 对执行迁移时基准版本的描述
-  baseline-description: BaseLineInitialize
-  # 若连接的数据库非空库，是否初始化
-  # 当迁移时发现目标schema非空，而且带有没有元数据的表时，是否自动执行基准迁移，默认false.
-  baseline-on-migrate: true
-  # 指定 baseline 的版本号,缺省值为 1, 低于该版本号的 SQL 文件, migrate 的时候被忽略
-  # 开始执行基准迁移时对现有的schema的版本打标签，默认值为1.
-  baseline-version: 20230606
-  # 是否开启校验
-  # 迁移时是否校验，默认为 true
-  validate-on-migrate: true
-  # 开发环境最好开启 outOfOrder, 生产环境关闭 outOfOrder
-  # 是否允许无序的迁移，默认 false
-  out-of-order: true
-  # 当读取元数据表时是否忽略错误的迁移，默认false
-  ignore-future-migrations: false
 
 --- #################### 验证码相关配置 ####################
 

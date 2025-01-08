@@ -31,7 +31,6 @@ import jakarta.annotation.Resource;
  * @author 芋道源码
  */
 @AutoConfiguration
-@DependsOn("flywayConfig")
 @EnableConfigurationProperties(SecurityProperties.class)
 public class SecurityAutoConfiguration {
 
