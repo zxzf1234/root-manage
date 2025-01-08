@@ -3,7 +3,6 @@ package cn.iocoder.yudao.server;
 import cn.hutool.core.thread.ThreadUtil;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.babyfish.jimmer.spring.repository.EnableJimmerRepositories;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 

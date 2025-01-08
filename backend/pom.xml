@@ -15,7 +15,7 @@
 
     <name>${project.artifactId}</name>
     <properties>
-        <revision>1.7.2-snapshot</revision>
+        <revision>1.7.3-snapshot</revision>
         <!-- Maven 相关 -->
         <java.version>17</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>

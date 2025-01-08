@@ -13,7 +13,7 @@
     <description>基础 bom 文件，管理整个项目的依赖版本</description>
 
     <properties>
-        <revision>1.7.2-snapshot</revision>
+        <revision>1.7.3-snapshot</revision>
         <!-- 统一依赖管理 -->
         <spring.boot.version>3.4.1</spring.boot.version>
         <!-- Web 相关 -->
@@ -166,6 +166,11 @@
 
             <!-- 工具类相关 -->
 
+            <dependency>
+                <groupId>org.reflections</groupId>
+                <artifactId>reflections</artifactId>
+                <version>0.10.2</version>
+            </dependency>
 
             <dependency>
                 <groupId>org.projectlombok</groupId>
@@ -474,6 +479,10 @@
 
 
         <!-- 工具类相关 -->
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
