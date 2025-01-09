@@ -1,21 +1,30 @@
 package cn.iocoder.yudao.server.classLoader;
 
 import cn.hutool.core.io.FileUtil;
+import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.ApplicationContextInitializer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.stereotype.Service;
 
 import java.net.URLClassLoader;
 import java.util.Map;
 import java.util.Set;
 
+//@Service
 @Slf4j
-public class JarLoaderInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
+public class JarLoadingService {
 
+    private final ConfigurableApplicationContext applicationContext;
     private final VersionedJarLoader jarLoader = new VersionedJarLoader();
 
-    @Override
-    public void initialize(ConfigurableApplicationContext applicationContext) {
+//    @Autowired
+    public JarLoadingService(ConfigurableApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
+    }
+
+    @PostConstruct
+    public void init() {
         try {
             // 加载所有 JAR 包
             String path = FileUtil.getParent(FileUtil.getAbsolutePath(""), 3);
@@ -29,7 +38,7 @@ public class JarLoaderInitializer implements ApplicationContextInitializer<Confi
                 URLClassLoader loader = entry.getValue();
 
                 // 扫描组件并注册 Bean
-                Set<Class<?>> components = new ComponentScanner().scanComponents(loader, "com.example.module");
+                Set<Class<?>> components = new ComponentScanner().scanComponents(loader, "cn.iocoder.yudao.service");
                 new BeanRegister(applicationContext).registerBeans(components, loader);
             }
         } catch (Exception e) {

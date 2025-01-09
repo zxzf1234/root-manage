@@ -13,7 +13,7 @@
     <description>基础 bom 文件，管理整个项目的依赖版本</description>
 
     <properties>
-        <revision>1.7.3-snapshot</revision>
+        <revision>1.7.4-snapshot</revision>
         <!-- 统一依赖管理 -->
         <spring.boot.version>3.4.1</spring.boot.version>
         <!-- Web 相关 -->
