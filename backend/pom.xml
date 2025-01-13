@@ -8,7 +8,6 @@
     <version>${revision}</version>
     <packaging>pom</packaging>
     <modules>
-        <module>yudao-dependencies</module>
         <module>yudao-server</module>
         <module>yudao-service</module>
     </modules>
@@ -28,18 +27,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jimmer.version>0.9.9</jimmer.version>
     </properties>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>cn.iocoder.boot</groupId>
-                <artifactId>yudao-dependencies</artifactId>
-                <version>${revision}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <build>
         <pluginManagement>
