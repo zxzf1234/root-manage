@@ -1,1 +1,20 @@
 #org.springframework.context.ApplicationContextInitializer=cn.iocoder.yudao.server.classLoader.JarLoaderInitializer
+#org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+#    cn.iocoder.yudao.service.framework.operateLog.config.OperateLogAutoConfiguration,\
+#    cn.iocoder.yudao.service.framework.file.config.FileAutoConfiguration,\
+#    cn.iocoder.yudao.service.framework.captcha.config.CaptchaConfiguration,\
+#    cn.iocoder.yudao.service.framework.db.datasource.DataSourceAutoConfiguration,\
+#    cn.iocoder.yudao.service.framework.redis.config.CacheAutoConfiguration,\
+#    cn.iocoder.yudao.service.framework.redis.config.RedisAutoConfiguration,\
+#    cn.iocoder.yudao.service.framework.monitor.config.MetricsAutoConfiguration,\
+#    cn.iocoder.yudao.service.framework.monitor.config.TracerAutoConfiguration,\
+#    cn.iocoder.yudao.service.framework.job.config.AsyncAutoConfiguration,\
+#    cn.iocoder.yudao.service.framework.job.config.QuartzAutoConfiguration,\
+#    cn.iocoder.yudao.service.framework.security.config.SecurityAutoConfiguration,\
+#    cn.iocoder.yudao.service.framework.security.config.WebSecurityConfigurerAdapter,\
+#    cn.iocoder.yudao.service.framework.web.apiLog.config.ApiLogAutoConfiguration,\
+#    cn.iocoder.yudao.service.framework.web.jackson.config.JacksonAutoConfiguration,\
+#    cn.iocoder.yudao.service.framework.web.swagger.config.SwaggerAutoConfiguration,\
+#    cn.iocoder.yudao.service.framework.web.web.config.WebAutoConfiguration,\
+#    cn.iocoder.yudao.service.framework.web.xss.config.XssAutoConfiguration,\
+#    cn.iocoder.yudao.service.framework.websocket.config.WebSocketAutoConfiguration

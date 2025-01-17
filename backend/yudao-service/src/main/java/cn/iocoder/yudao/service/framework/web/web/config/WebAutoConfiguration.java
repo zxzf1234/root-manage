@@ -8,11 +8,13 @@ import cn.iocoder.yudao.service.framework.web.web.core.handler.GlobalExceptionHa
 import cn.iocoder.yudao.service.framework.web.web.core.handler.GlobalResponseBodyHandler;
 import cn.iocoder.yudao.service.framework.web.web.core.util.WebFrameworkUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,6 +40,13 @@ public class WebAutoConfiguration implements WebMvcConfigurer {
     @Value("${spring.application.name}")
     private String applicationName;
 
+    private final ConfigurableApplicationContext applicationContext;
+
+    @Autowired
+    public WebAutoConfiguration(ConfigurableApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
+    }
+
     @Override
     public void configurePathMatch(PathMatchConfigurer configurer) {
         configurePathMatch(configurer, webProperties.getAdminApi());
@@ -59,6 +68,8 @@ public class WebAutoConfiguration implements WebMvcConfigurer {
 
     @Bean
     public GlobalExceptionHandler globalExceptionHandler(ApiErrorLogFrameworkService ApiErrorLogFrameworkService) {
+        System.out.println("this is &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& globalExceptionHandler");
+        System.out.println(applicationContext.getId());
         return new GlobalExceptionHandler(applicationName, ApiErrorLogFrameworkService);
     }
 

@@ -62,20 +62,20 @@ public class FileConfigServiceImpl implements FileConfigService {
     @PostConstruct
     public void initLocalCache() {
         // 第一步：查询数据
-        List<InfraFileConfig> configs = infraFileConfigRepository.findAll();
-        log.info("[initLocalCache][缓存文件配置，数量为:{}]", configs.size());
-
-        // 第二步：构建缓存：创建或更新文件 Client
-
-        configs.forEach(config -> {
-
-            fileClientFactory.createOrUpdateFileClient(config.id(), config.storage(), config.config());
-
-            // 如果是 master，进行设置
-            if (Boolean.TRUE.equals(config.master())) {
-                masterFileClient = fileClientFactory.getFileClient(config.id());
-            }
-        });
+//        List<InfraFileConfig> configs = infraFileConfigRepository.findAll();
+//        log.info("[initLocalCache][缓存文件配置，数量为:{}]", configs.size());
+//
+//        // 第二步：构建缓存：创建或更新文件 Client
+//
+//        configs.forEach(config -> {
+//
+//            fileClientFactory.createOrUpdateFileClient(config.id(), config.storage(), config.config());
+//
+//            // 如果是 master，进行设置
+//            if (Boolean.TRUE.equals(config.master())) {
+//                masterFileClient = fileClientFactory.getFileClient(config.id());
+//            }
+//        });
     }
 
     @Override
