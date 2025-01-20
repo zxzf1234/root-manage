@@ -38,7 +38,7 @@ import java.util.jar.JarFile;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@Service
+//@Service
 public class JarLoaderInitializer  {
 
     private final ConfigurableApplicationContext applicationContext;
@@ -48,7 +48,7 @@ public class JarLoaderInitializer  {
         this.applicationContext = applicationContext;
     }
 //    @Override
-    @PostConstruct
+//    @PostConstruct
     public void initialize() {
         try {
             // 加载所有 JAR 包
