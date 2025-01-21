@@ -16,6 +16,16 @@
         </el-form-item>
       </el-col>
       <el-col :span="24" style="padding-left: 10px; padding-right: 10px">
+        <el-form-item prop="account">
+          <el-input
+            v-model="loginData.loginForm.account"
+            :placeholder="t('login.accountPlaceholder')"
+            :prefix-icon="iconAccount"
+            class="!w-320px"
+          />
+        </el-form-item>
+      </el-col>
+      <el-col :span="24" style="padding-left: 10px; padding-right: 10px">
         <el-form-item prop="username">
           <el-input
             v-model="loginData.loginForm.username"
@@ -33,7 +43,7 @@
             :prefix-icon="iconLock"
             show-password
             type="password"
-            @keyup.enter="getCode()"
+            @keyup.enter="getCaptcha()"
             class="!w-320px"
           />
         </el-form-item>
@@ -62,7 +72,7 @@
             :title="t('login.login')"
             class="w-[100%]"
             type="primary"
-            @click="getCode()"
+            @click="getCaptcha()"
           />
         </el-form-item>
       </el-col>
@@ -137,6 +147,7 @@ const { t } = useI18n()
 
 const iconAvatar = useIcon({ icon: 'ep:avatar' })
 const iconLock = useIcon({ icon: 'ep:lock' })
+const iconAccount = useIcon({ icon: 'ic:baseline-home' })
 const formLogin = ref()
 const { validForm } = useFormValid(formLogin)
 const { getLoginState } = useLoginState()
@@ -160,6 +171,7 @@ const loginData = reactive({
   loginForm: {
     username: import.meta.env.VITE_DEFAULT_USERNAME,
     password: import.meta.env.VITE_DEFAULT_PASSWORD,
+    account: import.meta.env.VITE_DEFAULT_ACCOUNT,
     captchaVerification: '',
     rememberMe: false
   }
@@ -173,7 +185,7 @@ const loginData = reactive({
 // ]
 
 // 获取验证码
-const getCode = async () => {
+const getCaptcha = async () => {
   // 情况一，未开启：则直接登录
 
   if (loginData.captchaEnable === 'false') {
@@ -182,7 +194,7 @@ const getCode = async () => {
     // alert('2')
     // 情况二，已开启：则展示验证码；只有完成验证码的情况，才进行登录
     // 弹出验证码
-    verify.value.show()
+    verify.value.open()
   }
 }
 
@@ -194,6 +206,7 @@ const getCookie = () => {
       ...loginData.loginForm,
       username: loginForm.username ? loginForm.username : loginData.loginForm.username,
       password: loginForm.password ? loginForm.password : loginData.loginForm.password,
+      account: loginForm.account ? loginForm.account : loginData.loginForm.account,
       rememberMe: loginForm.rememberMe ? true : false
     }
   }

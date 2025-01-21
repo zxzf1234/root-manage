@@ -119,6 +119,7 @@ export default {
     forgetPassword: '忘记密码?',
     usernamePlaceholder: '请输入用户名',
     passwordPlaceholder: '请输入密码',
+    accountPlaceholder: '请输入卖家账号',
     codePlaceholder: '请输入验证码',
     mobileTitle: '手机登录',
     mobileNumber: '手机号码',

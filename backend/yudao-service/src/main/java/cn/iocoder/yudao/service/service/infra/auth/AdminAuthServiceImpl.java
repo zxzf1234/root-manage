@@ -83,6 +83,7 @@ public class AdminAuthServiceImpl implements AdminAuthService {
 
     @Override
     public AuthLoginRespVO login(AuthLoginReqVO reqVO) {
+        System.out.println(reqVO);
         // 校验验证码
         validateCaptcha(reqVO);
 

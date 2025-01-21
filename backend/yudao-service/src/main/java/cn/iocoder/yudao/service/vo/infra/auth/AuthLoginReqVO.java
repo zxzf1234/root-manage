@@ -32,6 +32,9 @@ public class AuthLoginReqVO {
     @Length(min = 4, max = 16, message = "密码长度为 4-16 位")
     private String password;
 
+    @Schema(description = "卖家账号", required = true, example = "root")
+    private String account;
+
     // ========== 图片验证码相关 ==========
 
     @Schema(description = "验证码，验证码开启时，需要传递", required = true,

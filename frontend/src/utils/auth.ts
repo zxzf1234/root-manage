@@ -6,6 +6,13 @@ const { wsCache } = useCache()
 
 const AccessTokenKey = 'ACCESS_TOKEN'
 const RefreshTokenKey = 'REFRESH_TOKEN'
+const AccountName = 'ACCOUNT_NAME'
+const AccountVersion = 'ACCOUNT_VERSION'
+
+interface cacheTokenModel extends TokenType {
+  accountName: string
+  accountVersion: string
+}
 
 // 获取token
 export const getAccessToken = () => {
@@ -19,15 +26,19 @@ export const getRefreshToken = () => {
 }
 
 // 设置token
-export const setToken = (token: TokenType) => {
+export const setToken = (token: cacheTokenModel) => {
   wsCache.set(RefreshTokenKey, token.refreshToken)
   wsCache.set(AccessTokenKey, token.accessToken)
+  wsCache.set(AccountName, token.accountName)
+  wsCache.set(AccountVersion, token.accountVersion)
 }
 
 // 删除token
 export const removeToken = () => {
   wsCache.delete(AccessTokenKey)
   wsCache.delete(RefreshTokenKey)
+  wsCache.delete(AccountName)
+  wsCache.delete(AccountVersion)
 }
 
 /** 格式化token（jwt格式） */
@@ -41,6 +52,7 @@ const LoginFormKey = 'LOGINFORM'
 export type LoginFormType = {
   username: string
   password: string
+  account: string
   rememberMe: boolean
 }
 

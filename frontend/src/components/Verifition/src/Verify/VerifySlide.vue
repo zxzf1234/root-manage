@@ -79,7 +79,7 @@
  * */
 import { aesEncrypt } from './../utils/ase'
 import { resetSize } from './../utils/util'
-import { getCode, reqCheck } from '@/api/login'
+import { getCaptcha, reqCheck } from '@/api/login'
 
 const props = defineProps({
   captchaType: {
@@ -216,13 +216,14 @@ const init = () => {
 watch(type, () => {
   init()
 })
-onMounted(() => {
+const open = async () => {
   // 禁止拖拽
-  init()
+  await init()
   proxy.$el.onselectstart = function () {
     return false
   }
-})
+}
+defineExpose({ open }) // 提供 open 方法，用于打开弹窗
 //鼠标按下
 const start = (e) => {
   e = e || window.event
@@ -364,7 +365,7 @@ const getPictrue = async () => {
   let data = {
     captchaType: captchaType.value
   }
-  const res = await getCode(data)
+  const res = await getCaptcha(data)
   if (res.repCode == '0000') {
     backImgBase.value = res.repData.originalImageBase64
     blockBackImgBase.value = res.repData.jigsawImageBase64

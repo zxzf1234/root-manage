@@ -111,9 +111,10 @@ export default {
       clickShow.value = false
       refresh()
     }
-    const show = () => {
+    const open = () => {
       if (mode.value == 'pop') {
         clickShow.value = true
+        instance.value.open()
       }
     }
     watchEffect(() => {
@@ -137,7 +138,7 @@ export default {
       instance,
       showBox,
       closeBox,
-      show
+      open
     }
   }
 }

@@ -64,8 +64,8 @@
  * */
 import { resetSize } from './../utils/util'
 import { aesEncrypt } from './../utils/ase'
-import { getCode, reqCheck } from '@/api/login'
-import { getCurrentInstance, nextTick, onMounted, reactive, ref, toRefs } from 'vue'
+import { getCaptcha, reqCheck } from '@/api/login'
+import { getCurrentInstance, nextTick, reactive, ref, toRefs } from 'vue'
 
 const props = defineProps({
   //弹出式pop，固定fixed
@@ -140,13 +140,14 @@ const init = () => {
     proxy.$parent.$emit('ready', proxy)
   })
 }
-onMounted(() => {
+const open = async () => {
   // 禁止拖拽
   init()
   proxy.$el.onselectstart = function () {
     return false
   }
-})
+}
+defineExpose({ open }) // 提供 open 方法，用于打开弹窗
 const canvas = ref(null)
 const canvasClick = (e) => {
   checkPosArr.push(getMousePos(canvas, e))
@@ -227,7 +228,7 @@ const getPictrue = async () => {
   let data = {
     captchaType: captchaType.value
   }
-  const res = await getCode(data)
+  const res = await getCaptcha(data)
   if (res.repCode == '0000') {
     pointBackImgBase.value = res.repData.originalImageBase64
     backToken.value = res.repData.token

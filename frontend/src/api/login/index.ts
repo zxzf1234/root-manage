@@ -54,7 +54,7 @@ export const socialAuthRedirect = (type: number, redirectUri: string) => {
   })
 }
 // 获取验证图片以及 token
-export const getCode = (data) => {
+export const getCaptcha = (data) => {
   return request.postOriginal({ url: 'infra/captcha/get', data })
 }
 
