@@ -2,6 +2,7 @@ package cn.iocoder.yudao.service.framework.security.core.filter;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.iocoder.yudao.service.framework.db.dataSource.DatabaseContextHolder;
 import cn.iocoder.yudao.service.framework.exception.ServiceException;
 import cn.iocoder.yudao.service.framework.web.web.core.pojo.CommonResult;
 import cn.iocoder.yudao.service.util.servlet.ServletUtils;
@@ -51,6 +52,11 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
         String token = SecurityFrameworkUtils.obtainAuthorization(request, securityProperties.getTokenHeader(), securityProperties.getTokenParameter());
+        String accountName = SecurityFrameworkUtils.getAccountName(request);
+        System.out.println("this is accountName " + accountName);
+        if (accountName != null) {
+            DatabaseContextHolder.setDatabaseType(accountName);
+        }
         if (StrUtil.isNotEmpty(token)) {
             Integer userType = WebFrameworkUtils.getLoginUserType(request);
             try {

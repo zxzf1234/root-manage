@@ -22,7 +22,7 @@ public class serverAspect implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         String uri = ((HttpServletRequest) request).getRequestURI();
-        System.out.println("uri is " + uri);
+//        System.out.println("uri is " + uri);
 //        String version = "1.7.2";
 //        URLClassLoader loader = jarLoader.getLoader(version);
 //

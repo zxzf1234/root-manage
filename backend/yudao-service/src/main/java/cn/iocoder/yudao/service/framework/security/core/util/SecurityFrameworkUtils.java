@@ -26,6 +26,23 @@ public class SecurityFrameworkUtils {
     private SecurityFrameworkUtils() {}
 
     /**
+     * 从请求中，获得卖家账号
+     *
+     * @param request 请求
+     * @return accountName 卖家账号
+     */
+    public static String getAccountName(HttpServletRequest request) {
+        String accountName = request.getHeader("Account-Name");
+
+        if (!StringUtils.hasText(accountName)) {
+            return null;
+        }else{
+            return accountName;
+        }
+
+    }
+
+    /**
      * 从请求中，获得认证 Token
      *
      * @param request 请求

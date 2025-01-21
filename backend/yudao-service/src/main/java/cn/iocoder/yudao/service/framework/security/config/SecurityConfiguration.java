@@ -29,13 +29,9 @@ public class SecurityConfiguration {
                         .requestMatchers("/swagger-resources/**").anonymous()
                         .requestMatchers("/webjars/**").anonymous()
                         .requestMatchers("/*/api-docs").anonymous();
-                // 积木报表
-                registry.requestMatchers("/jmreport/**").permitAll();
                 // Spring Boot Actuator 的安全配置
                 registry.requestMatchers("/actuator").anonymous()
                         .requestMatchers("/actuator/**").anonymous();
-                // Druid 监控
-                registry.requestMatchers("/druid/**").anonymous();
                 // Spring Boot Admin Server 的安全配置
                 registry.requestMatchers(adminSeverContextPath).anonymous()
                         .requestMatchers(adminSeverContextPath + "/**").anonymous();

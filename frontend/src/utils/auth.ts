@@ -10,7 +10,6 @@ const AccountName = 'ACCOUNT_NAME'
 const AccountVersion = 'ACCOUNT_VERSION'
 
 interface cacheTokenModel extends TokenType {
-  accountName: string
   accountVersion: string
 }
 
@@ -29,7 +28,7 @@ export const getRefreshToken = () => {
 export const setToken = (token: cacheTokenModel) => {
   wsCache.set(RefreshTokenKey, token.refreshToken)
   wsCache.set(AccessTokenKey, token.accessToken)
-  wsCache.set(AccountName, token.accountName)
+
   wsCache.set(AccountVersion, token.accountVersion)
 }
 
@@ -39,6 +38,21 @@ export const removeToken = () => {
   wsCache.delete(RefreshTokenKey)
   wsCache.delete(AccountName)
   wsCache.delete(AccountVersion)
+}
+
+// 设置卖家账号名称
+export const setAccountName = (accountName: string) => {
+  wsCache.set(AccountName, accountName)
+}
+
+// 获取卖家账号名称
+export const getAccountName = () => {
+  return wsCache.get(AccountName) ? wsCache.get(AccountName) : null
+}
+
+// 获取卖家账号版本
+export const getAccountVersion = () => {
+  return wsCache.get(AccountVersion) ? wsCache.get(AccountVersion) : null
 }
 
 /** 格式化token（jwt格式） */
@@ -52,7 +66,7 @@ const LoginFormKey = 'LOGINFORM'
 export type LoginFormType = {
   username: string
   password: string
-  account: string
+  accountName: string
   rememberMe: boolean
 }
 

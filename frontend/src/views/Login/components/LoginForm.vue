@@ -16,9 +16,9 @@
         </el-form-item>
       </el-col>
       <el-col :span="24" style="padding-left: 10px; padding-right: 10px">
-        <el-form-item prop="account">
+        <el-form-item prop="accountName">
           <el-input
-            v-model="loginData.loginForm.account"
+            v-model="loginData.loginForm.accountName"
             :placeholder="t('login.accountPlaceholder')"
             :prefix-icon="iconAccount"
             class="!w-320px"
@@ -171,7 +171,7 @@ const loginData = reactive({
   loginForm: {
     username: import.meta.env.VITE_DEFAULT_USERNAME,
     password: import.meta.env.VITE_DEFAULT_PASSWORD,
-    account: import.meta.env.VITE_DEFAULT_ACCOUNT,
+    accountName: import.meta.env.VITE_DEFAULT_ACCOUNT_NAME,
     captchaVerification: '',
     rememberMe: false
   }
@@ -186,8 +186,8 @@ const loginData = reactive({
 
 // 获取验证码
 const getCaptcha = async () => {
+  authUtil.setAccountName(loginData.loginForm.accountName)
   // 情况一，未开启：则直接登录
-
   if (loginData.captchaEnable === 'false') {
     await handleLogin({})
   } else {
@@ -206,7 +206,7 @@ const getCookie = () => {
       ...loginData.loginForm,
       username: loginForm.username ? loginForm.username : loginData.loginForm.username,
       password: loginForm.password ? loginForm.password : loginData.loginForm.password,
-      account: loginForm.account ? loginForm.account : loginData.loginForm.account,
+      accountName: loginForm.accountName ? loginForm.accountName : loginData.loginForm.accountName,
       rememberMe: loginForm.rememberMe ? true : false
     }
   }
@@ -219,6 +219,7 @@ const handleLogin = async (params) => {
     if (!data) {
       return
     }
+
     loginData.loginForm.captchaVerification = params.captchaVerification
 
     const res = await LoginApi.login(loginData.loginForm)
