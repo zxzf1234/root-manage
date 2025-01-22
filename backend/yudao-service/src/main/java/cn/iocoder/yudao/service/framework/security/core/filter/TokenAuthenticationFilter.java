@@ -53,7 +53,6 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         String token = SecurityFrameworkUtils.obtainAuthorization(request, securityProperties.getTokenHeader(), securityProperties.getTokenParameter());
         String accountName = SecurityFrameworkUtils.getAccountName(request);
-        System.out.println("this is accountName " + accountName);
         if (accountName != null) {
             DatabaseContextHolder.setDatabaseType(accountName);
         }

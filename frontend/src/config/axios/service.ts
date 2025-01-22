@@ -14,8 +14,8 @@ import {
   getRefreshToken,
   removeToken,
   setToken,
-  getAccountName
-  // getAccountVersion
+  getAccountName,
+  getAccountVersion
 } from '@/utils/auth'
 import errorCode from './errorCode'
 
@@ -61,12 +61,11 @@ service.interceptors.request.use(
       ;(config as Recordable).headers.Authorization = 'Bearer ' + getAccessToken() // 让每个请求携带自定义token
     }
     if (getAccountName()) {
-      console.log(getAccountName())
       ;(config as Recordable).headers['Account-Name'] = getAccountName()
     }
-    // if (getAccountVersion()) {
-    //   ;(config as Recordable).headers['Account-Version'] = getAccountVersion()
-    // }
+    if (getAccountVersion()) {
+      ;(config as Recordable).headers['Account-Version'] = getAccountVersion()
+    }
     const params = config.params || {}
     const data = config.data || false
     if (
