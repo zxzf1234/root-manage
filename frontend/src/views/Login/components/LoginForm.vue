@@ -132,6 +132,7 @@
 </template>
 <script lang="ts" name="LoginForm" setup>
 import axios from 'axios'
+import { service } from '@/config/axios/service'
 import { ElLoading } from 'element-plus'
 import LoginFormTitle from './LoginFormTitle.vue'
 import type { RouteLocationNormalizedLoaded } from 'vue-router'
@@ -186,24 +187,9 @@ const loginData = reactive({
 //   { icon: 'ant-design:dingtalk-circle-filled', type: 20 }
 // ]
 
-// 获取验证码
+// 点击登录
 const handleClickLogin = async () => {
-  const customerInfo = await axios.get(
-    import.meta.env.VITE_ACCOUNT_ROUTER_URL +
-      '/admin-api/infra/devops/customer/get-by-name?customerName=' +
-      loginData.loginForm.accountName
-  )
-  if (customerInfo.data.code != 0) {
-    message.alertError(customerInfo.data.msg)
-    return
-  }
-  if (!customerInfo.data.data) {
-    message.alertError('获取账号信息失败，请联系售后')
-    return
-  }
-  loginData.loginForm.accountNo = customerInfo.data.data.accountNo
-  authUtil.setAccountNo(loginData.loginForm.accountNo)
-
+  if (!(await getCustomerInfo())) return
   // 情况一，未开启：则直接登录
   if (loginData.captchaEnable === 'false') {
     await handleLogin({})
@@ -215,6 +201,29 @@ const handleClickLogin = async () => {
   }
 }
 
+const getCustomerInfo = async () => {
+  const customerInfo = await axios.get(
+    import.meta.env.VITE_ACCOUNT_ROUTER_URL +
+      '/admin-api/infra/devops/customer/get-by-name?customerName=' +
+      loginData.loginForm.accountName
+  )
+  if (customerInfo.data.code != 0) {
+    message.alertError(customerInfo.data.msg)
+    return false
+  }
+  if (!customerInfo.data.data) {
+    message.alertError('获取账号信息失败，请联系售后')
+    return false
+  }
+  loginData.loginForm.accountNo = customerInfo.data.data.accountNo
+  // 放入缓存
+  authUtil.setAccountInfo(customerInfo.data.data)
+  // 更新接口的baseURL
+  service.defaults.baseURL =
+    'http://' + customerInfo.data.data.server.ip + ':48080' + import.meta.env.VITE_API_URL
+  return true
+}
+
 // 记住我
 const getCookie = () => {
   const loginForm = authUtil.getLoginForm()
@@ -223,7 +232,7 @@ const getCookie = () => {
       ...loginData.loginForm,
       username: loginForm.username ? loginForm.username : loginData.loginForm.username,
       password: loginForm.password ? loginForm.password : loginData.loginForm.password,
-      accountNo: loginForm.accountName ? loginForm.accountName : loginData.loginForm.accountName,
+      accountNo: loginForm.accountNo ? loginForm.accountNo : loginData.loginForm.accountNo,
       rememberMe: loginForm.rememberMe ? true : false
     }
   }
