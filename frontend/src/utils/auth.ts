@@ -6,7 +6,7 @@ const { wsCache } = useCache()
 
 const AccessTokenKey = 'ACCESS_TOKEN'
 const RefreshTokenKey = 'REFRESH_TOKEN'
-const AccountName = 'ACCOUNT_NAME'
+const AccountNo = 'ACCOUNT_NO'
 const AccountVersion = 'ACCOUNT_VERSION'
 
 interface cacheTokenModel extends TokenType {
@@ -36,18 +36,18 @@ export const setToken = (token: cacheTokenModel) => {
 export const removeToken = () => {
   wsCache.delete(AccessTokenKey)
   wsCache.delete(RefreshTokenKey)
-  wsCache.delete(AccountName)
+  wsCache.delete(AccountNo)
   wsCache.delete(AccountVersion)
 }
 
 // 设置卖家账号名称
-export const setAccountName = (accountName: string) => {
-  wsCache.set(AccountName, accountName)
+export const setAccountNo = (accountNo: string) => {
+  wsCache.set(AccountNo, accountNo)
 }
 
 // 获取卖家账号名称
-export const getAccountName = () => {
-  return wsCache.get(AccountName) ? wsCache.get(AccountName) : null
+export const getAccountNo = () => {
+  return wsCache.get(AccountNo) ? wsCache.get(AccountNo) : null
 }
 
 // 获取卖家账号版本
@@ -66,7 +66,7 @@ const LoginFormKey = 'LOGINFORM'
 export type LoginFormType = {
   username: string
   password: string
-  accountName: string
+  accountNo: string
   rememberMe: boolean
 }
 

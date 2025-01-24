@@ -43,7 +43,7 @@
             :prefix-icon="iconLock"
             show-password
             type="password"
-            @keyup.enter="getCaptcha()"
+            @keyup.enter="handleClickLogin()"
             class="!w-320px"
           />
         </el-form-item>
@@ -72,7 +72,7 @@
             :title="t('login.login')"
             class="w-[100%]"
             type="primary"
-            @click="getCaptcha()"
+            @click="handleClickLogin()"
           />
         </el-form-item>
       </el-col>
@@ -131,6 +131,7 @@
   </el-form>
 </template>
 <script lang="ts" name="LoginForm" setup>
+import axios from 'axios'
 import { ElLoading } from 'element-plus'
 import LoginFormTitle from './LoginFormTitle.vue'
 import type { RouteLocationNormalizedLoaded } from 'vue-router'
@@ -143,7 +144,7 @@ import * as LoginApi from '@/api/login'
 import { LoginStateEnum, useFormValid, useLoginState } from './useLogin'
 
 const { t } = useI18n()
-// const message = useMessage()
+const message = useMessage()
 
 const iconAvatar = useIcon({ icon: 'ep:avatar' })
 const iconLock = useIcon({ icon: 'ep:lock' })
@@ -172,6 +173,7 @@ const loginData = reactive({
     username: import.meta.env.VITE_DEFAULT_USERNAME,
     password: import.meta.env.VITE_DEFAULT_PASSWORD,
     accountName: import.meta.env.VITE_DEFAULT_ACCOUNT_NAME,
+    accountNo: '',
     captchaVerification: '',
     rememberMe: false
   }
@@ -185,8 +187,23 @@ const loginData = reactive({
 // ]
 
 // 获取验证码
-const getCaptcha = async () => {
-  authUtil.setAccountName(loginData.loginForm.accountName)
+const handleClickLogin = async () => {
+  const customerInfo = await axios.get(
+    import.meta.env.VITE_ACCOUNT_ROUTER_URL +
+      '/admin-api/infra/devops/customer/get-by-name?customerName=' +
+      loginData.loginForm.accountName
+  )
+  if (customerInfo.data.code != 0) {
+    message.alertError(customerInfo.data.msg)
+    return
+  }
+  if (!customerInfo.data.data) {
+    message.alertError('获取账号信息失败，请联系售后')
+    return
+  }
+  loginData.loginForm.accountNo = customerInfo.data.data.accountNo
+  authUtil.setAccountNo(loginData.loginForm.accountNo)
+
   // 情况一，未开启：则直接登录
   if (loginData.captchaEnable === 'false') {
     await handleLogin({})
@@ -206,7 +223,7 @@ const getCookie = () => {
       ...loginData.loginForm,
       username: loginForm.username ? loginForm.username : loginData.loginForm.username,
       password: loginForm.password ? loginForm.password : loginData.loginForm.password,
-      accountName: loginForm.accountName ? loginForm.accountName : loginData.loginForm.accountName,
+      accountNo: loginForm.accountName ? loginForm.accountName : loginData.loginForm.accountName,
       rememberMe: loginForm.rememberMe ? true : false
     }
   }

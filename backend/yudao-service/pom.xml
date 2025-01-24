@@ -647,6 +647,7 @@
                         </path>
                     </annotationProcessorPaths>
                 </configuration>
+                <parameters>true</parameters>
             </plugin>
         </plugins>
     </build>
