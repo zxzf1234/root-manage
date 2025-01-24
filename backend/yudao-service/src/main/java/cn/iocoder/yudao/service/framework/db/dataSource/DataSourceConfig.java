@@ -17,8 +17,20 @@ import java.util.Properties;
 @SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
 public class DataSourceConfig {
 
-    @Value("${spring.datasource.driver-class-name:com.mysql.cj.jdbc.Driver}")
-    private String driverClassName;
+    @Value("${spring.datasource.url}")
+    private String defaultDbUrl;
+
+    @Value("${spring.datasource.username}")
+    private String defaultDbUsername;
+
+    @Value("${spring.datasource.password}")
+    private String defaultDbPassword;
+
+    @Value("${spring.datasource.driver-class-name}")
+    private String defaultDbDriverClassName;
+
+    @Value("${xiyu.is_local:true}")
+    private boolean isLocal;
 
     @Bean
     public DataSource dataSource() throws Exception {
@@ -37,27 +49,35 @@ public class DataSourceConfig {
 
     private Map<Object, Object> getDateSource(){
         Map<Object, Object> DataSources = new HashMap<>();
+        if(isLocal){
+            DriverManagerDataSource defaultDataSource = new DriverManagerDataSource();
+            defaultDataSource.setUrl(defaultDbUrl);
+            defaultDataSource.setUsername(defaultDbUsername);
+            defaultDataSource.setPassword(defaultDbPassword);
+            defaultDataSource.setDriverClassName(defaultDbDriverClassName);
+            DataSources.put("default", defaultDataSource);
+        }else{
+            String databaseName1 = "root_manage";
+            String databaseName2 = "root_manage2";
+            String userName = "root";
+            String password = "888admin";
 
-        String databaseName1 = "root_manage";
-        String databaseName2 = "root_manage2";
-        String userName = "root";
-        String password = "888admin";
 
+            DriverManagerDataSource dataSource1 = new DriverManagerDataSource();
+            dataSource1.setUrl("jdbc:mysql://127.0.0.1:3306/" + databaseName1 + "?useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&nullCatalogMeansCurrent=true");
+            dataSource1.setUsername(userName);
+            dataSource1.setPassword(password);
+            dataSource1.setDriverClassName("com.mysql.cj.jdbc.Driver");
+            DataSources.put(databaseName1, dataSource1);
 
-        DriverManagerDataSource dataSource1 = new DriverManagerDataSource();
-        dataSource1.setUrl("jdbc:mysql://127.0.0.1:3306/" + databaseName1 + "?useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&nullCatalogMeansCurrent=true");
-        dataSource1.setUsername(userName);
-        dataSource1.setPassword(password);
-        dataSource1.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        DataSources.put(databaseName1, dataSource1);
+            DriverManagerDataSource dataSource2 = new DriverManagerDataSource();
+            dataSource2.setUrl("jdbc:mysql://127.0.0.1:3306/" + databaseName2 + "?useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&nullCatalogMeansCurrent=true");
+            dataSource2.setUsername(userName);
+            dataSource2.setPassword(password);
+            dataSource2.setDriverClassName("com.mysql.cj.jdbc.Driver");
+            DataSources.put(databaseName2, dataSource2);
 
-        DriverManagerDataSource dataSource2 = new DriverManagerDataSource();
-        dataSource2.setUrl("jdbc:mysql://127.0.0.1:3306/" + databaseName2 + "?useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&nullCatalogMeansCurrent=true");
-        dataSource2.setUsername(userName);
-        dataSource2.setPassword(password);
-        dataSource2.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        DataSources.put(databaseName2, dataSource2);
+        }
         return DataSources;
-
     }
 }

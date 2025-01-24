@@ -59,10 +59,13 @@ service.interceptors.request.use(
     if (getAccessToken() && !isToken) {
       ;(config as Recordable).headers.Authorization = 'Bearer ' + getAccessToken() // 让每个请求携带自定义token
     }
-    const accountInfo = getAccountInfo()
-    if (accountInfo) {
-      ;(config as Recordable).headers['Account-No'] = accountInfo.accountNo
-      ;(config as Recordable).headers['Account-Version'] = accountInfo.version.version
+    // 非本地化部署需要获取账号信息
+    if (!import.meta.env.VITE_IS_LOCAL) {
+      const accountInfo = getAccountInfo()
+      if (accountInfo) {
+        ;(config as Recordable).headers['Account-No'] = accountInfo.accountNo
+        ;(config as Recordable).headers['Account-Version'] = accountInfo.version.version
+      }
     }
 
     const params = config.params || {}

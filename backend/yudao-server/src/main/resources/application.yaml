@@ -89,9 +89,10 @@ aj:
 
 --- #################### 芋道相关配置 ####################
 
-yudao:
+xiyu:
   info:
     version: 1.0.0
+  is-local: true
   web:
     admin-ui:
       url: http://dashboard.yudao.iocoder.cn # Admin 管理后台 UI 的地址
@@ -102,8 +103,8 @@ yudao:
   swagger:
     title: ${spring.application.name}
     description: 提供管理后台、用户 App 的所有功能
-    version: ${yudao.info.version}
-    url: ${yudao.web.admin-ui.url}
+    version: ${xiyu.info.version}
+    url: ${xiyu.web.admin-ui.url}
     email: xingyu4j@vip.qq.com
     license: MIT
     license-url: https://gitee.com/zhijiantianya/ruoyi-vue-pro/blob/master/LICENSE

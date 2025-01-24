@@ -15,7 +15,7 @@
           <LoginFormTitle style="width: 100%" />
         </el-form-item>
       </el-col>
-      <el-col :span="24" style="padding-left: 10px; padding-right: 10px">
+      <el-col :span="24" style="padding-left: 10px; padding-right: 10px" v-if="!isLocal">
         <el-form-item prop="accountName">
           <el-input
             v-model="loginData.loginForm.accountName"
@@ -159,6 +159,7 @@ const redirect = ref<string>('')
 const loginLoading = ref(false)
 const verify = ref()
 const captchaType = ref('blockPuzzle') // blockPuzzle 滑块 clickWord 点击文字
+const isLocal = import.meta.env.VITE_IS_LOCAL
 
 const getShow = computed(() => unref(getLoginState) === LoginStateEnum.LOGIN)
 
@@ -202,6 +203,7 @@ const handleClickLogin = async () => {
 }
 
 const getCustomerInfo = async () => {
+  if (import.meta.env.VITE_IS_LOCAL) return true
   const customerInfo = await axios.get(
     import.meta.env.VITE_ACCOUNT_ROUTER_URL +
       '/admin-api/infra/devops/customer/get-by-name?customerName=' +

@@ -5,6 +5,11 @@ server:
 
 spring:
   datasource:
+    name: root_manage
+    url: jdbc:mysql://127.0.0.1:3306/${spring.datasource.name}?useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&nullCatalogMeansCurrent=true # MySQL Connector/J 8.X 连接的示例
+    username: root
+    password: 888admin
+    driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       minimum-idle: 5
       maximum-pool-size: 20
@@ -93,7 +98,7 @@ debug: false
 --- #################### 芋道相关配置 ####################
 
 # 芋道配置项，设置当前项目所有自定义的配置
-yudao:
+xiyu:
   captcha:
     enable: true # 本地环境，暂时关闭图片验证码，方便登录等接口的测试；
   security:

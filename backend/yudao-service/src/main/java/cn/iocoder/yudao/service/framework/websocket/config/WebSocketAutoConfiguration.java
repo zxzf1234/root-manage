@@ -71,7 +71,7 @@ public class WebSocketAutoConfiguration {
     // ==================== Sender 相关 ====================
 
     @Configuration
-    @ConditionalOnProperty(prefix = "yudao.websocket", name = "sender-type", havingValue = "local", matchIfMissing = true)
+    @ConditionalOnProperty(prefix = "xiyu.websocket", name = "sender-type", havingValue = "local", matchIfMissing = true)
     public static class LocalWebSocketMessageSenderConfiguration {
 
         @Bean

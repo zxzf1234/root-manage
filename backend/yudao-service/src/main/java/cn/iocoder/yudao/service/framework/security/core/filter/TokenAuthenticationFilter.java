@@ -15,10 +15,10 @@ import cn.iocoder.yudao.service.model.infra.oauth2.SystemOauth2AccessToken;
 import cn.iocoder.yudao.service.service.infra.oauth2.Oauth2TokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import jakarta.annotation.Resource;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -40,6 +40,9 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
     private final Oauth2TokenService oauth2TokenService;
 
+    @Value("${xiyu.is_local:true}")
+    private boolean isLocal;
+
     @Autowired
     public TokenAuthenticationFilter(Oauth2TokenService oauth2TokenService, SecurityProperties securityProperties, GlobalExceptionHandler globalExceptionHandler) {
         this.oauth2TokenService = oauth2TokenService;
@@ -52,10 +55,14 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
         String token = SecurityFrameworkUtils.obtainAuthorization(request, securityProperties.getTokenHeader(), securityProperties.getTokenParameter());
-        String accountName = SecurityFrameworkUtils.getAccountName(request);
-        if (accountName != null) {
-            DatabaseContextHolder.setDatabaseType(accountName);
+        // 非本地化设置数据库
+        if(!isLocal){
+            String accountNo = SecurityFrameworkUtils.getAccountNo(request);
+            if (accountNo != null) {
+                DatabaseContextHolder.setDatabaseType(accountNo);
+            }
         }
+
         if (StrUtil.isNotEmpty(token)) {
             Integer userType = WebFrameworkUtils.getLoginUserType(request);
             try {

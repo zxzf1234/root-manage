@@ -57,7 +57,7 @@ public class AdminAuthServiceImpl implements AdminAuthService {
     /**
      * 验证码的开关，默认为 true
      */
-    @Value("${yudao.captcha.enable:true}")
+    @Value("${xiyu.captcha.enable:true}")
     private Boolean captchaEnable;
 
     @Override

@@ -12,7 +12,7 @@ import jakarta.validation.constraints.NotNull;
  *
  * @author xingyu4j
  */
-@ConfigurationProperties("yudao.websocket")
+@ConfigurationProperties("xiyu.websocket")
 @Data
 @Validated
 public class WebSocketProperties {

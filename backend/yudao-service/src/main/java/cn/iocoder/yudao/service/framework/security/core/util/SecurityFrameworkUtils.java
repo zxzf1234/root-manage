@@ -31,13 +31,13 @@ public class SecurityFrameworkUtils {
      * @param request 请求
      * @return accountName 卖家账号
      */
-    public static String getAccountName(HttpServletRequest request) {
-        String accountName = request.getHeader("Account-Name");
+    public static String getAccountNo(HttpServletRequest request) {
+        String accountNo = request.getHeader("Account-No");
 
-        if (!StringUtils.hasText(accountName)) {
+        if (!StringUtils.hasText(accountNo)) {
             return null;
         }else{
-            return accountName;
+            return accountNo;
         }
 
     }
