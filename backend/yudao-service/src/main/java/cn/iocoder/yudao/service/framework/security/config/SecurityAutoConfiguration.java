@@ -32,6 +32,7 @@ import jakarta.annotation.Resource;
  */
 @AutoConfiguration
 //@EnableConfigurationProperties(SecurityProperties.class)
+@DependsOn("flywayInitializer")
 public class SecurityAutoConfiguration {
 
     @Resource
