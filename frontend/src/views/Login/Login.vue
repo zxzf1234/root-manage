@@ -49,7 +49,7 @@ import { toRaw } from 'vue'
 import bg from '@/assets/imgs/bg.png'
 import logo from '@/assets/imgs/logo.svg?component'
 import illustration from '@/assets/imgs/illustration.svg?component'
-const appTitle = import.meta.env.VITE_APP_TITLE
+const appTitle = import.meta.env.VITE_APP_NAME
 </script>
 
 <style lang="scss" scoped>

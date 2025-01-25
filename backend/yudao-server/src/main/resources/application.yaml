@@ -1,6 +1,7 @@
 spring:
   application:
     name: root管理系统
+    number: root
 
   profiles:
     active: local
@@ -92,6 +93,7 @@ aj:
 xiyu:
   info:
     version: 1.0.0
+  app-no: root
   is-local: true
   web:
     admin-ui:

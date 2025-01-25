@@ -29,7 +29,7 @@ public class DataSourceConfig {
     @Value("${spring.datasource.driver-class-name}")
     private String defaultDbDriverClassName;
 
-    @Value("${xiyu.is_local:true}")
+    @Value("${xiyu.is-local}")
     private boolean isLocal;
 
     @Bean

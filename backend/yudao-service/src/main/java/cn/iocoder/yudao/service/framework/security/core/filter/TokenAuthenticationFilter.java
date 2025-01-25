@@ -40,7 +40,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
     private final Oauth2TokenService oauth2TokenService;
 
-    @Value("${xiyu.is_local:true}")
+    @Value("${xiyu.is-local}")
     private boolean isLocal;
 
     @Autowired

@@ -143,6 +143,8 @@ import * as authUtil from '@/utils/auth'
 import { usePermissionStore } from '@/store/modules/permission'
 import * as LoginApi from '@/api/login'
 import { LoginStateEnum, useFormValid, useLoginState } from './useLogin'
+import { useCache, CACHE_KEY } from '@/hooks/web/useCache'
+const { wsCache } = useCache()
 
 const { t } = useI18n()
 const message = useMessage()
@@ -203,26 +205,31 @@ const handleClickLogin = async () => {
 }
 
 const getCustomerInfo = async () => {
-  if (import.meta.env.VITE_IS_LOCAL) return true
-  const customerInfo = await axios.get(
-    import.meta.env.VITE_ACCOUNT_ROUTER_URL +
-      '/admin-api/infra/devops/customer/get-by-name?customerName=' +
-      loginData.loginForm.accountName
-  )
-  if (customerInfo.data.code != 0) {
-    message.alertError(customerInfo.data.msg)
-    return false
+  if (import.meta.env.VITE_IS_LOCAL) {
+    // 更新server URL
+    authUtil.setServerUrl(import.meta.env.VITE_SERVER_IP, import.meta.env.VITE_SERVER_PORT)
+  } else {
+    const customerInfo = await axios.get(
+      import.meta.env.VITE_ACCOUNT_ROUTER_URL +
+        '/admin-api/infra/devops/customer/get-by-name?customerName=' +
+        loginData.loginForm.accountName
+    )
+    if (customerInfo.data.code != 0) {
+      message.alertError(customerInfo.data.msg)
+      return false
+    }
+    if (!customerInfo.data.data) {
+      message.alertError('获取账号信息失败，请联系售后')
+      return false
+    }
+    loginData.loginForm.accountNo = customerInfo.data.data.accountNo
+    // 放入缓存
+    authUtil.setAccountInfo(customerInfo.data.data)
+    // 更新server URL
+    authUtil.setServerUrl(customerInfo.data.data.server.ip, customerInfo.data.data.server.port)
+    return true
   }
-  if (!customerInfo.data.data) {
-    message.alertError('获取账号信息失败，请联系售后')
-    return false
-  }
-  loginData.loginForm.accountNo = customerInfo.data.data.accountNo
-  // 放入缓存
-  authUtil.setAccountInfo(customerInfo.data.data)
-  // 更新接口的baseURL
-  service.defaults.baseURL =
-    'http://' + customerInfo.data.data.server.ip + ':48080' + import.meta.env.VITE_API_URL
+  service.defaults.baseURL = wsCache.get(CACHE_KEY.SERVER_HTTP_URL)
   return true
 }
 

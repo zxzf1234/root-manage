@@ -44,14 +44,15 @@
 import * as UserApi from '@/api/system/user/user'
 import { getAccessToken } from '@/utils/auth'
 import download from '@/utils/download'
+import { useCache, CACHE_KEY } from '@/hooks/web/useCache'
+const { wsCache } = useCache()
 
 const message = useMessage() // 消息弹窗
 
 const dialogVisible = ref(false) // 弹窗的是否展示
 const formLoading = ref(false) // 表单的加载中
 const uploadRef = ref()
-const importUrl =
-  import.meta.env.VITE_BASE_URL + import.meta.env.VITE_API_URL + '/system/user/import'
+const importUrl = wsCache.get(CACHE_KEY.SERVER_HTTP_URL) + '/system/user/import'
 const uploadHeaders = ref() // 上传 Header 头
 const fileList = ref([]) // 文件列表
 const updateSupport = ref(0) // 是否更新已经存在的用户数据

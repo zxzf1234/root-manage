@@ -5,10 +5,12 @@
 </template>
 <script setup lang="ts" name="InfraSwagger">
 import * as ConfigApi from '@/api/infra/data/config'
+import { useCache, CACHE_KEY } from '@/hooks/web/useCache'
+const { wsCache } = useCache()
 
 const loading = ref(true) // 是否加载中
-const src = ref(import.meta.env.VITE_BASE_URL + '/doc.html') // Knife4j UI
-// const src = ref(import.meta.env.VITE_BASE_URL + '/swagger-ui') // Swagger UI
+const src = ref(wsCache.get(CACHE_KEY.SERVER_BASE_URL) + '/doc.html') // Knife4j UI
+// const src = ref(wsCache.get(CACHE_KEY.SERVER_BASE_URL) + '/swagger-ui') // Swagger UI
 
 /** 初始化 */
 onMounted(async () => {

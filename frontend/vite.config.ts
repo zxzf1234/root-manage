@@ -34,7 +34,6 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       // 本地跨域代理. 目前注释的原因：暂时没有用途，server 端已经支持跨域
       // proxy: {
       //   ['/admin-api']: {
-      //     target: env.VITE_BASE_URL,
       //     ws: false,
       //     changeOrigin: true,
       //     rewrite: (path) => path.replace(new RegExp(`^/admin-api`), ''),
