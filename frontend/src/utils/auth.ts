@@ -49,10 +49,7 @@ export const setServerUrl = (url, port) => {
     CACHE_KEY.SERVER_HTTP_URL,
     'http://' + url + ':' + port + '/' + import.meta.env.VITE_APP_NO + '-server/admin-api'
   )
-  wsCache.set(
-    CACHE_KEY.SERVER_WS_URL,
-    'ws://' + url + ':' + port + '/' + import.meta.env.VITE_APP_NO + '-server'
-  )
+  wsCache.set(CACHE_KEY.SERVER_WS_URL, 'ws://' + url + ':' + port)
   wsCache.set(
     CACHE_KEY.SERVER_UPLOAD_FILE_URL,
     'http://' +

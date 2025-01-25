@@ -87,7 +87,7 @@ const dialogTitle = ref('')
 
 const message = useMessage() // 消息弹窗
 
-const server = ref(wsCache.get(CACHE_KEY.SERVER_UPLOAD_FILE_URL) + '?token=' + getAccessToken()) // WebSocket 服务地址
+const server = ref(wsCache.get(CACHE_KEY.SERVER_WS_URL) + '?token=' + getAccessToken()) // WebSocket 服务地址
 const getIsOpen = computed(() => status.value === 'OPEN') // WebSocket 连接是否打开
 const getTagColor = computed(() => (getIsOpen.value ? 'success' : 'red')) // WebSocket 连接的展示颜色
 
@@ -186,7 +186,7 @@ const userList = ref<any[]>([]) // 用户列表
 onMounted(async () => {
   // 获取用户列表
   userList.value = await UserApi.listAllSimple()
-  server.value = wsCache.get(CACHE_KEY.SERVER_UPLOAD_FILE_URL) + '?token=' + getAccessToken()
+  server.value = wsCache.get(CACHE_KEY.SERVER_WS_URL) + '?token=' + getAccessToken()
 })
 
 const openView = async () => {
