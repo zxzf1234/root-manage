@@ -59,7 +59,6 @@ public class FileConfigServiceImpl implements FileConfigService {
     private Validator validator;
 
     @Override
-    @PostConstruct
     public void initLocalCache() {
         // 第一步：查询数据
         List<InfraFileConfig> configs = infraFileConfigRepository.findAll();

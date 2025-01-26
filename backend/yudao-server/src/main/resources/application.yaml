@@ -1,3 +1,28 @@
+--- #################### 系统相关配置 ####################
+xiyu:
+  info:
+    version: 1.0.0
+  is-local: true
+  account-router_url: http://39.101.174.235:48080
+  web:
+    admin-ui:
+      url: http://dashboard.yudao.iocoder.cn # Admin 管理后台 UI 的地址
+  websocket:
+    enable: true # websocket的开关
+    path: /ws # 路径
+    sender-type: local # 消息发送的类型，可选值为 local、redis、rocketmq、kafka、rabbitmq
+  swagger:
+    title: ${spring.application.name}
+    description: 提供管理后台、用户 App 的所有功能
+    version: ${xiyu.info.version}
+    url: ${xiyu.web.admin-ui.url}
+    email: xingyu4j@vip.qq.com
+    license: MIT
+    license-url: https://gitee.com/zhijiantianya/ruoyi-vue-pro/blob/master/LICENSE
+  captcha:
+    enable: true # 验证码的开关，默认为 true
+
+--- #################### spring相关配置 ####################
 spring:
   application:
     name: root管理系统
@@ -37,7 +62,7 @@ spring:
     redis:
       time-to-live: 1h # 设置过期时间为 1 小时
   flyway:
-    enabled: true
+    enabled: ${xiyu.is-local}
     encoding: utf-8
     # 对执行迁移时基准版本的描述
     baseline-description: BaseLineInitialize
@@ -87,31 +112,6 @@ aj:
     req-get-minute-limit: 30 # get 接口一分钟内请求数限制
     req-check-minute-limit: 60 # check 接口一分钟内请求数限制
     req-verify-minute-limit: 60 # verify 接口一分钟内请求数限制
-
---- #################### 芋道相关配置 ####################
-
-xiyu:
-  info:
-    version: 1.0.0
-  app-no: root
-  is-local: true
-  web:
-    admin-ui:
-      url: http://dashboard.yudao.iocoder.cn # Admin 管理后台 UI 的地址
-  websocket:
-    enable: true # websocket的开关
-    path: /ws # 路径
-    sender-type: local # 消息发送的类型，可选值为 local、redis、rocketmq、kafka、rabbitmq
-  swagger:
-    title: ${spring.application.name}
-    description: 提供管理后台、用户 App 的所有功能
-    version: ${xiyu.info.version}
-    url: ${xiyu.web.admin-ui.url}
-    email: xingyu4j@vip.qq.com
-    license: MIT
-    license-url: https://gitee.com/zhijiantianya/ruoyi-vue-pro/blob/master/LICENSE
-  captcha:
-    enable: true # 验证码的开关，默认为 true
 
 
 debug: false

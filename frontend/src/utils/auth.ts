@@ -58,7 +58,7 @@ export const setServerUrl = (url, port) => {
       port +
       '/' +
       import.meta.env.VITE_APP_NO +
-      '/admin-api/infra/file/upload'
+      '-server//admin-api/infra/file/upload'
   )
 }
 

@@ -15,7 +15,7 @@
           <LoginFormTitle style="width: 100%" />
         </el-form-item>
       </el-col>
-      <el-col :span="24" style="padding-left: 10px; padding-right: 10px" v-if="!isLocal">
+      <el-col :span="24" style="padding-left: 10px; padding-right: 10px" v-if="isLocal == 'false'">
         <el-form-item prop="accountName">
           <el-input
             v-model="loginData.loginForm.accountName"
@@ -161,7 +161,7 @@ const redirect = ref<string>('')
 const loginLoading = ref(false)
 const verify = ref()
 const captchaType = ref('blockPuzzle') // blockPuzzle 滑块 clickWord 点击文字
-const isLocal = import.meta.env.VITE_IS_LOCAL
+const isLocal = ref(import.meta.env.VITE_IS_LOCAL)
 
 const getShow = computed(() => unref(getLoginState) === LoginStateEnum.LOGIN)
 
@@ -205,13 +205,13 @@ const handleClickLogin = async () => {
 }
 
 const getCustomerInfo = async () => {
-  if (import.meta.env.VITE_IS_LOCAL) {
+  if (isLocal.value == 'true') {
     // 更新server URL
     authUtil.setServerUrl(import.meta.env.VITE_SERVER_IP, import.meta.env.VITE_SERVER_PORT)
   } else {
     const customerInfo = await axios.get(
       import.meta.env.VITE_ACCOUNT_ROUTER_URL +
-        '/admin-api/infra/devops/customer/get-by-name?customerName=' +
+        '/devops-server/admin-api/infra/devops/customer/get-by-name?customerName=' +
         loginData.loginForm.accountName
     )
     if (customerInfo.data.code != 0) {
@@ -222,13 +222,14 @@ const getCustomerInfo = async () => {
       message.alertError('获取账号信息失败，请联系售后')
       return false
     }
+    console.log(customerInfo)
     loginData.loginForm.accountNo = customerInfo.data.data.accountNo
     // 放入缓存
     authUtil.setAccountInfo(customerInfo.data.data)
     // 更新server URL
     authUtil.setServerUrl(customerInfo.data.data.server.ip, customerInfo.data.data.server.port)
-    return true
   }
+  console.log('this is getCustomerInfo ' + wsCache.get(CACHE_KEY.SERVER_HTTP_URL))
   service.defaults.baseURL = wsCache.get(CACHE_KEY.SERVER_HTTP_URL)
   return true
 }

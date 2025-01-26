@@ -13,7 +13,6 @@ import org.springframework.beans.factory.config.MethodInvokingFactoryBean;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,7 +31,6 @@ import jakarta.annotation.Resource;
  */
 @AutoConfiguration
 //@EnableConfigurationProperties(SecurityProperties.class)
-@DependsOn("flywayInitializer")
 public class SecurityAutoConfiguration {
 
     @Resource

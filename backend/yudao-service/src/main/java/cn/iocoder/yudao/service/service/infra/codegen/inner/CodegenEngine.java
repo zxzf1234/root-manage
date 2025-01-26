@@ -27,7 +27,6 @@ import cn.iocoder.yudao.service.util.upgrade.UpgradeUtils;
 import org.jsoup.internal.StringUtil;
 import org.springframework.stereotype.Component;
 
-import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import java.io.File;
 import java.time.LocalDateTime;
@@ -149,8 +148,7 @@ public class CodegenEngine {
         this.templateEngine = new VelocityEngine(config);
     }
 
-    @PostConstruct
-    private void initGlobalBindingMap() {
+    public void initGlobalBindingMap() {
         // 全局配置
         globalBindingMap.put("basePackage", "cn.iocoder.yudao");
         // 全局 Java Bean
