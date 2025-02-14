@@ -17,6 +17,7 @@ import org.springdoc.core.providers.JavadocProvider;
 import org.springdoc.core.service.OpenAPIService;
 import org.springdoc.core.service.SecurityService;
 import org.springdoc.core.utils.PropertyResolverUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -43,6 +44,9 @@ import java.util.Optional;
 @EnableConfigurationProperties(SwaggerProperties.class)
 @ConditionalOnProperty(prefix = "springdoc.api-docs", name = "enabled", havingValue = "true", matchIfMissing = true) // 设置为 false 时，禁用
 public class SwaggerAutoConfiguration {
+
+    @Value("${spring.application.number}")
+    private String applicationNo;
 
     // ========== 全局 OpenAPI 配置 ==========
 
@@ -109,14 +113,14 @@ public class SwaggerAutoConfiguration {
         return buildGroupedOpenApi("all", "");
     }
 
-    public static GroupedOpenApi buildGroupedOpenApi(String group) {
+    public GroupedOpenApi buildGroupedOpenApi(String group) {
         return buildGroupedOpenApi(group, group);
     }
 
-    public static GroupedOpenApi buildGroupedOpenApi(String group, String path) {
+    public GroupedOpenApi buildGroupedOpenApi(String group, String path) {
         return GroupedOpenApi.builder()
                 .group(group)
-                .pathsToMatch("/admin-api/" + path + "/**", "/app-api/" + path + "/**")
+                .pathsToMatch("/" + applicationNo + "-server" + "/admin-api/" + path + "/**", "/" + applicationNo + "-server" + "/app-api/" + path + "/**")
                 .addOperationCustomizer((operation, handlerMethod) -> operation
                     .addParametersItem(buildSecurityHeaderParameter()))
                 .build();

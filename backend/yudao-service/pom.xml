@@ -16,10 +16,7 @@
         <revision>1.7.4-snapshot</revision>
         <!-- 统一依赖管理 -->
         <spring.boot.version>3.4.1</spring.boot.version>
-        <!-- Web 相关 -->
-        <knife4j.version>4.4.0</knife4j.version>
         <!-- DB 相关 -->
-        <druid.version>1.2.16</druid.version>
         <jimmer.version>0.9.9</jimmer.version>
         <flyway.version>11.1.0</flyway.version>
         <mysql.connector.version>8.0.22</mysql.connector.version>
@@ -92,11 +89,6 @@
             </dependency>
 
             <!-- Web 相关 -->
-            <!--            <dependency>-->
-            <!--                <groupId>com.github.xiaoymin</groupId>-->
-            <!--                <artifactId>knife4j-openapi3-spring-boot-starter</artifactId>-->
-            <!--                <version>${knife4j.version}</version>-->
-            <!--            </dependency>-->
             <dependency>
                 <groupId>org.springdoc</groupId>
                 <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
@@ -133,11 +125,6 @@
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-mysql</artifactId>
                 <version>${flyway.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.alibaba</groupId>
-                <artifactId>druid-spring-boot-starter</artifactId>
-                <version>${druid.version}</version>
             </dependency>
 
             <!-- 监控相关 -->
@@ -404,10 +391,6 @@
 
 
         <!-- Web 相关 -->
-        <!--        <dependency>-->
-        <!--            <groupId>com.github.xiaoymin</groupId>-->
-        <!--            <artifactId>knife4j-openapi3-spring-boot-starter</artifactId>-->
-        <!--        </dependency>-->
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-api</artifactId>
@@ -433,10 +416,6 @@
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-mysql</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid-spring-boot-starter</artifactId>
         </dependency>
 
         <!-- 监控 相关 -->
