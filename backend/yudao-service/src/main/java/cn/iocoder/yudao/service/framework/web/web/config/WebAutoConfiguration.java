@@ -27,6 +27,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import jakarta.annotation.Resource;
 import jakarta.servlet.Filter;
 
+import java.util.Objects;
+
 @AutoConfiguration
 @EnableConfigurationProperties(WebProperties.class)
 @Slf4j
@@ -42,6 +44,9 @@ public class WebAutoConfiguration implements WebMvcConfigurer {
 
     @Value("${spring.application.number}")
     private String applicationNo;
+
+    @Value("${spring.profiles.active}")
+    private String profilesActive;
 
     private final ConfigurableApplicationContext applicationContext;
 
@@ -63,16 +68,14 @@ public class WebAutoConfiguration implements WebMvcConfigurer {
      * @param api        API 配置
      */
     private void configurePathMatch(PathMatchConfigurer configurer, WebProperties.Api api) {
-        log.info("******* this is configurePathMatch version is 1.7.4  api is " + "/" + applicationNo + "-server" + api.getPrefix() + " *******");
         AntPathMatcher antPathMatcher = new AntPathMatcher(".");
-        configurer.addPathPrefix("/" + applicationNo + "-server" + api.getPrefix(), clazz -> clazz.isAnnotationPresent(RestController.class)
+        String prefix = Objects.equals(profilesActive, "local") ? ("/" + applicationNo + "-server" ) : "" + api.getPrefix();
+        configurer.addPathPrefix(prefix, clazz -> clazz.isAnnotationPresent(RestController.class)
                 && antPathMatcher.match(api.getController(), clazz.getPackage().getName())); // 仅仅匹配 controller 包
     }
 
     @Bean
     public GlobalExceptionHandler globalExceptionHandler(ApiErrorLogFrameworkService ApiErrorLogFrameworkService) {
-        System.out.println("this is &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& globalExceptionHandler");
-        System.out.println(applicationContext.getId());
         return new GlobalExceptionHandler(applicationName, ApiErrorLogFrameworkService);
     }
 
