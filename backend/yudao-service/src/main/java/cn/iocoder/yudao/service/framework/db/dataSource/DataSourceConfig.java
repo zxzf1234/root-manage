@@ -71,6 +71,10 @@ public class DataSourceConfig {
         Map<Object, Object> DataSources = new HashMap<>();
         System.out.println("this is isLocal" + isLocal);
         if(isLocal){
+            System.out.println("this is defaultDbUrl " + defaultDbUrl);
+            System.out.println("this is defaultDbUsername " + defaultDbUsername);
+            System.out.println("this is defaultDbPassword " + defaultDbPassword);
+            System.out.println("this is defaultDbDriverClassName " + defaultDbDriverClassName);
             DriverManagerDataSource defaultDataSource = new DriverManagerDataSource();
             defaultDataSource.setUrl(defaultDbUrl);
             defaultDataSource.setUsername(defaultDbUsername);
