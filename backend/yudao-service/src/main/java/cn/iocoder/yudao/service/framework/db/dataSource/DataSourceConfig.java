@@ -69,6 +69,7 @@ public class DataSourceConfig {
 
     private Map<Object, Object> getDateSource() throws Exception {
         Map<Object, Object> DataSources = new HashMap<>();
+        System.out.println("this is isLocal" + isLocal);
         if(isLocal){
             DriverManagerDataSource defaultDataSource = new DriverManagerDataSource();
             defaultDataSource.setUrl(defaultDbUrl);
