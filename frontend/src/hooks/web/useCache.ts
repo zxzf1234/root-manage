@@ -6,24 +6,28 @@ import WebStorageCache from 'web-storage-cache'
 
 type CacheType = 'localStorage' | 'sessionStorage'
 
-export const CACHE_KEY = {
-  IS_DARK: 'isDark',
-  USER: 'user',
-  LANG: 'lang',
-  THEME: 'theme',
-  LAYOUT: 'layout',
-  ROLE_ROUTERS: 'roleRouters',
-  DICT_CACHE: 'dictCache',
-  TABLE_CACHE: 'tableCache',
-  ACCESS_TOKEN_KEY: 'access_token_key',
-  REFRESH_TOKEN_KEY: 'refresh_token_key',
-  ACCOUNT_INFO: 'account_info',
-  ACCOUNT_VERSION: 'account_version',
-  SERVER_BASE_URL: 'server_base_url',
-  SERVER_HTTP_URL: 'server_http_url',
-  SERVER_WS_URL: 'server_ws_url',
-  SERVER_UPLOAD_FILE_URL: 'server_upload_file_url'
-}
+const keys = [
+  'IS_DARK',
+  'USER',
+  'LANG',
+  'THEME',
+  'LAYOUT',
+  'ROLE_ROUTERS',
+  'DICT_CACHE',
+  'TABLE_CACHE',
+  'ACCESS_TOKEN_KEY',
+  'REFRESH_TOKEN_KEY',
+  'ACCOUNT_INFO',
+  'ACCOUNT_VERSION',
+  'SERVER_BASE_URL',
+  'SERVER_HTTP_URL',
+  'SERVER_WS_URL',
+  'SERVER_UPLOAD_FILE_URL'
+] as const
+
+export const CACHE_KEY = Object.fromEntries(
+  keys.map((key) => [key, `${import.meta.env.VITE_APP_NO}-${key.toLowerCase()}`])
+) as { readonly [K in (typeof keys)[number]]: string }
 
 export const useCache = (type: CacheType = 'localStorage') => {
   const wsCache: WebStorageCache = new WebStorageCache({
