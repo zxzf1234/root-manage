@@ -1,12 +1,21 @@
 <template>
-  <Form ref="formRef" :labelWidth="80" :rules="rules" :schema="schema">
-    <template #sex="form">
-      <el-radio-group v-model="form['sex']">
+  <el-form ref="formRef" :labelWidth="80" :rules="rules">
+    <el-form-item label="用户昵称" prop="nickname">
+      <el-input v-model="formData.nickname" placeholder="请输入用户昵称" />
+    </el-form-item>
+    <el-form-item label="手机号码" prop="mobile">
+      <el-input v-model="formData.mobile" maxlength="11" placeholder="请输入手机号码" />
+    </el-form-item>
+    <el-form-item label="邮箱" prop="email">
+      <el-input v-model="formData.email" maxlength="50" placeholder="请输入邮箱" />
+    </el-form-item>
+    <el-form-item label="性别">
+      <el-radio-group v-model="formData.sex">
         <el-radio :value="1">{{ t('profile.user.man') }}</el-radio>
         <el-radio :value="2">{{ t('profile.user.woman') }}</el-radio>
       </el-radio-group>
-    </template>
-  </Form>
+    </el-form-item>
+  </el-form>
   <XButton :title="t('common.save')" @click="submit()" />
   <XButton :title="t('common.reset')" type="danger" @click="init()" />
 </template>
@@ -14,7 +23,6 @@
 import type { FormRules } from 'element-plus'
 import { ElMessage } from 'element-plus'
 
-import { FormSchema } from '@/types/form'
 import type { FormExpose } from '@/components/Form'
 import {
   getUserProfile,
@@ -43,29 +51,13 @@ const rules = reactive<FormRules>({
     }
   ]
 })
-const schema = reactive<FormSchema[]>([
-  {
-    field: 'nickname',
-    label: t('profile.user.nickname'),
-    component: 'Input'
-  },
-  {
-    field: 'mobile',
-    label: t('profile.user.mobile'),
-    component: 'Input'
-  },
-  {
-    field: 'email',
-    label: t('profile.user.email'),
-    component: 'Input'
-  },
-  {
-    field: 'sex',
-    label: t('profile.user.sex'),
-    component: 'InputNumber',
-    value: 0
-  }
-])
+const formData = ref({
+  id: undefined,
+  nickname: '',
+  mobile: '',
+  email: '',
+  sex: undefined
+})
 const formRef = ref<FormExpose>() // 表单 Ref
 const submit = () => {
   const elForm = unref(formRef)?.getElFormRef()
@@ -80,8 +72,7 @@ const submit = () => {
   })
 }
 const init = async () => {
-  const res = await getUserProfile()
-  unref(formRef)?.setValues(res)
+  formData.value = await getUserProfile()
 }
 onMounted(async () => {
   await init()
