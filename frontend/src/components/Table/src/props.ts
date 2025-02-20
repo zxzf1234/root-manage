@@ -9,7 +9,7 @@ export default {
     type: Object,
     default: {
       total: 0,
-      pageSize: 10,
+      pageSize: 50,
       currentPage: 1,
       background: true,
       pageSizes: [10, 20, 50, 200]

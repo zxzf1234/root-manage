@@ -70,15 +70,6 @@
             >
               <Icon icon="ep:upload" /> 导入
             </el-button>
-            <el-button
-              type="success"
-              plain
-              @click="handleExport"
-              :loading="exportLoading"
-              v-hasPermi="['system:user:export']"
-            >
-              <Icon icon="ep:download" />导出
-            </el-button>
           </el-form-item>
         </el-form>
       </ContentWrap>
@@ -136,7 +127,7 @@
 <script setup lang="ts" name="SystemUser">
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
 import { formatDate } from '@/utils/formatTime'
-import download from '@/utils/download'
+// import download from '@/utils/download'
 import * as UserApi from '@/api/system/user/user'
 import UserForm from './UserForm.vue'
 import UserImportForm from './UserImportForm.vue'
@@ -252,20 +243,20 @@ const handleStatusChange = async (row: UserApi.UserVO) => {
 }
 
 /** 导出按钮操作 */
-const exportLoading = ref(false)
-const handleExport = async () => {
-  try {
-    // 导出的二次确认
-    await message.exportConfirm()
-    // 发起导出
-    exportLoading.value = true
-    const data = await UserApi.exported(queryParams)
-    download.excel(data, '用户数据.xls')
-  } catch {
-  } finally {
-    exportLoading.value = false
-  }
-}
+// const exportLoading = ref(false)
+// const handleExport = async () => {
+//   try {
+//     // 导出的二次确认
+//     await message.exportConfirm()
+//     // 发起导出
+//     exportLoading.value = true
+//     const data = await UserApi.exported(queryParams)
+//     download.excel(data, '用户数据.xls')
+//   } catch {
+//   } finally {
+//     exportLoading.value = false
+//   }
+// }
 
 /** 删除按钮操作 */
 const handleDelete = async (id: number) => {

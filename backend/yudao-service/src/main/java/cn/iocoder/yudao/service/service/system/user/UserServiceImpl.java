@@ -193,7 +193,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public PageResult<UserPageOutput> page(UserPageInput inputVO) {
-        log.info("******* this is user page version is 1.7.4  ******");
         Page<SystemUser> pageResult = systemUserRepository.getUserPage(inputVO);
         List<UserPageOutput> userList = UserConvert.INSTANCE.pagePageOutputConvert(pageResult.getRows());
         return new PageResult<>(userList, pageResult.getTotalRowCount());
@@ -208,7 +207,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserGetOutput get(Long id) {
-        log.info("******* this is user get version is 1.7.4  ******");
          Optional<SystemUser> opUser = systemUserRepository.GetUser(id);
          if(opUser.isEmpty())
              throw exception(USER_NOT_EXISTS);

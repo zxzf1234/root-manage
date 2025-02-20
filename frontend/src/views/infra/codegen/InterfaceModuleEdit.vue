@@ -58,7 +58,7 @@ const formData = ref({
   parentId: undefined,
   name: '',
   comment: undefined,
-  type: 0,
+  type: undefined,
   sort: 0
 })
 const formRules = reactive({
@@ -122,7 +122,7 @@ const resetForm = () => {
     parentId: undefined,
     name: '',
     comment: undefined,
-    type: 0,
+    type: undefined,
     sort: 0
   }
   formRef.value?.resetFields()
