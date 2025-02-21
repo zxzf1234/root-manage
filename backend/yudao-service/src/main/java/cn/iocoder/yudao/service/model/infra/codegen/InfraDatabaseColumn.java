@@ -47,6 +47,8 @@ public interface InfraDatabaseColumn extends BaseEntity {
 
     Integer sort();
 
+    Integer relatedTableType();
+
     @Nullable
     @LogicalDeleted("now")
     LocalDateTime deletedTime();

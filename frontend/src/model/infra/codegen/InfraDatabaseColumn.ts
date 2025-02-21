@@ -1,6 +1,6 @@
 export type InfraDatabaseColumn = {
-  id: string
-  tableId: string
+  id: string | undefined
+  tableId: string | undefined
   columnName: string
   dataType: string
   columnComment: string

@@ -198,19 +198,19 @@
                 "
                 @change="dataTypeBlur(scope)"
               >
-                <el-option value="BIGINT" leable="BIGINT" />
-                <el-option value="INT" leable="INT" />
-                <el-option value="TINYINT" leable="TINYINT" />
-                <el-option value="VARCHAR(50)" leable="VARCHAR(50)" />
-                <el-option value="VARCHAR(255)" leable="VARCHAR(255)" />
-                <el-option value="VARCHAR(1024)" leable="VARCHAR(1024)" />
-                <el-option value="DECIMAL(19,4)" leable="DECIMAL(19,4)" />
-                <el-option value="BLOB" leable="BLOB" />
-                <el-option value="TEXT" leable="TEXT" />
-                <el-option value="LONGBLOB" leable="LONGBLOB" />
-                <el-option value="LONGTEXT" leable="LONGTEXT" />
-                <el-option value="DATETIME" leable="DATETIME" />
-                <el-option value="TIMESTAMP" leable="TIMESTAMP" />
+                <el-option value="BIGINT" label="BIGINT" />
+                <el-option value="INT" label="INT" />
+                <el-option value="TINYINT" label="TINYINT" />
+                <el-option value="VARCHAR(50)" label="VARCHAR(50)" />
+                <el-option value="VARCHAR(255)" label="VARCHAR(255)" />
+                <el-option value="VARCHAR(1024)" label="VARCHAR(1024)" />
+                <el-option value="DECIMAL(19,4)" label="DECIMAL(19,4)" />
+                <el-option value="BLOB" label="BLOB" />
+                <el-option value="TEXT" label="TEXT" />
+                <el-option value="LONGBLOB" label="LONGBLOB" />
+                <el-option value="LONGTEXT" label="LONGTEXT" />
+                <el-option value="DATETIME" label="DATETIME" />
+                <el-option value="TIMESTAMP" label="TIMESTAMP" />
               </el-select>
             </template>
           </el-table-column>
@@ -292,23 +292,46 @@
                 placeholder="输入表名搜索"
                 remote-show-suffix
                 :remote-method="getTableOptions"
+                :disabled="
+                  [
+                    'id',
+                    'create_time',
+                    'update_time',
+                    'creator_id',
+                    'updater_id',
+                    'deleted_time'
+                  ].includes(scope.row.columnName)
+                "
               >
                 <el-option
                   v-for="dict in tableOptions"
                   :key="dict.id"
                   :label="dict.name"
                   :value="dict.name"
-                  :disabled="
-                    [
-                      'id',
-                      'create_time',
-                      'update_time',
-                      'creator_id',
-                      'updater_id',
-                      'deleted_time'
-                    ].includes(scope.row.columnName)
-                  "
                 />
+              </el-select>
+            </template>
+          </el-table-column>
+          <el-table-column label="关联表类型" min-width="11%">
+            <template #default="scope">
+              <el-select
+                v-model="scope.row.relatedTableType"
+                filterable
+                default-first-option
+                class="!w-150px"
+                :disabled="
+                  [
+                    'id',
+                    'create_time',
+                    'update_time',
+                    'creator_id',
+                    'updater_id',
+                    'deleted_time'
+                  ].includes(scope.row.columnName)
+                "
+              >
+                <el-option :value="1" label="多对一" />
+                <el-option :value="2" label="一对一" />
               </el-select>
             </template>
           </el-table-column>
@@ -345,7 +368,7 @@
               <el-input
                 v-model="scope.row.example"
                 @blur="scope.row.example = scope.row.example.trim()"
-                class="!w-150px"
+                class="!w-130px"
                 :disabled="
                   [
                     'id',
@@ -568,6 +591,7 @@ const open = async (type: string, id?: string) => {
           dictType: '',
           example: '',
           relatedTable: '',
+          relatedTableType: 1,
           required: 0,
           operateType: '',
           sort: 0,
@@ -585,6 +609,7 @@ const open = async (type: string, id?: string) => {
           dictType: '',
           example: '',
           relatedTable: '',
+          relatedTableType: 1,
           required: 0,
           operateType: '',
           sort: 1000,
@@ -602,6 +627,7 @@ const open = async (type: string, id?: string) => {
           dictType: '',
           example: '',
           relatedTable: '',
+          relatedTableType: 1,
           required: 0,
           operateType: '',
           sort: 1001,
@@ -619,6 +645,7 @@ const open = async (type: string, id?: string) => {
           dictType: '',
           example: '',
           relatedTable: '',
+          relatedTableType: 1,
           required: 0,
           operateType: '',
           sort: 1002,
@@ -636,6 +663,7 @@ const open = async (type: string, id?: string) => {
           dictType: '',
           example: '',
           relatedTable: '',
+          relatedTableType: 1,
           required: 0,
           operateType: '',
           sort: 1003,
@@ -653,6 +681,7 @@ const open = async (type: string, id?: string) => {
           dictType: '',
           example: '',
           relatedTable: '',
+          relatedTableType: 1,
           required: 0,
           operateType: '',
           sort: 1004,
@@ -866,6 +895,7 @@ const handleAddColumn = async () => {
     dictType: '',
     example: '',
     relatedTable: '',
+    relatedTableType: 1,
     required: 0,
     operateType: 'new',
     sort: columnSort++,
@@ -996,6 +1026,7 @@ const handleAddDeletedTime = () => {
     dictType: '',
     example: '',
     relatedTable: '',
+    relatedTableType: 1,
     required: 0,
     operateType: 'new',
     sort: 1004,

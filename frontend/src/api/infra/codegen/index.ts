@@ -32,6 +32,7 @@ export type DatabaseColumnVO = {
   dictType: string
   example: string
   relatedTable: string
+  relatedTableType: number
   required: number
   sort: number
   operateType: string | undefined

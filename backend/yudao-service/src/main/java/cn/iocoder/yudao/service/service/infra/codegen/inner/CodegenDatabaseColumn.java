@@ -28,6 +28,8 @@ public class CodegenDatabaseColumn {
 
     private String relatedTable;
 
+    private Integer relatedTableType;
+
     private String htmlType;
 
     private Boolean required;

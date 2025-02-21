@@ -24,6 +24,7 @@ public interface InfraDatabaseColumnRepository extends JRepository<InfraDatabase
                 .set(infradatabaseColumnTable.javaType(), column.javaType())
                 .set(infradatabaseColumnTable.nullable(), column.nullable())
                 .set(infradatabaseColumnTable.relatedTable(), column.relatedTable())
+                .set(infradatabaseColumnTable.relatedTableType(), column.relatedTableType())
                 .set(infradatabaseColumnTable.required(), column.required())
                 .where(infradatabaseColumnTable.id().eq(column.id()))
                 .execute();

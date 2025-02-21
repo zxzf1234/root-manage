@@ -4,9 +4,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import java.util.*;
 import jakarta.validation.constraints.*;
+import org.hibernate.validator.constraints.*;
 import jakarta.validation.constraints.NotEmpty;
-
+import org.springframework.format.annotation.DateTimeFormat;
 import static cn.iocoder.yudao.service.util.date.DateUtils.FORMAT_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 /**
  * 数据库表字段 Base VO，提供给添加、修改、详细的子 VO 使用
@@ -25,7 +28,7 @@ public class InfraDatabaseColumnBase {
 
     @Schema(description = "字段类型", requiredMode = Schema.RequiredMode.REQUIRED, example = "int(11)")
     @NotEmpty(message = "物理类型不能为空")
-    @Pattern(regexp = "^(BIT|TINYINT|SMALLINT|MEDIUMINT|INT|BIGINT|FLOAT|DOUBLE|DECIMAL|DATE|TIME|YEAR|DATETIME|TIMESTAMP|VARCHAR|CHAR|TEXT|BLOB|LONGBLOB|LONGTEXT)[0-9(),]*$", message = "物理类型不合法")
+    @Pattern(regexp = "^(BIT|TINYINT|SMALLINT|MEDIUMINT|INT|BIGINT|FLOAT|DOUBLE|DECIMAL|DATE|TIME|YEAR|DATETIME|TIMESTAMP|VARCHAR|CHAR|TEXT)[0-9(),]*$", message = "物理类型不合法")
     private String dataType;
 
     @Schema(description = "字段描述", requiredMode = Schema.RequiredMode.REQUIRED, example = "年龄")
@@ -62,5 +65,8 @@ public class InfraDatabaseColumnBase {
     @Schema(description = "排序", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
     @NotNull(message = "排序不能为空")
     private Integer sort;
+
+    @Schema(description = "关联表类型", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
+    private Integer relatedTableType;
 
 }

@@ -282,6 +282,7 @@ public class DatabaseTableServiceImpl implements DatabaseTableService {
                 ||!Objects.equals(oldColumn.javaType(), reqVoColumn.getJavaType())
                 ||!Objects.equals(oldColumn.required(), reqVoColumn.getRequired())
                 ||!Objects.equals(oldColumn.relatedTable(), reqVoColumn.getRelatedTable())
+                ||!Objects.equals(oldColumn.relatedTableType(), reqVoColumn.getRelatedTableType())
 
         ) {
             isColumnChange = true;
