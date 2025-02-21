@@ -7,6 +7,7 @@ import org.babyfish.jimmer.Page;
 import org.springframework.util.StringUtils;
 import java.util.Optional;
 import java.util.List;
+import java.time.LocalDateTime;
 
 public interface ${classNameHump}Repository extends JRepository<${classNameHump}, Long> {
 #set($Table = $classNameHump.substring(0,1).toLowerCase() + ${classNameHump.substring(1)})

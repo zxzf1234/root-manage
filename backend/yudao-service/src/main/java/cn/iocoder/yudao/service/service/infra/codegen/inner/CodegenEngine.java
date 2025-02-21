@@ -628,7 +628,7 @@ public class CodegenEngine {
             }
 
             function.append("    Optional<").append(upperFirst(toCamelCase(inputSubTable.name()))).append("> findFirstBy")
-                    .append(columnFunction) .append("(") .append(columnParam) .append(");\r\n");
+                    .append(columnFunction) .append("(") .append(columnParam) .append(")\r\n");
             String repositoryDuplicateFunctionName = "findFirstBy" + columnFunction;
             bindingMap.put("subRepositoryDuplicateFunctionName", repositoryDuplicateFunctionName);
             bindingMap.put("subRepositoryDuplicateFunctionParams", functionParam);
@@ -676,7 +676,7 @@ public class CodegenEngine {
 
             if(infraInterface.name().toLowerCase().contains("create") || infraInterface.name().toLowerCase().contains("update")){
                 function.append("    Optional<").append(upperFirst(toCamelCase(inputTable.name()))).append("> findFirstBy")
-                        .append(columnFunction) .append("(") .append(columnParam) .append(");\r\n");
+                        .append(columnFunction) .append("(") .append(columnParam) .append(")\r\n");
                 String repositoryDuplicateFunctionName = "findFirstBy" + columnFunction;
                 bindingMap.put("repositoryDuplicateFunctionName", repositoryDuplicateFunctionName);
                 bindingMap.put("repositoryDuplicateFunctionParams", functionParam);

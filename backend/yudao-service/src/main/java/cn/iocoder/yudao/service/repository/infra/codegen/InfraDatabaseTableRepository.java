@@ -1,6 +1,5 @@
 package cn.iocoder.yudao.service.repository.infra.codegen;
 
-import cn.iocoder.yudao.service.vo.infra.tradeTest.trade.TradePageQueryInput;
 import cn.iocoder.yudao.service.model.infra.codegen.*;
 import cn.iocoder.yudao.service.vo.infra.codegen.database.DatabaseTableListReqVO;
 import org.babyfish.jimmer.spring.repository.JRepository;
@@ -75,11 +74,6 @@ public interface InfraDatabaseTableRepository extends JRepository<InfraDatabaseT
                         .mappings(InfraDatabaseMappingFetcher.$.allTableFields())
                 ))
                 .fetchOptional();
-    };    default Page<InfraDatabaseTable> pageQuery(TradePageQueryInput inputVO){
-        return sql().createQuery(infraDatabaseTableTable)
-                .whereIf(StringUtils.hasText(inputVO.getName()), () -> infraDatabaseTableTable.name().like(inputVO.getName()))
-                        .orderBy(infraDatabaseTableTable.id().desc())
-                        .select(infraDatabaseTableTable).fetchPage(inputVO.getPageNo() - 1, inputVO.getPageSize());
     }
 
 

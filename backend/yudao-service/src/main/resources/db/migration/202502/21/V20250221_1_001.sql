@@ -1,0 +1,1 @@
+INSERT IGNORE INTO infra_interface_validation(id,parent_id,parent_type,validation,validation_condition,message) VALUES ('29bbae0d-3bd4-455e-be05-7eb12c5ce35c','ec6ac848-cd33-4efa-addd-a18ccadb76ce',0,'NotBlank','','参数类型不能为空');

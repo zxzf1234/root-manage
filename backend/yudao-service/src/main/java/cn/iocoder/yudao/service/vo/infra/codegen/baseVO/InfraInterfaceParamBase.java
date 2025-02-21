@@ -1,6 +1,7 @@
 package cn.iocoder.yudao.service.vo.infra.codegen.baseVO;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import java.util.*;
 import jakarta.validation.constraints.*;
@@ -28,6 +29,7 @@ public class InfraInterfaceParamBase {
     private Boolean isList;
 
     @Schema(description = "参数类型", example = "string")
+    @NotBlank(message = "参数类型不能为空")
     private String variableType;
 
     @Schema(description = "关联字段id", example = "23423423")
