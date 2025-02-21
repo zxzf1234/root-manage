@@ -78,7 +78,6 @@ public class CodegenEngine {
             .put(templatePath("interfaceModule/convert"), templatePath("interfaceModule/convertPath"))
             .put(templatePath("interfaceModule/serviceImpl"), templatePath("interfaceModule/serviceImplPath"))
             .put(templatePath("interfaceModule/service"), templatePath("interfaceModule/servicePath"))
-            .put(templatePath("interfaceModule/vo"), templatePath("interfaceModule/voPath"))
             .put(templatePath("interfaceModule/errorCode"), templatePath("interfaceModule/errorCodePath"))
             .put(templatePath("interfaceModule/vueApi"), templatePath("interfaceModule/vueApiPath"))
             .build();
@@ -384,8 +383,8 @@ public class CodegenEngine {
             //生成代码 Optional<InfraDictNo> optionalOldInfraDictNo = infraDictNoRepository.findById(inputVO.getId());
             functionContent.append("        Optional<").append(inputTableName).append(">").append(" optionalOld")
                     .append(inputTableName).append(" = ").append(inputRepositoryName).append(".findById(inputVO.getId());\r\n");
-            //生成代码 if(!optionalOldInfraDictNo.isPresent())
-            functionContent.append("        if(!optionalOld").append(inputTableName).append(".isPresent()){\r\n");
+            //生成代码 if(optionalOldInfraDictNo.isEmpty())
+            functionContent.append("        if(optionalOld").append(inputTableName).append(".isEmpty()){\r\n");
             //生成代码 throw exception(DICT_NO_EXIST);
             functionContent.append("            throw exception(").append(notExistErrorCode).append(");\r\n");
             //生成代码 }
@@ -412,8 +411,8 @@ public class CodegenEngine {
                 //生成代码 Optional<InfraDictData> optionalDeleteInfraDictData = infraDictDataRepository.findById(data.getId());
                 functionContent.append("                Optional<").append(inputSubTableName).append("> optionalDelete").append(inputSubTableName)
                         .append(" = ").append(inputSubRepositoryName).append(".findById(").append(inputSubClassName).append(".getId());\r\n");
-                //生成代码 if(!optionalDeleteInfraDictData.isPresent()){
-                functionContent.append("                if(!optionalDelete").append(inputSubTableName).append(".isPresent()){\r\n");
+                //生成代码 if(optionalDeleteInfraDictData.isEmpty()){
+                functionContent.append("                if(optionalDelete").append(inputSubTableName).append(".isEmpty()){\r\n");
                 //生成代码 throw exception(DICT_DATA_NOT_EXISTS);
                 functionContent.append("                    throw exception(").append(subNotExistErrorCode).append(");\r\n");
                 //生成代码          }
@@ -450,8 +449,8 @@ public class CodegenEngine {
                 functionContent.append("                Optional<").append(inputSubTableName).append("> optionalOld").append(inputSubTableName)
                         .append(" = ").append(inputSubRepositoryName).append(".findById(").append(inputSubClassName)
                         .append(".getId());\r\n");
-                //生成代码 if(!optionalOldInfraDictData.isPresent()) {
-                functionContent.append("                if(!optionalOld").append(inputSubTableName).append(".isPresent()) {\r\n");
+                //生成代码 if(optionalOldInfraDictData.isEmpty()) {
+                functionContent.append("                if(optionalOld").append(inputSubTableName).append(".isEmpty()) {\r\n");
                 //生成代码 throw exception(DICT_DATA_NOT_EXISTS);
                 functionContent.append("                    ").append("throw exception(").append(subNotExistErrorCode).append(");\r\n");
                 //生成代码          }
@@ -521,8 +520,8 @@ public class CodegenEngine {
             //生成代码 Optional<InfraDictNo> optionalDeleteInfraDictNo = infraDictNoRepository.findById(id);
             functionContent.append("        Optional<").append(inputTableName).append(">").append(" optionalDelete").append(inputTableName)
                     .append(" = ").append(inputRepositoryName).append(".findById(id);\r\n");
-            //生成代码 if(!optionalOldInfraDictNo.isPresent())
-            functionContent.append("        if(!optionalDelete").append(inputTableName).append(".isPresent()){\r\n");
+            //生成代码 if(optionalOldInfraDictNo.isEmpty())
+            functionContent.append("        if(optionalDelete").append(inputTableName).append(".isEmpty()){\r\n");
             //生成代码 throw exception(DICT_NO_EXIST);
             functionContent.append("            throw exception(").append(notExistErrorCode).append(");\r\n");
             //生成代码 }
@@ -568,8 +567,8 @@ public class CodegenEngine {
             //生成代码 Optional<InfraDictData> optionalDictData = infraDictDataRepository.findById(id);
             functionContent.append("        Optional<").append(outputTableName).append("> option").append(outputTableName)
                     .append(" = ").append(outputRepositoryName).append(".findById(id);\r\n");
-            //生成代码 if(!optionalOldInfraDictNo.isPresent())
-            functionContent.append("        if(!option").append(outputTableName).append(".isPresent()){\r\n");
+            //生成代码 if(optionalOldInfraDictNo.isEmpty())
+            functionContent.append("        if(option").append(outputTableName).append(".isEmpty()){\r\n");
             //生成代码 throw exception(DICT_NO_EXIST);
             functionContent.append("            throw exception(").append(notExistErrorCode).append(");\r\n");
             //生成代码 }

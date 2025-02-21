@@ -12,7 +12,6 @@ import ${basePackage}.service.util.entity.EntityUtils;
 import org.babyfish.jimmer.DraftObjects;
 import ${PageResultClassName};
 import ${basePackage}.service.convert#foreach ($parentName in $parentNames).$parentName#end.${nameHumpUp}Convert;
-import ${basePackage}.service.vo#foreach ($parentName in $parentNames).$parentName#end.${nameHump}.*;
 
 import static ${ServiceExceptionUtilClassName}.exception;
 import static ${basePackage}.service.errorCode#foreach ($parentName in $parentNames).$parentName#end.${nameHumpUp}ErrorCode.*;

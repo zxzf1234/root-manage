@@ -24,7 +24,6 @@ import ${OperateLogClassName};
 import static ${OperateTypeEnumClassName}.*;
 
 import ${basePackage}.service.service#foreach ($parentName in $parentNames).$parentName#end.${nameHumpUp}Service;
-import ${basePackage}.service.vo#foreach ($parentName in $parentNames).$parentName#end.${nameHump}.*;
 
 @Tag(name = "${module.comment}")
 @RestController

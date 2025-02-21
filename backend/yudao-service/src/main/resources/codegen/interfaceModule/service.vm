@@ -1,7 +1,6 @@
 package ${basePackage}.service.service#foreach ($parentName in $parentNames).$parentName#end;
 
 import java.util.*;
-import ${basePackage}.service.vo#foreach ($parentName in $parentNames).$parentName#end.${nameHump}.*;
 import ${PageResultClassName};
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
