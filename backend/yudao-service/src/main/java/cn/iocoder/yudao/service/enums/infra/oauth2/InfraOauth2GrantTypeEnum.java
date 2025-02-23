@@ -13,24 +13,26 @@ public enum InfraOauth2GrantTypeEnum {
     /**
     * password
     */
-    PASSWORD("password"),
+    PASSWORD("password", "password"),
     /**
     * authorization_code
     */
-    AUTHORIZATION_CODE("authorization_code"),
+    AUTHORIZATION_CODE("authorization_code", "authorization_code"),
     /**
     * implicit
     */
-    IMPLICIT("implicit"),
+    IMPLICIT("implicit", "implicit"),
     /**
     * client_credentials
     */
-    CLIENT_CREDENTIALS("client_credentials"),
+    CLIENT_CREDENTIALS("client_credentials", "client_credentials"),
     /**
     * refresh_token
     */
-    REFRESH_TOKEN("refresh_token");
+    REFRESH_TOKEN("refresh_token", "refresh_token");
 
     private final String value;
+
+    private final String label;
 
 }

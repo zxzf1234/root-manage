@@ -1,5 +1,6 @@
 package cn.iocoder.yudao.service.vo.infra.data.dictType;
 
+import cn.iocoder.yudao.service.enums.common.CommonStatusEnum;
 import cn.iocoder.yudao.service.framework.excel.core.annotations.DictFormat;
 import cn.iocoder.yudao.service.framework.excel.core.convert.DictConvert;
 import cn.iocoder.yudao.service.enums.DictTypeConstants;
@@ -19,6 +20,6 @@ public class DictTypeExcelOutput {
     private String type;
 
     @ExcelProperty(value = "状态", converter = DictConvert.class)
-    @DictFormat(DictTypeConstants.COMMON_STATUS)
+    @DictFormat(CommonStatusEnum.class)
     private Integer status;
 }

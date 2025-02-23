@@ -65,7 +65,7 @@ public class RoleServiceImpl implements RoleService {
         role = SystemRoleDraft.$.produce(role, SystemRole->{
             SystemRole
                     .setType( SystemRoleTypeEnum.CUSTOM.getValue())
-                    .setStatus(CommonStatusEnum.ENABLE.getStatus())
+                    .setStatus(CommonStatusEnum.ENABLE.getValue())
                     .setDataScope(SystemDataScopeEnum.ALL.getValue()); // 默认可查看所有数据。原因是，可能一些项目不需要项目权限
         });
         role = systemRoleRepository.insert(role);
@@ -176,7 +176,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public List<RoleListAllSimpleOutput> listAllSimple() {
-        Collection<Integer> statuses = singleton(CommonStatusEnum.ENABLE.getStatus());
+        Collection<Integer> statuses = singleton(CommonStatusEnum.ENABLE.getValue());
         List<SystemRole> listRoles = systemRoleRepository.findByStatusIn(statuses);
         return RoleConvert.INSTANCE.listAllSimpleOutPutConvert(listRoles);
     }
@@ -247,7 +247,7 @@ public class RoleServiceImpl implements RoleService {
             if (role == null) {
                 throw exception(ROLE_NOT_EXISTS);
             }
-            if (!CommonStatusEnum.ENABLE.getStatus().equals(role.status())) {
+            if (!CommonStatusEnum.ENABLE.getValue().equals(role.status())) {
                 throw exception(ROLE_IS_DISABLE, role.name());
             }
         });

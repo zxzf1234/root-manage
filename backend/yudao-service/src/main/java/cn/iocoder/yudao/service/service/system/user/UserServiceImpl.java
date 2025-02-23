@@ -88,7 +88,7 @@ public class UserServiceImpl implements UserService {
         SystemUser newUserConvert = UserConvert.INSTANCE.createInputConvert(inputVO);
         String password = passwordEncoder.encode(inputVO.getPassword());
         SystemUser newUser = SystemUserDraft.$.produce(newUserConvert, SystemUsers -> SystemUsers
-                .setStatus(CommonStatusEnum.ENABLE.getStatus())
+                .setStatus(CommonStatusEnum.ENABLE.getValue())
                 .setPassword(password));
         newUser = systemUserRepository.insert(newUser);
         return newUser.id();
@@ -200,7 +200,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserListAllSimpleOutput> listAllSimple() {
-        List<SystemUser> systemUsers = systemUserRepository.GetUserListByStatus(CommonStatusEnum.ENABLE.getStatus());
+        List<SystemUser> systemUsers = systemUserRepository.GetUserListByStatus(CommonStatusEnum.ENABLE.getValue());
         // 排序后，返回给前端
         return UserConvert.INSTANCE.convertSimpleListUser(systemUsers);
     }
@@ -223,16 +223,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void getImportTemplate(HttpServletResponse response ) throws IOException {
-        // 手动创建导出 demo
-        List<UserImportExcelVO> list = Arrays.asList(
-                UserImportExcelVO.builder().username("yunai").deptId(1L).email("yunai@iocoder.cn").mobile("15601691300")
-                        .nickname("芋道").status(CommonStatusEnum.ENABLE.getStatus()).sex(CommonSexEnum.MALE.getValue()).build(),
-                UserImportExcelVO.builder().username("yuanma").deptId(2L).email("yuanma@iocoder.cn").mobile("15601701300")
-                        .nickname("源码").status(CommonStatusEnum.DISABLE.getStatus()).sex(CommonSexEnum.FEMALE.getValue()).build()
-        );
 
         // 输出
-        ExcelUtils.write(response, "用户导入模板.xls", "用户列表", UserImportExcelVO.class, list);
+        ExcelUtils.write(response, "用户导入模板.xls", "用户列表", UserImportExcelVO.class, null);
     }
 
     @Override
@@ -448,7 +441,7 @@ public class UserServiceImpl implements UserService {
             if (user == null) {
                 throw exception(USER_NOT_EXISTS);
             }
-            if (!CommonStatusEnum.ENABLE.getStatus().equals(user.status())) {
+            if (!CommonStatusEnum.ENABLE.getValue().equals(user.status())) {
                 throw exception(USER_IS_DISABLE, user.nickname());
             }
         });

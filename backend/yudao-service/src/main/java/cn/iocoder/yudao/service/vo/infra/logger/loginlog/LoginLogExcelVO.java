@@ -1,5 +1,7 @@
 package cn.iocoder.yudao.service.vo.infra.logger.loginlog;
 
+import cn.iocoder.yudao.service.enums.system.login.SystemLoginResultEnum;
+import cn.iocoder.yudao.service.enums.system.login.SystemLoginTypeEnum;
 import cn.iocoder.yudao.service.framework.excel.core.annotations.DictFormat;
 import cn.iocoder.yudao.service.framework.excel.core.convert.DictConvert;
 import cn.iocoder.yudao.service.enums.DictTypeConstants;
@@ -21,11 +23,11 @@ public class LoginLogExcelVO {
     private String username;
 
     @ExcelProperty(value = "日志类型", converter = DictConvert.class)
-    @DictFormat(DictTypeConstants.SYSTEM_LOGIN_TYPE)
+    @DictFormat(SystemLoginTypeEnum.class)
     private Integer logType;
 
     @ExcelProperty(value = "登录结果", converter = DictConvert.class)
-    @DictFormat(DictTypeConstants.SYSTEM_LOGIN_RESULT)
+    @DictFormat(SystemLoginResultEnum.class)
     private Integer result;
 
     @ExcelProperty("登录 IP")

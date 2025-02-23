@@ -85,7 +85,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<PostListAllSimpleOutput> listAllSimple() {
         // 获得岗位列表，只要开启状态的
-        List<SystemPost> list = systemPostRepository.findByIdInAndStatusIn(null, Collections.singleton(CommonStatusEnum.ENABLE.getStatus()));
+        List<SystemPost> list = systemPostRepository.findByIdInAndStatusIn(null, Collections.singleton(CommonStatusEnum.ENABLE.getValue()));
         // 排序后，返回给前端
         list.sort(Comparator.comparing(SystemPost::sort));
         return PostConvert.INSTANCE.listAllSimpleOutputConvert(list);
@@ -166,7 +166,7 @@ public class PostServiceImpl implements PostService {
             if (post == null) {
                 throw exception(POST_NOT_FOUND);
             }
-            if (!CommonStatusEnum.ENABLE.getStatus().equals(post.status())) {
+            if (!CommonStatusEnum.ENABLE.getValue().equals(post.status())) {
                 throw exception(POST_NOT_ENABLE, post.name());
             }
         });
@@ -174,7 +174,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<SystemPost> getPostList(Collection<Long> ids) {
-        return systemPostRepository.findByIdInAndStatusIn(ids, asSet(CommonStatusEnum.ENABLE.getStatus(), CommonStatusEnum.DISABLE.getStatus()));
+        return systemPostRepository.findByIdInAndStatusIn(ids, asSet(CommonStatusEnum.ENABLE.getValue(), CommonStatusEnum.DISABLED.getValue()));
     }
 
 

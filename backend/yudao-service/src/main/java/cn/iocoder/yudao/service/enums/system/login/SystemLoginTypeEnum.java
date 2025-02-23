@@ -15,33 +15,40 @@ public enum SystemLoginTypeEnum implements IntArrayValuable {
     /**
     * 账号登录
     */
-    LOGIN_USERNAME(100),
+    LOGIN_USERNAME(100, "账号登录"),
     /**
     * 社交登录
     */
-    LOGIN_SOCIAL(101),
+    LOGIN_SOCIAL(101, "社交登录"),
     /**
     * 手机登录
     */
-    LOGIN_MOBILE(103),
+    LOGIN_MOBILE(103, "手机登录"),
     /**
     * 短信登陆
     */
-    LOGIN_SMS(104),
+    LOGIN_SMS(104, "短信登陆"),
     /**
     * 主动登出
     */
-    LOGOUT_SELF(200),
+    LOGOUT_SELF(200, "主动登出"),
     /**
     * 强制登出
     */
-    LOGOUT_DELETE(202);
+    LOGOUT_DELETE(202, "强制登出");
 
     private final Integer value;
 
-    public static final int[] ARRAYS = Arrays.stream(values()).mapToInt(SystemLoginTypeEnum::getValue).toArray();
+    private final String label;
+
+    public static final int[] VALUES = Arrays.stream(values()).mapToInt(SystemLoginTypeEnum::getValue).toArray();
 
     @Override
-    public int[] array() { return ARRAYS;}
+    public int[] getValues() { return VALUES;}
+
+    public static final String[] LABELS = Arrays.stream(values()).map(SystemLoginTypeEnum::getLabel).toArray(String[]::new);
+
+    @Override
+    public String[] getLabels() { return LABELS; }
 
 }

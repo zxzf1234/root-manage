@@ -15,21 +15,28 @@ public enum InfraJobLogStatusEnum implements IntArrayValuable {
     /**
     * 运行中
     */
-    RUNNING(0),
+    RUNNING(0, "运行中"),
     /**
     * 成功
     */
-    SUCCESS(1),
+    SUCCESS(1, "成功"),
     /**
     * 失败
     */
-    FAILURE(2);
+    FAILURE(2, "失败");
 
     private final Integer value;
 
-    public static final int[] ARRAYS = Arrays.stream(values()).mapToInt(InfraJobLogStatusEnum::getValue).toArray();
+    private final String label;
+
+    public static final int[] VALUES = Arrays.stream(values()).mapToInt(InfraJobLogStatusEnum::getValue).toArray();
 
     @Override
-    public int[] array() { return ARRAYS;}
+    public int[] getValues() { return VALUES;}
+
+    public static final String[] LABELS = Arrays.stream(values()).map(InfraJobLogStatusEnum::getLabel).toArray(String[]::new);
+
+    @Override
+    public String[] getLabels() { return LABELS; }
 
 }

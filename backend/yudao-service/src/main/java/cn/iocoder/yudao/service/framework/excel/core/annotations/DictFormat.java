@@ -1,5 +1,7 @@
 package cn.iocoder.yudao.service.framework.excel.core.annotations;
 
+import cn.iocoder.yudao.service.enums.common.IntArrayValuable;
+
 import java.lang.annotation.*;
 
 /**
@@ -17,6 +19,6 @@ public @interface DictFormat {
      *
      * @return 字典类型
      */
-    String value();
+    Class<? extends IntArrayValuable> value();
 
 }

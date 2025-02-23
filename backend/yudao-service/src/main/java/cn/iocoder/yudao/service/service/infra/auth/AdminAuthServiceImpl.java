@@ -74,7 +74,7 @@ public class AdminAuthServiceImpl implements AdminAuthService {
             throw exception(AUTH_LOGIN_BAD_CREDENTIALS);
         }
         // 校验是否禁用
-        if (ObjectUtil.notEqual(opUser.get().status(), CommonStatusEnum.ENABLE.getStatus())) {
+        if (ObjectUtil.notEqual(opUser.get().status(), CommonStatusEnum.ENABLE.getValue())) {
             createLoginLog(opUser.get().id(), username, logTypeEnum, SystemLoginResultEnum.USER_DISABLED);
             throw exception(AUTH_LOGIN_USER_DISABLED);
         }

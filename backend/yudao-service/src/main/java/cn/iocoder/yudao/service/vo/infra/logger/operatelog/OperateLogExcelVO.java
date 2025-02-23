@@ -1,5 +1,6 @@
 package cn.iocoder.yudao.service.vo.infra.logger.operatelog;
 
+import cn.iocoder.yudao.service.enums.system.operate.SystemOperateTypeEnum;
 import cn.iocoder.yudao.service.framework.excel.core.annotations.DictFormat;
 import cn.iocoder.yudao.service.framework.excel.core.convert.DictConvert;
 import cn.iocoder.yudao.service.enums.DictTypeConstants;
@@ -24,7 +25,7 @@ public class OperateLogExcelVO {
     private String name;
 
     @ExcelProperty(value = "操作类型", converter = DictConvert.class)
-    @DictFormat(DictTypeConstants.SYSTEM_OPERATE_TYPE)
+    @DictFormat(SystemOperateTypeEnum.class)
     private String type;
 
     @ExcelProperty("操作人")

@@ -1821,6 +1821,23 @@ public class CodegenEngine {
         return bindingMap;
     }
 
+    public void tmpDictUpdateExecute(InfraDictType newType){
+        Map<String, Object> newBindingMap = getDictBindingMap(newType);
+        Map<String, String> templates = new LinkedHashMap<>(DICT_TEMPLATES);
+        templates.forEach((vmPath, filePath) -> {
+            String newFilePath = templateEngine.getTemplate(filePath).render(newBindingMap);
+            String newContent = templateEngine.getTemplate(vmPath).render(newBindingMap);
+            if(filePath.contains("javaEnumPath")) {
+                if (!FileUtil.exist(newFilePath)) {
+                    FileUtil.touch(newFilePath);
+                    RuntimeUtil.execForStr("git add " + newFilePath);
+                }
+                File newFile = FileUtil.file(newFilePath);
+                FileUtil.writeUtf8String(newContent, newFile);
+            }
+        });
+    }
+
 
     public void dictUpdateExecute(InfraDictType oldType, InfraDictType newType){
         Map<String, Object> oldBindingMap = getDictBindingMap(oldType);

@@ -1,0 +1,1 @@
+UPDATE infra_dict_data SET sort=1,label='会员',value='1',type_id='aa41b08f-89c8-cc27-a555-d3a923942df8',status=0,color_type='primary',css_class='',remark='',data_enum='MEMBER' WHERE id = '461775b8-5794-11ee-873c-e073e73d10a7';

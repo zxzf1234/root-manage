@@ -70,7 +70,7 @@ public class MenuController {
     public CommonResult<List<MenuSimpleRespVO>> getSimpleMenuList() {
         // 获得菜单列表，只要开启状态的
         MenuListReqVO reqVO = new MenuListReqVO();
-        reqVO.setStatus(CommonStatusEnum.ENABLE.getStatus());
+        reqVO.setStatus(CommonStatusEnum.ENABLE.getValue());
         List<SystemMenu> list = menuService.getMenuList(reqVO);
         // 排序后，返回给前端
         list.sort(Comparator.comparing(SystemMenu::sort));

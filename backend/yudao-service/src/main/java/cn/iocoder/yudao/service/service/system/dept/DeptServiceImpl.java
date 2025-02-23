@@ -107,7 +107,7 @@ public class DeptServiceImpl implements DeptService {
             throw exception(DEPT_PARENT_NOT_EXITS);
         }
         // 父部门被禁用
-        if (!CommonStatusEnum.ENABLE.getStatus().equals(opDept.get().status())) {
+        if (!CommonStatusEnum.ENABLE.getValue().equals(opDept.get().status())) {
             throw exception(DEPT_NOT_ENABLE);
         }
         // 父部门不能是原来的子部门
@@ -164,7 +164,7 @@ public class DeptServiceImpl implements DeptService {
             if (dept == null) {
                 throw exception(DEPT_NOT_FOUND);
             }
-            if (!CommonStatusEnum.ENABLE.getStatus().equals(dept.status())) {
+            if (!CommonStatusEnum.ENABLE.getValue().equals(dept.status())) {
                 throw exception(DEPT_NOT_ENABLE, dept.name());
             }
         });
@@ -220,7 +220,7 @@ public class DeptServiceImpl implements DeptService {
     public List<DeptListAllSimpleOutput> listAllSimple() {
         // 获得部门列表，只要开启状态的
         DeptListInput reqVO = new DeptListInput();
-        reqVO.setStatus(CommonStatusEnum.ENABLE.getStatus());
+        reqVO.setStatus(CommonStatusEnum.ENABLE.getValue());
         List<SystemDept> list = systemDeptRepository.selectList(reqVO);
         // 排序后，返回给前端
         list.sort(Comparator.comparing(SystemDept::sort));

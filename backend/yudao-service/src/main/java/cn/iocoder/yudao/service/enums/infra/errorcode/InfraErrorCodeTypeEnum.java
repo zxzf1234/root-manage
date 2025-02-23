@@ -15,17 +15,24 @@ public enum InfraErrorCodeTypeEnum implements IntArrayValuable {
     /**
     * 自动生成
     */
-    AUTO_GENERATION(1),
+    AUTO_GENERATION(1, "自动生成"),
     /**
     * 手动编辑
     */
-    MANUAL_OPERATION(2);
+    MANUAL_OPERATION(2, "手动编辑");
 
     private final Integer value;
 
-    public static final int[] ARRAYS = Arrays.stream(values()).mapToInt(InfraErrorCodeTypeEnum::getValue).toArray();
+    private final String label;
+
+    public static final int[] VALUES = Arrays.stream(values()).mapToInt(InfraErrorCodeTypeEnum::getValue).toArray();
 
     @Override
-    public int[] array() { return ARRAYS;}
+    public int[] getValues() { return VALUES;}
+
+    public static final String[] LABELS = Arrays.stream(values()).map(InfraErrorCodeTypeEnum::getLabel).toArray(String[]::new);
+
+    @Override
+    public String[] getLabels() { return LABELS; }
 
 }

@@ -25,12 +25,12 @@ export const SystemUserSocialTypeEnum = {
 
 /**
  * 用户类型
- * @param MENBER 会员
+ * @param MEMBER 会员
  * @param ADMIN 管理员
  */
 export const UserTypeEnum = {
   //会员
-  MENBER: 1,
+  MEMBER: 1,
   //管理员
   ADMIN: 2
 }

@@ -10,6 +10,8 @@ public interface IntArrayValuable {
     /**
      * @return int 数组
      */
-    int[] array();
+    int[] getValues();
+
+    String[] getLabels();
 
 }

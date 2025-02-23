@@ -1,5 +1,7 @@
 package cn.iocoder.yudao.service.vo.system.user.user;
 
+import cn.iocoder.yudao.service.enums.common.CommonSexEnum;
+import cn.iocoder.yudao.service.enums.common.CommonStatusEnum;
 import cn.iocoder.yudao.service.framework.excel.core.annotations.DictFormat;
 import cn.iocoder.yudao.service.framework.excel.core.convert.DictConvert;
 import cn.iocoder.yudao.service.enums.DictTypeConstants;
@@ -30,11 +32,11 @@ public class UserExcelVO {
     private String mobile;
 
     @ExcelProperty(value = "用户性别", converter = DictConvert.class)
-    @DictFormat(DictTypeConstants.COMMON_SEX)
+    @DictFormat(CommonSexEnum.class)
     private Integer sex;
 
     @ExcelProperty(value = "帐号状态", converter = DictConvert.class)
-    @DictFormat(DictTypeConstants.COMMON_STATUS)
+    @DictFormat(CommonStatusEnum.class)
     private Integer status;
 
     @ExcelProperty("最后登录IP")

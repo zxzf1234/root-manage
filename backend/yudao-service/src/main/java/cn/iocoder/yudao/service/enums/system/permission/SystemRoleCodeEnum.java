@@ -13,12 +13,14 @@ public enum SystemRoleCodeEnum {
     /**
     * root
     */
-    ROOT("root"),
+    ROOT("root", "root"),
     /**
     * 超级管理员
     */
-    SUPER_ADMIN("super_admin");
+    SUPER_ADMIN("super_admin", "超级管理员");
 
     private final String value;
+
+    private final String label;
 
 }

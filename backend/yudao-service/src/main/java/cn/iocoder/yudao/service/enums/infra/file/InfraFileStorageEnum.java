@@ -15,28 +15,36 @@ public enum InfraFileStorageEnum implements IntArrayValuable {
     /**
     * 数据库
     */
-    DATABASE(1),
+    DATABASE(1, "数据库"),
     /**
     * 本地磁盘
     */
-    LOCAL(10),
+    LOCAL(10, "本地磁盘"),
     /**
     * FTP 服务器
     */
-    FTP(11),
+    FTP(11, "FTP 服务器"),
     /**
     * SFTP 服务器
     */
-    SFTP(12),
+    SFTP(12, "SFTP 服务器"),
     /**
     * S3 对象存储
     */
-    OBJECT(20);
+    OBJECT(20, "S3 对象存储");
 
     private final Integer value;
 
-    public static final int[] ARRAYS = Arrays.stream(values()).mapToInt(InfraFileStorageEnum::getValue).toArray();
+    private final String label;
+
+    public static final int[] VALUES = Arrays.stream(values()).mapToInt(InfraFileStorageEnum::getValue).toArray();
 
     @Override
-    public int[] array() { return ARRAYS;}
+    public int[] getValues() { return VALUES;}
+
+    public static final String[] LABELS = Arrays.stream(values()).map(InfraFileStorageEnum::getLabel).toArray(String[]::new);
+
+    @Override
+    public String[] getLabels() { return LABELS; }
+
 }

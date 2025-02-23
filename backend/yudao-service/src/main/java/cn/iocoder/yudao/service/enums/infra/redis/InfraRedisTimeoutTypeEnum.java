@@ -15,21 +15,28 @@ public enum InfraRedisTimeoutTypeEnum implements IntArrayValuable {
     /**
     * 永不超时
     */
-    NEVER(1),
+    NEVER(1, "永不超时"),
     /**
     * 动态超时
     */
-    DYNAMIC(2),
+    DYNAMIC(2, "动态超时"),
     /**
     * 固定超时
     */
-    FIX(3);
+    FIX(3, "固定超时");
 
     private final Integer value;
 
-    public static final int[] ARRAYS = Arrays.stream(values()).mapToInt(InfraRedisTimeoutTypeEnum::getValue).toArray();
+    private final String label;
+
+    public static final int[] VALUES = Arrays.stream(values()).mapToInt(InfraRedisTimeoutTypeEnum::getValue).toArray();
 
     @Override
-    public int[] array() { return ARRAYS;}
+    public int[] getValues() { return VALUES;}
+
+    public static final String[] LABELS = Arrays.stream(values()).map(InfraRedisTimeoutTypeEnum::getLabel).toArray(String[]::new);
+
+    @Override
+    public String[] getLabels() { return LABELS; }
 
 }

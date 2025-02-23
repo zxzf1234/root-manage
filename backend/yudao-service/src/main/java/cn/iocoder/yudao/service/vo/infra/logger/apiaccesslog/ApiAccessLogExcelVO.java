@@ -1,5 +1,6 @@
 package cn.iocoder.yudao.service.vo.infra.logger.apiaccesslog;
 
+import cn.iocoder.yudao.service.enums.common.UserTypeEnum;
 import cn.iocoder.yudao.service.framework.excel.core.annotations.DictFormat;
 import cn.iocoder.yudao.service.framework.excel.core.convert.DictConvert;
 import cn.iocoder.yudao.service.enums.DictTypeConstants;
@@ -26,7 +27,7 @@ public class ApiAccessLogExcelVO {
     private Long userId;
 
     @ExcelProperty(value = "用户类型", converter = DictConvert.class)
-    @DictFormat(DictTypeConstants.USER_TYPE)
+    @DictFormat(UserTypeEnum.class)
     private Integer userType;
 
     @ExcelProperty("应用名")

@@ -21,16 +21,23 @@ public enum ${typeUpHump}Enum #if($isNumber == 1)implements IntArrayValuable #en
     /**
     * ${data.label}
     */
-    ${data.dataEnum}(#if($isNumber != 1)"#end${data.value}#if($isNumber != 1)"#end)#if($n == $dataLenght);#else,#end
+    ${data.dataEnum}(#if($isNumber != 1)"#end${data.value}#if($isNumber != 1)"#end, "${data.label}")#if($n == $dataLenght);#else,#end
 #end
 
     private final#if($isNumber == 1) Integer#else String#end value;
+
+    private final String label;
 #if($isNumber == 1)
 
-    public static final int[] ARRAYS = Arrays.stream(values()).mapToInt(${typeUpHump}Enum::getValue).toArray();
+    public static final int[] VALUES = Arrays.stream(values()).mapToInt(${typeUpHump}Enum::getValue).toArray();
 
     @Override
-    public int[] array() { return ARRAYS;}
+    public int[] getValues() { return VALUES;}
+
+    public static final String[] LABELS = Arrays.stream(values()).map(${typeUpHump}Enum::getLabel).toArray(String[]::new);
+
+    @Override
+    public String[] getLabels() { return LABELS; }
 #end
 
 }

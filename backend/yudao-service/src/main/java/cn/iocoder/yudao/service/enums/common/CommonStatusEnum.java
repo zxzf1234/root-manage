@@ -2,35 +2,37 @@ package cn.iocoder.yudao.service.enums.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
 import java.util.Arrays;
+import cn.iocoder.yudao.service.enums.common.IntArrayValuable;
 
 /**
- * 通用状态枚举
- *
- * @author 芋道源码
- */
+* 系统状态
+*/
 @Getter
 @AllArgsConstructor
 public enum CommonStatusEnum implements IntArrayValuable {
 
+    /**
+    * 开启
+    */
     ENABLE(0, "开启"),
-    DISABLE(1, "关闭");
-
     /**
-     * 状态值
-     */
-    private final Integer status;
-    /**
-     * 状态名
-     */
-    private final String name;
+    * 关闭
+    */
+    DISABLED(1, "关闭");
 
-    public static final int[] ARRAYS = Arrays.stream(values()).mapToInt(CommonStatusEnum::getStatus).toArray();
+    private final Integer value;
+
+    private final String label;
+
+    public static final int[] VALUES = Arrays.stream(values()).mapToInt(CommonStatusEnum::getValue).toArray();
 
     @Override
-    public int[] array() {
-        return ARRAYS;
-    }
+    public int[] getValues() { return VALUES;}
+
+    public static final String[] LABELS = Arrays.stream(values()).map(CommonStatusEnum::getLabel).toArray(String[]::new);
+
+    @Override
+    public String[] getLabels() { return LABELS; }
 
 }

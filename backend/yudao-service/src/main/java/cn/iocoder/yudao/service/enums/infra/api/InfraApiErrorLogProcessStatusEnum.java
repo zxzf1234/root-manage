@@ -15,21 +15,28 @@ public enum InfraApiErrorLogProcessStatusEnum implements IntArrayValuable {
     /**
     * 未处理
     */
-    INIT(0),
+    INIT(0, "未处理"),
     /**
     * 已处理
     */
-    DONE(1),
+    DONE(1, "已处理"),
     /**
     * 已忽略
     */
-    IGNORE(2);
+    IGNORE(2, "已忽略");
 
     private final Integer value;
 
-    public static final int[] ARRAYS = Arrays.stream(values()).mapToInt(InfraApiErrorLogProcessStatusEnum::getValue).toArray();
+    private final String label;
+
+    public static final int[] VALUES = Arrays.stream(values()).mapToInt(InfraApiErrorLogProcessStatusEnum::getValue).toArray();
 
     @Override
-    public int[] array() { return ARRAYS;}
+    public int[] getValues() { return VALUES;}
+
+    public static final String[] LABELS = Arrays.stream(values()).map(InfraApiErrorLogProcessStatusEnum::getLabel).toArray(String[]::new);
+
+    @Override
+    public String[] getLabels() { return LABELS; }
 
 }

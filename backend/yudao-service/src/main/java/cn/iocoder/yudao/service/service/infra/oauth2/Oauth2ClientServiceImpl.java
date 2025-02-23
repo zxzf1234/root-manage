@@ -112,7 +112,7 @@ public class Oauth2ClientServiceImpl implements Oauth2ClientService {
             throw exception(OAUTH2_CLIENT_NOT_EXISTS);
         }
         SystemOauth2Client client = opClient.get();
-        if (ObjectUtil.notEqual(client.status(), CommonStatusEnum.ENABLE.getStatus())) {
+        if (ObjectUtil.notEqual(client.status(), CommonStatusEnum.ENABLE.getValue())) {
             throw exception(OAUTH2_CLIENT_DISABLE);
         }
 

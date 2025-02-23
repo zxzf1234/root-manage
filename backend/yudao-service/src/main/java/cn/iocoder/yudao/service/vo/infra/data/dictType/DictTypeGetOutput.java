@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import java.util.*;
 import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
 import jakarta.validation.Valid;
 import cn.iocoder.yudao.service.enums.common.CommonStatusEnum;
@@ -29,7 +30,7 @@ public class DictTypeGetOutput extends InfraDictTypeBase {
 
     @Schema(description = "字典数据", example = "字典数据")
     @Valid
-    private List<data> data;
+    private List<data> datas;
 
     @Schema(description = "字典数据")
     @Data

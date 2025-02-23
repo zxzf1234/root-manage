@@ -15,29 +15,36 @@ public enum SystemDataScopeEnum implements IntArrayValuable {
     /**
     * 全部数据权限
     */
-    ALL(1),
+    ALL(1, "全部数据权限"),
     /**
     * 指定部门数据权限
     */
-    DEPT_CUSTOM(2),
+    DEPT_CUSTOM(2, "指定部门数据权限"),
     /**
     * 本部门数据权限
     */
-    DEPT_ONLY(3),
+    DEPT_ONLY(3, "本部门数据权限"),
     /**
     * 本部门及以下数据权限
     */
-    DEPT_AND_CHILD(4),
+    DEPT_AND_CHILD(4, "本部门及以下数据权限"),
     /**
     * 仅本人数据权限
     */
-    SELF(5);
+    SELF(5, "仅本人数据权限");
 
     private final Integer value;
 
-    public static final int[] ARRAYS = Arrays.stream(values()).mapToInt(SystemDataScopeEnum::getValue).toArray();
+    private final String label;
+
+    public static final int[] VALUES = Arrays.stream(values()).mapToInt(SystemDataScopeEnum::getValue).toArray();
 
     @Override
-    public int[] array() { return ARRAYS;}
+    public int[] getValues() { return VALUES;}
+
+    public static final String[] LABELS = Arrays.stream(values()).map(SystemDataScopeEnum::getLabel).toArray(String[]::new);
+
+    @Override
+    public String[] getLabels() { return LABELS; }
 
 }

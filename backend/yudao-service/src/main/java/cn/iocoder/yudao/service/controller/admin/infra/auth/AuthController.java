@@ -92,12 +92,12 @@ public class AuthController {
             return null;
         }
         // 获得角色列表
-        List<Long> roleIds = permissionService.getUserRoleIds(getLoginUserId(), singleton(CommonStatusEnum.ENABLE.getStatus()));
+        List<Long> roleIds = permissionService.getUserRoleIds(getLoginUserId(), singleton(CommonStatusEnum.ENABLE.getValue()));
         List<SystemRole> roleList = roleService.getRoleListFrom(roleIds);
         // 获得菜单列表
         List<SystemMenu> menuList = permissionService.getRoleMenuList(roleIds,
                 SetUtils.asSet(MenuTypeEnum.DIR.getType(), MenuTypeEnum.MENU.getType(), MenuTypeEnum.BUTTON.getType()),
-                singleton(CommonStatusEnum.ENABLE.getStatus())); // 只要开启的
+                singleton(CommonStatusEnum.ENABLE.getValue())); // 只要开启的
         // 拼接结果返回
         return success(AuthConvert.INSTANCE.convert(user.get(), roleList, menuList));
     }
@@ -106,11 +106,11 @@ public class AuthController {
     @Operation(summary = "获得登录用户的菜单列表")
     public CommonResult<List<AuthMenuRespVO>> getMenuList() {
         // 获得角色列表
-        List<Long> roleIds = permissionService.getUserRoleIds(getLoginUserId(), singleton(CommonStatusEnum.ENABLE.getStatus()));
+        List<Long> roleIds = permissionService.getUserRoleIds(getLoginUserId(), singleton(CommonStatusEnum.ENABLE.getValue()));
         // 获得用户拥有的菜单列表
         List<SystemMenu> menuList = permissionService.getRoleMenuList(roleIds,
                 SetUtils.asSet(MenuTypeEnum.DIR.getType(), MenuTypeEnum.MENU.getType()), // 只要目录和菜单类型
-                singleton(CommonStatusEnum.ENABLE.getStatus())); // 只要开启的
+                singleton(CommonStatusEnum.ENABLE.getValue())); // 只要开启的
         // 转换成 Tree 结构返回
         return success(AuthConvert.INSTANCE.buildMenuTree(menuList));
     }

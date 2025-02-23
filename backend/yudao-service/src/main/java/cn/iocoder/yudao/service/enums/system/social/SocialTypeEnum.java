@@ -2,6 +2,7 @@ package cn.iocoder.yudao.service.enums.system.social;
 
 import cn.hutool.core.util.ArrayUtil;
 import cn.iocoder.yudao.service.enums.common.IntArrayValuable;
+import cn.iocoder.yudao.service.enums.system.mail.SystemMailSendStatusEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -46,27 +47,21 @@ public enum SocialTypeEnum implements IntArrayValuable {
      * 微信小程序
      * 文档链接：https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/login.html
      */
-    WECHAT_MINI_APP(34, "WECHAT_MINI_APP"),
-    ;
+    WECHAT_MINI_APP(34, "WECHAT_MINI_APP");
 
-    public static final int[] ARRAYS = Arrays.stream(values()).mapToInt(SocialTypeEnum::getType).toArray();
+    private final Integer value;
 
-    /**
-     * 类型
-     */
-    private final Integer type;
-    /**
-     * 类型的标识
-     */
-    private final String source;
+    private final String label;
+
+    public static final int[] VALUES = Arrays.stream(values()).mapToInt(SocialTypeEnum::getValue).toArray();
 
     @Override
-    public int[] array() {
-        return ARRAYS;
-    }
+    public int[] getValues() { return VALUES;}
 
-    public static SocialTypeEnum valueOfType(Integer type) {
-        return ArrayUtil.firstMatch(o -> o.getType().equals(type), values());
-    }
+    public static final String[] LABELS = Arrays.stream(values()).map(SocialTypeEnum::getLabel).toArray(String[]::new);
+
+    @Override
+    public String[] getLabels() { return LABELS; }
+
 
 }

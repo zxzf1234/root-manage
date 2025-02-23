@@ -1,5 +1,6 @@
 package cn.iocoder.yudao.service.vo.infra.data.job.log;
 
+import cn.iocoder.yudao.service.enums.infra.job.InfraJobStatusEnum;
 import cn.iocoder.yudao.service.framework.excel.core.annotations.DictFormat;
 import cn.iocoder.yudao.service.framework.excel.core.convert.DictConvert;
 import cn.iocoder.yudao.service.enums.DictTypeConstants;
@@ -41,7 +42,7 @@ public class JobLogExcelVO {
     private Integer duration;
 
     @ExcelProperty(value = "任务状态", converter = DictConvert.class)
-    @DictFormat(DictTypeConstants.INFRA_JOB_STATUS)
+    @DictFormat(InfraJobStatusEnum.class)
     private Integer status;
 
     @ExcelProperty("结果数据")

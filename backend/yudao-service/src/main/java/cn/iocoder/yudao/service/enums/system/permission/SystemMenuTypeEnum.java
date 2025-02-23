@@ -15,21 +15,28 @@ public enum SystemMenuTypeEnum implements IntArrayValuable {
     /**
     * 目录
     */
-    DIR(1),
+    DIR(1, "目录"),
     /**
     * 菜单
     */
-    MENU(2),
+    MENU(2, "菜单"),
     /**
     * 按钮
     */
-    BUTTON(3);
+    BUTTON(3, "按钮");
 
     private final Integer value;
 
-    public static final int[] ARRAYS = Arrays.stream(values()).mapToInt(SystemMenuTypeEnum::getValue).toArray();
+    private final String label;
+
+    public static final int[] VALUES = Arrays.stream(values()).mapToInt(SystemMenuTypeEnum::getValue).toArray();
 
     @Override
-    public int[] array() { return ARRAYS;}
+    public int[] getValues() { return VALUES;}
+
+    public static final String[] LABELS = Arrays.stream(values()).map(SystemMenuTypeEnum::getLabel).toArray(String[]::new);
+
+    @Override
+    public String[] getLabels() { return LABELS; }
 
 }

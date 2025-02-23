@@ -194,7 +194,7 @@ public class PermissionServiceImpl implements PermissionService {
         }
 
         // 获得当前登录的角色。如果为空，说明没有权限
-        List<Long> roleIds = getUserRoleIds(userId, singleton(CommonStatusEnum.ENABLE.getStatus()));
+        List<Long> roleIds = getUserRoleIds(userId, singleton(CommonStatusEnum.ENABLE.getValue()));
         if (CollUtil.isEmpty(roleIds)) {
             return false;
         }
@@ -228,7 +228,7 @@ public class PermissionServiceImpl implements PermissionService {
         }
 
         // 获得当前登录的角色。如果为空，说明没有权限
-        List<Long> roleIds = getUserRoleIds(userId, singleton(CommonStatusEnum.ENABLE.getStatus()));
+        List<Long> roleIds = getUserRoleIds(userId, singleton(CommonStatusEnum.ENABLE.getValue()));
         if (CollUtil.isEmpty(roleIds)) {
             return false;
         }
