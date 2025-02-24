@@ -36,7 +36,6 @@ public class ConfigExcelVO {
     private Integer type;
 
     @ExcelProperty(value = "是否可见", converter = DictConvert.class)
-    @DictFormat(InfraBooleanStringEnum.class)
     private Boolean visible;
 
     @ExcelProperty("备注")

@@ -3,10 +3,8 @@
     <el-upload
       ref="uploadRef"
       v-model:file-list="fileList"
-      :action="importUrl + '?updateSupport=' + updateSupport"
       :auto-upload="false"
       :disabled="formLoading"
-      :headers="uploadHeaders"
       :limit="1"
       :on-error="submitFormError"
       :on-exceed="handleExceed"
@@ -18,10 +16,10 @@
       <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
       <template #tip>
         <div class="el-upload__tip text-center">
-          <div class="el-upload__tip">
+          <!-- <div class="el-upload__tip">
             <el-checkbox v-model="updateSupport" />
             是否更新已经存在的用户数据
-          </div>
+          </div> -->
           <span>仅允许导入 xls、xlsx 格式文件。</span>
           <el-link
             :underline="false"
@@ -42,20 +40,15 @@
 </template>
 <script lang="ts" name="SystemUserImportForm" setup>
 import * as UserApi from '@/api/system/user/user'
-import { getAccessToken } from '@/utils/auth'
 import download from '@/utils/download'
-import { useCache, CACHE_KEY } from '@/hooks/web/useCache'
-const { wsCache } = useCache()
+import type { UploadUserFile } from 'element-plus'
 
 const message = useMessage() // 消息弹窗
 
 const dialogVisible = ref(false) // 弹窗的是否展示
 const formLoading = ref(false) // 表单的加载中
 const uploadRef = ref()
-const importUrl = wsCache.get(CACHE_KEY.SERVER_HTTP_URL) + '/system/user/import'
-const uploadHeaders = ref() // 上传 Header 头
-const fileList = ref([]) // 文件列表
-const updateSupport = ref(0) // 是否更新已经存在的用户数据
+const fileList = ref<UploadUserFile[]>([]) // 文件列表
 
 /** 打开弹窗 */
 const open = () => {
@@ -70,12 +63,11 @@ const submitForm = async () => {
     message.error('请上传文件')
     return
   }
-  // 提交请求
-  uploadHeaders.value = {
-    Authorization: 'Bearer ' + getAccessToken()
-  }
+  const info = await UserApi.importExcel({
+    file: new Blob([fileList.value[0].raw!], { type: fileList.value[0].raw?.type })
+  })
+  console.log(info)
   formLoading.value = true
-  uploadRef.value!.submit()
 }
 
 /** 文件上传成功 */
@@ -116,6 +108,7 @@ const resetForm = () => {
   // 重置上传状态和文件
   formLoading.value = false
   uploadRef.value?.clearFiles()
+  fileList.value = []
 }
 
 /** 文件数超出提示 */

@@ -23,15 +23,15 @@ public class DictDataServiceTest {
     @Resource
     private CodegenEngine codegenEngine;
 
-    @Test
-    public void testUpdateDictType() {
-        List<InfraDictType> typeList = infraDictTypeRepository.findAll();
-        System.out.println("this is testUpdateDictType");
-        System.out.println(typeList.size());
-        for(InfraDictType type : typeList){
-            Optional<InfraDictType> opOldTypeDetail = infraDictTypeRepository.findByDetailId(type.id());
-            codegenEngine.tmpDictUpdateExecute(opOldTypeDetail.get());
-        }
-
-    }
+//    @Test
+//    public void testUpdateDictType() {
+//        List<InfraDictType> typeList = infraDictTypeRepository.findAll();
+//        System.out.println("this is testUpdateDictType");
+//        System.out.println(typeList.size());
+//        for(InfraDictType type : typeList){
+//            Optional<InfraDictType> opOldTypeDetail = infraDictTypeRepository.findByDetailId(type.id());
+//            codegenEngine.tmpDictUpdateExecute(opOldTypeDetail.get());
+//        }
+//
+//    }
 }

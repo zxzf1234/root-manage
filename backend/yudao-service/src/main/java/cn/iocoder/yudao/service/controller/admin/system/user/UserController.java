@@ -112,15 +112,10 @@ public class UserController {
 
     @PostMapping("/import")
     @Operation(summary = "导入用户")
-    @Parameters({
-            @Parameter(name = "file", description = "Excel 文件", required = true),
-            @Parameter(name = "updateSupport", description = "是否支持更新，默认为 false", example = "true")
-    })
+    @Parameters({@Parameter(name = "file", description = "Excel 文件", required = true)})
     @PreAuthorize("@ss.hasPermission('system:user:import')")
-    public CommonResult<UserImportRespVO> importExcel(@RequestParam("file") MultipartFile file,
-                                                      @RequestParam(value = "updateSupport", required = false, defaultValue = "false") Boolean updateSupport) throws Exception {
+    public CommonResult<UserImportRespVO> importExcel(@RequestParam("file") MultipartFile file) throws Exception {
         List<UserImportExcelVO> list = ExcelUtils.read(file, UserImportExcelVO.class);
-        UserImportRespVO respVO = userService.importUserList(list,updateSupport);
-        return success(respVO);
+        return success(userService.importUserList(list));
     }
 }

@@ -64,9 +64,6 @@ public class UserServiceImpl implements UserService {
     @Resource
     private SystemUserPostRepository systemUserPostRepository;
 
-    @Value("${sys.user.init-password:yudaoyuanma}")
-    private String userInitPassword;
-
     @Resource
     private DeptService deptService;
     @Resource
@@ -223,13 +220,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void getImportTemplate(HttpServletResponse response ) throws IOException {
-
-        // 输出
         ExcelUtils.write(response, "用户导入模板.xls", "用户列表", UserImportExcelVO.class, null);
     }
 
     @Override
-    public UserImportRespVO importUserList(List<UserImportExcelVO> list, Boolean updateSupport) {
+    public UserImportRespVO importUserList(List<UserImportExcelVO> list) {
         if (CollUtil.isEmpty(list)) {
             throw exception(USER_IMPORT_LIST_IS_EMPTY);
         }
@@ -238,30 +233,21 @@ public class UserServiceImpl implements UserService {
         list.forEach(importUser -> {
             // 校验，判断是否有不符合的原因
             try {
-                validateUserForCreateOrUpdate(null, null, importUser.getMobile(), importUser.getEmail(),
-                        importUser.getDeptId(), null);
+                validateUserForCreateOrUpdate(null, importUser.getUsername(), importUser.getMobile(), importUser.getEmail(),
+                        null, null);
             } catch (ServiceException ex) {
                 respVO.getFailureUsernames().put(importUser.getUsername(), ex.getMessage());
                 return;
             }
-            // 判断如果不存在，在进行插入
-            Optional<SystemUser> existUser = systemUserRepository.findByUsername(importUser.getUsername());
-            if (existUser.isEmpty()) {
-                SystemUser newUserConvert = UserConvert.INSTANCE.convertUser(importUser);
-                newUserConvert = SystemUserDraft.$.produce(newUserConvert, SystemUsers -> SystemUsers.setPassword(userInitPassword));
-                systemUserRepository.insert(newUserConvert);
-                respVO.getCreateUsernames().add(importUser.getUsername());
-                return;
-            }
-            // 如果存在，判断是否允许更新
-            if (!updateSupport) {
-                respVO.getFailureUsernames().put(importUser.getUsername(), USER_USERNAME_EXISTS.getMsg());
-                return;
-            }
-            SystemUser updateUser = UserConvert.INSTANCE.convertUser(importUser);
-            systemUserRepository.update(updateUser);
+            SystemUser newUserConvert = UserConvert.INSTANCE.convertUser(importUser);
+            newUserConvert = SystemUserDraft.$.produce(newUserConvert, SystemUsers ->
+                    SystemUsers.setPassword(passwordEncoder.encode(importUser.getPassword()))
+                            .setStatus(importUser.getStatus() == null ? CommonStatusEnum.ENABLE.getValue() : SystemUsers.status())
+                            .setSex(importUser.getSex() == null ? CommonSexEnum.MALE.getValue() : SystemUsers.sex())
+            );
+            systemUserRepository.insert(newUserConvert);
+            respVO.getCreateUsernames().add(importUser.getUsername());
 
-            respVO.getUpdateUsernames().add(importUser.getUsername());
         });
         return respVO;
     }

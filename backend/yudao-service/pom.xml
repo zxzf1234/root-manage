@@ -31,7 +31,7 @@
         <lombok.version>1.18.30</lombok.version>
         <mapstruct.version>1.5.3.Final</mapstruct.version>
         <hutool.version>5.8.15</hutool.version>
-        <easyexcel.verion>3.2.1</easyexcel.verion>
+        <easyexcel.verion>4.0.3</easyexcel.verion>
         <velocity.version>2.3</velocity.version>
         <screw.version>1.0.5</screw.version>
         <guava.version>31.1-jre</guava.version>
@@ -204,6 +204,23 @@
                 <groupId>com.alibaba</groupId>
                 <artifactId>easyexcel</artifactId>
                 <version>${easyexcel.verion}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.poi</groupId>
+                        <artifactId>poi-ooxml-schemas</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi</artifactId>
+                <version>5.2.5</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml</artifactId>
+                <version>5.2.5</version>
             </dependency>
 
             <dependency>
@@ -353,7 +370,6 @@
                 <artifactId>spring-boot-starter-validation</artifactId>
                 <version>${spring.boot.version}</version>
             </dependency>
-
         </dependencies>
     </dependencyManagement>
     <dependencies>
@@ -467,6 +483,14 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>easyexcel</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
         </dependency>
 
         <dependency>

@@ -45,6 +45,10 @@ export const getImportTemplate = () => {
   return request.download({ url: '/system/user/get-import-template' })
 }
 
+export const importExcel = (data) => {
+  return request.upload({ url: '/system/user/import', data })
+}
+
 /**
  * 获得用户详情
  */
