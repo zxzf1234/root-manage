@@ -1,7 +1,7 @@
 
     #if(${interface.isImport}==true)
     @GetMapping("/get-${interfaceNameSymbol}-template")
-    @Operation(summary = "获得${interface.comment}模板")
+    @Operation(summary = "获取${interface.comment}模板")
     public void get${interfaceNameHump.substring(0, 1).toUpperCase()}${interfaceNameHump.substring(1)}Template(HttpServletResponse response ) throws IOException {
         ${moduleNameHump}Service.get${interfaceNameHump.substring(0, 1).toUpperCase()}${interfaceNameHump.substring(1)}Template(response);
     }
