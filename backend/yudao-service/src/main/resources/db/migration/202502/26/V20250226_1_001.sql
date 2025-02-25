@@ -1,0 +1,1 @@
+INSERT IGNORE INTO system_menu(creator_id,updater_id,id,name,permission,type,sort,parent_id,path,icon,component,component_name,status,visible,keep_alive,always_show,deleted_time) VALUES (-1,-1,'eb2c8f47-6032-4485-bb7a-d8343c4ef8f7','岗位导入','system:post:import',3,6,'06cb9c34-23b0-11ee-a1af-047c1649ee1e','','','','',0,true,true,true,NULL);

@@ -10,6 +10,9 @@ import jakarta.validation.Valid;
 import ${basePackage}.service.enums.common.CommonStatusEnum;
 import ${basePackage}.service.framework.validation.InEnum;
 import java.math.BigDecimal;
+#if(${interface.isImport}==true)
+import lombok.experimental.SuperBuilder;
+#end
 ## 处理 Date 字段的引入
 #foreach ($param in $outputParams)
     #if (${param.variableType} == "LocalDateTime" || ${param.variableType} == "LocalDateTime[]")## 时间类型
@@ -22,7 +25,11 @@ import java.math.BigDecimal;
 
 @Schema(description = "${interface.comment}")
 @Data
+#if(${interface.isImport}==true)
+@SuperBuilder
+#else
 @AllArgsConstructor
+#end
 public class ${moduleNameHumpUp}${interfaceNameHumpUp}Output #if(${interface.outputExtendClass} != "")extends ${interface.outputExtendClass}#end {
 #foreach ($param in $outputParams)
     #parse("codegen/interface/param.vm")

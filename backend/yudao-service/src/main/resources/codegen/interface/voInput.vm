@@ -10,6 +10,12 @@ import jakarta.validation.Valid;
 import ${basePackage}.service.enums.common.CommonStatusEnum;
 import ${basePackage}.service.framework.validation.InEnum;
 import java.math.BigDecimal;
+#if(${interface.isImport}==true)
+import com.alibaba.excel.annotation.ExcelProperty;
+import com.alibaba.excel.annotation.write.style.HeadStyle;
+import com.alibaba.excel.enums.poi.FillPatternTypeEnum;
+import lombok.experimental.Accessors;
+#end
 ## 处理 Date 字段的引入
 #foreach ($param in $inputParams)
 #if (${param.variableType} == "LocalDateTime" || ${param.variableType} == "LocalDateTime[]")## 时间类型
@@ -22,6 +28,9 @@ import java.time.LocalDateTime;
 
 @Schema(description = "${interface.comment}")
 @Data
+#if(${interface.isImport}==true)
+@Accessors(chain = false) // 设置 chain = false，避免用户导入有问题
+#end
 public class ${moduleNameHumpUp}${interfaceNameHumpUp}Input #if(${interface.inputExtendClass} != "")extends ${interface.inputExtendClass}#end {
 #foreach ($param in $inputParams)
     #parse("codegen/interface/param.vm")

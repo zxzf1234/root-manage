@@ -1491,7 +1491,7 @@ const handleIsImport = (value) => {
     formData.value.isImport = true
     formData.value.inputType = 'VOClassList'
     formData.value.outputType = 'VOClassList'
-    formData.value.outputExtendClass = 'importRespVO'
+    formData.value.outputExtendClass = 'ImportRespVO'
     formData.value.method = 'upload'
   }
 }

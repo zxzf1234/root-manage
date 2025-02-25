@@ -46,6 +46,9 @@
         >
           <Icon icon="ep:download" /> 导出
         </el-button>
+        <el-button type="warning" plain @click="handleImport" v-hasPermi="['system:post:import']">
+          <Icon icon="ep:upload" /> 导入
+        </el-button>
       </el-form-item>
     </el-form>
   </ContentWrap>
@@ -75,6 +78,13 @@
 
   <!-- 表单弹窗：添加/修改 -->
   <PostForm ref="formRef" @success="getList" />
+  <Import
+    ref="importFormRef"
+    @success="getList"
+    :template-method="PostApi.getImportExcelTemplate"
+    :import-method="PostApi.importExcel"
+    title="岗位导入"
+  />
 </template>
 <script setup lang="tsx" name="SystemPost">
 import { DICT_TYPE, getIntDictOptions } from '@/utils/dict'
@@ -85,6 +95,7 @@ import PostForm from './PostForm.vue'
 import { formatDate } from '@/utils/formatTime'
 const message = useMessage() // 消息弹窗
 const { t } = useI18n() // 国际化
+const importFormRef = ref()
 
 const loading = ref(true) // 列表的加载中
 const queryParams = reactive({
@@ -176,6 +187,10 @@ const handleExport = async () => {
   } finally {
     exportLoading.value = false
   }
+}
+
+const handleImport = () => {
+  importFormRef.value.open()
 }
 
 /** 初始化 **/

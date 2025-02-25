@@ -1,11 +1,12 @@
 
 #if(${interface.isImport}==true)
 /**
-* 获取${interface.comment}模板
-*/
+ * 获取${interface.comment}模板
+ */
 export const get${interfaceNameHump.substring(0, 1).toUpperCase()}${interfaceNameHump.substring(1)}Template= () => {
     return request.download({ url: '/${vueModulePath}/${moduleNameSymbol}/get-${interfaceNameSymbol}-template' })
 }
+
 #end
 /**
  * ${interface.comment}

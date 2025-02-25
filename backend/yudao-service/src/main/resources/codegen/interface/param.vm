@@ -1,5 +1,11 @@
-
+#if(${interface.isImport}==true)
+    @ExcelProperty("${param.comment}")
+    #if(${param.required})
+    @HeadStyle(fillPatternType = FillPatternTypeEnum.SOLID_FOREGROUND, fillForegroundColor = 10)
+    #end
+#else
     @Schema(description = "${param.comment}"#if (${param.required}), requiredMode = Schema.RequiredMode.REQUIRED#end#if ("$!param.example" != ""), example = "${param.example}"#end)
+#end
 #foreach ($validation in $param.validations)
     #if ("$!validation.validationCondition" != "")
     @${validation.validation}($validation.validationCondition, message = "$validation.message")
