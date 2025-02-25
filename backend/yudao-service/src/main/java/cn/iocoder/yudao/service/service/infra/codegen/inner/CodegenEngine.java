@@ -812,6 +812,7 @@ public class CodegenEngine {
                     getStr(bindingMap, "basePackage").replaceAll("\\.", ".") +
                     ".service.framework.excel.core.util.ExcelUtils;" ;
             controllerImportList.add(excelUtilsImport);
+            controllerImportList.add("import org.springframework.web.multipart.MultipartFile;");
             serviceImplImportList.add(excelUtilsImport);
         }
 

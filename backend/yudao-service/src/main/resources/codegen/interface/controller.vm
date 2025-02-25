@@ -17,9 +17,9 @@
     #if(${interfaceInputSingleParam}!="")
     ${interfaceInputSingleParam}
     #end
-    public#if(${interfaceOutput}!="void" && ${interface.method}!="download") CommonResult<${interfaceOutput}>#else void#end ${interfaceNameHump}(${interfaceInputValid}${interfaceInputRequest}#if(${interfaceInput} != "")#if(${interface.isImport}==true)@RequestParam("file") MultipartFile file#else${interfaceInput} ${interfaceInputVar}#end#end#if(${interface.inputServlet})#if(${interfaceInput} != ""),#end HttpServletResponse response#end) #if(${interface.method}=="download" || ${interface.method}=="upload")throws IOException #end{
+    public#if(${interfaceOutput}!="void" && ${interface.method}!="download") CommonResult<${interfaceOutput}>#else void#end ${interfaceNameHump}(#if(${interface.isImport}==false)${interfaceInputValid}${interfaceInputRequest}#end#if(${interfaceInput} != "")#if(${interface.isImport}==true)@RequestParam("file") MultipartFile file#else${interfaceInput} ${interfaceInputVar}#end#end#if(${interface.inputServlet})#if(${interfaceInput} != ""),#end HttpServletResponse response#end) #if(${interface.method}=="download" || ${interface.method}=="upload")throws IOException #end{
         #if(${interface.isImport}==true)
-            ${interfaceInput} inputVO = ExcelUtils.read(file, ${moduleNameHumpUp}${interfaceNameHumpUp}Input.class);
+        ${interfaceInput} inputVO = ExcelUtils.read(file, ${moduleNameHumpUp}${interfaceNameHumpUp}Input.class);
         #end
         #if(${interfaceOutput}!="void" && ${interface.method}!="download")
         return success(${moduleNameHump}Service.${interfaceNameHump}(#if(${interface.inputServlet})response#if(${interfaceInput} != ""),#end #end#if(${interfaceInput} != "")${interfaceInputVar}#end));
