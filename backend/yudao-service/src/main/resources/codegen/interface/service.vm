@@ -1,2 +1,6 @@
 
+#if(${interface.isImport}==true)
+    void get${interfaceNameHump.substring(0, 1).toUpperCase()}${interfaceNameHump.substring(1)}Template(HttpServletResponse response);
+#end
+
 #if(${interface.method}=="download")    void#else    ${interfaceOutput}#end ${interfaceNameHump}(#if(${interface.inputServlet})HttpServletResponse response#if(${interfaceInput} != ""),#end #end#if(${interfaceInput} != "")${interfaceInput} ${interfaceInputVar}#end)#if(${interface.method}=="download") throws IOException#end;

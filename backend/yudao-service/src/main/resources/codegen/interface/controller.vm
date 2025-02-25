@@ -1,4 +1,10 @@
-
+    #if(${interface.isImport}==true)
+    @GetMapping("/get-${interfaceNameSymbol}-template")
+    @Operation(summary = "获得${interface.comment}模板")
+    public void get${interfaceNameHump.substring(0, 1).toUpperCase()}${interfaceNameHump.substring(1)}Template(HttpServletResponse response ) throws IOException {
+        ${moduleNameHump}Service.get${interfaceNameHump.substring(0, 1).toUpperCase()}${interfaceNameHump.substring(1)}Template(response);
+    }
+    #end
     @${javaMethod}Mapping("/${interfaceNameSymbol}")
     #if(${interface.comment}!="")
     @Operation(summary = "${interface.comment}")

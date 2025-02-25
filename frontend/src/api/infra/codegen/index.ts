@@ -107,6 +107,7 @@ export type InterfaceVO = {
   method: string
   authorize: string
   isTransaction: boolean
+  isImport: boolean
   moduleId: string
   moduleName: string
   inputType: string

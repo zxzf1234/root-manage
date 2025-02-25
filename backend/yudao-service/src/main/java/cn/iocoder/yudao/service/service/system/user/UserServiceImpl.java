@@ -274,10 +274,8 @@ public class UserServiceImpl implements UserService {
                 );
                 systemUserRepository.insert(newUser);
             } catch (Exception ex) {
-                respVOList.add(new UserImportRespVO(columnIndex, ex.getMessage()));
+                respVOList.add(UserImportRespVO.builder().columnIndex(columnIndex).errorMessage(ex.getMessage()).build());
             }
-
-
         }
         return respVOList;
     }

@@ -16,14 +16,6 @@
           @keyup.enter="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="岗位编码" prop="code">
-        <el-input
-          v-model="queryParams.code"
-          placeholder="请输入岗位编码"
-          clearable
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
       <el-form-item label="状态" prop="status">
         <el-select v-model="queryParams.status" placeholder="请选择状态" clearable>
           <el-option
@@ -108,14 +100,9 @@ const columns: TableColumnList = [
     prop: 'name'
   },
   {
-    label: '岗位编码',
-    prop: 'code'
-  },
-  {
     label: '岗位顺序',
     prop: 'sort'
   },
-
   {
     label: '岗位备注',
     prop: 'remark'

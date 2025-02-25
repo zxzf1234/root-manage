@@ -1,4 +1,11 @@
 
+#if(${interface.isImport}==true)
+    @Override
+    void get${interfaceNameHump.substring(0, 1).toUpperCase()}${interfaceNameHump.substring(1)}Template(HttpServletResponse response){
+        ExcelUtils.write(response, "${interface.comment}模板.xls", "${interface.comment}", ${moduleNameHumpUp}${interfaceNameHumpUp}Input.class, null);
+    };
+#end
+
     @Override
     #if(${interface.isTransaction} == true)
     @Transactional(rollbackFor = Exception.class)

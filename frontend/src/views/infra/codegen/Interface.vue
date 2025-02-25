@@ -56,6 +56,9 @@
       <template #isTransaction="{ row }">
         <dict-tag :type="DICT_TYPE.COMMON_STATUS" :value="row.isTransaction ? 0 : 1" />
       </template>
+      <template #isImport="{ row }">
+        <dict-tag :type="DICT_TYPE.COMMON_STATUS" :value="row.isImport ? 0 : 1" />
+      </template>
     </Table>
   </ContentWrap>
   <ContentWrap class="h-[35%]">
@@ -67,8 +70,9 @@
               <el-form-item label="入参类型" prop="inputType">
                 <el-select v-model="rowDetail.inputType" disabled>
                   <el-option label="void" value="void" />
-                  <el-option label="单参数" value="single" />
+                  <el-option label="参数" value="param" />
                   <el-option label="VO类" value="VOClass" />
+                  <el-option label="List<VO类>" value="VOClassList" />
                 </el-select>
               </el-form-item>
             </el-col>
@@ -108,8 +112,9 @@
               <el-form-item label="出参类型" prop="outputType" disabled>
                 <el-select v-model="rowDetail.outputType" disabled>
                   <el-option label="void" value="void" />
-                  <el-option label="单参数" value="single" />
+                  <el-option label="参数" value="param" />
                   <el-option label="VO类" value="VOClass" />
+                  <el-option label="List<VO类>" value="VOClassList" />
                 </el-select>
               </el-form-item>
             </el-col>
@@ -172,6 +177,7 @@ const initFormData = {
   method: '',
   authorize: '',
   isTransaction: false,
+  isImport: false,
   inputType: '',
   inputExtendClass: '',
   inputServlet: 0,
@@ -226,6 +232,11 @@ const interfaceColumns: TableColumnList = [
     label: '是否开启事务',
     prop: 'isTransaction',
     slot: 'isTransaction'
+  },
+  {
+    label: '是否为导入',
+    prop: 'isImport',
+    slot: 'isImport'
   },
   {
     label: '创建时间',

@@ -10,9 +10,6 @@
       <el-form-item label="岗位标题" prop="name">
         <el-input v-model="formData.name" placeholder="请输入岗位标题" />
       </el-form-item>
-      <el-form-item label="岗位编码" prop="code">
-        <el-input v-model="formData.code" placeholder="请输入岗位编码" />
-      </el-form-item>
       <el-form-item label="岗位顺序" prop="sort">
         <el-input v-model="formData.sort" placeholder="请输入岗位顺序" />
       </el-form-item>

@@ -4,6 +4,8 @@ import cn.iocoder.yudao.service.model.base.BaseEntity;
 import cn.iocoder.yudao.service.model.infra.codegen.InfraInterfaceModule;
 import cn.iocoder.yudao.service.model.infra.codegen.InfraInterfaceParam;
 import cn.iocoder.yudao.service.model.infra.codegen.InfraInterfaceSubclass;
+import cn.iocoder.yudao.service.model.infra.codegen.InfraInterfaceParam;
+import cn.iocoder.yudao.service.model.infra.codegen.InfraInterfaceSubclass;
 import org.babyfish.jimmer.sql.*;
 import java.time.LocalDateTime;
 import org.jetbrains.annotations.Nullable;
@@ -31,8 +33,9 @@ public interface InfraInterface extends BaseEntity {
     @Nullable
     UUID moduleId();
 
-    @ManyToOne
+    @OneToOne
     @Nullable
+    @OnDissociate(DissociateAction.DELETE)
     InfraInterfaceModule module();
 
     String inputType();
@@ -44,6 +47,8 @@ public interface InfraInterface extends BaseEntity {
     String outputExtendClass();
 
     Boolean inputServlet();
+
+    Boolean isImport();
 
     @Nullable
     @LogicalDeleted("now")

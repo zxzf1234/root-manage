@@ -13,6 +13,12 @@ import java.math.BigDecimal;
 #end
 #end
 #foreach ($column in $columns)
+#if (${column.javaType} == "UUID")
+import java.util.UUID;
+#break
+#end
+#end
+#foreach ($column in $columns)
 #if (${column.validation} == "InEnum")
 import ${basePackage}.framework.common.validation.InEnum;
 import ${basePackage}.framework.common.enums.*;

@@ -73,6 +73,14 @@
       <el-form-item prop="isTransaction" label="是否开启事务">
         <el-checkbox v-model="formData.isTransaction" false-value="false" true-value="true" />
       </el-form-item>
+      <el-form-item prop="isImport" label="是否为导入">
+        <el-checkbox
+          v-model="formData.isImport"
+          false-value="false"
+          true-value="true"
+          @change="handleIsImport"
+        />
+      </el-form-item>
     </el-form>
     <el-tabs v-model="tabActiveName" type="card">
       <el-tab-pane label="入参" name="inputParam">
@@ -730,6 +738,7 @@ const initFormData = {
   method: '',
   authorize: '',
   isTransaction: false,
+  isImport: false,
   inputType: '',
   inputExtendClass: '',
   inputServlet: 0,
@@ -790,7 +799,6 @@ const open = async (type: string, id?: string) => {
     formData.value.moduleId = oldModuleId
     formData.value.id = crypto.randomUUID()
   }
-  console.log(formData.value)
   // 获得模块树
   await getTree()
   await getTableOptions()
@@ -988,6 +996,8 @@ const interfaceNameBlur = () => {
     formData.value.outputType = 'VOClass'
     formData.value.method = 'get'
     formData.value.comment = '获取单个'
+  } else if (formData.value.name.indexOf('import') >= 0) {
+    handleIsImport(true)
   }
 }
 
@@ -1466,5 +1476,14 @@ const validationChange = (row) => {
     validations = validations.concat(['Range'])
   }
   return validations
+}
+
+const handleIsImport = (value) => {
+  if (value) {
+    formData.value.inputType = 'VOClassList'
+    formData.value.outputType = 'VOClassList'
+    formData.value.outputExtendClass = 'importRespVO'
+    formData.value.method = 'upload'
+  }
 }
 </script>
