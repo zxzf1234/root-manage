@@ -1,3 +1,4 @@
+import { template } from 'lodash-es';
 <template>
   <Dialog v-model="dialogVisible" title="用户导入" width="400">
     <div v-if="!isShowErrorMeesage">
@@ -38,8 +39,7 @@
     </template>
   </Dialog>
 </template>
-<script lang="ts" name="SystemUserImportForm" setup>
-import * as UserApi from '@/api/system/user/user'
+<script setup lang="ts" name="Import">
 import download from '@/utils/download'
 import type { UploadUserFile } from 'element-plus'
 
@@ -56,6 +56,21 @@ const columns: TableColumnList = [
   { label: '错误原因', prop: 'errorMessage' }
 ]
 
+const props = defineProps({
+  templateMethod: {
+    type: Function,
+    required: true
+  },
+  importMethod: {
+    type: Function,
+    required: true
+  },
+  title: {
+    type: String,
+    required: true
+  }
+})
+
 /** 打开弹窗 */
 const open = () => {
   dialogVisible.value = true
@@ -71,7 +86,7 @@ const submitForm = async () => {
     message.error('请上传文件')
     return
   }
-  const errorMessages = await UserApi.importExcel({
+  const errorMessages = await props.importMethod({
     file: new Blob([fileList.value[0].raw!], { type: fileList.value[0].raw?.type })
   })
   formLoading.value = true
@@ -108,7 +123,7 @@ const handleExceed = (): void => {
 
 /** 下载模板操作 */
 const importTemplate = async () => {
-  const res = await UserApi.getImportTemplate()
-  download.excel(res, '用户导入模版.xls')
+  const res = await props.templateMethod()
+  download.excel(res, props.title + '模版.xls')
 }
 </script>

@@ -120,7 +120,13 @@
   <!-- 添加或修改用户对话框 -->
   <UserForm ref="formRef" @success="getList" />
   <!-- 用户导入对话框 -->
-  <UserImportForm ref="importFormRef" @success="getList" />
+  <Import
+    ref="importFormRef"
+    @success="getList"
+    :template-method="UserApi.getImportTemplate"
+    :import-method="UserApi.importExcel"
+    title="用户导入"
+  />
   <!-- 分配角色 -->
   <UserAssignRoleForm ref="assignRoleFormRef" @success="getList" />
 </template>
@@ -130,7 +136,6 @@ import { formatDate } from '@/utils/formatTime'
 // import download from '@/utils/download'
 import * as UserApi from '@/api/system/user/user'
 import UserForm from './UserForm.vue'
-import UserImportForm from './UserImportForm.vue'
 import UserAssignRoleForm from './UserAssignRoleForm.vue'
 import DeptTree from './DeptTree.vue'
 const message = useMessage() // 消息弹窗
