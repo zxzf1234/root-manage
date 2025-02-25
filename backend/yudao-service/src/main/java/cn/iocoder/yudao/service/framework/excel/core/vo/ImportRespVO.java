@@ -8,7 +8,7 @@ import lombok.experimental.SuperBuilder;
 
 @Data
 @SuperBuilder
-public class importRespVO {
+public class ImportRespVO {
     @Schema(description = "行数")
     private Integer columnIndex;
 

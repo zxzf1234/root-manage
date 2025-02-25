@@ -1,0 +1,1 @@
+UPDATE infra_interface_vo_class SET name = 'ImportRespVO' WHERE id = '52f5c182-8721-1fe3-3717-1be1bcdb74e5';

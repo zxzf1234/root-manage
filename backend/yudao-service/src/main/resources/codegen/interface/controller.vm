@@ -1,9 +1,11 @@
+
     #if(${interface.isImport}==true)
     @GetMapping("/get-${interfaceNameSymbol}-template")
     @Operation(summary = "获得${interface.comment}模板")
     public void get${interfaceNameHump.substring(0, 1).toUpperCase()}${interfaceNameHump.substring(1)}Template(HttpServletResponse response ) throws IOException {
         ${moduleNameHump}Service.get${interfaceNameHump.substring(0, 1).toUpperCase()}${interfaceNameHump.substring(1)}Template(response);
     }
+
     #end
     @${javaMethod}Mapping("/${interfaceNameSymbol}")
     #if(${interface.comment}!="")
@@ -15,7 +17,10 @@
     #if(${interfaceInputSingleParam}!="")
     ${interfaceInputSingleParam}
     #end
-    public#if(${interfaceOutput}!="void" && ${interface.method}!="download") CommonResult<${interfaceOutput}>#else void#end ${interfaceNameHump}(${interfaceInputValid}${interfaceInputRequest}#if(${interfaceInput} != "")${interfaceInput} ${interfaceInputVar}#end#if(${interface.inputServlet})#if(${interfaceInput} != ""),#end HttpServletResponse response#end) #if(${interface.method}=="download")throws IOException #end{
+    public#if(${interfaceOutput}!="void" && ${interface.method}!="download") CommonResult<${interfaceOutput}>#else void#end ${interfaceNameHump}(${interfaceInputValid}${interfaceInputRequest}#if(${interfaceInput} != "")${interfaceInput} ${interfaceInputVar}#end#if(${interface.inputServlet})#if(${interfaceInput} != ""),#end HttpServletResponse response#end) #if(${interface.method}=="download" || ${interface.method}=="upload")throws IOException #end{
+        #if(${interface.isImport}==true)
+            ${interfaceInput} inputVO = ExcelUtils.read(file, ${moduleNameHumpUp}${interfaceNameHumpUp}Input.class);
+        #end
         #if(${interfaceOutput}!="void" && ${interface.method}!="download")
         return success(${moduleNameHump}Service.${interfaceNameHump}(#if(${interface.inputServlet})response#if(${interfaceInput} != ""),#end #end#if(${interfaceInput} != "")${interfaceInputVar}#end));
         #else

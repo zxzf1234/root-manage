@@ -1409,6 +1409,14 @@ const handleSaveInterface = async () => {
   ) {
     await message.confirm('更新接口没有添加入参继承类，确定保存吗？')
   }
+  if (formData.value.name == 'delete') {
+    message.alertError('delete是关键词，请将接口名改为deleted')
+    return
+  }
+  if (formData.value.name == 'import') {
+    message.alertError('import是关键词，请将接口名改为importExcel')
+    return
+  }
 
   // 提交请求
   formLoading.value = true
@@ -1480,6 +1488,7 @@ const validationChange = (row) => {
 
 const handleIsImport = (value) => {
   if (value) {
+    formData.value.isImport = true
     formData.value.inputType = 'VOClassList'
     formData.value.outputType = 'VOClassList'
     formData.value.outputExtendClass = 'importRespVO'

@@ -12,6 +12,7 @@ import cn.iocoder.yudao.service.convert.infra.codegen.CodegenConvert;
 import cn.iocoder.yudao.service.enums.infra.codegen.CodegenSceneEnum;
 import cn.iocoder.yudao.service.framework.codegen.config.SchemaHistory;
 import cn.iocoder.yudao.service.framework.excel.core.util.ExcelUtils;
+import cn.iocoder.yudao.service.framework.excel.core.vo.ImportRespVO;
 import cn.iocoder.yudao.service.framework.exception.util.ServiceExceptionUtil;
 import cn.iocoder.yudao.service.framework.operateLog.core.annotations.OperateLog;
 import cn.iocoder.yudao.service.framework.operateLog.core.enums.OperateTypeEnum;
@@ -858,7 +859,7 @@ public class CodegenEngine {
         bindingMap.put("functionContent", "        return null;");
         String inputSrcExtendClass = "";
         String inputSrcExtendTableImport = "";
-        String inputExtendClassImport = "";
+        String inputExtendClassImport;
         if(!infraInterface.inputExtendClass().isEmpty()) {
             InfraInterfaceVoClass voClass = infraInterfaceVoClassRepository.findByName(infraInterface.inputExtendClass()).get();
             if (Objects.equals(voClass.name(), "PageParam")){
@@ -931,37 +932,41 @@ public class CodegenEngine {
         if(!infraInterface.outputExtendClass().isEmpty()) {
             InfraInterfaceVoClass voClass = infraInterfaceVoClassRepository.findByName(infraInterface.outputExtendClass()).get();
             outputSrcExtendClass = srcExtendClass(voClass.id());
-
-            InfraDatabaseTable table = infraDatabaseTableRepository.findByName(outputSrcExtendClass).get();
-            outputSrcExtendTableImport = "import " +
-                    getStr(bindingMap, "basePackage").replaceAll("\\.", ".") +
-                    ".service.model." + table.firstModule()+ "."+ table.secondModule()+ "."+
-                    upperFirst(toCamelCase(outputSrcExtendClass)) + ";";
-            outputSrcExtendClass = upperFirst(toCamelCase(outputSrcExtendClass));
-            outputExtendClassImport = getExtendClassImport(infraInterface.outputExtendClass(), bindingMap);
-            convertImportList.add(outputSrcExtendTableImport);
-            outputImportList.add(outputExtendClassImport);
-            if(infraInterface.name().toLowerCase().contains("pagequery") || infraInterface.name().toLowerCase().contains("listquery")
-                    || infraInterface.name().toLowerCase().contains("singleget")){
-                bindingMap.put("outputTable", table);
-                bindingMap.put("tableFirstModule", table.firstModule());
-                bindingMap.put("tableSecondModule", table.secondModule());
-                bindingMap.put("classNameHump", upperFirst(toCamelCase(table.name())));
-                generateInterfaceRepositoryFunction(bindingMap);
-                if(infraInterface.name().toLowerCase().contains("pagequery") || infraInterface.name().toLowerCase().contains("listquery")){
-                    bindingMap.put("isGenerateRepository", true);
-                }else{
-                    generateInterfaceErrorCode(bindingMap);
-                }
-                generateInterfaceFunctionContent(bindingMap);
-                serviceImplList.add("    @Resource\r\n" + "    private " + upperFirst(toCamelCase(table.name()))
-                        + "Repository " + toCamelCase(table.name()) + "Repository;\r\n");
-                serviceImplImportList.add("import " +
+            if (Objects.equals(voClass.name(), "ImportRespVO")){
+                outputExtendClassImport = "import "+ ImportRespVO.class.getName() +";";
+            }else {
+                InfraDatabaseTable table = infraDatabaseTableRepository.findByName(outputSrcExtendClass).get();
+                outputSrcExtendTableImport = "import " +
                         getStr(bindingMap, "basePackage").replaceAll("\\.", ".") +
-                        ".service.repository." + table.firstModule() + "." + table.secondModule() + "." +
-                        upperFirst(toCamelCase(outputSrcExtendClass)) + "Repository;");
-                serviceImplImportList.add(outputSrcExtendTableImport);
+                        ".service.model." + table.firstModule() + "." + table.secondModule() + "." +
+                        upperFirst(toCamelCase(outputSrcExtendClass)) + ";";
+                outputSrcExtendClass = upperFirst(toCamelCase(outputSrcExtendClass));
+                outputExtendClassImport = getExtendClassImport(infraInterface.outputExtendClass(), bindingMap);
+                convertImportList.add(outputSrcExtendTableImport);
+
+                if (infraInterface.name().toLowerCase().contains("pagequery") || infraInterface.name().toLowerCase().contains("listquery")
+                        || infraInterface.name().toLowerCase().contains("singleget")) {
+                    bindingMap.put("outputTable", table);
+                    bindingMap.put("tableFirstModule", table.firstModule());
+                    bindingMap.put("tableSecondModule", table.secondModule());
+                    bindingMap.put("classNameHump", upperFirst(toCamelCase(table.name())));
+                    generateInterfaceRepositoryFunction(bindingMap);
+                    if (infraInterface.name().toLowerCase().contains("pagequery") || infraInterface.name().toLowerCase().contains("listquery")) {
+                        bindingMap.put("isGenerateRepository", true);
+                    } else {
+                        generateInterfaceErrorCode(bindingMap);
+                    }
+                    generateInterfaceFunctionContent(bindingMap);
+                    serviceImplList.add("    @Resource\r\n" + "    private " + upperFirst(toCamelCase(table.name()))
+                            + "Repository " + toCamelCase(table.name()) + "Repository;\r\n");
+                    serviceImplImportList.add("import " +
+                            getStr(bindingMap, "basePackage").replaceAll("\\.", ".") +
+                            ".service.repository." + table.firstModule() + "." + table.secondModule() + "." +
+                            upperFirst(toCamelCase(outputSrcExtendClass)) + "Repository;");
+                    serviceImplImportList.add(outputSrcExtendTableImport);
+                }
             }
+            outputImportList.add(outputExtendClassImport);
         }
         bindingMap.put("outputSrcExtendClass", outputSrcExtendClass);
 
@@ -1013,6 +1018,10 @@ public class CodegenEngine {
             if(infraInterface.name().toLowerCase().contains("pagequery") || infraInterface.name().toLowerCase().contains("listquery")){
                 repositoryList.add(inputImport.toString());
                 bindingMap.put("isGenerateRepository", true);
+            }
+            if(infraInterface.isImport()){
+                input = "@RequestParam(\"file\") MultipartFile";
+                inputVar = "file";
             }
             bindingMap.put("isGenerateVoInput", true);
         }
