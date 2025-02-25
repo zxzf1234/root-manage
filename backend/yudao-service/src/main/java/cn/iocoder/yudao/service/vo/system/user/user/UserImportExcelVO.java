@@ -47,13 +47,11 @@ public class UserImportExcelVO {
     @ExcelProperty("岗位")
     private String postName;
 
-    @ExcelProperty(value = "用户性别", converter = DictConvert.class)
-    @DictFormat(CommonSexEnum.class)
-    private Integer sex;
+    @ExcelProperty(value = "用户性别")
+    private String sexStr;
 
-    @ExcelProperty(value = "账号状态", converter = DictConvert.class)
-    @DictFormat(CommonStatusEnum.class)
-    private Integer status;
+    @ExcelProperty(value = "账号状态")
+    private String statusStr;
 
     @ExcelProperty(value = "备注")
     private String remark;

@@ -114,7 +114,7 @@ public class UserController {
     @Operation(summary = "导入用户")
     @Parameters({@Parameter(name = "file", description = "Excel 文件", required = true)})
     @PreAuthorize("@ss.hasPermission('system:user:import')")
-    public CommonResult<UserImportRespVO> importExcel(@RequestParam("file") MultipartFile file) throws Exception {
+    public CommonResult<List<UserImportRespVO>> importExcel(@RequestParam("file") MultipartFile file) throws Exception {
         List<UserImportExcelVO> list = ExcelUtils.read(file, UserImportExcelVO.class);
         return success(userService.importUserList(list));
     }

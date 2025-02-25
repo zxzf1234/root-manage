@@ -1,5 +1,11 @@
 package cn.iocoder.yudao.service.service.system.user;
+import cn.iocoder.yudao.service.enums.common.IntArrayValuable;
 import cn.iocoder.yudao.service.framework.exception.ServiceException;
+import cn.iocoder.yudao.service.model.system.dept.SystemDept;
+import cn.iocoder.yudao.service.model.system.dept.SystemPost;
+import cn.iocoder.yudao.service.model.system.user.SystemUserProps;
+import cn.iocoder.yudao.service.repository.system.dept.SystemDeptRepository;
+import cn.iocoder.yudao.service.repository.system.dept.SystemPostRepository;
 import cn.iocoder.yudao.service.repository.system.dept.SystemUserPostRepository;
 import cn.iocoder.yudao.service.repository.system.user.SystemUserRepository;
 import cn.iocoder.yudao.service.service.infra.file.FileService;
@@ -8,9 +14,9 @@ import cn.iocoder.yudao.service.service.system.permission.PermissionService;
 import cn.iocoder.yudao.service.service.system.post.PostService;
 import cn.iocoder.yudao.service.vo.system.user.profile.UserProfileUpdatePasswordReqVO;
 import cn.iocoder.yudao.service.vo.system.user.profile.UserProfileUpdateReqVO;
+import com.alibaba.excel.annotation.ExcelProperty;
 import com.google.common.annotations.VisibleForTesting;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import cn.iocoder.yudao.service.util.collection.CollectionUtils;
 import cn.iocoder.yudao.service.model.system.dept.SystemUserPost;
 import cn.hutool.core.collection.CollUtil;
@@ -29,6 +35,8 @@ import cn.iocoder.yudao.service.vo.system.user.user.UserUpdateStatusInput;
 import cn.iocoder.yudao.service.vo.system.user.user.UserUpdatePasswordInput;
 import cn.iocoder.yudao.service.vo.system.user.user.UserUpdateInput;
 import cn.iocoder.yudao.service.vo.system.user.user.UserCreateInput;
+import org.babyfish.jimmer.ImmutableObjects;
+import org.babyfish.jimmer.sql.ast.mutation.SaveMode;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import cn.iocoder.yudao.service.model.system.user.SystemUserDraft;
 import cn.iocoder.yudao.service.model.system.dept.SystemUserPostDraft;
@@ -39,14 +47,25 @@ import org.babyfish.jimmer.Page;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.IntStream;
+
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.transaction.annotation.Transactional;
 import cn.iocoder.yudao.service.framework.web.web.core.pojo.PageResult;
 import cn.iocoder.yudao.service.convert.system.user.UserConvert;
 import cn.iocoder.yudao.service.vo.system.user.user.*;
 import cn.iocoder.yudao.service.enums.common.CommonStatusEnum;
+import org.springframework.util.StringUtils;
 
+import static cn.iocoder.yudao.service.errorCode.infra.ErrorCodeConstants.AUTH_LOGIN_CAPTCHA_CODE_ERROR;
+import static cn.iocoder.yudao.service.errorCode.infra.ErrorCodeConstants.ERROR_CODE_IMPORT_DICT;
+import static cn.iocoder.yudao.service.errorCode.system.dept.DeptErrorCode.DEPT_NOT_FOUND;
+import static cn.iocoder.yudao.service.errorCode.system.post.PostErrorCode.POST_NOT_FOUND;
 import static cn.iocoder.yudao.service.framework.exception.util.ServiceExceptionUtil.exception;
 import static cn.iocoder.yudao.service.errorCode.system.user.UserErrorCode.*;
 import static cn.iocoder.yudao.service.util.collection.CollectionUtils.convertList;
@@ -65,9 +84,17 @@ public class UserServiceImpl implements UserService {
     private SystemUserPostRepository systemUserPostRepository;
 
     @Resource
+    private SystemDeptRepository systemDeptRepository;
+
+    @Resource
+    private SystemPostRepository systemPostRepository;
+
+    @Resource
     private DeptService deptService;
+
     @Resource
     private PostService postService;
+
     @Resource
     private PermissionService permissionService;
     @Resource
@@ -114,8 +141,9 @@ public class UserServiceImpl implements UserService {
         Collection<Long> deletePostIds = CollUtil.subtract(dbPostIds, postIds);
         // 执行新增和删除。对于已经授权的菜单，不用做任何处理
         if (!CollectionUtil.isEmpty(createPostIds)) {
-            systemUserPostRepository.saveAll(convertList(createPostIds,
-                    postId -> SystemUserPostDraft.$.produce(SystemUserPost-> SystemUserPost.setUserId(userId).setPostId(postId)))
+            systemUserPostRepository.saveEntities(convertList(createPostIds,
+                    postId -> SystemUserPostDraft.$.produce(SystemUserPost-> SystemUserPost.setUserId(userId).setPostId(postId))),
+                    SaveMode.INSERT_ONLY
             );
 
         }
@@ -224,32 +252,74 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserImportRespVO importUserList(List<UserImportExcelVO> list) {
+    public List<UserImportRespVO> importUserList(List<UserImportExcelVO> list) {
         if (CollUtil.isEmpty(list)) {
             throw exception(USER_IMPORT_LIST_IS_EMPTY);
         }
-        UserImportRespVO respVO = UserImportRespVO.builder().createUsernames(new ArrayList<>())
-                .updateUsernames(new ArrayList<>()).failureUsernames(new LinkedHashMap<>()).build();
-        list.forEach(importUser -> {
+        List<UserImportRespVO> respVOList = new ArrayList<>();
+        int columnIndex = 1;
+        for(UserImportExcelVO excelVO : list){
+            columnIndex++;
             // 校验，判断是否有不符合的原因
             try {
-                validateUserForCreateOrUpdate(null, importUser.getUsername(), importUser.getMobile(), importUser.getEmail(),
-                        null, null);
-            } catch (ServiceException ex) {
-                respVO.getFailureUsernames().put(importUser.getUsername(), ex.getMessage());
-                return;
-            }
-            SystemUser newUserConvert = UserConvert.INSTANCE.convertUser(importUser);
-            newUserConvert = SystemUserDraft.$.produce(newUserConvert, SystemUsers ->
-                    SystemUsers.setPassword(passwordEncoder.encode(importUser.getPassword()))
-                            .setStatus(importUser.getStatus() == null ? CommonStatusEnum.ENABLE.getValue() : SystemUsers.status())
-                            .setSex(importUser.getSex() == null ? CommonSexEnum.MALE.getValue() : SystemUsers.sex())
-            );
-            systemUserRepository.insert(newUserConvert);
-            respVO.getCreateUsernames().add(importUser.getUsername());
+                SystemUser newUser = UserConvert.INSTANCE.convertUser(excelVO);
+                newUser = transferImportVO(newUser, excelVO);
 
-        });
-        return respVO;
+                validateUserForCreateOrUpdate(null, newUser.username(),  excelVO.getMobile(), excelVO.getEmail(),
+                        ImmutableObjects.isLoaded(newUser, SystemUserProps.DEPT_ID) ?  newUser.deptId() : null,
+                        ImmutableObjects.isLoaded(newUser, SystemUserProps.POST_IDS) ? newUser.postIds() : null);
+
+                newUser = SystemUserDraft.$.produce(newUser, SystemUsers ->
+                        SystemUsers.setPassword(passwordEncoder.encode(excelVO.getPassword()))
+                );
+                systemUserRepository.insert(newUser);
+            } catch (Exception ex) {
+                respVOList.add(new UserImportRespVO(columnIndex, ex.getMessage()));
+            }
+
+
+        }
+        return respVOList;
+    }
+
+    private SystemUser transferImportVO(SystemUser newUser, UserImportExcelVO excelVO) throws Exception {
+        // 岗位
+        if(StringUtils.hasText(excelVO.getPostName())){
+            List<Long> postIds = new ArrayList<>();
+            String split = excelVO.getPostName().contains(",") ? "," : "，";
+            String[] postStrList = excelVO.getPostName().split(split);
+            for(String postStr : postStrList){
+                SystemPost post = systemPostRepository.findByName(postStr).orElse(null);
+                if(post == null){
+                    throw exception(POST_NOT_FOUND);
+                }
+                postIds.add(post.id());
+            }
+
+            newUser = SystemUserDraft.$.produce(newUser, SystemUsers ->
+                    SystemUsers.setPostIds(postIds)
+            );
+        }
+
+        // 角色
+        if(StringUtils.hasText(excelVO.getPostName())) {
+            SystemDept dept = systemDeptRepository.findByName(excelVO.getDeptName()).orElse(null);
+            if (dept == null) {
+                throw exception(DEPT_NOT_FOUND);
+            }
+            newUser = SystemUserDraft.$.produce(newUser, SystemUsers ->
+                    SystemUsers.setDeptId(dept.id())
+            );
+        }
+
+        // 状态 性别
+        Integer status = ExcelUtils.convertToJavaData(excelVO,"statusStr", CommonStatusEnum.class, CommonStatusEnum.ENABLE.getValue());
+        Integer sex = ExcelUtils.convertToJavaData(excelVO,"sexStr", CommonSexEnum.class, CommonSexEnum.MALE.getValue());
+        newUser = SystemUserDraft.$.produce(newUser, SystemUsers ->
+                SystemUsers.setStatus(status).setSex(sex)
+        );
+
+        return newUser;
     }
 
     private void validateUserForCreateOrUpdate(Long id, String username, String mobile, String email,

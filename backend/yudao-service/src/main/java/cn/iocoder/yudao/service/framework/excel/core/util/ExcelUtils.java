@@ -1,13 +1,22 @@
 package cn.iocoder.yudao.service.framework.excel.core.util;
 
+import cn.iocoder.yudao.service.enums.common.IntArrayValuable;
 import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.write.style.column.LongestMatchColumnWidthStyleStrategy;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.net.URLEncoder;
+import java.util.Arrays;
 import java.util.List;
+
+import static cn.iocoder.yudao.service.errorCode.infra.ErrorCodeConstants.ERROR_CODE_IMPORT_DICT;
+import static cn.iocoder.yudao.service.framework.exception.util.ServiceExceptionUtil.exception;
 
 /**
  * Excel 工具类
@@ -43,6 +52,48 @@ public class ExcelUtils {
        return EasyExcel.read(file.getInputStream(), head, null)
                 .autoCloseStream(false)  // 不要自动关闭，交给 Servlet 自己处理
                 .doReadAllSync();
+    }
+
+    public static Integer convertToJavaData(Object excelVO, String fieldName, Class<? extends IntArrayValuable> enumType, Integer defaultType) throws Exception {
+        // 获取对象的Class对象
+        Class<?> clazz = excelVO.getClass();
+
+        // 获取指定名称的字段
+        Field field = clazz.getDeclaredField(fieldName);
+        field.setAccessible(true); // 如果字段是私有的，需要设置为可访问
+
+        // 检查该字段上是否存在ImportRequired注解
+        String annotationValue = "";
+        if (field.isAnnotationPresent(ExcelProperty.class)) {
+            // 获取注解实例
+            ExcelProperty annotation = field.getAnnotation(ExcelProperty.class);
+
+            annotationValue = annotation.value()[0];
+        }
+
+        String getterMethodName = "get" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
+        // 查找并调用getter方法
+        Method getterMethod = clazz.getMethod(getterMethodName);
+        Object fieldValue = getterMethod.invoke(excelVO);
+        if(fieldValue == null)
+            return defaultType;
+
+        String value = fieldValue.toString();
+        if(!StringUtils.hasText(value))
+            return defaultType;
+        // 获取静态 VALUES 数组
+        Field valuesField = enumType.getDeclaredField("VALUES");
+        int[] valuesArray = (int[]) valuesField.get(null);
+
+        // 获取静态 VALUES 数组
+        Field labelsField = enumType.getDeclaredField("LABELS");
+        String[] labelsArray = (String[]) labelsField.get(null);
+        int index = Arrays.stream(labelsArray).toList().indexOf(value);
+        if(index >= 0){
+            return valuesArray[index];
+        }else{
+            throw exception(ERROR_CODE_IMPORT_DICT, annotationValue);
+        }
     }
 
 }

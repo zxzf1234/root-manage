@@ -25,4 +25,6 @@ public interface SystemDeptRepository extends JRepository<SystemDept, Long> {
     long countByParentId(Long parentId);
 
     Optional<SystemDept> findByParentIdAndName(Long parentId, String name);
+
+    Optional<SystemDept> findByName(String name);
 }

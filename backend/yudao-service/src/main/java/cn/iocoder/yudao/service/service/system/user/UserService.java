@@ -45,7 +45,7 @@ public interface UserService {
 
     void getImportTemplate(HttpServletResponse response ) throws IOException;
 
-    UserImportRespVO importUserList(List<UserImportExcelVO> list);
+    List<UserImportRespVO> importUserList(List<UserImportExcelVO> list);
 
     boolean isPasswordMatch(String rawPassword, String encodedPassword);
 

@@ -1,37 +1,37 @@
 <template>
   <Dialog v-model="dialogVisible" title="用户导入" width="400">
-    <el-upload
-      ref="uploadRef"
-      v-model:file-list="fileList"
-      :auto-upload="false"
-      :disabled="formLoading"
-      :limit="1"
-      :on-error="submitFormError"
-      :on-exceed="handleExceed"
-      :on-success="submitFormSuccess"
-      accept=".xlsx, .xls"
-      drag
-    >
-      <Icon icon="ep:upload" />
-      <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-      <template #tip>
-        <div class="el-upload__tip text-center">
-          <!-- <div class="el-upload__tip">
-            <el-checkbox v-model="updateSupport" />
-            是否更新已经存在的用户数据
-          </div> -->
-          <span>仅允许导入 xls、xlsx 格式文件。</span>
-          <el-link
-            :underline="false"
-            style="font-size: 12px; vertical-align: baseline"
-            type="primary"
-            @click="importTemplate"
-          >
-            下载模板
-          </el-link>
-        </div>
-      </template>
-    </el-upload>
+    <div v-if="!isShowErrorMeesage">
+      <el-upload
+        ref="uploadRef"
+        v-model:file-list="fileList"
+        :auto-upload="false"
+        :disabled="formLoading"
+        :limit="1"
+        :on-error="submitFormError"
+        :on-exceed="handleExceed"
+        accept=".xlsx, .xls"
+        drag
+      >
+        <Icon icon="ep:upload" />
+        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+        <template #tip>
+          <div class="el-upload__tip text-center">
+            <span>仅允许导入 xls、xlsx 格式文件。</span>
+            <el-link
+              :underline="false"
+              style="font-size: 12px; vertical-align: baseline"
+              type="primary"
+              @click="importTemplate"
+            >
+              下载模板
+            </el-link>
+          </div>
+        </template>
+      </el-upload>
+    </div>
+    <div v-else>
+      <Table :columns="columns" :data="errorData" />
+    </div>
     <template #footer>
       <el-button :disabled="formLoading" type="primary" @click="submitForm">确 定</el-button>
       <el-button @click="dialogVisible = false">取 消</el-button>
@@ -49,6 +49,12 @@ const dialogVisible = ref(false) // 弹窗的是否展示
 const formLoading = ref(false) // 表单的加载中
 const uploadRef = ref()
 const fileList = ref<UploadUserFile[]>([]) // 文件列表
+const isShowErrorMeesage = ref(false)
+const errorData = ref()
+const columns: TableColumnList = [
+  { label: '行数', prop: 'columnIndex' },
+  { label: '错误原因', prop: 'errorMessage' }
+]
 
 /** 打开弹窗 */
 const open = () => {
@@ -57,44 +63,27 @@ const open = () => {
 }
 defineExpose({ open }) // 提供 open 方法，用于打开弹窗
 
+/** 文件上传成功 */
+const emits = defineEmits(['success'])
 /** 提交表单 */
 const submitForm = async () => {
   if (fileList.value.length == 0) {
     message.error('请上传文件')
     return
   }
-  const info = await UserApi.importExcel({
+  const errorMessages = await UserApi.importExcel({
     file: new Blob([fileList.value[0].raw!], { type: fileList.value[0].raw?.type })
   })
-  console.log(info)
   formLoading.value = true
-}
-
-/** 文件上传成功 */
-const emits = defineEmits(['success'])
-const submitFormSuccess = (response: any) => {
-  if (response.code !== 0) {
-    message.error(response.msg)
-    formLoading.value = false
-    return
+  if (errorMessages.data.length == 0) {
+    message.alert('导入成功')
+    // 发送操作成功的事件
+    emits('success')
+    dialogVisible.value = false
+  } else {
+    errorData.value = errorMessages.data
+    isShowErrorMeesage.value = true
   }
-  // 拼接提示语
-  const data = response.data
-  let text = '上传成功数量：' + data.createUsernames.length + ';'
-  for (let username of data.createUsernames) {
-    text += '< ' + username + ' >'
-  }
-  text += '更新成功数量：' + data.updateUsernames.length + ';'
-  for (const username of data.updateUsernames) {
-    text += '< ' + username + ' >'
-  }
-  text += '更新失败数量：' + Object.keys(data.failureUsernames).length + ';'
-  for (const username in data.failureUsernames) {
-    text += '< ' + username + ': ' + data.failureUsernames[username] + ' >'
-  }
-  message.alert(text)
-  // 发送操作成功的事件
-  emits('success')
 }
 
 /** 上传错误提示 */
@@ -109,6 +98,7 @@ const resetForm = () => {
   formLoading.value = false
   uploadRef.value?.clearFiles()
   fileList.value = []
+  isShowErrorMeesage.value = false
 }
 
 /** 文件数超出提示 */

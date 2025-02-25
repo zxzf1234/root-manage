@@ -70,6 +70,10 @@ public interface ErrorCodeConstants {
     ErrorCode AUTH_LOGIN_USER_DISABLED = new ErrorCode(ERROR_CODE_AUTH_START_CODE + 1, "登录失败，账号被禁用");
     ErrorCode AUTH_LOGIN_CAPTCHA_CODE_ERROR = new ErrorCode(ERROR_CODE_AUTH_START_CODE + 2, "验证码不正确，原因：{}");
 
+    // ========== IMPORT 模块 ==========
+    Integer ERROR_CODE_IMPORT = ERROR_CODE_START_CODE + 6000;
+    ErrorCode ERROR_CODE_IMPORT_DICT = new ErrorCode(ERROR_CODE_IMPORT, "{}类型不正确");
+
 
 
 
