@@ -58,3 +58,17 @@ export const exported = (params) => {
 export const page = (params) => {
   return request.get({ url: '/system/post/page', params })
 }
+
+/**
+ * 获取岗位导入模板
+ */
+export const getImportExcelTemplate = () => {
+  return request.download({ url: '/system/post/get-import-excel-template' })
+}
+
+/**
+ * 岗位导入
+ */
+export const importExcel = (data) => {
+  return request.upload({ url: '/system/post/import-excel', data })
+}

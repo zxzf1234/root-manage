@@ -1,5 +1,8 @@
 package cn.iocoder.yudao.service.service.system.post;
 
+import org.springframework.web.multipart.MultipartFile;
+import cn.iocoder.yudao.service.vo.system.post.post.PostImportExcelOutput;
+import cn.iocoder.yudao.service.vo.system.post.post.PostImportExcelInput;
 import cn.iocoder.yudao.service.enums.common.CommonStatusEnum;
 import cn.iocoder.yudao.service.framework.excel.core.util.ExcelUtils;
 import cn.iocoder.yudao.service.convert.system.post.PostConvert;
@@ -177,5 +180,14 @@ public class PostServiceImpl implements PostService {
         return systemPostRepository.findByIdInAndStatusIn(ids, asSet(CommonStatusEnum.ENABLE.getValue(), CommonStatusEnum.DISABLED.getValue()));
     }
 
+    @Override
+    public void getImportExcelTemplate(HttpServletResponse response) throws IOException {
+        ExcelUtils.write(response, "岗位导入模板.xls", "岗位导入", PostImportExcelInput.class, null);
+    };
+
+    @Override
+    public List<PostImportExcelOutput> importExcel(List<PostImportExcelInput> inputVO) {
+        return null;
+    }
 
 }

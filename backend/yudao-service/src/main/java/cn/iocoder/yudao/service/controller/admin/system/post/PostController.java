@@ -1,4 +1,8 @@
 package cn.iocoder.yudao.service.controller.admin.system.post;
+import cn.iocoder.yudao.service.vo.system.post.post.PostImportExcelOutput;
+import cn.iocoder.yudao.service.vo.system.post.post.PostImportExcelInput;
+import org.springframework.web.multipart.MultipartFile;
+import cn.iocoder.yudao.service.framework.excel.core.util.ExcelUtils;
 import cn.iocoder.yudao.service.vo.system.post.post.PostPageOutput;
 import cn.iocoder.yudao.service.vo.system.post.post.PostPageInput;
 import cn.iocoder.yudao.service.vo.system.post.post.PostExportedInput;
@@ -82,6 +86,20 @@ public class PostController {
     @PreAuthorize("@ss.hasPermission('system:post:query')")
     public CommonResult<PageResult<PostPageOutput>> page(@Valid PostPageInput inputVO) {
         return success(postService.page(inputVO));
+    }
+
+    @GetMapping("/get-import-excel-template")
+    @Operation(summary = "获取岗位导入模板")
+    public void getImportExcelTemplate(HttpServletResponse response ) throws IOException {
+        postService.getImportExcelTemplate(response);
+    }
+
+    @PostMapping("/import-excel")
+    @Operation(summary = "岗位导入")
+    @PreAuthorize("@ss.hasPermission('system:post:import')")
+    public CommonResult<List<PostImportExcelOutput>> importExcel(@RequestParam("file") MultipartFile file) throws IOException {
+        List<PostImportExcelInput> inputVO = ExcelUtils.read(file, PostImportExcelInput.class);
+        return success(postService.importExcel(inputVO));
     }
 
 }

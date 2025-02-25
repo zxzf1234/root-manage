@@ -4,7 +4,7 @@
  * 获取${interface.comment}模板
  */
 export const get${interfaceNameHump.substring(0, 1).toUpperCase()}${interfaceNameHump.substring(1)}Template= () => {
-    return request.download({ url: '/${vueModulePath}/${moduleNameSymbol}/get-${interfaceNameSymbol}-template' })
+  return request.download({ url: '/${vueModulePath}/${moduleNameSymbol}/get-${interfaceNameSymbol}-template' })
 }
 
 #end
@@ -22,7 +22,7 @@ export const ${interfaceNameHump} = ($interfaceInputVar) => {
 }
     #else
         #set($params = "params")
-        #if(${interface.method} == "post" || ${interface.method} == "put")
+        #if(${interface.method} == "post" || ${interface.method} == "put" || ${interface.method} == "upload")
             #set($params = "data")
         #end
 export const ${interfaceNameHump} = ($params) => {

@@ -1,5 +1,9 @@
 package cn.iocoder.yudao.service.service.system.post;
 
+import org.springframework.web.multipart.MultipartFile;
+import cn.iocoder.yudao.service.framework.excel.core.util.ExcelUtils;
+import cn.iocoder.yudao.service.vo.system.post.post.PostImportExcelOutput;
+import cn.iocoder.yudao.service.vo.system.post.post.PostImportExcelInput;
 import cn.iocoder.yudao.service.model.system.dept.SystemPost;
 import cn.iocoder.yudao.service.vo.system.post.post.PostPageOutput;
 import cn.iocoder.yudao.service.vo.system.post.post.PostPageInput;
@@ -36,5 +40,9 @@ public interface PostService {
     void validatePostList(Collection<Long> ids);
 
     List<SystemPost> getPostList(Collection<Long> ids);
+
+    void getImportExcelTemplate(HttpServletResponse response) throws IOException;
+
+    List<PostImportExcelOutput> importExcel(List<PostImportExcelInput> inputVO);
 
 }

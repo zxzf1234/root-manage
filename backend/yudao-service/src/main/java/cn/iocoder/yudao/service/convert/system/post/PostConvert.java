@@ -1,5 +1,7 @@
 package cn.iocoder.yudao.service.convert.system.post;
 
+import cn.iocoder.yudao.service.vo.system.post.post.PostImportExcelOutput;
+import cn.iocoder.yudao.service.vo.system.post.post.PostImportExcelInput;
 import cn.iocoder.yudao.service.vo.system.post.post.PostPageOutput;
 import cn.iocoder.yudao.service.vo.system.post.post.PostPageInput;
 import cn.iocoder.yudao.service.vo.system.post.post.PostExportedOutput;
