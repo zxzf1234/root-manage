@@ -807,6 +807,14 @@ public class CodegenEngine {
         bindingMap.put("isGenerateSubRepository", false);
         bindingMap.put("inputSubTableName", "");
 
+        if(infraInterface.isImport()){
+            String excelUtilsImport = "import " +
+                    getStr(bindingMap, "basePackage").replaceAll("\\.", ".") +
+                    ".service.framework.excel.core.util.ExcelUtils;" ;
+            controllerImportList.add(excelUtilsImport);
+            serviceImplImportList.add(excelUtilsImport);
+        }
+
         List<CodegenInterfaceSubclass> inputSubclasses = CodegenConvert.INSTANCE.convertList20(infraInterface.inputSubclasses());
         for(CodegenInterfaceSubclass inputSubclass : inputSubclasses){
             convertParams(inputSubclass.getSubclassParams());
@@ -994,7 +1002,7 @@ public class CodegenEngine {
                     "example = \""+
                     infraInterface.inputParams().get(0).example() +"\")";
         } else {
-            input =  moduleNameHumpUp + upperFirst(interfaceNameHump) + "Input";
+            input = moduleNameHumpUp + upperFirst(interfaceNameHump) + "Input";
 
             StringBuilder inputImport = new StringBuilder("import " +
                     getStr(bindingMap, "basePackage").replaceAll("\\.", ".") +
@@ -1018,10 +1026,6 @@ public class CodegenEngine {
             if(infraInterface.name().toLowerCase().contains("pagequery") || infraInterface.name().toLowerCase().contains("listquery")){
                 repositoryList.add(inputImport.toString());
                 bindingMap.put("isGenerateRepository", true);
-            }
-            if(infraInterface.isImport()){
-                input = "@RequestParam(\"file\") MultipartFile";
-                inputVar = "file";
             }
             bindingMap.put("isGenerateVoInput", true);
         }
