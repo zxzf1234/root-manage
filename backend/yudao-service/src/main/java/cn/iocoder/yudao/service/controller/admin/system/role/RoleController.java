@@ -28,7 +28,7 @@ import cn.iocoder.yudao.service.vo.system.role.role.*;
 
 @Tag(name = "角色管理")
 @RestController
-@RequestMapping("/system/role")
+@RequestMapping("/system/role/role")
 @Validated
 public class RoleController {
 

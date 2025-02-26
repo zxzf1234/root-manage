@@ -23,7 +23,7 @@ import static cn.iocoder.yudao.service.framework.web.web.core.pojo.CommonResult.
 
 @Tag(name = "管理后台 - 部门")
 @RestController
-@RequestMapping("/system/dept")
+@RequestMapping("/system/dept/dept")
 @Validated
 public class DeptController {
 

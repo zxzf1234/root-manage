@@ -31,7 +31,7 @@ import cn.iocoder.yudao.service.service.system.post.PostService;
 
 @Tag(name = "岗位管理")
 @RestController
-@RequestMapping("/system/post")
+@RequestMapping("/system/post/post")
 @Validated
 public class PostController {
 

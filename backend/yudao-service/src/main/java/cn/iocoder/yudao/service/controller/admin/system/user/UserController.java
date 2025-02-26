@@ -33,7 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Tag(name = "用户管理")
 @RestController
-@RequestMapping("/system/user")
+@RequestMapping("/system/user/user")
 @Validated
 public class UserController {
 
