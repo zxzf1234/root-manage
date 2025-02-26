@@ -222,7 +222,6 @@ const getCustomerInfo = async () => {
       message.alertError('获取账号信息失败，请联系售后')
       return false
     }
-    console.log(customerInfo)
     loginData.loginForm.accountNo = customerInfo.data.data.accountNo
     // 放入缓存
     authUtil.setAccountInfo(customerInfo.data.data)

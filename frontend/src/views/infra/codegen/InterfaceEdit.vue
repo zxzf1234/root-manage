@@ -130,7 +130,21 @@
           row-key="id"
           @current-change="(row) => handleCurrentParamChange(row, formData.inputParams)"
           :row-style="rowStyle"
+          class="input-params"
         >
+          <el-table-column label="排序" align="center" min-width="2%">
+            <template #default>
+              <div class="flex items-center">
+                <Icon
+                  icon="material-symbols:drag-pan"
+                  data-inline="false"
+                  class="drag-label cursor-grab"
+                  @mouseenter="inputParamsRowDrop()"
+                  style="margin-left: 10px"
+                />
+              </div>
+            </template>
+          </el-table-column>
           <el-table-column type="expand">
             <template #default="scope">
               <el-table
@@ -273,7 +287,21 @@
           row-key="id"
           @current-change="(row) => handleCurrentParamChange(row, formData.outputParams)"
           :row-style="rowStyle"
+          class="output-params"
         >
+          <el-table-column label="排序" align="center" min-width="2%">
+            <template #default>
+              <div class="flex items-center">
+                <Icon
+                  icon="material-symbols:drag-pan"
+                  data-inline="false"
+                  class="drag-label cursor-grab"
+                  @mouseenter="outputParamsRowDrop()"
+                  style="margin-left: 10px"
+                />
+              </div>
+            </template>
+          </el-table-column>
           <el-table-column type="expand">
             <template #default="scope">
               <el-table
@@ -708,6 +736,7 @@ import * as CodegenApi from '@/api/infra/codegen'
 import { ElTable } from 'element-plus'
 import InterfaceRelatedParam from './InterfaceRelatedParam.vue'
 import { camelCase } from 'lodash-es'
+import Sortable from 'sortablejs'
 
 const { t } = useI18n() // 国际化
 const message = useMessage() // 消息弹窗
@@ -1494,5 +1523,37 @@ const handleIsImport = (value) => {
     formData.value.outputExtendClass = 'ImportRespVO'
     formData.value.method = 'upload'
   }
+}
+
+const inputParamsRowDrop = () => {
+  nextTick(() => {
+    const wrapper: HTMLElement | null = document.querySelector(
+      '.input-params .el-table__body-wrapper tbody'
+    )
+    Sortable.create(wrapper, {
+      animation: 300,
+      handle: '.drag-label',
+      onEnd: async ({ newIndex, oldIndex }) => {
+        const currentRow = formData.value.inputParams.splice(oldIndex, 1)[0]
+        formData.value.inputParams.splice(newIndex, 0, currentRow)
+      }
+    })
+  })
+}
+
+const outputParamsRowDrop = () => {
+  nextTick(() => {
+    const wrapper: HTMLElement | null = document.querySelector(
+      '.output-params .el-table__body-wrapper tbody'
+    )
+    Sortable.create(wrapper, {
+      animation: 300,
+      handle: '.drag-label',
+      onEnd: async ({ newIndex, oldIndex }) => {
+        const currentRow = formData.value.outputParams.splice(oldIndex, 1)[0]
+        formData.value.outputParams.splice(newIndex, 0, currentRow)
+      }
+    })
+  })
 }
 </script>

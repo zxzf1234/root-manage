@@ -1452,9 +1452,7 @@ public class CodegenEngine {
                     int index = fileContent.indexOf(oldInterfaceContent);
                     if(index > 0){
                         fileContent.replace(index , index + oldInterfaceContent.length(), newInterfaceContent);
-                    }
-                    else
-                    {
+                    } else {
                         if(!newInterfaceContent.isEmpty()) {
                             int lastIndex = fileContent.lastIndexOf("\r\n}");
                             if(lastIndex > 0) {
@@ -1468,13 +1466,11 @@ public class CodegenEngine {
                     int index = fileContent.indexOf(oldInterfaceContent);
                     if(index > 0){
                         fileContent.replace(index , index + oldInterfaceContent.length(), newInterfaceContent);
-                    }
-                    else
-                    {
+                    } else {
                         if(!newInterfaceContent.isEmpty())
                             fileContent.append(newInterfaceContent);
                     }
-                }else {
+                } else {
                     fileContent = new StringBuilder(newInterfaceContent);
                 }
                 if(vmPath.contains("convert") && (!newConvertImportList.isEmpty() || !oldConvertImportList.isEmpty()))
