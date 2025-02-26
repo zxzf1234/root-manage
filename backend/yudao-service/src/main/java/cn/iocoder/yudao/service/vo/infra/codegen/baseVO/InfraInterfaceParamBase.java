@@ -7,10 +7,10 @@ import java.util.*;
 import jakarta.validation.constraints.*;
 import org.hibernate.validator.constraints.*;
 import jakarta.validation.constraints.NotEmpty;
+import java.util.UUID;
 import org.springframework.format.annotation.DateTimeFormat;
 import static cn.iocoder.yudao.service.util.date.DateUtils.FORMAT_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 /**
  * 接口参数 Base VO，提供给添加、修改、详细的子 VO 使用
@@ -56,5 +56,9 @@ public class InfraInterfaceParamBase {
     @Schema(description = "关联字段")
     @Size(max = 255, message = "关联字段长度不能超过255")
     private String relatedColumn;
+
+    @Schema(description = "排序")
+    @Range(max = 100000000, message = "排序最大不能超过100000000")
+    private Integer sort;
 
 }

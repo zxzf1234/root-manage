@@ -12,4 +12,5 @@ export type InfraInterfaceParam = {
   parentType: number
   inoutType: number
   relatedColumn: string
+  sort: number
 }

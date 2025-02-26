@@ -78,17 +78,26 @@ public class InterfaceServiceImpl implements InterfaceService{
                     draft -> draft.setSubclassParams(Collections.emptyList()));
             newSubclasses.add(outputSubclass);
         }
+
+        int inputSort = 1;
         for(InfraInterfaceParam inputParam : newInterface.inputParams()){
             newValidations.addAll(inputParam.validations());
+            int finalInputSort = inputSort;
             inputParam = InfraInterfaceParamDraft.$.produce(inputParam,
-                    draft -> draft.setValidations(Collections.emptyList()));
+                    draft -> draft.setValidations(Collections.emptyList())
+                            .setSort(finalInputSort));
+            inputSort++;
             newParams.add(inputParam);
         }
 
+        int outputSort = 1;
         for(InfraInterfaceParam outputParam : newInterface.outputParams()){
             newValidations.addAll(outputParam.validations());
+            int finalOutputSort = outputSort;
             outputParam = InfraInterfaceParamDraft.$.produce(outputParam,
-                    draft -> draft.setValidations(Collections.emptyList()));
+                    draft -> draft.setValidations(Collections.emptyList())
+                            .setSort(finalOutputSort));
+            outputSort++;
             newParams.add(outputParam);
         }
 
@@ -206,6 +215,8 @@ public class InterfaceServiceImpl implements InterfaceService{
                 }
             }
         }
+
+        int inputSort = 1;
         for(InterfaceEditInput.inputParam inputParam : reqVO.getInputParams()){
             if(Objects.equals(inputParam.getOperateType(), "delete")){
                 deleteParams.add(inputParam.getId());
@@ -215,7 +226,9 @@ public class InterfaceServiceImpl implements InterfaceService{
                 inputParam.setValidations(inputParam.getValidations().stream().filter(validation -> !validation.getOperateType().equals("delete")).collect(Collectors.toList()));
                 InfraInterfaceParam newParam = CodegenConvert.INSTANCE.convert(inputParam);
                 newValidations.addAll(newParam.validations());
-                newParam = InfraInterfaceParamDraft.$.produce(newParam, draft -> draft.setValidations(Collections.emptyList()));
+                int finalInputSort = inputSort;
+                newParam = InfraInterfaceParamDraft.$.produce(newParam, draft -> draft.setValidations(Collections.emptyList()).setSort(finalInputSort));
+                inputSort++;
                 newParams.add(newParam);
             }else {
                 updateValidation(inputParam.getValidations(), newValidations, deleteValidations);
@@ -224,7 +237,9 @@ public class InterfaceServiceImpl implements InterfaceService{
                     throw exception(CODEGEN_INTERFACE_PARAM_NOT_EXITS);
                 }
                 InfraInterfaceParam updateParam = CodegenConvert.INSTANCE.convert(inputParam);
-                updateParam = InfraInterfaceParamDraft.$.produce(updateParam, draft -> draft.setValidations(Collections.emptyList()));
+                int finalInputSort = inputSort;
+                updateParam = InfraInterfaceParamDraft.$.produce(updateParam, draft -> draft.setValidations(Collections.emptyList()).setSort(finalInputSort));
+                inputSort++;
                 if (!EntityUtils.isEquals(opOldParam.get(), updateParam)){
                     infraInterfaceParamRepository.update(updateParam);
                     codegenEngine.saveUpdateSql(updateParam);
@@ -233,6 +248,7 @@ public class InterfaceServiceImpl implements InterfaceService{
             }
         }
 
+        int outputSort = 1;
         for(InterfaceEditInput.outputParam outputParam : reqVO.getOutputParams()){
             if(Objects.equals(outputParam.getOperateType(), "delete")){
                 deleteParams.add(outputParam.getId());
@@ -242,7 +258,9 @@ public class InterfaceServiceImpl implements InterfaceService{
                 outputParam.setValidations(outputParam.getValidations().stream().filter(validation -> !validation.getOperateType().equals("delete")).collect(Collectors.toList()));
                 InfraInterfaceParam newParam = CodegenConvert.INSTANCE.convert(outputParam);
                 newValidations.addAll(newParam.validations());
-                newParam = InfraInterfaceParamDraft.$.produce(newParam, draft -> draft.setValidations(Collections.emptyList()));
+                int finalInputSort = inputSort;
+                newParam = InfraInterfaceParamDraft.$.produce(newParam, draft -> draft.setValidations(Collections.emptyList()).setSort(finalInputSort));
+                outputSort++;
                 newParams.add(newParam);
             }else {
                 updateValidation(outputParam.getValidations(), newValidations, deleteValidations);
@@ -251,7 +269,9 @@ public class InterfaceServiceImpl implements InterfaceService{
                     throw exception(CODEGEN_INTERFACE_PARAM_NOT_EXITS);
                 }
                 InfraInterfaceParam updateParam = CodegenConvert.INSTANCE.convert(outputParam);
-                updateParam = InfraInterfaceParamDraft.$.produce(updateParam, draft -> draft.setValidations(Collections.emptyList()));
+                int finalInputSort = inputSort;
+                updateParam = InfraInterfaceParamDraft.$.produce(updateParam, draft -> draft.setValidations(Collections.emptyList()).setSort(finalInputSort));
+                outputSort++;
                 if (!EntityUtils.isEquals(opOldParam.get(), updateParam)){
                     infraInterfaceParamRepository.update(updateParam);
                     codegenEngine.saveUpdateSql(updateParam);

@@ -20,12 +20,14 @@ public class InfraInterfaceOutputParamResolver implements TransientResolver<UUID
     @Override
     public Map<UUID, List<UUID>> resolve(Collection<UUID> ids) {
         return Tuple2.toMultiMap(sqlClient
-                .createQuery(InfraInterfaceParamTable.$)
-                .where(InfraInterfaceParamTable.$.parentId().in(ids))
-                .where(InfraInterfaceParamTable.$.inoutType().eq(1))
-                .where(InfraInterfaceParamTable.$.parentType().eq(0))
-                .select(InfraInterfaceParamTable.$.parentId(), InfraInterfaceParamTable.$.id())
-                .execute());
+                        .createQuery(InfraInterfaceParamTable.$)
+                        .where(InfraInterfaceParamTable.$.parentId().in(ids))
+                        .where(InfraInterfaceParamTable.$.inoutType().eq(1))
+                        .where(InfraInterfaceParamTable.$.parentType().eq(0))
+                        .orderBy(InfraInterfaceParamTable.$.sort())
+                        .select(InfraInterfaceParamTable.$.parentId(), InfraInterfaceParamTable.$.id())
+                        .execute()
+        );
     }
 
 

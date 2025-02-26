@@ -229,7 +229,6 @@ const getCustomerInfo = async () => {
     // 更新server URL
     authUtil.setServerUrl(customerInfo.data.data.server.ip, customerInfo.data.data.server.port)
   }
-  console.log('this is getCustomerInfo ' + wsCache.get(CACHE_KEY.SERVER_HTTP_URL))
   service.defaults.baseURL = wsCache.get(CACHE_KEY.SERVER_HTTP_URL)
   return true
 }

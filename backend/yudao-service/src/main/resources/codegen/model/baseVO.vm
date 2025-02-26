@@ -26,6 +26,12 @@ import ${basePackage}.framework.common.enums.*;
 #end
 #end
 #foreach ($column in $columns)
+#if (${column.validation} == "NotBlank")
+import jakarta.validation.constraints.NotBlank;
+#break
+#end
+#end
+#foreach ($column in $columns)
 #if (${column.validation} == "Email")
 import jakarta.validation.constraints.Email;
 #break
