@@ -38,4 +38,6 @@ public interface PostConvert {
 
     List<PostExportedOutput> exportedOutPutConvert(List<SystemPost> output);
 
+    SystemPost ImportExcelInputConvert(PostImportExcelInput input);
+
 }

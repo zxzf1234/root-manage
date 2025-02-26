@@ -1,5 +1,12 @@
 package cn.iocoder.yudao.service.service.system.post;
 
+import cn.iocoder.yudao.service.convert.system.user.UserConvert;
+import cn.iocoder.yudao.service.model.system.dept.SystemPostDraft;
+import cn.iocoder.yudao.service.model.system.user.SystemUser;
+import cn.iocoder.yudao.service.model.system.user.SystemUserDraft;
+import cn.iocoder.yudao.service.model.system.user.SystemUserProps;
+import cn.iocoder.yudao.service.vo.system.user.user.UserImportRespVO;
+import org.babyfish.jimmer.ImmutableObjects;
 import org.springframework.web.multipart.MultipartFile;
 import cn.iocoder.yudao.service.vo.system.post.post.PostImportExcelOutput;
 import cn.iocoder.yudao.service.vo.system.post.post.PostImportExcelInput;
@@ -187,7 +194,21 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<PostImportExcelOutput> importExcel(List<PostImportExcelInput> inputVO) {
-        return null;
+        List<PostImportExcelOutput> respVOList = new ArrayList<>();
+        int columnIndex = 1;
+        for(PostImportExcelInput input : inputVO){
+            columnIndex++;
+            SystemPost newPost = PostConvert.INSTANCE.ImportExcelInputConvert(input);
+            try {
+                validatePostNameUnique(null, input.getName());
+                Integer status = ExcelUtils.convertToJavaData(input,"statusStr", CommonStatusEnum.class, CommonStatusEnum.ENABLE.getValue());
+                newPost = SystemPostDraft.$.produce(newPost, draft -> draft.setStatus(status).setCode(""));
+            } catch (Exception ex) {
+                respVOList.add(PostImportExcelOutput.builder().columnIndex(columnIndex).errorMessage(ex.getMessage()).build());
+            }
+            systemPostRepository.insert(newPost);
+        }
+        return respVOList;
     }
 
 }
