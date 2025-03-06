@@ -1,17 +1,15 @@
 <template>
   <div class="upload-box">
     <el-upload
-      :action="updateUrl"
       list-type="picture-card"
       :class="['upload', drag ? 'no-border' : '']"
       v-model:file-list="fileList"
       :multiple="true"
       :limit="limit"
-      :headers="uploadHeaders"
       :before-upload="beforeUpload"
       :on-exceed="handleExceed"
-      :on-success="uploadSuccess"
       :on-error="uploadError"
+      :http-request="uploadRequest"
       :drag="drag"
       :accept="fileType.join(',')"
     >
@@ -51,7 +49,7 @@ import { ElNotification } from 'element-plus'
 import type { UploadProps, UploadFile, UploadUserFile } from 'element-plus'
 
 import { propTypes } from '@/utils/propTypes'
-import { getAccessToken } from '@/utils/auth'
+import * as FileApi from '@/api/infra/file'
 
 const message = useMessage() // 消息弹窗
 
@@ -72,22 +70,30 @@ const props = defineProps({
     type: Array as PropType<UploadUserFile[]>,
     required: true
   },
-  updateUrl: propTypes.string.def(import.meta.env.VITE_UPLOAD_URL),
   drag: propTypes.bool.def(true), // 是否支持拖拽上传 ==> 非必传（默认为 true）
   disabled: propTypes.bool.def(false), // 是否禁用上传组件 ==> 非必传（默认为 false）
-  limit: propTypes.number.def(5), // 最大图片上传数 ==> 非必传（默认为 5张）
-  fileSize: propTypes.number.def(5), // 图片大小限制 ==> 非必传（默认为 5M）
-  fileType: propTypes.array.def(['image/jpeg', 'image/png', 'image/gif']), // 图片类型限制 ==> 非必传（默认为 ["image/jpeg", "image/png", "image/gif"]）
+  limit: propTypes.number.def(50), // 最大图片上传数 ==> 非必传（默认为 5张）
+  fileSize: propTypes.number.def(50), // 图片大小限制 ==> 非必传（默认为 5M）
+  fileType: propTypes.array.def([]), // 图片类型限制 ==> 非必传（默认不限制）
   height: propTypes.string.def('150px'), // 组件高度 ==> 非必传（默认为 150px）
   width: propTypes.string.def('150px'), // 组件宽度 ==> 非必传（默认为 150px）
   borderRadius: propTypes.string.def('8px') // 组件边框圆角 ==> 非必传（默认为 8px）
 })
 
-const uploadHeaders = ref({
-  Authorization: 'Bearer ' + getAccessToken()
-})
-
 const fileList = ref<UploadUserFile[]>(props.modelValue)
+
+const uploadRequest = async (options) => {
+  const res = await FileApi.uploadFile({
+    file: options.file
+  })
+  fileList.value.forEach((file) => {
+    if (file.name == options.file.name) {
+      file.url = res.data
+    }
+  })
+  emit('update:modelValue', fileList.value)
+  message.success('上传成功')
+}
 
 /**
  * @description 文件上传之前判断
@@ -96,19 +102,26 @@ const fileList = ref<UploadUserFile[]>(props.modelValue)
 const beforeUpload: UploadProps['beforeUpload'] = (rawFile) => {
   const imgSize = rawFile.size / 1024 / 1024 < props.fileSize
   const imgType = props.fileType
-  if (!imgType.includes(rawFile.type as FileTypes))
+
+  if (imgType.length > 0 && !imgType.includes(rawFile.type as FileTypes)) {
     ElNotification({
       title: '温馨提示',
       message: '上传图片不符合所需的格式！',
       type: 'warning'
     })
-  if (!imgSize)
+    return false
+  }
+
+  if (!imgSize) {
     ElNotification({
       title: '温馨提示',
       message: `上传图片大小不能超过 ${props.fileSize}M！`,
       type: 'warning'
     })
-  return imgType.includes(rawFile.type as FileTypes) && imgSize
+    return false
+  }
+
+  return true
 }
 
 // 图片上传成功
@@ -116,12 +129,6 @@ interface UploadEmits {
   (e: 'update:modelValue', value: UploadUserFile[]): void
 }
 const emit = defineEmits<UploadEmits>()
-const uploadSuccess = (response, uploadFile: UploadFile) => {
-  if (!response) return
-  uploadFile.url = response.data
-  emit('update:modelValue', fileList.value)
-  message.success('上传成功')
-}
 
 // 删除图片
 const handleRemove = (uploadFile: UploadFile) => {

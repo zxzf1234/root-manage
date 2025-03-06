@@ -50,16 +50,6 @@ export const setServerUrl = (url, port) => {
     'http://' + url + ':' + port + '/' + import.meta.env.VITE_APP_NO + '-server/admin-api'
   )
   wsCache.set(CACHE_KEY.SERVER_WS_URL, 'ws://' + url + ':' + port)
-  wsCache.set(
-    CACHE_KEY.SERVER_UPLOAD_FILE_URL,
-    'http://' +
-      url +
-      ':' +
-      port +
-      '/' +
-      import.meta.env.VITE_APP_NO +
-      '-server//admin-api/infra/file/upload'
-  )
 }
 
 /** 格式化token（jwt格式） */

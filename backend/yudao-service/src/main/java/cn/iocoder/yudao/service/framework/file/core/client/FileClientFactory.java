@@ -17,6 +17,6 @@ public interface FileClientFactory {
      * @param storage 存储器的枚举 {@link cn.iocoder.yudao.service.framework.file.core.enums.FileStorageEnum}
      * @param config 文件配置
      */
-    <Config extends FileClientConfig> void createOrUpdateFileClient(Long configId, Integer storage, Config config);
+    <Config extends FileClientConfig> void createOrUpdateFileClient(Long configId, Integer storage, Config config, String applicationNo);
 
 }

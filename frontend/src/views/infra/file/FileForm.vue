@@ -3,16 +3,15 @@
     <el-upload
       ref="uploadRef"
       v-model:file-list="fileList"
-      :action="url"
       :auto-upload="false"
       :data="data"
       :disabled="formLoading"
-      :headers="uploadHeaders"
       :limit="1"
       :on-change="handleFileChange"
       :on-error="submitFormError"
       :on-exceed="handleExceed"
       :on-success="submitFormSuccess"
+      :http-request="uploadRequest"
       accept=".jpg, .png, .gif"
       drag
     >
@@ -31,15 +30,12 @@
   </Dialog>
 </template>
 <script lang="ts" name="InfraFileForm" setup>
-import { getAccessToken } from '@/utils/auth'
-
+import * as FileApi from '@/api/infra/file'
 const { t } = useI18n() // 国际化
 const message = useMessage() // 消息弹窗
 
 const dialogVisible = ref(false) // 弹窗的是否展示
 const formLoading = ref(false) // 表单的加载中
-const url = import.meta.env.VITE_UPLOAD_URL
-const uploadHeaders = ref() // 上传 Header 头
 const fileList = ref([]) // 文件列表
 const data = ref({ path: '' })
 const uploadRef = ref()
@@ -62,11 +58,14 @@ const submitFileForm = () => {
     message.error('请上传文件')
     return
   }
-  // 提交请求
-  uploadHeaders.value = {
-    Authorization: 'Bearer ' + getAccessToken()
-  }
+
   unref(uploadRef)?.submit()
+}
+
+const uploadRequest = async (options) => {
+  await FileApi.uploadFile({
+    file: options.file
+  })
 }
 
 /** 文件上传成功处理 */

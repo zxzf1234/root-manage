@@ -42,7 +42,7 @@ onMounted(async () => {
 
 const exampleImageUploadHandler = (blobInfo) => {
   return new Promise((resolve, reject) => {
-    FileApi.updateFile({ file: blobInfo.blob() })
+    FileApi.uploadFile({ file: blobInfo.blob() })
       .then((res) => {
         if (res.code === 0) {
           resolve(res.data)

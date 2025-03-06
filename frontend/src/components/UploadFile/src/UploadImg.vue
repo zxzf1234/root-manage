@@ -1,14 +1,12 @@
 <template>
   <div class="upload-box">
     <el-upload
-      :action="updateUrl"
       :id="uuid"
       :class="['upload', drag ? 'no-border' : '']"
       :multiple="false"
       :show-file-list="false"
-      :headers="uploadHeaders"
+      :http-request="uploadRequest"
       :before-upload="beforeUpload"
-      :on-success="uploadSuccess"
       :on-error="uploadError"
       :drag="drag"
       :accept="fileType.join(',')"
@@ -55,7 +53,7 @@ import type { UploadProps } from 'element-plus'
 
 import { generateUUID } from '@/utils'
 import { propTypes } from '@/utils/propTypes'
-import { getAccessToken } from '@/utils/auth'
+import * as FileApi from '@/api/infra/file'
 
 type FileTypes =
   | 'image/apng'
@@ -70,9 +68,9 @@ type FileTypes =
   | 'image/x-icon'
 
 // 接受父组件参数
+// const model = defineModel().value == undefined ? ref('') : defineModel()
 const props = defineProps({
   modelValue: propTypes.string.def(''),
-  updateUrl: propTypes.string.def(import.meta.env.VITE_UPLOAD_URL),
   drag: propTypes.bool.def(true), // 是否支持拖拽上传 ==> 非必传（默认为 true）
   disabled: propTypes.bool.def(false), // 是否禁用上传组件 ==> 非必传（默认为 false）
   fileSize: propTypes.number.def(5), // 图片大小限制 ==> 非必传（默认为 5M）
@@ -94,13 +92,17 @@ const deleteImg = () => {
   emit('update:modelValue', '')
 }
 
-const uploadHeaders = ref({
-  Authorization: 'Bearer ' + getAccessToken()
-})
-
 const editImg = () => {
   const dom = document.querySelector(`#${uuid.value} .el-upload__input`)
   dom && dom.dispatchEvent(new MouseEvent('click'))
+}
+
+const uploadRequest = async (options) => {
+  const res = await FileApi.uploadFile({
+    file: options.file
+  })
+
+  emit('update:modelValue', res.data)
 }
 
 const beforeUpload: UploadProps['beforeUpload'] = (rawFile) => {
@@ -110,12 +112,6 @@ const beforeUpload: UploadProps['beforeUpload'] = (rawFile) => {
     message.notifyWarning('上传图片不符合所需的格式！')
   if (!imgSize) message.notifyWarning(`上传图片大小不能超过 ${props.fileSize}M！`)
   return imgType.includes(rawFile.type as FileTypes) && imgSize
-}
-
-// 图片上传成功提示
-const uploadSuccess: UploadProps['onSuccess'] = (res: any): void => {
-  message.success('上传成功')
-  emit('update:modelValue', res.data)
 }
 
 // 图片上传错误提示

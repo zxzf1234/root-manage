@@ -19,6 +19,7 @@ import cn.iocoder.yudao.service.repository.infra.file.InfraFileConfigRepository;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.babyfish.jimmer.Page;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -58,6 +59,9 @@ public class FileConfigServiceImpl implements FileConfigService {
     @Resource
     private Validator validator;
 
+    @Value("${spring.application.number}")
+    private String applicationNo;
+
     @Override
     public void initLocalCache() {
         // 第一步：查询数据
@@ -68,7 +72,7 @@ public class FileConfigServiceImpl implements FileConfigService {
 
         configs.forEach(config -> {
 
-            fileClientFactory.createOrUpdateFileClient(config.id(), config.storage(), config.config());
+            fileClientFactory.createOrUpdateFileClient(config.id(), config.storage(), config.config(), applicationNo);
 
             // 如果是 master，进行设置
             if (Boolean.TRUE.equals(config.master())) {

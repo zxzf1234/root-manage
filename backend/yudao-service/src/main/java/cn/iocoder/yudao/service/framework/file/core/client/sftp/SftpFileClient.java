@@ -16,8 +16,8 @@ public class SftpFileClient extends AbstractFileClient<SftpFileClientConfig> {
 
     private Sftp sftp;
 
-    public SftpFileClient(Long id, SftpFileClientConfig config) {
-        super(id, config);
+    public SftpFileClient(Long id, SftpFileClientConfig config, String applicationNo) {
+        super(id, config, applicationNo);
     }
 
     @Override

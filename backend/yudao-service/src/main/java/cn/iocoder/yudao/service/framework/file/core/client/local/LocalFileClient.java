@@ -12,8 +12,8 @@ import java.io.File;
  */
 public class LocalFileClient extends AbstractFileClient<LocalFileClientConfig> {
 
-    public LocalFileClient(Long id, LocalFileClientConfig config) {
-        super(id, config);
+    public LocalFileClient(Long id, LocalFileClientConfig config, String applicationNo) {
+        super(id, config, applicationNo);
     }
 
     @Override

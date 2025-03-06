@@ -12,8 +12,8 @@ public class DBFileClient extends AbstractFileClient<DBFileClientConfig> {
 
     private DBFileContentFrameworkDAO dao;
 
-    public DBFileClient(Long id, DBFileClientConfig config) {
-        super(id, config);
+    public DBFileClient(Long id, DBFileClientConfig config, String applicationNo) {
+        super(id, config, applicationNo);
     }
 
     @Override

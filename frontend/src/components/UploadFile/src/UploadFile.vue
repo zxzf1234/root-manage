@@ -8,24 +8,22 @@
       v-model:file-list="fileList"
       :show-file-list="true"
       :auto-upload="autoUpload"
-      :action="updateUrl"
-      :headers="uploadHeaders"
+      :http-request="uploadRequest"
       :limit="props.limit"
       :drag="drag"
       :before-upload="beforeUpload"
       :on-exceed="handleExceed"
-      :on-success="handleFileSuccess"
       :on-error="excelUploadError"
       :on-remove="handleRemove"
       :on-preview="handlePreview"
       class="upload-file-uploader"
     >
       <el-button type="primary" v-if="drag == false">
-        <Icon icon="ep:upload-filled" />选取文件</el-button
-      >
-      <div v-else class="h-[90px]" style="margin-top: 20px"
-        ><Icon icon="ph:upload-simple" :size="26" /><div>可点击或拖拽上传</div></div
-      >
+        <Icon icon="ep:upload-filled" />选取文件
+      </el-button>
+      <div v-else class="h-[90px]" style="margin-top: 20px">
+        <Icon icon="ph:upload-simple" :size="26" /><div>可点击或拖拽上传</div>
+      </div>
       <template v-if="isShowTip" #tip>
         <div style="font-size: 8px">
           大小不超过 <b style="color: #f56c6c">{{ fileSize }}MB</b>
@@ -41,13 +39,12 @@
 import { PropType } from 'vue'
 
 import { propTypes } from '@/utils/propTypes'
-import { getAccessToken } from '@/utils/auth'
+import * as FileApi from '@/api/infra/file'
 import type {
   UploadInstance,
   UploadUserFile,
   UploadProps,
   UploadRawFile,
-  UploadFile,
   MessageHandler
 } from 'element-plus'
 
@@ -60,7 +57,6 @@ const props = defineProps({
     required: true
   },
   title: propTypes.string.def('文件上传'),
-  updateUrl: propTypes.string.def(import.meta.env.VITE_UPLOAD_URL),
   fileType: propTypes.array.def([]), // 文件类型, 例如['png', 'jpg', 'jpeg']
   fileSize: propTypes.number.def(5), // 大小限制(MB)
   limit: propTypes.number.def(5), // 数量限制
@@ -72,9 +68,7 @@ const props = defineProps({
 const uploadRef = ref<UploadInstance>()
 const fileList = ref<UploadUserFile[]>(props.modelValue)
 const uploadNumber = ref<number>(0)
-const uploadHeaders = ref({
-  Authorization: 'Bearer ' + getAccessToken()
-})
+
 const currentUploadFile = ref()
 const currentUploadingMessages = ref<MessageHandler[]>([])
 const uploadSucessNumber = ref<number>(0)
@@ -85,6 +79,23 @@ watch(
     fileList.value = propModelValue
   }
 )
+
+const uploadRequest = async (options) => {
+  const res = await FileApi.uploadFile({
+    file: options.file
+  })
+  fileList.value.forEach((file) => {
+    if (file.name == options.file.name) {
+      file.url = res.data
+    }
+  })
+  uploadSucessNumber.value++
+  if (uploadSucessNumber.value == uploadNumber.value) {
+    uploadSucessNumber.value = 0
+    uploadNumber.value = 0
+    emit('update:modelValue', fileList.value)
+  }
+}
 
 // 文件上传之前判断
 const beforeUpload: UploadProps['beforeUpload'] = (file: UploadRawFile) => {
@@ -120,22 +131,7 @@ const beforeUpload: UploadProps['beforeUpload'] = (file: UploadRawFile) => {
 // const handleFileChange = (uploadFile: UploadFile): void => {
 //   uploadRef.value.data.path = uploadFile.name
 // }
-// 文件上传成功
-const handleFileSuccess: UploadProps['onSuccess'] = (res: any, uploadFile: UploadFile): void => {
-  const currentUploadingMessage = currentUploadingMessages.value.pop()
-  if (currentUploadingMessage != undefined) currentUploadingMessage.close()
-  message.success('上传成功')
 
-  fileList.value.forEach((file) => {
-    if (file.name == uploadFile.name) file.url = res.data
-  })
-  uploadSucessNumber.value++
-  if (uploadSucessNumber.value == uploadNumber.value) {
-    uploadSucessNumber.value = 0
-    uploadNumber.value = 0
-    emit('update:modelValue', fileList.value)
-  }
-}
 // 文件数超出提示
 const handleExceed: UploadProps['onExceed'] = (): void => {
   message.error(`上传文件数量不能超过${props.limit}个!`)

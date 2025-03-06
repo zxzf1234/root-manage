@@ -21,8 +21,7 @@ const keys = [
   'ACCOUNT_VERSION',
   'SERVER_BASE_URL',
   'SERVER_HTTP_URL',
-  'SERVER_WS_URL',
-  'SERVER_UPLOAD_FILE_URL'
+  'SERVER_WS_URL'
 ] as const
 
 export const CACHE_KEY = Object.fromEntries(

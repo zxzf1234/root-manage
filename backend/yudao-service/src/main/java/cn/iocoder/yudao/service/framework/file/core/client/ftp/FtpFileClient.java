@@ -20,8 +20,8 @@ public class FtpFileClient extends AbstractFileClient<FtpFileClientConfig> {
 
     private Ftp ftp;
 
-    public FtpFileClient(Long id, FtpFileClientConfig config) {
-        super(id, config);
+    public FtpFileClient(Long id, FtpFileClientConfig config, String applicationNo) {
+        super(id, config, applicationNo);
     }
 
     @Override

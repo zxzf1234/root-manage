@@ -2,6 +2,7 @@ package cn.iocoder.yudao.service.framework.file.core.client;
 
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 
 /**
  * 文件客户端的抽象类，提供模板方法，减少子类的冗余代码
@@ -20,9 +21,12 @@ public abstract class AbstractFileClient<Config extends FileClientConfig> implem
      */
     protected Config config;
 
-    public AbstractFileClient(Long id, Config config) {
+    protected String applicationNo;
+
+    public AbstractFileClient(Long id, Config config, String applicationNo) {
         this.id = id;
         this.config = config;
+        this.applicationNo = applicationNo;
     }
 
     /**
@@ -63,7 +67,7 @@ public abstract class AbstractFileClient<Config extends FileClientConfig> implem
      * @return URL 访问地址
      */
     protected String formatFileUrl(String domain, String path) {
-        return StrUtil.format("{}/admin-api/infra/file/{}/get/{}", domain, getId(), path);
+        return StrUtil.format("{}/{}-server/admin-api/infra/file/{}/get/{}", domain, applicationNo, getId(), path);
     }
 
 }

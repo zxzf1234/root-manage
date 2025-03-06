@@ -33,10 +33,10 @@ public class FileClientFactoryImpl implements FileClientFactory {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <Config extends FileClientConfig> void createOrUpdateFileClient(Long configId, Integer storage, Config config) {
+    public <Config extends FileClientConfig> void createOrUpdateFileClient(Long configId, Integer storage, Config config, String applicationNo) {
         AbstractFileClient<Config> client = (AbstractFileClient<Config>) clients.get(configId);
         if (client == null) {
-            client = this.createFileClient(configId, storage, config);
+            client = this.createFileClient(configId, storage, config, applicationNo);
             client.init();
             clients.put(client.getId(), client);
         } else {
@@ -46,11 +46,11 @@ public class FileClientFactoryImpl implements FileClientFactory {
 
     @SuppressWarnings("unchecked")
     private <Config extends FileClientConfig> AbstractFileClient<Config> createFileClient(
-            Long configId, Integer storage, Config config) {
+            Long configId, Integer storage, Config config, String applicationNo) {
         FileStorageEnum storageEnum = FileStorageEnum.getByStorage(storage);
         Assert.notNull(storageEnum, String.format("文件配置(%s) 为空", storageEnum));
         // 创建客户端
-        return (AbstractFileClient<Config>) ReflectUtil.newInstance(storageEnum.getClientClass(), configId, config);
+        return (AbstractFileClient<Config>) ReflectUtil.newInstance(storageEnum.getClientClass(), configId, config, applicationNo);
     }
 
 }
