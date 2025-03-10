@@ -60,7 +60,7 @@ public class InterfaceServiceImpl implements InterfaceService{
             for(InfraInterfaceParam subclassParam : inputSubclass.subclassParams()){
                 newValidations.addAll(subclassParam.validations());
                 subclassParam = InfraInterfaceParamDraft.$.produce(subclassParam,
-                        draft -> draft.setValidations(Collections.emptyList()));
+                        draft -> draft.setValidations(Collections.emptyList()).setSort(0));
                 newParams.add(subclassParam);
             }
             inputSubclass = InfraInterfaceSubclassDraft.$.produce(inputSubclass,
@@ -71,7 +71,7 @@ public class InterfaceServiceImpl implements InterfaceService{
             for(InfraInterfaceParam subclassParam : outputSubclass.subclassParams()){
                 newValidations.addAll(subclassParam.validations());
                 subclassParam = InfraInterfaceParamDraft.$.produce(subclassParam,
-                        draft -> draft.setValidations(Collections.emptyList()));
+                        draft -> draft.setValidations(Collections.emptyList()).setSort(0));
                 newParams.add(subclassParam);
             }
             outputSubclass = InfraInterfaceSubclassDraft.$.produce(outputSubclass,
@@ -103,9 +103,9 @@ public class InterfaceServiceImpl implements InterfaceService{
 
         newInterface = InfraInterfaceDraft.$.produce(newInterface,
                 draft -> draft.setInputParams(Collections.emptyList())
-                .setOutputParams(Collections.emptyList())
-                .setInputSubclasses(Collections.emptyList())
-                .setOutputSubclasses(Collections.emptyList()));
+                        .setOutputParams(Collections.emptyList())
+                        .setInputSubclasses(Collections.emptyList())
+                        .setOutputSubclasses(Collections.emptyList()));
         newInterface = infraInterfaceRepository.insert(newInterface);
         codegenEngine.saveInsertSql(newInterface);
         infraInterfaceSubclassRepository.saveAll(newSubclasses);
@@ -152,7 +152,7 @@ public class InterfaceServiceImpl implements InterfaceService{
                 for(InfraInterfaceParam subclassParam : newSubclass.subclassParams()){
                     newValidations.addAll(subclassParam.validations());
                     subclassParam = InfraInterfaceParamDraft.$.produce(subclassParam,
-                            draft -> draft.setValidations(Collections.emptyList()));
+                            draft -> draft.setValidations(Collections.emptyList()).setSort(0));
                     newParams.add(subclassParam);
                 }
                 newSubclass = InfraInterfaceSubclassDraft.$.produce(newSubclass,
@@ -195,7 +195,7 @@ public class InterfaceServiceImpl implements InterfaceService{
                 for(InfraInterfaceParam subclassParam : newSubclass.subclassParams()){
                     newValidations.addAll(subclassParam.validations());
                     subclassParam = InfraInterfaceParamDraft.$.produce(subclassParam,
-                            draft -> draft.setValidations(Collections.emptyList()));
+                            draft -> draft.setValidations(Collections.emptyList()).setSort(0));
                     newParams.add(subclassParam);
                 }
                 newSubclass = InfraInterfaceSubclassDraft.$.produce(newSubclass,
@@ -258,8 +258,8 @@ public class InterfaceServiceImpl implements InterfaceService{
                 outputParam.setValidations(outputParam.getValidations().stream().filter(validation -> !validation.getOperateType().equals("delete")).collect(Collectors.toList()));
                 InfraInterfaceParam newParam = CodegenConvert.INSTANCE.convert(outputParam);
                 newValidations.addAll(newParam.validations());
-                int finalInputSort = inputSort;
-                newParam = InfraInterfaceParamDraft.$.produce(newParam, draft -> draft.setValidations(Collections.emptyList()).setSort(finalInputSort));
+                int finalOutputSort = outputSort;
+                newParam = InfraInterfaceParamDraft.$.produce(newParam, draft -> draft.setValidations(Collections.emptyList()).setSort(finalOutputSort));
                 outputSort++;
                 newParams.add(newParam);
             }else {
@@ -357,12 +357,12 @@ public class InterfaceServiceImpl implements InterfaceService{
             }else if(Objects.equals(subclassParam.getOperateType(), "new")){
                 InfraInterfaceParam newParam = CodegenConvert.INSTANCE.convert(subclassParam);
                 newValidations.addAll(newParam.validations());
-                newParam = InfraInterfaceParamDraft.$.produce(newParam, draft -> draft.setValidations(Collections.emptyList()));
+                newParam = InfraInterfaceParamDraft.$.produce(newParam, draft -> draft.setValidations(Collections.emptyList()).setSort(0));
                 newParams.add(newParam);
             }else{
                 InfraInterfaceParam updateParam = CodegenConvert.INSTANCE.convert(subclassParam);
                 updateValidation(subclassParam.getValidations(), newValidations, deleteValidations);
-                updateParam = InfraInterfaceParamDraft.$.produce(updateParam, draft -> draft.setValidations(Collections.emptyList()));
+                updateParam = InfraInterfaceParamDraft.$.produce(updateParam, draft -> draft.setValidations(Collections.emptyList()).setSort(0));
                 Optional<InfraInterfaceParam> opOldParam = infraInterfaceParamRepository.findById(subclassParam.getId());
                 if (opOldParam.isEmpty())
                     throw exception(CODEGEN_INTERFACE_PARAM_NOT_EXITS);

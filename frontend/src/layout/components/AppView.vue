@@ -9,7 +9,7 @@ const layout = computed(() => appStore.getLayout)
 
 const fixedHeader = computed(() => appStore.getFixedHeader)
 
-const footer = computed(() => appStore.getFooter)
+const footer = false
 
 const tagsViewStore = useTagsViewStore()
 
@@ -21,7 +21,7 @@ const getCaches = computed((): string[] => {
 <template>
   <section
     :class="[
-      'p-[var(--app-content-padding)] h-[100vh] w-[100%] bg-[var(--app-content-bg-color)] dark:bg-[var(--el-bg-color)]',
+      'p-[var(--app-content-padding)] h-[100%] w-[100%] bg-[var(--app-content-bg-color)] dark:bg-[var(--el-bg-color)]',
       {
         '!min-h-[calc(100%-var(--app-footer-height))]':
           ((fixedHeader && (layout === 'classic' || layout === 'topLeft')) || layout === 'top') &&

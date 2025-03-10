@@ -10,7 +10,8 @@ const props = defineProps({
   fullscreen: propTypes.bool.def(true),
   width: propTypes.oneOfType([String, Number]).def('40%'),
   scroll: propTypes.bool.def(false), // 是否开启滚动条。如果是的话，按照 maxHeight 设置最大高度
-  maxHeight: propTypes.oneOfType([String, Number]).def('300px')
+  maxHeight: propTypes.oneOfType([String, Number]).def('300px'),
+  isModal: propTypes.bool.def(true)
 })
 
 const getBindValue = computed(() => {
@@ -59,13 +60,15 @@ const dialogStyle = computed(() => {
 
 <template>
   <ElDialog
-    :close-on-click-modal="true"
-    :fullscreen="isFullscreen"
-    :width="width"
     destroy-on-close
     draggable
-    lock-scroll
     v-bind="getBindValue"
+    :modal="isModal"
+    :lock-scroll="isModal"
+    :close-on-click-modal="!isModal"
+    :modal-class="isModal ? '' : 'modal-wrap'"
+    :class="isModal ? '' : 'dialog-wrap'"
+    :append-to-body="!isModal"
   >
     <template #header>
       <div class="flex justify-between">
@@ -75,7 +78,7 @@ const dialogStyle = computed(() => {
         <Icon
           v-if="fullscreen"
           :icon="isFullscreen ? 'zmdi:fullscreen-exit' : 'zmdi:fullscreen'"
-          class="mr-22px cursor-pointer is-hover mt-2px z-10"
+          class="mr-10px cursor-pointer is-hover z-10"
           color="var(--el-color-info)"
           @click="toggleFull"
         />
@@ -114,5 +117,11 @@ const dialogStyle = computed(() => {
   .#{$elNamespace}-dialog__footer {
     border-top: 1px solid var(--el-border-color);
   }
+}
+.modal-wrap {
+  pointer-events: none !important;
+}
+.dialog-wrap {
+  pointer-events: auto !important;
 }
 </style>

@@ -1,0 +1,28 @@
+package cn.iocoder.yudao.service.service.system.notice;
+
+import org.springframework.stereotype.Service;
+import jakarta.annotation.Resource;
+import org.springframework.validation.annotation.Validated;
+import org.babyfish.jimmer.Page;
+import java.util.*;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.transaction.annotation.Transactional;
+import java.io.IOException;
+import cn.iocoder.yudao.service.util.entity.EntityUtils;
+import org.babyfish.jimmer.DraftObjects;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.PageResult;
+import cn.iocoder.yudao.service.convert.system.notice.NoticeConvert;
+
+import static cn.iocoder.yudao.service.framework.exception.util.ServiceExceptionUtil.exception;
+import static cn.iocoder.yudao.service.errorCode.system.notice.NoticeErrorCode.*;
+
+/**
+ * 通知管理 Service 实现类
+ */
+@Service
+@Validated
+public class NoticeServiceImpl implements NoticeService {
+
+
+
+}

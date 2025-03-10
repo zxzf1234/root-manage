@@ -742,7 +742,9 @@ public class CodegenEngine {
         Map<String, Object> bindingMap = new HashMap<>(globalBindingMap);
         if(infraInterface.moduleId() == null)
             return null;
-        InfraInterfaceModule infraInterfaceModule =  infraInterfaceModuleRepository.findById(Objects.requireNonNull(infraInterface.moduleId())).get();
+        InfraInterfaceModule infraInterfaceModule =  infraInterfaceModuleRepository.findById(Objects.requireNonNull(infraInterface.moduleId())).orElse(null);
+        if(infraInterfaceModule == null)
+            return null;
         String interfaceNameHump = toCamelCase(infraInterface.name());
         String interfaceNameSymbol = toSymbolCase(infraInterface.name(), '-');
         String moduleNameHump = infraInterfaceModule.name();
@@ -1241,6 +1243,8 @@ public class CodegenEngine {
         InfraInterface infraInterface = infraInterfaceRepository.findDetailById(interfaceId).get();
 
         Map<String, Object> bindingMap = getInterfaceBindingMap(infraInterface);
+        if(bindingMap == null)
+            return;
 
         List<String> oldControllerImportList = Convert.toList(String.class, bindingMap.get("controllerImportList"));
         List<String> oldConvertImportList = Convert.toList(String.class, bindingMap.get("convertImportList"));

@@ -19,6 +19,10 @@ public interface SystemNotice extends BaseEntity {
 
     Integer status();
 
+    Long notifierId();
+
+    Boolean isRead();
+
     @Nullable
     @LogicalDeleted("now")
     LocalDateTime deletedTime();

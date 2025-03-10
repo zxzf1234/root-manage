@@ -12,7 +12,7 @@ import { useTableStoreWithOut } from '@/store/modules/table'
 export default defineComponent({
   name: 'Table',
   props,
-  emits: ['page-change'],
+  emits: ['page-change', 'row-contextmenu'],
   setup(props, { slots, attrs, emit, expose }) {
     const {
       columns,
@@ -52,6 +52,34 @@ export default defineComponent({
       } else return cloneDeep(unref(columns))
     }
     const dynamicColumns = ref(getDynamicColumns())
+    watch(
+      () => unref(columns),
+      (newColumn) => {
+        if (unref(saveKey) && tableStore?.[unref(saveKey)]?.['column']) {
+          let saveColumn = tableStore[unref(saveKey)]['column']
+          let currentColumns = []
+          let saveLabel = getKeyList(saveColumn, 'label')
+          let originLabel = getKeyList(newColumn, 'label')
+          let originColumns = cloneDeep(newColumn)
+          let y = 0
+          for (let i = 0; i < saveLabel.length; i++) {
+            if (originLabel.indexOf(saveLabel[i]) >= 0) {
+              currentColumns[y] = originColumns[originLabel.indexOf(saveLabel[i])]
+              currentColumns[y].hide = saveColumn[i].hide
+              y++
+            }
+          }
+          for (let i = 0; i < originLabel.length; i++) {
+            if (saveLabel.indexOf(originLabel[i]) == -1) {
+              currentColumns[y] = originColumns[i]
+              y++
+            }
+          }
+          dynamicColumns.value = currentColumns
+        } else dynamicColumns.value = cloneDeep(unref(columns))
+      },
+      { deep: true }
+    )
     let checkColumnList = getKeyList(cloneDeep(unref(dynamicColumns)), 'label')
     let paginationCom = computed(() => {
       if (!unref(pageParam) || Object.keys(unref(pageParam)).length == 0) return undefined
@@ -292,10 +320,10 @@ export default defineComponent({
     })
     const menuOption = ref({
       show: false,
-      option: { zIndex: 3000, minWidth: 130, x: 500, y: 200, theme: 'flat' }
+      option: { zIndex: 3000, minWidth: 130, x: 500, y: 200, theme: 'default' }
     })
     let menuSlot = slots?.['menu']?.({ row: {} })
-    function showMouseMenu(row, _column, event) {
+    function showMouseMenu(row, column, event) {
       if (menuSlot == undefined || menuSlot?.length <= 0) return
       event.preventDefault()
       const { x, y } = event
@@ -303,6 +331,8 @@ export default defineComponent({
       menuOption.value.option.x = x
       menuOption.value.option.y = y
       menuSlot = slots?.['menu']?.({ row: row })
+      tableRef.value?.getTableRef().setCurrentRow(row)
+      emit('row-contextmenu', row, column, event)
     }
     function disableContextMenu(event) {
       event.preventDefault()
@@ -333,7 +363,15 @@ export default defineComponent({
 })
 </script>
 <style>
-.mx-context-menu {
+.mx-context-menu-item-sperator {
   padding: 0 !important;
+}
+:root {
+  --mx-menu-hover-backgroud: #409eff;
+  --mx-menu-open-hover-backgroud: #409eff;
+  --mx-menu-open-backgroud: #409eff;
+}
+.el-table__body-wrapper .el-table-column--selection > .cell {
+  justify-content: center;
 }
 </style>
