@@ -1,5 +1,10 @@
 package cn.iocoder.yudao.service.service.system.notice;
 
+import cn.iocoder.yudao.service.vo.system.notice.notice.NoticeGetUnreadCountInput;
+import cn.iocoder.yudao.service.model.system.notice.SystemNotice;
+import cn.iocoder.yudao.service.repository.system.notice.SystemNoticeRepository;
+import cn.iocoder.yudao.service.vo.system.notice.notice.NoticePageQueryOutput;
+import cn.iocoder.yudao.service.vo.system.notice.notice.NoticePageQueryInput;
 import org.springframework.stereotype.Service;
 import jakarta.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
@@ -23,6 +28,22 @@ import static cn.iocoder.yudao.service.errorCode.system.notice.NoticeErrorCode.*
 @Validated
 public class NoticeServiceImpl implements NoticeService {
 
+    @Resource
+    private SystemNoticeRepository systemNoticeRepository;
 
+
+
+
+    @Override
+    public PageResult<NoticePageQueryOutput> pageQuery(NoticePageQueryInput inputVO) {
+        Page<SystemNotice> pageSystemNotice = systemNoticeRepository.pageQuery(inputVO);
+        List<NoticePageQueryOutput> listSystemNotice = NoticeConvert.INSTANCE.pageQueryOutputConvert(pageSystemNotice.getRows());
+        return new PageResult<>(listSystemNotice, pageSystemNotice.getTotalRowCount());
+    }
+
+    @Override
+    public Long getUnreadCount(NoticeGetUnreadCountInput inputVO) {
+        return systemNoticeRepository.getUnreadCount(inputVO.getNotifierId());
+    }
 
 }

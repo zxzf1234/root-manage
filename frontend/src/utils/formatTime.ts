@@ -199,3 +199,46 @@ export function convertDate(param: Date | string) {
   }
   return param
 }
+
+export function convertShowTime(time) {
+  // 获取当前日期
+  const currentDate = dayjs()
+  const dateToCheck = dayjs(time)
+
+  // 获取上个月的1号
+  const lastMonthFirstDay = currentDate.startOf('month').subtract(1, 'month')
+  if (dateToCheck.isBefore(lastMonthFirstDay, 'day')) return dateToCheck.format('YYYYMM')
+
+  // 获取本月1号
+  const thisMonthFirstDay = currentDate.startOf('month')
+  if (dateToCheck.isBefore(thisMonthFirstDay, 'day')) return '上个月'
+
+  // 获取三周前周一的日期
+  const lastThreeWeek = currentDate.startOf('week').subtract(3, 'week')
+  if (dateToCheck.isBefore(lastThreeWeek, 'day')) return '本月更早'
+
+  // 获取两周前周一的日期
+  const lastTwoWeek = currentDate.startOf('week').subtract(2, 'week')
+  if (dateToCheck.isBefore(lastTwoWeek, 'day')) return '三周前'
+
+  // 获取上周周一的日期
+  const lastWeek = currentDate.startOf('week').subtract(1, 'week')
+  if (dateToCheck.isBefore(lastWeek, 'day')) return '两周前'
+
+  const currentWeek = currentDate.startOf('week')
+  if (dateToCheck.isBefore(currentWeek, 'day')) return '上周'
+
+  if (dateToCheck.isSame(currentDate, 'day')) return '今天'
+
+  const yesterday = currentDate.startOf('day').subtract(1, 'day')
+  if (dateToCheck.isSame(yesterday, 'day')) return '昨天'
+
+  const dayOfWeek = dateToCheck.day()
+  if (dayOfWeek == 1) return '本周一'
+  if (dayOfWeek == 2) return '本周二'
+  if (dayOfWeek == 3) return '本周三'
+  if (dayOfWeek == 4) return '本周四'
+  if (dayOfWeek == 5) return '本周五'
+
+  return formatDate(time)
+}

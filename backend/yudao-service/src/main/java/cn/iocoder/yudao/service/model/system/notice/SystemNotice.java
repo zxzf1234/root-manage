@@ -1,4 +1,4 @@
-package cn.iocoder.yudao.service.model.system.notify;
+package cn.iocoder.yudao.service.model.system.notice;
 
 import cn.iocoder.yudao.service.model.base.BaseEntity;
 import org.babyfish.jimmer.sql.*;

@@ -1,0 +1,2 @@
+UPDATE infra_database_table SET name='system_notice',comment='通知公告表',remark='',first_module='system',second_module='notice' WHERE id = '7f7c2842-fbc4-4b37-9ec9-4949e36307ed';
+UPDATE infra_interface_vo_class SET update_time=NOW(),creator_id=0,updater_id=0,name='SystemNoticeBase',comment='通知公告表',type=0,parent_id='7f7c2842-fbc4-4b37-9ec9-4949e36307ed' WHERE id = '741679d0-376c-11ee-98db-00163e021dba';
