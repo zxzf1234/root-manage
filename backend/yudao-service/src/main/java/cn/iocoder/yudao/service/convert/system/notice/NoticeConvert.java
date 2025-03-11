@@ -1,5 +1,6 @@
 package cn.iocoder.yudao.service.convert.system.notice;
 
+import cn.iocoder.yudao.service.vo.system.notice.notice.NoticeSetReadInput;
 import cn.iocoder.yudao.service.vo.system.notice.notice.NoticeGetUnreadCountInput;
 import cn.iocoder.yudao.service.model.system.notice.SystemNotice;
 import cn.iocoder.yudao.service.vo.system.notice.notice.NoticePageQueryOutput;

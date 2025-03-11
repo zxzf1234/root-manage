@@ -1,5 +1,6 @@
 package cn.iocoder.yudao.service.service.system.notice;
 
+import cn.iocoder.yudao.service.vo.system.notice.notice.NoticeSetReadInput;
 import cn.iocoder.yudao.service.vo.system.notice.notice.NoticeGetUnreadCountInput;
 import cn.iocoder.yudao.service.vo.system.notice.notice.NoticePageQueryOutput;
 import cn.iocoder.yudao.service.vo.system.notice.notice.NoticePageQueryInput;
@@ -16,5 +17,9 @@ public interface NoticeService {
     PageResult<NoticePageQueryOutput> pageQuery(NoticePageQueryInput inputVO);
 
     Long getUnreadCount(NoticeGetUnreadCountInput inputVO);
+
+    Boolean setRead(NoticeSetReadInput inputVO);
+
+    Boolean allSetRead(Long notifierId);
 
 }

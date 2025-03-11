@@ -1,6 +1,6 @@
 <template>
   <div class="message">
-    <ElPopover :width="400" placement="bottom" trigger="click">
+    <ElPopover :width="500" placement="bottom" trigger="click">
       <template #reference>
         <ElBadge
           :value="unreadCount"
@@ -18,51 +18,81 @@
           />
         </ElBadge>
       </template>
-      <ElTabs v-model="activeName">
-        <ElTabPane label="未读" name="unread">
-          <Table
-            :page-data="unreadData"
-            :columns="columns"
-            :page-param="unreadQueryParams"
-            :show-header="false"
-            row-key="id"
-            alignWhole="left"
-            align="left"
-            :border="false"
-            :showOverflowTooltip="false"
-          >
-            <template #content="{ row }">
+      <div style="display: flex; margin-bottom: 8px">
+        <el-button
+          :type="!queryParams.isRead ? 'primary' : ''"
+          round
+          @click="handleClickIsRead(false)"
+        >
+          未读
+        </el-button>
+        <el-button
+          :type="queryParams.isRead ? 'primary' : ''"
+          round
+          @click="handleClickIsRead(true)"
+        >
+          已读
+        </el-button>
+        <el-button
+          v-if="!queryParams.isRead"
+          style="margin-left: auto !important; margin-right: 7px"
+          text
+          @click="handleClickAllRead"
+        >
+          全部已读
+        </el-button>
+      </div>
+      <Table
+        :data="data"
+        :columns="columns"
+        :show-header="false"
+        row-key="id"
+        alignWhole="left"
+        align="left"
+        :border="false"
+        :showOverflowTooltip="false"
+        style="height: 400px"
+      >
+        <template #content="{ row }">
+          <div style="display: flex">
+            <div>
+              <el-button
+                v-if="!queryParams.isRead"
+                link
+                class="w-3.5 h-3.5 px-1.5 border-0 mx-1.5"
+                @click="handleClickRead(row)"
+              >
+                <Icon
+                  icon="fad:armrecording"
+                  :size="14"
+                  style="margin-top: 12px"
+                  :color="row.isRead ? '#e0e8f0' : '#5faff6'"
+                />
+              </el-button>
+            </div>
+            <div>
+              <span style="color: #808080; font-size: 12px; width: auto">
+                {{ convertShowTime(row.showTime) }}
+              </span>
               <div>
-                <div style="display: flex">
-                  <el-button
-                    link
-                    class="w-3.5 h-3.5 px-1.5 border-0 mx-1.5"
-                    @click="handleNoticeRead(row)"
-                  >
-                    <Icon
-                      icon="fad:armrecording"
-                      :size="14"
-                      style="margin: 0"
-                      :color="row.isRead ? '#e0e8f0' : '#5faff6'"
-                    />
-                  </el-button>
-                  <div>
-                    <span style="color: #808080; font-size: 13px; width: auto">
-                      {{ convertShowTime(row.showTime) }}
-                    </span>
-                    <span> {{ row.content }}</span>
-                  </div>
-                </div>
+                <span> {{ row.content }}</span>
               </div>
-            </template>
-          </Table>
-        </ElTabPane>
-        <ElTabPane label="已读" name="read">
-          <Table :page-data="readData" :columns="columns" :page-param="readQueryParams">
-            <template #content="{ row }">{{ row.content }}</template>
-          </Table>
-        </ElTabPane>
-      </ElTabs>
+            </div>
+          </div>
+        </template>
+      </Table>
+      <div style="display: flex; border-top: 1px solid #f9fafb">
+        <el-pagination
+          v-model:current-page="page.currentPage"
+          v-model:page-size="page.pageSize"
+          size="small"
+          layout="total,  prev, pager, next"
+          :pager-count="5"
+          :total="page.totalSize"
+          @update:current-page="getList"
+          style="margin: auto; margin-bottom: 3px; margin-top: 5px"
+        />
+      </div>
       <!-- 更多 -->
       <!-- <div style="text-align: right; margin-top: 10px">
         <XButton preIcon="ep:view" title="查看全部" type="primary" @click="goMyList" />
@@ -78,19 +108,16 @@ import { CACHE_KEY, useCache } from '@/hooks/web/useCache'
 const { wsCache } = useCache()
 
 // const { push } = useRouter()
-const activeName = ref('unread')
+
 const unreadCount = ref(0) // 未读消息数量
-const unreadData = ref()
-const readData = ref()
+const data = ref()
+const userId = ref()
 
-const unreadQueryParams = ref({
+const queryParams = ref({
   noticerId: undefined,
-  isRead: false
-})
-
-const readQueryParams = ref({
-  noticerId: undefined,
-  isRead: true
+  isRead: false,
+  pageNo: 1,
+  pageSize: 20
 })
 
 const columns: TableColumnList = [
@@ -101,6 +128,11 @@ const columns: TableColumnList = [
     showOverflowTooltip: true
   }
 ]
+const page = ref({
+  currentPage: 1,
+  pageSize: 20,
+  totalSize: 0
+})
 
 defineProps({
   color: propTypes.string.def('')
@@ -108,9 +140,8 @@ defineProps({
 
 // ========== 初始化 =========
 onMounted(() => {
-  let userInfo = wsCache.get(CACHE_KEY.USER)
-  unreadQueryParams.value.noticerId = userInfo.user.id
-  readQueryParams.value.noticerId = userInfo.user.id
+  userId.value = wsCache.get(CACHE_KEY.USER)
+  queryParams.value.noticerId = userId.value
   // 首次加载小红点
   getUnreadCount()
   // 轮询刷新小红点
@@ -121,7 +152,7 @@ onMounted(() => {
 
 // 获得未读消息数
 const getUnreadCount = async () => {
-  unreadCount.value = await NoticeApi.getUnreadCount(unreadQueryParams.value)
+  unreadCount.value = await NoticeApi.getUnreadCount(queryParams.value)
 }
 
 // 获得消息列表
@@ -129,13 +160,27 @@ const getList = async () => {
   // 强制设置 unreadCount 为 0，避免小红点因为轮询太慢，不消除
   unreadCount.value = 0
 
-  unreadData.value = await NoticeApi.pageQuery(unreadQueryParams.value)
-  readData.value = await NoticeApi.pageQuery(readQueryParams.value)
-  unreadCount.value = unreadData.value.total
+  queryParams.value.pageNo = page.value.currentPage
+  queryParams.value.pageSize = page.value.pageSize
+  const pageInfo = await NoticeApi.pageQuery(queryParams.value)
+
+  data.value = pageInfo.list
+  page.value.totalSize = pageInfo.total
 }
 
-const handleNoticeRead = async (row) => {
-  console.log(row.id)
+const handleClickRead = async (row) => {
+  await NoticeApi.setRead({ id: row.id })
+  getList()
+}
+
+const handleClickAllRead = async () => {
+  await NoticeApi.allSetRead(userId.value)
+  getList()
+}
+
+const handleClickIsRead = (isRead) => {
+  queryParams.value.isRead = isRead
+  getList()
 }
 
 // 跳转我的站内信

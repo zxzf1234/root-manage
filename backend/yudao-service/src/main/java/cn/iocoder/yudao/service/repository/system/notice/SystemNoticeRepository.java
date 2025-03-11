@@ -29,5 +29,20 @@ public interface SystemNoticeRepository extends JRepository<SystemNotice, Long> 
                 .fetchUnlimitedCount();
     }
 
+    default void setRead(Long id){
+        sql().createUpdate(systemNoticeTable)
+                .where(systemNoticeTable.id().eq(id))
+                .set(systemNoticeTable.isRead(), true)
+                .execute();
+    }
+
+    default void setAllRead(Long noticerId){
+        sql().createUpdate(systemNoticeTable)
+                .where(systemNoticeTable.notifierId().eq(noticerId))
+                .where(systemNoticeTable.isRead().eq(false))
+                .set(systemNoticeTable.isRead(), true)
+                .execute();
+    }
+
 
 }

@@ -12,3 +12,17 @@ export const pageQuery = (params) => {
 export const getUnreadCount = (data) => {
   return request.post({ url: '/system/notice/notice/get-unread-count', data })
 }
+
+/**
+ * 将通知消息标记未已读
+ */
+export const setRead = (data) => {
+  return request.post({ url: '/system/notice/notice/set-read', data })
+}
+
+/**
+ * 将消息全部标记为已读
+ */
+export const allSetRead = (notifierId) => {
+  return request.post({ url: '/system/notice/notice/all-set-read?notifierId=' + notifierId })
+}

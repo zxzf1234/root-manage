@@ -1,4 +1,5 @@
 package cn.iocoder.yudao.service.controller.admin.system.notice;
+import cn.iocoder.yudao.service.vo.system.notice.notice.NoticeSetReadInput;
 import cn.iocoder.yudao.service.vo.system.notice.notice.NoticeGetUnreadCountInput;
 import cn.iocoder.yudao.service.vo.system.notice.notice.NoticePageQueryOutput;
 import cn.iocoder.yudao.service.vo.system.notice.notice.NoticePageQueryInput;
@@ -46,6 +47,19 @@ public class NoticeController {
     @Operation(summary = "获取未读通知数量")
     public CommonResult<Long> getUnreadCount(@Valid @RequestBody NoticeGetUnreadCountInput inputVO) {
         return success(noticeService.getUnreadCount(inputVO));
+    }
+
+    @PostMapping("/set-read")
+    @Operation(summary = "将通知消息标记未已读")
+    public CommonResult<Boolean> setRead(@Valid @RequestBody NoticeSetReadInput inputVO) {
+        return success(noticeService.setRead(inputVO));
+    }
+
+    @PostMapping("/all-set-read")
+    @Operation(summary = "将消息全部标记为已读")
+    @Parameter(name = "notifierId", description = "通知人", example = "")
+    public CommonResult<Boolean> allSetRead(@RequestParam("notifierId") Long notifierId) {
+        return success(noticeService.allSetRead(notifierId));
     }
 
 }

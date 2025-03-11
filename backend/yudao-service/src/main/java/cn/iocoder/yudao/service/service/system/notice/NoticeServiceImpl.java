@@ -1,5 +1,6 @@
 package cn.iocoder.yudao.service.service.system.notice;
 
+import cn.iocoder.yudao.service.vo.system.notice.notice.NoticeSetReadInput;
 import cn.iocoder.yudao.service.vo.system.notice.notice.NoticeGetUnreadCountInput;
 import cn.iocoder.yudao.service.model.system.notice.SystemNotice;
 import cn.iocoder.yudao.service.repository.system.notice.SystemNoticeRepository;
@@ -44,6 +45,18 @@ public class NoticeServiceImpl implements NoticeService {
     @Override
     public Long getUnreadCount(NoticeGetUnreadCountInput inputVO) {
         return systemNoticeRepository.getUnreadCount(inputVO.getNotifierId());
+    }
+
+    @Override
+    public Boolean setRead(NoticeSetReadInput inputVO) {
+        systemNoticeRepository.setRead(inputVO.getId());
+        return true;
+    }
+
+    @Override
+    public Boolean allSetRead(Long notifierId) {
+        systemNoticeRepository.setAllRead(notifierId);
+        return true;
     }
 
 }
