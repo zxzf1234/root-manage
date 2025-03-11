@@ -7,6 +7,7 @@ import WebStorageCache from 'web-storage-cache'
 type CacheType = 'localStorage' | 'sessionStorage'
 
 const keys = [
+  'NOTICE_UNREAD_INFO',
   'IS_DARK',
   'USER',
   'LANG',

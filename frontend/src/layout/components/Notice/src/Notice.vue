@@ -13,19 +13,25 @@
       style="
         display: flex;
         height: 100px;
-        margin-bottom: 10px;
+
         justify-content: center;
         align-items: center;
         font-size: medium;
         color: #111111;
         text-align: center;
+        margin: 0px 10px 10px 10px;
       "
     >
       {{ noticeInfo.content }}
     </div>
     <div style="display: flex; margin-bottom: 10px">
       <el-button type="info" style="margin-left: 20%" @click="handleClickRead">标为已读</el-button>
-      <el-button type="primary" style="margin-right: 20%; margin-left: auto">立刻处理</el-button>
+      <el-button
+        type="primary"
+        style="margin-right: 20%; margin-left: auto"
+        @click="handleClickProcess"
+        >立刻处理</el-button
+      >
     </div>
     <div style="display: flex">
       <el-button text :disabled="queryParams.pageNo == 1" @click="handleClickPrev">
@@ -50,6 +56,7 @@ import { convertShowTime, formatDate } from '@/utils/formatTime'
 import { useCache, CACHE_KEY } from '@/hooks/web/useCache'
 const { wsCache } = useCache()
 import * as NoticeApi from '@/api/system/notice/notice'
+const { push } = useRouter() // 路由
 
 const noticeInfo = ref({ id: 0, content: '', createTime: new Date() })
 
@@ -79,7 +86,6 @@ defineExpose({ open }) // 提供 open 方法，用于打开弹窗
 const getList = async () => {
   const pageInfo = await NoticeApi.pageQuery(queryParams.value)
   queryParams.value.total = pageInfo.total
-  console.log(pageInfo.list[0])
   noticeInfo.value = pageInfo.list[0]
   dialogTitle.value =
     convertShowTime(noticeInfo.value.createTime) + formatDate(noticeInfo.value.createTime, 'HH:MM')
@@ -102,6 +108,10 @@ const close = async () => {
 const handleClickRead = async () => {
   await NoticeApi.setRead({ id: noticeInfo.value.id })
   getList()
+}
+
+const handleClickProcess = async () => {
+  push('/system/user')
 }
 </script>
 <style>

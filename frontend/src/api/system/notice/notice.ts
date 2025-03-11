@@ -7,10 +7,10 @@ export const pageQuery = (params) => {
 }
 
 /**
- * 获取未读通知数量
+ * 获取未读通知信息
  */
-export const getUnreadCount = (data) => {
-  return request.post({ url: '/system/notice/notice/get-unread-count', data })
+export const getUnreadInfo = (data) => {
+  return request.post({ url: '/system/notice/notice/get-unread-info', data })
 }
 
 /**

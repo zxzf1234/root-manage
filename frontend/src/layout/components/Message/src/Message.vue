@@ -72,7 +72,7 @@
             </div>
             <div>
               <span style="color: #808080; font-size: 12px; width: auto">
-                {{ convertShowTime(row.showTime) }}
+                {{ convertShowTime(row.createTime) }}
               </span>
               <div>
                 <span> {{ row.content }}</span>
@@ -104,7 +104,7 @@
 <script lang="ts" name="Message" setup>
 import { Notice } from '@/layout/components/Notice'
 import * as NoticeApi from '@/api/system/notice/notice'
-import { convertShowTime } from '@/utils/formatTime'
+import { betweenDay, convertShowTime } from '@/utils/formatTime'
 import { propTypes } from '@/utils/propTypes'
 import { CACHE_KEY, useCache } from '@/hooks/web/useCache'
 const { wsCache } = useCache()
@@ -140,21 +140,32 @@ defineProps({
 })
 
 // ========== 初始化 =========
-onMounted(() => {
-  noticeRef.value.open()
+onMounted(async () => {
   userId.value = wsCache.get(CACHE_KEY.USER)
   queryParams.value.noticerId = userId.value
-  // 首次加载小红点
-  getUnreadCount()
+  await getList()
+  getUnreadInfo()
   // 轮询刷新小红点
   setInterval(() => {
-    getUnreadCount()
+    getUnreadInfo()
   }, 1000 * 60 * 2)
 })
 
 // 获得未读消息数
-const getUnreadCount = async () => {
-  unreadCount.value = await NoticeApi.getUnreadCount(queryParams.value)
+const getUnreadInfo = async () => {
+  const oldNoticeUnreadInfo = wsCache.get(CACHE_KEY.NOTICE_UNREAD_INFO)
+  const noticeUnreadInfo = await NoticeApi.getUnreadInfo(queryParams.value)
+  unreadCount.value = noticeUnreadInfo.count
+  // 有新消息和当天第一次都会弹窗
+  if (
+    noticeUnreadInfo.count > 0 &&
+    (oldNoticeUnreadInfo == undefined ||
+      betweenDay(oldNoticeUnreadInfo.showTime, new Date()) > 0 ||
+      oldNoticeUnreadInfo.maxId < noticeUnreadInfo.maxId)
+  ) {
+    noticeRef.value.open()
+  }
+  wsCache.set(CACHE_KEY.NOTICE_UNREAD_INFO, { ...noticeUnreadInfo, showTime: new Date() })
 }
 
 // 获得消息列表

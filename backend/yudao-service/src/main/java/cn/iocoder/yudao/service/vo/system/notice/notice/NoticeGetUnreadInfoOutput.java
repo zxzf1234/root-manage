@@ -11,11 +11,14 @@ import cn.iocoder.yudao.service.enums.common.CommonStatusEnum;
 import cn.iocoder.yudao.service.framework.validation.InEnum;
 import java.math.BigDecimal;
 
-@Schema(description = "获取未读通知数量")
+@Schema(description = "获取未读通知信息")
 @Data
-public class NoticeGetUnreadCountInput  {
+@AllArgsConstructor
+public class NoticeGetUnreadInfoOutput  {
 
-    @Schema(description = "通知人")
-    private Long notifierId;
+    @Schema(description = "通知公告表主键ID")
+    private Long maxId;
 
+    @Schema(description = "数量")
+    private Long count;
 }

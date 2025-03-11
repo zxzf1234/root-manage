@@ -30,6 +30,15 @@ public interface SystemNoticeRepository extends JRepository<SystemNotice, Long> 
                 .fetchUnlimitedCount();
     }
 
+    default List<Long> getUnreadMaxId(Long noticerId){
+        return sql().createQuery(systemNoticeTable)
+                .whereIf(noticerId != null, systemNoticeTable.notifierId().eq(noticerId))
+                .where(systemNoticeTable.isRead().eq(false))
+                .orderBy(systemNoticeTable.id().desc())
+                .select(systemNoticeTable.id())
+                .limit(1).execute();
+    }
+
     default void setRead(Long id){
         sql().createUpdate(systemNoticeTable)
                 .where(systemNoticeTable.id().eq(id))
