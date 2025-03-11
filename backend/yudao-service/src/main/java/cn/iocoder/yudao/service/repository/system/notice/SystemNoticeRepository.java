@@ -17,6 +17,7 @@ public interface SystemNoticeRepository extends JRepository<SystemNotice, Long> 
         return sql().createQuery(systemNoticeTable)
                 .whereIf(inputVO.getIsRead() != null, systemNoticeTable.isRead().eq(inputVO.getIsRead()))
                 .whereIf(inputVO.getNotifierId() != null, systemNoticeTable.notifierId().eq(inputVO.getNotifierId()))
+                .orderBy(systemNoticeTable.id().desc())
                 .select(systemNoticeTable)
                 .fetchPage(inputVO.getPageNo() - 1, inputVO.getPageSize());
     }

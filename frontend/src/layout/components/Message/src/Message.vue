@@ -86,7 +86,7 @@
           v-model:current-page="page.currentPage"
           v-model:page-size="page.pageSize"
           size="small"
-          layout="total,  prev, pager, next"
+          layout="total, prev, pager, next"
           :pager-count="5"
           :total="page.totalSize"
           @update:current-page="getList"
@@ -99,16 +99,17 @@
       </div> -->
     </ElPopover>
   </div>
+  <Notice ref="noticeRef" />
 </template>
 <script lang="ts" name="Message" setup>
+import { Notice } from '@/layout/components/Notice'
 import * as NoticeApi from '@/api/system/notice/notice'
 import { convertShowTime } from '@/utils/formatTime'
 import { propTypes } from '@/utils/propTypes'
 import { CACHE_KEY, useCache } from '@/hooks/web/useCache'
 const { wsCache } = useCache()
 
-// const { push } = useRouter()
-
+const noticeRef = ref()
 const unreadCount = ref(0) // 未读消息数量
 const data = ref()
 const userId = ref()
@@ -140,6 +141,7 @@ defineProps({
 
 // ========== 初始化 =========
 onMounted(() => {
+  noticeRef.value.open()
   userId.value = wsCache.get(CACHE_KEY.USER)
   queryParams.value.noticerId = userId.value
   // 首次加载小红点
