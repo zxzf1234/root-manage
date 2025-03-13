@@ -47,7 +47,7 @@ public class NoticeServiceImpl implements NoticeService {
     public NoticeGetUnreadInfoOutput getUnreadInfo(NoticeGetUnreadInfoInput inputVO) {
         Long count = systemNoticeRepository.getUnreadCount(inputVO.getNotifierId());
         List<Long> maxIds = systemNoticeRepository.getUnreadMaxId(inputVO.getNotifierId());
-        return new NoticeGetUnreadInfoOutput( maxIds == null ? 0L : maxIds.get(0), count);
+        return new NoticeGetUnreadInfoOutput( maxIds == null || maxIds.size() == 0 ? 0L : maxIds.get(0), count);
     }
 
     @Override

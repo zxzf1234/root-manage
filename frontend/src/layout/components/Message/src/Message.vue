@@ -20,7 +20,7 @@
       </template>
       <div style="display: flex; margin-bottom: 8px">
         <el-button
-          :type="!queryParams.isRead ? 'primary' : ''"
+          :type="queryParams.isRead ? '' : 'primary'"
           round
           @click="handleClickIsRead(false)"
         >
@@ -54,7 +54,7 @@
         style="height: 400px"
       >
         <template #content="{ row }">
-          <div style="display: flex">
+          <div style="display: flex; margin-left: 8px">
             <div>
               <el-button
                 v-if="!queryParams.isRead"
@@ -99,7 +99,7 @@
       </div> -->
     </ElPopover>
   </div>
-  <Notice ref="noticeRef" />
+  <Notice ref="noticeRef" @read-notice="getUnreadInfo()" />
 </template>
 <script lang="ts" name="Message" setup>
 import { Notice } from '@/layout/components/Notice'
@@ -141,7 +141,7 @@ defineProps({
 
 // ========== 初始化 =========
 onMounted(async () => {
-  userId.value = wsCache.get(CACHE_KEY.USER)
+  userId.value = wsCache.get(CACHE_KEY.USER).user.id
   queryParams.value.noticerId = userId.value
   await getList()
   getUnreadInfo()
@@ -170,9 +170,6 @@ const getUnreadInfo = async () => {
 
 // 获得消息列表
 const getList = async () => {
-  // 强制设置 unreadCount 为 0，避免小红点因为轮询太慢，不消除
-  unreadCount.value = 0
-
   queryParams.value.pageNo = page.value.currentPage
   queryParams.value.pageSize = page.value.pageSize
   const pageInfo = await NoticeApi.pageQuery(queryParams.value)
@@ -183,12 +180,14 @@ const getList = async () => {
 
 const handleClickRead = async (row) => {
   await NoticeApi.setRead({ id: row.id })
-  getList()
+  await getList()
+  await getUnreadInfo()
 }
 
 const handleClickAllRead = async () => {
   await NoticeApi.allSetRead(userId.value)
-  getList()
+  await getList()
+  await getUnreadInfo()
 }
 
 const handleClickIsRead = (isRead) => {

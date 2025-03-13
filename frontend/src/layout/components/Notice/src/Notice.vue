@@ -83,9 +83,16 @@ const open = async () => {
 }
 defineExpose({ open }) // 提供 open 方法，用于打开弹窗
 
+const emit = defineEmits(['readNotice'])
+
 const getList = async () => {
   const pageInfo = await NoticeApi.pageQuery(queryParams.value)
+  if (pageInfo.total == 0) {
+    close()
+    return
+  }
   queryParams.value.total = pageInfo.total
+
   noticeInfo.value = pageInfo.list[0]
   dialogTitle.value =
     convertShowTime(noticeInfo.value.createTime) + formatDate(noticeInfo.value.createTime, 'HH:MM')
@@ -107,11 +114,15 @@ const close = async () => {
 
 const handleClickRead = async () => {
   await NoticeApi.setRead({ id: noticeInfo.value.id })
+  emit('readNotice')
   getList()
 }
 
 const handleClickProcess = async () => {
   push('/system/user')
+  await NoticeApi.setRead({ id: noticeInfo.value.id })
+  emit('readNotice')
+  getList()
 }
 </script>
 <style>
