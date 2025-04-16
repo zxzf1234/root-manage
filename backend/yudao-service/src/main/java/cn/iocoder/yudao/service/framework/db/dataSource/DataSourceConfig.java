@@ -23,10 +23,13 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Properties;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
+import oshi.SystemInfo;
+import oshi.hardware.ComputerSystem;
 
 @Configuration
 @SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
@@ -44,8 +47,8 @@ public class DataSourceConfig {
     @Value("${spring.datasource.driver-class-name}")
     private String defaultDbDriverClassName;
 
-    @Value("${xiyu.is-local}")
-    private boolean isLocal;
+    @Value("${spring.profiles.active}")
+    private String springProfiles;
 
     @Value("${xiyu.account-router_url}")
     private String accountRouterUrl;
@@ -69,7 +72,7 @@ public class DataSourceConfig {
 
     private Map<Object, Object> getDateSource() throws Exception {
         Map<Object, Object> DataSources = new HashMap<>();
-        if(isLocal){
+        if(!Objects.equals(springProfiles, "local")){
             DriverManagerDataSource defaultDataSource = new DriverManagerDataSource();
             defaultDataSource.setUrl(defaultDbUrl);
             defaultDataSource.setUsername(defaultDbUsername);
@@ -79,10 +82,11 @@ public class DataSourceConfig {
         }else{
             // 从server router获取当前服务器的数据库信息
             String json = "{\"projectNo\":\"" + applicationNo +"\"}";
-            HttpResponse response = HttpRequest.post(accountRouterUrl+"/devops-server/admin-api/infra/devops/customer/get-by-ip-and-project")
-                    .body(json)
-                    .header("Content-Type", "application/json") // 设置请求头
-                    .execute(); // 执行请求
+
+            HttpResponse response = HttpRequest.post(accountRouterUrl+"/devops-server/admin-api/infra/devops/customer/get-server-customer-info")
+                .body(json)
+                .header("Content-Type", "application/json") // 设置请求头
+                .execute(); // 执行请求
 
             // 检查响应状态码
             if (response.isOk()) {
@@ -100,8 +104,12 @@ public class DataSourceConfig {
                         String databaseName = item.getStr("databaseName");
                         JSONObject serverObject = item.getJSONObject("server");
 
+
                         // 从server对象中获取databasePassword
                         String databasePassword = serverObject != null ? serverObject.getStr("databasePassword") : "";
+
+                        String uniqueCode =  serverObject != null ? serverObject.getStr("uniqueCode") : "";
+                        checkServerUniqueCode(uniqueCode);
 
                         DriverManagerDataSource dataSource = new DriverManagerDataSource();
                         dataSource.setUrl("jdbc:mysql://127.0.0.1:3306/" + databaseName + "?useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&nullCatalogMeansCurrent=true");
@@ -118,5 +126,17 @@ public class DataSourceConfig {
 
         }
         return DataSources;
+    }
+
+    private void checkServerUniqueCode(String uniqueCode) throws Exception{
+        if(uniqueCode.isEmpty())
+            return;
+        SystemInfo systemInfo = new SystemInfo();
+        ComputerSystem computerSystem = systemInfo.getHardware().getComputerSystem();
+
+        // 获取主板 UUID
+        String hardwareUUID = computerSystem.getHardwareUUID();
+       if(!uniqueCode.equals(hardwareUUID))
+           throw new Exception("服务器唯一码和后台记录的唯一码不一致");
     }
 }
