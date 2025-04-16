@@ -1,5 +1,5 @@
 <template>
-  <ContentWrap class="h-[55%]">
+  <ContentWrap class="h-[60%]">
     <!-- 搜索栏 -->
     <el-form ref="queryFormRef" inline v-model="queryParams" label-width="68px">
       <el-form-item label="表名称" prop="name">
@@ -63,6 +63,7 @@
       adaptive
       save-key="databaseTable"
       @row-dblclick="(row) => handleUpdate(row)"
+      :border="false"
     >
       <template #menu="{ row }">
         <context-menu-item label="修改" @click="handleUpdate(row)" />

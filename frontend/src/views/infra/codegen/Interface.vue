@@ -1,6 +1,6 @@
 <template>
   <!-- 搜索栏 -->
-  <ContentWrap class="h-[55%]">
+  <ContentWrap class="h-[60%]">
     <el-form ref="queryFormRef" :inline="true" :model="queryParams" label-width="68px">
       <el-form-item label="模块" prop="moduleName">
         <el-tree-select

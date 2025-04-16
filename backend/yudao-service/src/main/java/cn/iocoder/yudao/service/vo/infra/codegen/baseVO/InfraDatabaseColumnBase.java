@@ -23,12 +23,12 @@ public class InfraDatabaseColumnBase {
 
     @Schema(description = "字段名", requiredMode = Schema.RequiredMode.REQUIRED, example = "user_age")
     @NotEmpty(message = "字段名不能为空")
-    @Pattern(regexp = "^[a-z_]+$", message = "字段名只能是小写英文和_")
+    @Pattern(regexp = "^[a-z_0-9]+$", message = "字段名只能是小写英文和_")
     private String columnName;
 
     @Schema(description = "字段类型", requiredMode = Schema.RequiredMode.REQUIRED, example = "int(11)")
     @NotEmpty(message = "物理类型不能为空")
-    @Pattern(regexp = "^(BIT|TINYINT|SMALLINT|MEDIUMINT|INT|BIGINT|FLOAT|DOUBLE|DECIMAL|DATE|TIME|YEAR|DATETIME|TIMESTAMP|VARCHAR|CHAR|TEXT)[0-9(),]*$", message = "物理类型不合法")
+    @Pattern(regexp = "^(BIT|TINYINT|SMALLINT|MEDIUMINT|INT|BIGINT|FLOAT|DOUBLE|DECIMAL|DATE|TIME|YEAR|DATETIME|TIMESTAMP|VARCHAR|CHAR|TEXT|LONGTEXT)[0-9(),]*$", message = "物理类型不合法")
     private String dataType;
 
     @Schema(description = "字段描述", requiredMode = Schema.RequiredMode.REQUIRED, example = "年龄")

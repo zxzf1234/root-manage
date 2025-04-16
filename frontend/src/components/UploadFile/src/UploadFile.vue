@@ -6,7 +6,7 @@
       name="file"
       v-model="fileList"
       v-model:file-list="fileList"
-      :show-file-list="true"
+      :show-file-list="showFileList"
       :auto-upload="autoUpload"
       :http-request="uploadRequest"
       :limit="props.limit"
@@ -18,12 +18,14 @@
       :on-preview="handlePreview"
       class="upload-file-uploader"
     >
-      <el-button type="primary" v-if="drag == false">
-        <Icon icon="ep:upload-filled" />选取文件
-      </el-button>
-      <div v-else class="h-[90px]" style="margin-top: 20px">
-        <Icon icon="ph:upload-simple" :size="26" /><div>可点击或拖拽上传</div>
-      </div>
+      <slot>
+        <el-button type="primary" v-if="drag == false">
+          <Icon icon="ep:upload-filled" />选取文件
+        </el-button>
+        <div v-else class="h-[90px]" style="margin-top: 20px">
+          <Icon icon="ph:upload-simple" :size="26" /><div>可点击或拖拽上传</div>
+        </div>
+      </slot>
       <template v-if="isShowTip" #tip>
         <div style="font-size: 8px">
           大小不超过 <b style="color: #f56c6c">{{ fileSize }}MB</b>
@@ -44,8 +46,8 @@ import type {
   UploadInstance,
   UploadUserFile,
   UploadProps,
-  UploadRawFile,
-  MessageHandler
+  UploadRawFile
+  // MessageHandler
 } from 'element-plus'
 
 const message = useMessage() // 消息弹窗
@@ -62,7 +64,8 @@ const props = defineProps({
   limit: propTypes.number.def(5), // 数量限制
   autoUpload: propTypes.bool.def(true), // 自动上传
   drag: propTypes.bool.def(false), // 拖拽上传
-  isShowTip: propTypes.bool.def(true) // 是否显示提示
+  isShowTip: propTypes.bool.def(true), // 是否显示提示
+  showFileList: propTypes.bool.def(true) // 是否显示文件列表
 })
 // ========== 上传相关 ==========
 const uploadRef = ref<UploadInstance>()
@@ -70,7 +73,7 @@ const fileList = ref<UploadUserFile[]>(props.modelValue)
 const uploadNumber = ref<number>(0)
 
 const currentUploadFile = ref()
-const currentUploadingMessages = ref<MessageHandler[]>([])
+// const currentUploadingMessages = ref<MessageHandler[]>([])
 const uploadSucessNumber = ref<number>(0)
 
 watch(
@@ -91,6 +94,7 @@ const uploadRequest = async (options) => {
   })
   uploadSucessNumber.value++
   if (uploadSucessNumber.value == uploadNumber.value) {
+    message.success('上传成功')
     uploadSucessNumber.value = 0
     uploadNumber.value = 0
     emit('update:modelValue', fileList.value)
@@ -123,7 +127,6 @@ const beforeUpload: UploadProps['beforeUpload'] = (file: UploadRawFile) => {
     message.error(`上传文件大小不能超过${props.fileSize}MB!`)
     return false
   }
-  currentUploadingMessages.value.push(message.success('正在上传文件，请稍候...'))
   currentUploadFile.value = file
   uploadNumber.value++
 }

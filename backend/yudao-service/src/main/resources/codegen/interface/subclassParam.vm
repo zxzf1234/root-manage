@@ -10,4 +10,7 @@
         #if (${param.variableType} == "LocalDateTime" || ${param.variableType} == "LocalDateTime[]")## 时间类型
         @DateTimeFormat(pattern = FORMAT_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND)
         #end
+        #if (${param.classType} > 0)
+        @Valid
+        #end
         private #if($param.isList == true)List<#end${param.variableType}#if($param.isList == true)>#end ${param.humpName};

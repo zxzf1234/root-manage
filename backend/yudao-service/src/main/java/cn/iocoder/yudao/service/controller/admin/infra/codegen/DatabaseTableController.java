@@ -1,27 +1,36 @@
 package cn.iocoder.yudao.service.controller.admin.infra.codegen;
-
-import cn.iocoder.yudao.service.framework.web.web.core.pojo.CommonResult;
-import cn.iocoder.yudao.service.framework.web.web.core.pojo.PageResult;
-import cn.iocoder.yudao.service.service.infra.codegen.DatabaseTableService;
 import cn.iocoder.yudao.service.vo.infra.codegen.database.*;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
 import jakarta.annotation.Resource;
-import jakarta.validation.Valid;
-import java.util.List;
-import java.util.UUID;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.security.access.prepost.PreAuthorize;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Operation;
 
+import jakarta.validation.constraints.*;
+import jakarta.validation.*;
+import jakarta.servlet.http.*;
+import java.util.*;
+import java.io.IOException;
+
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.PageResult;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.CommonResult;
 import static cn.iocoder.yudao.service.framework.web.web.core.pojo.CommonResult.success;
 
-@Tag(name = "管理后台 - 数据库表管理")
+import cn.iocoder.yudao.service.framework.excel.core.util.ExcelUtils;
+
+import cn.iocoder.yudao.service.framework.operateLog.core.annotations.OperateLog;
+import static cn.iocoder.yudao.service.framework.operateLog.core.enums.OperateTypeEnum.*;
+
+import cn.iocoder.yudao.service.service.infra.codegen.DatabaseTableService;
+
+@Tag(name = "数据库表")
 @RestController
 @RequestMapping("/infra/codegen/database-table")
 @Validated
 public class DatabaseTableController {
+
     @Resource
     private DatabaseTableService databaseTableService;
 

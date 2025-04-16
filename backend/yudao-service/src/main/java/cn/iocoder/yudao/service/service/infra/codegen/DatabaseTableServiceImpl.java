@@ -2,8 +2,6 @@ package cn.iocoder.yudao.service.service.infra.codegen;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.iocoder.yudao.service.framework.web.web.core.pojo.PageResult;
-import cn.iocoder.yudao.service.util.entity.EntityUtils;
 import cn.iocoder.yudao.service.convert.infra.codegen.CodegenConvert;
 import cn.iocoder.yudao.service.model.infra.codegen.*;
 import cn.iocoder.yudao.service.repository.infra.codegen.*;
@@ -11,18 +9,31 @@ import cn.iocoder.yudao.service.service.infra.codegen.inner.CodegenEngine;
 import cn.iocoder.yudao.service.vo.infra.codegen.baseVO.InfraDatabaseColumnBase;
 import cn.iocoder.yudao.service.vo.infra.codegen.database.*;
 import org.babyfish.jimmer.sql.ast.mutation.DeleteMode;
-import org.babyfish.jimmer.Page;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import jakarta.annotation.Resource;
+import org.springframework.validation.annotation.Validated;
+import org.babyfish.jimmer.Page;
 import java.util.*;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.transaction.annotation.Transactional;
+import java.io.IOException;
 import java.util.stream.Collectors;
 
-import static cn.hutool.core.text.CharSequenceUtil.*;
-import static cn.iocoder.yudao.service.framework.exception.util.ServiceExceptionUtil.exception;
+import cn.iocoder.yudao.service.util.entity.EntityUtils;
+import org.babyfish.jimmer.DraftObjects;
+import cn.iocoder.yudao.service.framework.web.web.core.pojo.PageResult;
+
+import static cn.hutool.core.text.CharSequenceUtil.toCamelCase;
+import static cn.hutool.core.text.CharSequenceUtil.upperFirst;
+import static cn.hutool.core.text.NamingCase.toSymbolCase;
 import static cn.iocoder.yudao.service.errorCode.infra.ErrorCodeConstants.*;
+import static cn.iocoder.yudao.service.framework.exception.util.ServiceExceptionUtil.exception;
+
+/**
+ * 数据库表 Service 实现类
+ */
 @Service
+@Validated
 public class DatabaseTableServiceImpl implements DatabaseTableService {
 
     @Resource

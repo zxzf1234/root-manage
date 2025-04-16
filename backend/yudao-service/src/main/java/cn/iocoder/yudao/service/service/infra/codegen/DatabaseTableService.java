@@ -1,10 +1,14 @@
 package cn.iocoder.yudao.service.service.infra.codegen;
 
+import java.util.*;
 import cn.iocoder.yudao.service.framework.web.web.core.pojo.PageResult;
 import cn.iocoder.yudao.service.vo.infra.codegen.database.*;
-import java.util.List;
-import java.util.UUID;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
+/**
+ * 数据库表 Service 接口
+ */
 public interface DatabaseTableService {
 
     PageResult<DatabaseTableResp> getDatabaseTableList(DatabaseTableListReqVO listReqVO);

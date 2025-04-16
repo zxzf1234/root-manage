@@ -49,7 +49,7 @@ export default {
   },
   adaptiveConfig: {
     type: Object as AdaptiveConfig,
-    default: { offsetBottom: 560, zIndex: 0 }
+    default: { offsetBottom: 560, zIndex: 3 }
   },
   heightPer: {
     type: String || Number,
