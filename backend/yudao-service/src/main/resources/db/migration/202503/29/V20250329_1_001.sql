@@ -1,0 +1,4 @@
+INSERT IGNORE INTO infra_interface_validation(id,parent_id,parent_type,validation,validation_condition,message) VALUES ('b6c808dd-480d-460d-9c1e-f55408a9a56f','62d4cf6f-546a-4152-8ce2-38d3b145421e',0,'Size','max = 50','职位长度不能超过50');
+INSERT IGNORE INTO infra_database_column(id,table_id,column_name,data_type,column_comment,nullable,default_value,java_type,dict_type,example,required,related_table,sort,related_table_type) VALUES ('62d4cf6f-546a-4152-8ce2-38d3b145421e','e1a06dd2-bba2-49f8-ae05-8c172f216d61','position','VARCHAR(50)','职位',false,'''','String','','',false,'',15,1);
+ALTER TABLE system_user
+ADD COLUMN `position` VARCHAR(50) NOT NULL DEFAULT '' COMMENT '职位';

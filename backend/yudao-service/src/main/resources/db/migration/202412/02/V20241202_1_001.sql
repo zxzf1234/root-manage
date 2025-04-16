@@ -1,0 +1,1 @@
+alter table infra_api_error_log change column request_params request_params text COMMENT '请求参数';

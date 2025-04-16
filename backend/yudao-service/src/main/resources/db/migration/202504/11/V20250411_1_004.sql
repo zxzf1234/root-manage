@@ -1,0 +1,6 @@
+UPDATE infra_interface_subclass SET parent_id='51f7b230-149c-4689-b527-f37a9649befd',name='leaders',comment='部门负责人',inherit_class='SystemDeptLeaderBase',inherit_type=2,type=1 WHERE id = '5142cd6b-69b8-44c2-9fc7-bfadf363c489';
+UPDATE infra_interface_param SET name='leaders',comment='部门负责人',is_list=true,variable_type='Subclass',related_id='5142cd6b-69b8-44c2-9fc7-bfadf363c489',related_type=3,example='',required=false,parent_id='51f7b230-149c-4689-b527-f37a9649befd',parent_type=0,inout_type=1,related_column='leaders',sort=3 WHERE id = '1ca57abe-9978-4c9e-b46c-4cef4a3ae775';
+INSERT IGNORE INTO infra_interface_subclass(id,parent_id,name,comment,inherit_class,inherit_type,type) VALUES ('87ee5483-1e96-4e02-ba7a-73e2626437a3','51f7b230-149c-4689-b527-f37a9649befd','leader','用户信息表','SystemUserBase',2,1);
+INSERT IGNORE INTO infra_interface_param(id,name,comment,is_list,variable_type,related_id,related_type,example,required,parent_id,parent_type,inout_type,related_column,sort) VALUES ('9446cfef-602c-4811-9282-ff7a846f778e','leader','用户信息表',false,'Subclass','87ee5483-1e96-4e02-ba7a-73e2626437a3',3,'',false,'5142cd6b-69b8-44c2-9fc7-bfadf363c489',1,1,'leader',0);
+delete from infra_interface_param where id = '6b802813-3e4c-4d51-9006-fcd8d4c30201';
+delete from infra_interface_subclass where id = '71e0f779-8c97-4bd7-8781-92c934a0a31a';
