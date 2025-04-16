@@ -1,8 +1,8 @@
 package cn.iocoder.yudao.service.service.system.user;
-import cn.iocoder.yudao.service.enums.common.IntArrayValuable;
-import cn.iocoder.yudao.service.framework.exception.ServiceException;
-import cn.iocoder.yudao.service.model.system.dept.SystemDept;
-import cn.iocoder.yudao.service.model.system.dept.SystemPost;
+import cn.iocoder.yudao.service.model.system.dept.*;
+import cn.iocoder.yudao.service.repository.system.dept.SystemDeptLeaderRepository;
+import cn.iocoder.yudao.service.vo.system.user.user.UserGetOwnerUserOutput;
+import cn.iocoder.yudao.service.vo.system.user.user.UserGetByDeptOutput;
 import cn.iocoder.yudao.service.model.system.user.SystemUserProps;
 import cn.iocoder.yudao.service.repository.system.dept.SystemDeptRepository;
 import cn.iocoder.yudao.service.repository.system.dept.SystemPostRepository;
@@ -14,11 +14,9 @@ import cn.iocoder.yudao.service.service.system.permission.PermissionService;
 import cn.iocoder.yudao.service.service.system.post.PostService;
 import cn.iocoder.yudao.service.vo.system.user.profile.UserProfileUpdatePasswordReqVO;
 import cn.iocoder.yudao.service.vo.system.user.profile.UserProfileUpdateReqVO;
-import com.alibaba.excel.annotation.ExcelProperty;
 import com.google.common.annotations.VisibleForTesting;
 import lombok.extern.slf4j.Slf4j;
 import cn.iocoder.yudao.service.util.collection.CollectionUtils;
-import cn.iocoder.yudao.service.model.system.dept.SystemUserPost;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.io.IoUtil;
@@ -39,7 +37,6 @@ import org.babyfish.jimmer.ImmutableObjects;
 import org.babyfish.jimmer.sql.ast.mutation.SaveMode;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import cn.iocoder.yudao.service.model.system.user.SystemUserDraft;
-import cn.iocoder.yudao.service.model.system.dept.SystemUserPostDraft;
 import org.springframework.stereotype.Service;
 import jakarta.annotation.Resource;
 
@@ -47,12 +44,8 @@ import org.babyfish.jimmer.Page;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.IntStream;
+import java.util.stream.Collectors;
 
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.transaction.annotation.Transactional;
@@ -62,12 +55,11 @@ import cn.iocoder.yudao.service.vo.system.user.user.*;
 import cn.iocoder.yudao.service.enums.common.CommonStatusEnum;
 import org.springframework.util.StringUtils;
 
-import static cn.iocoder.yudao.service.errorCode.infra.ErrorCodeConstants.AUTH_LOGIN_CAPTCHA_CODE_ERROR;
-import static cn.iocoder.yudao.service.errorCode.infra.ErrorCodeConstants.ERROR_CODE_IMPORT_DICT;
 import static cn.iocoder.yudao.service.errorCode.system.dept.DeptErrorCode.DEPT_NOT_FOUND;
 import static cn.iocoder.yudao.service.errorCode.system.post.PostErrorCode.POST_NOT_FOUND;
 import static cn.iocoder.yudao.service.framework.exception.util.ServiceExceptionUtil.exception;
 import static cn.iocoder.yudao.service.errorCode.system.user.UserErrorCode.*;
+import static cn.iocoder.yudao.service.framework.security.core.util.SecurityFrameworkUtils.getLoginUserId;
 import static cn.iocoder.yudao.service.util.collection.CollectionUtils.convertList;
 
 /**
@@ -85,6 +77,9 @@ public class UserServiceImpl implements UserService {
 
     @Resource
     private SystemDeptRepository systemDeptRepository;
+
+    @Resource
+    private SystemDeptLeaderRepository systemDeptLeaderRepository;
 
     @Resource
     private SystemPostRepository systemPostRepository;
@@ -501,5 +496,54 @@ public class UserServiceImpl implements UserService {
         });
     }
 
+
+    @Override
+    public List<UserGetByDeptOutput> getByDept(Long deptId) {
+        List<SystemUser> deptUserList = getDeptUser(deptId);
+        return UserConvert.INSTANCE.getByDeptOutputConvert(deptUserList);
+    }
+
+    private List<SystemUser> getDeptUser(Long deptId){
+        List<SystemUser> deptUserList = new ArrayList<>(systemUserRepository.findByDeptId(deptId));
+        List<SystemDept> childDeptList = deptService.getDeptListByParentId(deptId, true);
+        for(SystemDept childDept : childDeptList){
+            deptUserList.addAll(getDeptUser(childDept.id()));
+        }
+        return deptUserList;
+    }
+
+    @Override
+    public List<UserGetOwnerUserOutput> getOwnerUsers() {
+        List<SystemUser> userList = getOwnerUsers(getLoginUserId());
+        return UserConvert.INSTANCE.getOwnerUserOutputConvert(userList);
+    }
+
+    @Override
+    public List<SystemUser> getOwnerUsers(Long userId){
+        SystemUser user = systemUserRepository.findNullable(getLoginUserId());
+        List<Long> deptIds = systemDeptLeaderRepository.findIdByLeaderId(userId);
+        List<SystemDept> deptList = new ArrayList<>();
+        for(Long deptId : deptIds){
+            deptList.addAll(deptService.getDeptListByParentId(deptId, true));
+        }
+        List<SystemUser> userList = systemUserRepository.findByDeptIdIn(deptList.stream().map(SystemDept::id).collect(Collectors.toList()));
+        userList = userList.stream().filter(item -> item.id() != user.id()).collect(Collectors.toList());
+        userList.add(0, user);
+        return userList;
+    }
+
+    @Override
+    public List<Long> getOwnerUserIds(Long userId){
+        List<Long> deptIds = systemDeptLeaderRepository.findIdByLeaderId(userId);
+        List<SystemDept> deptList = new ArrayList<>();
+        for(Long deptId : deptIds){
+            deptList.addAll(deptService.getDeptListByParentId(deptId, true));
+        }
+        List<Long> ownerIds = systemUserRepository.findIdByDeptIds(deptList.stream().map(SystemDept::id).collect(Collectors.toList()));
+        // userId放到第一位
+        ownerIds.remove(userId);
+        ownerIds.add(0, userId);
+        return ownerIds;
+    }
 
 }

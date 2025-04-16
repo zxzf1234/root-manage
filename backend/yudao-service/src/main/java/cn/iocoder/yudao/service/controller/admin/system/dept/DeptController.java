@@ -73,4 +73,11 @@ public class DeptController {
         return success(deptService.get(id));
     }
 
+    @PostMapping("/is-leader-user")
+    @Operation(summary = "判断是否是部门领导人")
+    @Parameter(name = "id", description = "主键ID", example = "")
+    public CommonResult<Boolean> isLeaderUser(@RequestParam("id") Long id) {
+        return success(deptService.isLeaderUser(id));
+    }
+
 }

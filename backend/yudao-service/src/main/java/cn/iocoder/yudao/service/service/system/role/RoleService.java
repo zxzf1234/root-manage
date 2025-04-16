@@ -1,5 +1,9 @@
 package cn.iocoder.yudao.service.service.system.role;
 
+import cn.iocoder.yudao.service.vo.system.role.role.RoleGetColumnByRoleCodesOutput;
+import cn.iocoder.yudao.service.vo.system.role.role.RoleGetColumnByRoleCodesInput;
+import cn.iocoder.yudao.service.vo.system.role.role.RoleSaveRoleColumnInput;
+import cn.iocoder.yudao.service.vo.system.role.role.RoleGetColumnByRoleIdOutput;
 import cn.iocoder.yudao.service.model.system.role.SystemRole;
 import cn.iocoder.yudao.service.vo.system.role.role.RoleExportedInput;
 import cn.iocoder.yudao.service.vo.system.role.role.RoleListAllSimpleOutput;
@@ -48,5 +52,11 @@ public interface RoleService {
     void updateRoleDataScope(Long id, Integer dataScope, List<Long> dataScopeDeptIds);
 
     void validateRoleList(Collection<Long> ids);
+
+    List<RoleGetColumnByRoleIdOutput> getColumnByRoleId(Long id);
+
+    Boolean saveRoleColumn(RoleSaveRoleColumnInput inputVO);
+
+    List<RoleGetColumnByRoleCodesOutput> getColumnByRoleCodes(RoleGetColumnByRoleCodesInput inputVO);
 
 }

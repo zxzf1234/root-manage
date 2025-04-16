@@ -37,7 +37,16 @@ public interface InfraDatabaseColumnRepository extends JRepository<InfraDatabase
                 .where(infradatabaseColumnTable.tableId().eq(tableId))
                 .setMode(DeleteMode.PHYSICAL)
                 .execute();
-    };
+    }
+
+    default List<InfraDatabaseColumn> findByTableNameAndColumnName(String tableName, List<String> columnNames){
+        return sql().createQuery(infradatabaseColumnTable)
+                .where(infradatabaseColumnTable.columnName().in(columnNames))
+                .where(infradatabaseColumnTable.table().name().eq(tableName))
+                .orderBy(infradatabaseColumnTable.sort())
+                .select(infradatabaseColumnTable)
+                .execute();
+    }
 
     List<InfraDatabaseColumn> findByTableId(UUID tableId);
 

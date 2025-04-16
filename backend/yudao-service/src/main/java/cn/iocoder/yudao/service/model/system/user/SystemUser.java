@@ -6,6 +6,7 @@ import org.babyfish.jimmer.sql.*;
 import java.time.LocalDateTime;
 import org.jetbrains.annotations.Nullable;
 import java.util.List;
+
 @Entity
 public interface SystemUser extends BaseEntity {
     @Id
@@ -26,8 +27,9 @@ public interface SystemUser extends BaseEntity {
     @Nullable
     Long deptId();
 
-    @ManyToOne
+    @OneToOne
     @Nullable
+    @OnDissociate(DissociateAction.DELETE)
     SystemDept dept();
 
     @Nullable
@@ -50,6 +52,8 @@ public interface SystemUser extends BaseEntity {
     LocalDateTime loginDate();
 
     String userNo();
+
+    String position();
 
     @Nullable
     @LogicalDeleted("now")

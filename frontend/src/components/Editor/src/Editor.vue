@@ -1,5 +1,6 @@
 <template>
   <Editor
+    ref="editorRef"
     v-model="contentValue"
     api-key="i4qd24kno2nub7wztws8prc79wqnlvkz77sklkp4jyyqca1q"
     :init="init"
@@ -28,9 +29,11 @@ import 'tinymce/plugins/searchreplace' //查找替换
 import 'tinymce/plugins/table' //表格
 import '@/components/Editor/src/plugins/formatpainter/plugin.min.js'
 
+const editorRef = ref()
+
 const emit = defineEmits(['update:modelValue', 'keydown'])
 const props = defineProps({
-  height: propTypes.oneOfType([Number, String]).def('200px'),
+  height: propTypes.oneOfType([Number, String]).def('600px'),
   modelValue: propTypes.string.def('')
 })
 const contentValue = ref()
@@ -38,6 +41,13 @@ const contentValue = ref()
 /** 初始化 */
 onMounted(async () => {
   tinymce.init({})
+})
+const getEditorRef = () => {
+  return editorRef.value
+}
+
+defineExpose({
+  getEditorRef
 })
 
 const exampleImageUploadHandler = (blobInfo) => {
@@ -67,9 +77,10 @@ const init = ref({
   images_upload_handler: exampleImageUploadHandler,
   menubar: false,
   statusbar: false,
+  paste_webkit_styles: 'all',
+  paste_retain_style_properties: 'all',
 
   plugins: [
-    // Core editing features
     'autolink',
     'charmap',
     'emoticons',
@@ -116,5 +127,11 @@ const handleKeyDown = (event) => {
 <style scoped>
 :deep(.tox:not([dir='rtl']) .tox-toolbar__group:not(:last-of-type)) {
   border-right: 1px solid #cccccc;
+}
+:deep(.tox-textarea-wrap) {
+  height: 100%;
+}
+:deep(.tox-textarea-wrap > textarea) {
+  height: 100%;
 }
 </style>

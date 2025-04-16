@@ -1,5 +1,7 @@
 package cn.iocoder.yudao.service.service.infra.codegen;
 
+import cn.iocoder.yudao.service.vo.infra.codegen.databaseTable.DatabaseTableGetColumnByNamesOutput;
+import cn.iocoder.yudao.service.vo.infra.codegen.databaseTable.DatabaseTableGetColumnByNamesInput;
 import java.util.*;
 import cn.iocoder.yudao.service.framework.web.web.core.pojo.PageResult;
 import cn.iocoder.yudao.service.vo.infra.codegen.database.*;
@@ -48,5 +50,7 @@ public interface DatabaseTableService {
     List<DatabaseTableColumnResp> getColumnList(DatabaseTableListReqVO listReqVO);
 
     void deleted(String id);
+
+    List<DatabaseTableGetColumnByNamesOutput> getColumnByNames(DatabaseTableGetColumnByNamesInput inputVO);
 
 }

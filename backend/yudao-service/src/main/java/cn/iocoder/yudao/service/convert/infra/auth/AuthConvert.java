@@ -25,7 +25,7 @@ public interface AuthConvert {
 
     default AuthPermissionInfoRespVO convert(SystemUser user, List<SystemRole> roleList, List<SystemMenu> menuList) {
         return AuthPermissionInfoRespVO.builder()
-            .user(AuthPermissionInfoRespVO.UserVO.builder().id(user.id()).nickname(user.nickname()).avatar(user.avatar()).build())
+            .user(AuthPermissionInfoRespVO.UserVO.builder().id(user.id()).nickname(user.nickname()).avatar(user.avatar()).deptId(user.deptId()).build())
             .roles(CollectionUtils.convertSet(roleList, SystemRole::code))
             .permissions(CollectionUtils.convertSet(menuList, SystemMenu::permission))
             .build();

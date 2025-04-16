@@ -51,10 +51,12 @@
               placeholder="请输入用户密码"
               show-password
               type="password"
+              autocomplete="new-password"
             />
           </el-form-item>
         </el-col>
       </el-row>
+
       <el-row>
         <el-col :span="12">
           <el-form-item label="用户性别">
@@ -78,6 +80,13 @@
                 :value="item.id"
               />
             </el-select>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="12">
+          <el-form-item label="职位" prop="position">
+            <el-input v-model="formData.position" placeholder="请输入职位" />
           </el-form-item>
         </el-col>
       </el-row>
@@ -122,6 +131,7 @@ const formData = ref({
   postIds: [],
   remark: '',
   status: CommonStatusEnum.ENABLE,
+  position: '',
   roleIds: []
 })
 const formRules = reactive({
@@ -209,6 +219,7 @@ const resetForm = () => {
     postIds: [],
     remark: '',
     status: CommonStatusEnum.ENABLE,
+    position: '',
     roleIds: []
   }
   formRef.value?.resetFields()

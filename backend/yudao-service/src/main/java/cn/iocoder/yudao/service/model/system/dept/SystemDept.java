@@ -1,10 +1,11 @@
 package cn.iocoder.yudao.service.model.system.dept;
 
 import cn.iocoder.yudao.service.model.base.BaseEntity;
-import cn.iocoder.yudao.service.model.system.user.SystemUser;
+import cn.iocoder.yudao.service.model.system.dept.SystemDeptLeader;
 import org.babyfish.jimmer.sql.*;
 import java.time.LocalDateTime;
 import org.jetbrains.annotations.Nullable;
+import java.util.List;
 
 @Entity
 public interface SystemDept extends BaseEntity {
@@ -18,14 +19,6 @@ public interface SystemDept extends BaseEntity {
 
     Integer sort();
 
-    @IdView
-    @Nullable
-    Long leaderUserId();
-
-    @ManyToOne
-    @Nullable
-    SystemUser leaderUser();
-
     String phone();
 
     String email();
@@ -35,5 +28,8 @@ public interface SystemDept extends BaseEntity {
     @Nullable
     @LogicalDeleted("now")
     LocalDateTime deletedTime();
+
+    @OneToMany(mappedBy = "dept")
+    List<SystemDeptLeader> leaders();
 
 }

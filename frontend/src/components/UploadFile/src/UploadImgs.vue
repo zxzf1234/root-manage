@@ -24,11 +24,9 @@
         <div class="upload-handle" @click.stop>
           <div class="handle-icon" @click="handlePictureCardPreview(file)">
             <Icon icon="ep:zoom-in" />
-            <span>查看</span>
           </div>
           <div class="handle-icon" @click="handleRemove(file)">
             <Icon icon="ep:delete" />
-            <span>删除</span>
           </div>
         </div>
       </template>

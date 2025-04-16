@@ -1,5 +1,8 @@
 package cn.iocoder.yudao.service.service.infra.codegen;
 
+import cn.iocoder.yudao.service.convert.infra.codegen.DatabaseTableConvert;
+import cn.iocoder.yudao.service.vo.infra.codegen.databaseTable.DatabaseTableGetColumnByNamesOutput;
+import cn.iocoder.yudao.service.vo.infra.codegen.databaseTable.DatabaseTableGetColumnByNamesInput;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.iocoder.yudao.service.convert.infra.codegen.CodegenConvert;
@@ -400,4 +403,9 @@ public class DatabaseTableServiceImpl implements DatabaseTableService {
 
         codegenEngine.saveDeleteSql(InfraDatabaseTable.class.getName(), tableId.toString());
     }
+    @Override
+    public List<DatabaseTableGetColumnByNamesOutput> getColumnByNames(DatabaseTableGetColumnByNamesInput inputVO) {
+        return DatabaseTableConvert.INSTANCE.getColumnByNamesOutputConvert(infraDatabaseColumnRepository.findByTableNameAndColumnName(inputVO.getTableName(), inputVO.getColumnNames()));
+    }
+
 }

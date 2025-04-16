@@ -119,7 +119,7 @@ const handleClickRead = async () => {
 }
 
 const handleClickProcess = async () => {
-  push('/system/user')
+  push('/customer/customer')
   await NoticeApi.setRead({ id: noticeInfo.value.id })
   emit('readNotice')
   getList()

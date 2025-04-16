@@ -22,7 +22,10 @@ const keys = [
   'ACCOUNT_VERSION',
   'SERVER_BASE_URL',
   'SERVER_HTTP_URL',
-  'SERVER_WS_URL'
+  'SERVER_WS_URL',
+  'MAIL_FOLDER_EXPAND',
+  'MAIL_LIST_EXPAND',
+  'SPLIT_PANE'
 ] as const
 
 export const CACHE_KEY = Object.fromEntries(

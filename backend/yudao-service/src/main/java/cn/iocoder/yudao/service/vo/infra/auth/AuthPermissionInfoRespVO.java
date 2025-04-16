@@ -40,6 +40,9 @@ public class AuthPermissionInfoRespVO {
         @Schema(description = "用户头像", required = true, example = "http://www.iocoder.cn/xx.jpg")
         private String avatar;
 
+        @Schema(description = "部门ID", required = true, example = "1024")
+        private Long deptId;
+
     }
 
 }

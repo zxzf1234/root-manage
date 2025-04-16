@@ -93,3 +93,17 @@ export const updateStatus = (data) => {
 export const exported = (params) => {
   return request.download({ url: '/system/user/user/exported', params })
 }
+
+/**
+ * 根据部门获取员工
+ */
+export const getByDept = (deptId) => {
+  return request.get({ url: '/system/user/user/get-by-dept?deptId=' + deptId })
+}
+
+/**
+ * 获取当前用户有权限的员工
+ */
+export const getOwnerUser = () => {
+  return request.get({ url: '/system/user/user/get-owner-user' })
+}

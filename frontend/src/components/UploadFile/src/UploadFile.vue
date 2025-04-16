@@ -1,5 +1,5 @@
 <template>
-  <div class="upload-file">
+  <div class="upload-file mr-3">
     <el-upload
       ref="uploadRef"
       :multiple="props.limit > 1"
@@ -165,9 +165,6 @@ const listToString = (list: UploadUserFile[], separator?: string) => {
 }
 </script>
 <style scoped lang="scss">
-.upload-file {
-  width: 240px;
-}
 .upload-file-uploader {
   margin-bottom: 5px;
 }

@@ -1,5 +1,8 @@
 package cn.iocoder.yudao.service.service.system.dept;
 
+import cn.iocoder.yudao.service.model.system.dept.SystemDeptLeader;
+import cn.iocoder.yudao.service.model.system.dept.SystemDeptLeaderDraft;
+import cn.iocoder.yudao.service.repository.system.dept.SystemDeptLeaderRepository;
 import cn.iocoder.yudao.service.vo.system.dept.dept.DeptGetOutput;
 import cn.iocoder.yudao.service.vo.system.dept.dept.DeptListAllSimpleOutput;
 import cn.iocoder.yudao.service.vo.system.dept.dept.DeptListOutput;
@@ -15,6 +18,7 @@ import cn.iocoder.yudao.service.repository.system.dept.SystemDeptRepository;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import lombok.extern.slf4j.Slf4j;
+import org.babyfish.jimmer.sql.ast.mutation.SaveMode;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -36,6 +40,9 @@ public class DeptServiceImpl implements DeptService {
 
     @Resource
     private SystemDeptRepository systemDeptRepository;
+
+    @Resource
+    private SystemDeptLeaderRepository systemDeptLeaderRepository;
 
     @Override
     public List<SystemDept> getDeptListByParentId(Long parentId, boolean recursive) {
@@ -180,6 +187,12 @@ public class DeptServiceImpl implements DeptService {
         // 插入部门
         SystemDept dept = DeptConvert.INSTANCE.createInputConvert(inputVO);
         dept = systemDeptRepository.insert(dept);
+        List<SystemDeptLeader> leaders = new ArrayList<>();
+        SystemDept finalDept = dept;
+        for(Long leaderOwnerId : inputVO.getLeaderUserIds()){
+            leaders.add(SystemDeptLeaderDraft.$.produce(draft -> draft.setDeptId(finalDept.id()).setLeaderId(leaderOwnerId)));
+        }
+        systemDeptLeaderRepository.saveEntities(leaders, SaveMode.INSERT_ONLY);
         return dept.id();
     }
 
@@ -193,7 +206,17 @@ public class DeptServiceImpl implements DeptService {
         // 更新部门
         SystemDept updateObj = DeptConvert.INSTANCE.updateInputConvert(inputVO);
         systemDeptRepository.update(updateObj);
+        updateLeaderOwner(inputVO.getId(), inputVO.getLeaderUserIds());
         return true;
+    }
+
+    private void updateLeaderOwner(Long deptId, List<Long> leaderOwnerIds){
+        systemDeptLeaderRepository.deleteNotInLeaderIds(deptId, leaderOwnerIds);
+        for(Long leaderOwnerId : leaderOwnerIds){
+            if(systemDeptLeaderRepository.findByDeptIdAndLeaderId(deptId, leaderOwnerId).isEmpty()){
+                systemDeptLeaderRepository.insert(SystemDeptLeaderDraft.$.produce(draft -> draft.setDeptId(deptId).setLeaderId(leaderOwnerId)));
+            }
+        }
     }
 
     @Override
@@ -229,10 +252,15 @@ public class DeptServiceImpl implements DeptService {
 
     @Override
     public DeptGetOutput get(Long id) {
-        Optional<SystemDept> opDept = systemDeptRepository.findById(id);
+        Optional<SystemDept> opDept = systemDeptRepository.singleGet(id);
         if(opDept.isEmpty())
             throw exception(DEPT_NOT_FOUND);
         return DeptConvert.INSTANCE.getOutputConvert(opDept.get());
+    }
+
+    @Override
+    public Boolean isLeaderUser(Long id) {
+        return !systemDeptLeaderRepository.findIdByLeaderId(id).isEmpty();
     }
 
 }

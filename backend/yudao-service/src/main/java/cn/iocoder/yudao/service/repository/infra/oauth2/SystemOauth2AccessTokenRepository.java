@@ -7,6 +7,7 @@ import org.babyfish.jimmer.spring.repository.JRepository;
 import org.babyfish.jimmer.Page;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,6 +21,14 @@ public interface SystemOauth2AccessTokenRepository extends JRepository<SystemOau
                 .where(systemOauth2AccessTokenTable.clientId().eqIf(reqVO.getClientId()))
                 .select(systemOauth2AccessTokenTable)
                 .fetchPage(reqVO.getPageNo() - 1, reqVO.getPageSize());
+    }
+
+    default List<SystemOauth2AccessToken> findByIsExpired(Boolean isExpired){
+        return sql().createQuery(systemOauth2AccessTokenTable)
+                .whereIf(isExpired, systemOauth2AccessTokenTable.expiresTime().lt(LocalDateTime.now()))
+                .whereIf(!isExpired, systemOauth2AccessTokenTable.expiresTime().gt(LocalDateTime.now()))
+                .select(systemOauth2AccessTokenTable)
+                .execute();
     }
 
     List<SystemOauth2AccessToken> findByRefreshToken(String refreshToken);

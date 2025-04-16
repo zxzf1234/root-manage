@@ -10,6 +10,7 @@ interface UserVO {
   id: number
   avatar: string
   nickname: string
+  deptId: number
 }
 interface UserInfoVO {
   permissions: string[]
@@ -26,7 +27,8 @@ export const useUserStore = defineStore('admin-user', {
     user: {
       id: 0,
       avatar: '',
-      nickname: ''
+      nickname: '',
+      deptId: 0
     }
   }),
   getters: {
@@ -62,7 +64,9 @@ export const useUserStore = defineStore('admin-user', {
     async loginOut() {
       await loginOut()
       removeToken()
-      wsCache.clear()
+      wsCache.delete(CACHE_KEY.ROLE_ROUTERS)
+      wsCache.delete(CACHE_KEY.DICT_CACHE)
+      wsCache.delete(CACHE_KEY.USER)
       this.resetState()
     },
     resetState() {
@@ -72,7 +76,8 @@ export const useUserStore = defineStore('admin-user', {
       this.user = {
         id: 0,
         avatar: '',
-        nickname: ''
+        nickname: '',
+        deptId: 0
       }
     }
   }

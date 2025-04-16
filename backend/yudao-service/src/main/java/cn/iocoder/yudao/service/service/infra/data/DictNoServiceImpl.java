@@ -14,6 +14,7 @@ import jakarta.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
 import org.babyfish.jimmer.Page;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -82,24 +83,28 @@ public class DictNoServiceImpl implements DictNoService {
 
     @Override
     public String produceNo(String keyName){
-       Optional<InfraDictNo> opNo =  infraDictNoRepository.findByKeyNameUpdate(keyName);
-       if (opNo.isEmpty())
+        Optional<InfraDictNo> opNo =  infraDictNoRepository.findByKeyNameUpdate(keyName);
+        if (opNo.isEmpty())
            return null;
 
-       InfraDictNo updateNo = InfraDictNoDraft.$.produce(opNo.get(), draft -> draft.setPostfixVal(
-               Objects.equals(draft.lastDate(), LocalDate.now().atStartOfDay()) ||draft.dateForm()== 2 ?
-                       draft.postfixVal() + 1: 1)
-               .setLastDate(LocalDate.now().atStartOfDay()));
-       infraDictNoRepository.update(updateNo);
+        Integer postfixVal = Objects.equals(opNo.get().lastDate(), LocalDate.now().atStartOfDay()) || opNo.get().dateForm()== 2 ?
+                opNo.get().postfixVal() + 1: 1;
+        LocalDateTime lastDate = LocalDate.now().atStartOfDay();
+//        InfraDictNo updateNo = InfraDictNoDraft.$.produce(opNo.get(), draft -> draft.setPostfixVal(
+//               Objects.equals(draft.lastDate(), LocalDate.now().atStartOfDay()) ||draft.dateForm()== 2 ?
+//                       draft.postfixVal() + 1: 1)
+//               .setLastDate(LocalDate.now().atStartOfDay()));
+//        infraDictNoRepository.update(updateNo);
+        infraDictNoRepository.updateProductNo(opNo.get().id(), postfixVal, lastDate);
         String postfixStr;
-       if(updateNo.postfixVal().toString().length()  > updateNo.postfixVal())
-            postfixStr = updateNo.postfixVal().toString();
-       else
-            postfixStr = String.format("%0"+updateNo.postfixLen()+"d", updateNo.postfixVal());
-        if(updateNo.dateForm() == 0)
-            return updateNo.prefix() + LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")) + postfixStr;
+        if(postfixVal.toString().length() > opNo.get().postfixLen())
+            postfixStr = postfixVal.toString();
         else
-            return updateNo.prefix() + LocalDate.now().format(DateTimeFormatter.ofPattern("yyMMdd")) + postfixStr;
+            postfixStr = String.format("%0"+opNo.get().postfixLen()+"d", postfixVal);
+        if(opNo.get().dateForm() == 0)
+            return opNo.get().prefix() + LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")) + postfixStr;
+        else
+            return opNo.get().prefix() + LocalDate.now().format(DateTimeFormatter.ofPattern("yyMMdd")) + postfixStr;
     }
 
 }

@@ -177,6 +177,10 @@ const columns: TableColumnList = [
     prop: 'remark'
   },
   {
+    label: '职位',
+    prop: 'position'
+  },
+  {
     label: '状态',
     prop: 'status',
     slot: 'status'

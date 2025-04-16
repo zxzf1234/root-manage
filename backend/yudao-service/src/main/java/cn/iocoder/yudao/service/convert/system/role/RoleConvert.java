@@ -1,5 +1,11 @@
 package cn.iocoder.yudao.service.convert.system.role;
 
+import cn.iocoder.yudao.service.vo.system.role.role.RoleGetColumnByRoleCodesInput;
+import cn.iocoder.yudao.service.vo.system.role.role.RoleGetColumnByRoleCodesOutput;
+import cn.iocoder.yudao.service.model.infra.codegen.InfraDatabaseColumn;
+import cn.iocoder.yudao.service.vo.system.role.role.RoleSaveRoleColumnInput;
+import cn.iocoder.yudao.service.vo.system.role.role.RoleGetColumnByRoleIdOutput;
+import cn.iocoder.yudao.service.model.system.role.SystemRoleAssignColumn;
 import cn.iocoder.yudao.service.vo.system.role.role.RoleExcelVO;
 import cn.iocoder.yudao.service.vo.system.role.role.*;
 import cn.iocoder.yudao.service.vo.system.role.role.RolePageOutput;
@@ -31,5 +37,9 @@ public interface RoleConvert {
     List<RoleListAllSimpleOutput> listAllSimpleOutPutConvert(List<SystemRole> output);
 
     List<RoleExcelVO> exportOutPutConvert(List<SystemRole> list);
+
+    List<RoleGetColumnByRoleIdOutput> getColumnByRoleIdOutputConvert(List<SystemRoleAssignColumn> output);
+
+    List<RoleGetColumnByRoleCodesOutput> getColumnByRoleCodesOutputConvert(List<InfraDatabaseColumn> output);
 
 }

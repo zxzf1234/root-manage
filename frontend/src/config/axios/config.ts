@@ -1,5 +1,9 @@
-import { useCache, CACHE_KEY } from '@/hooks/web/useCache'
-const { wsCache } = useCache()
+import { getServerHttpUrl } from '@/utils/auth'
+const getBaseUrl = () => {
+  const url = getServerHttpUrl()
+
+  return url
+}
 const config: {
   base_url: string
   result_code: number | string
@@ -9,7 +13,7 @@ const config: {
   /**
    * api请求基础路径
    */
-  base_url: wsCache.get(CACHE_KEY.SERVER_HTTP_URL),
+  base_url: getBaseUrl(),
   /**
    * 接口成功返回状态码
    */

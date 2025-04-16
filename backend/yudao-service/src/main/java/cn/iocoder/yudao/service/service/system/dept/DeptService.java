@@ -82,4 +82,6 @@ public interface DeptService {
 
     DeptGetOutput get(Long id);
 
+    Boolean isLeaderUser(Long id);
+
 }

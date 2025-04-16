@@ -1,4 +1,6 @@
 package cn.iocoder.yudao.service.controller.admin.system.user;
+import cn.iocoder.yudao.service.vo.system.user.user.UserGetOwnerUserOutput;
+import cn.iocoder.yudao.service.vo.system.user.user.UserGetByDeptOutput;
 import cn.iocoder.yudao.service.vo.system.user.user.UserGetOutput;
 import cn.iocoder.yudao.service.vo.system.user.user.UserListAllSimpleOutput;
 import cn.iocoder.yudao.service.vo.system.user.user.UserPageOutput;
@@ -118,4 +120,17 @@ public class UserController {
         List<UserImportExcelVO> list = ExcelUtils.read(file, UserImportExcelVO.class);
         return success(userService.importUserList(list));
     }
+    @GetMapping("/get-by-dept")
+    @Operation(summary = "根据部门获取员工")
+    @Parameter(name = "deptId", description = "部门表主键ID", example = "")
+    public CommonResult<List<UserGetByDeptOutput>> getByDept(@RequestParam("deptId") Long deptId) {
+        return success(userService.getByDept(deptId));
+    }
+
+    @GetMapping("/get-owner-user")
+    @Operation(summary = "获取当前用户有权限的员工")
+    public CommonResult<List<UserGetOwnerUserOutput>> getOwnerUser() {
+        return success(userService.getOwnerUsers());
+    }
+
 }

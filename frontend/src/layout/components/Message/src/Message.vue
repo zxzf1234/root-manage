@@ -115,7 +115,7 @@ const data = ref()
 const userId = ref()
 
 const queryParams = ref({
-  noticerId: undefined,
+  notifierId: undefined,
   isRead: false,
   pageNo: 1,
   pageSize: 20
@@ -142,7 +142,7 @@ defineProps({
 // ========== 初始化 =========
 onMounted(async () => {
   userId.value = wsCache.get(CACHE_KEY.USER).user.id
-  queryParams.value.noticerId = userId.value
+  queryParams.value.notifierId = userId.value
   await getList()
   getUnreadInfo()
   // 轮询刷新小红点

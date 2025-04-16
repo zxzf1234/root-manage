@@ -7,6 +7,7 @@ import org.babyfish.jimmer.spring.repository.JRepository;
 import org.babyfish.jimmer.Page;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -26,6 +27,14 @@ public interface InfraDictNoRepository extends JRepository<InfraDictNo, UUID> {
 
     default Optional<InfraDictNo> findByKeyNameUpdate(String keyName){
         return sql().createQuery(infraDictNoTable).where(infraDictNoTable.keyName().eq(keyName)).select(infraDictNoTable).forUpdate().fetchOptional();
+    }
+
+    default void updateProductNo(UUID id, Integer postfixVal, LocalDateTime lastDate){
+        sql().createUpdate(infraDictNoTable)
+                .where(infraDictNoTable.id().eq(id))
+                .set(infraDictNoTable.postfixVal(), postfixVal)
+                .set(infraDictNoTable.lastDate(), lastDate)
+                .execute();
     }
 
 

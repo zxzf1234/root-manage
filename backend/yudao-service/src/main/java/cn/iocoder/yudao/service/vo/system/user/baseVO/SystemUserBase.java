@@ -3,7 +3,10 @@ package cn.iocoder.yudao.service.vo.system.user.baseVO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import java.util.*;
-
+import jakarta.validation.constraints.*;
+import org.hibernate.validator.constraints.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.format.annotation.DateTimeFormat;
 import static cn.iocoder.yudao.service.util.date.DateUtils.FORMAT_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND;
 import java.time.LocalDateTime;
@@ -57,5 +60,9 @@ public class SystemUserBase {
 
     @Schema(description = "用户编号")
     private String userNo;
+
+    @Schema(description = "职位")
+    @Size(max = 50, message = "职位长度不能超过50")
+    private String position;
 
 }

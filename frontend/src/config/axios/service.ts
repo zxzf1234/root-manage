@@ -19,7 +19,8 @@ import {
 import errorCode from './errorCode'
 
 import { resetRouter } from '@/router'
-import { useCache } from '@/hooks/web/useCache'
+import { CACHE_KEY, useCache } from '@/hooks/web/useCache'
+const { wsCache } = useCache()
 
 const { result_code, base_url, request_timeout } = config
 
@@ -217,14 +218,16 @@ service.interceptors.response.use(
   }
 )
 
-const refreshToken = async () => {
+export const refreshToken = async () => {
   return await axios.post(base_url + '/infra/auth/refresh-token?refreshToken=' + getRefreshToken())
 }
 const handleAuthorized = () => {
   const { t } = useI18n()
-  const { wsCache } = useCache()
+
   resetRouter() // 重置静态路由表
-  wsCache.clear()
+  wsCache.delete(CACHE_KEY.ROLE_ROUTERS)
+  wsCache.delete(CACHE_KEY.DICT_CACHE)
+  wsCache.delete(CACHE_KEY.USER)
   removeToken()
   isRelogin.show = false
   // 干掉token后再走一次路由让它过router.beforeEach的校验

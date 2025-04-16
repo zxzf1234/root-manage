@@ -24,6 +24,60 @@ export const SystemUserSocialTypeEnum = {
 // ========== COMMON 模块 ==========
 
 /**
+ * 社交媒体类型
+ * @param WECHAT WeChat
+ * @param QQ QQ
+ * @param FACEBOOK FaceBook
+ * @param INSTAGRAM Instagram
+ * @param YOUTUBE YouTube
+ * @param TELEGRAM Telegram
+ * @param TWITTER Twitter
+ * @param SKYPE Skype
+ * @param LINKEDIN LinkedIn
+ * @param ZALO ZALO
+ * @param VIBER Viber
+ * @param WANGWANG 旺旺
+ * @param DINGDING 钉钉
+ * @param TIKTOK Tiktok
+ * @param LINE Line
+ * @param VK VK
+ */
+export const CommonSocialMediaTypeEnum = {
+  //WeChat
+  WECHAT: 1,
+  //QQ
+  QQ: 2,
+  //FaceBook
+  FACEBOOK: 3,
+  //Instagram
+  INSTAGRAM: 4,
+  //YouTube
+  YOUTUBE: 5,
+  //Telegram
+  TELEGRAM: 6,
+  //Twitter
+  TWITTER: 7,
+  //Skype
+  SKYPE: 8,
+  //LinkedIn
+  LINKEDIN: 9,
+  //ZALO
+  ZALO: 10,
+  //Viber
+  VIBER: 11,
+  //旺旺
+  WANGWANG: 12,
+  //钉钉
+  DINGDING: 13,
+  //Tiktok
+  TIKTOK: 14,
+  //Line
+  LINE: 15,
+  //VK
+  VK: 16
+}
+
+/**
  * 用户类型
  * @param MEMBER 会员
  * @param ADMIN 管理员
@@ -60,6 +114,18 @@ export const CommonStatusEnum = {
 }
 
 // ========== SYSTEM 模块 ==========
+
+/**
+ * 角色指定字段类型
+ * @param CUSTOMER 客户
+ * @param CUSTOMER_CONTACT 客户联系人
+ */
+export const SystemRoleColumnTypeEnum = {
+  //客户
+  CUSTOMER: 1,
+  //客户联系人
+  CUSTOMER_CONTACT: 2
+}
 
 /**
  * 角色标识
@@ -529,4 +595,257 @@ export const InfraFileStorageEnum = {
   SFTP: 12,
   //S3 对象存储
   OBJECT: 20
+}
+
+// ========== MAILBOX 模块 ==========
+
+/**
+ * 邮件状态
+ * @param RECEIVED 已收件
+ * @param SEND 已发送
+ * @param DRAFT 草稿
+ * @param JUNK 垃圾
+ * @param DELETED 已删除
+ */
+export const MailboxMailStatusEnum = {
+  //已收件
+  RECEIVED: 1,
+  //已发送
+  SEND: 2,
+  //草稿
+  DRAFT: 3,
+  //垃圾
+  JUNK: 4,
+  //已删除
+  DELETED: 5
+}
+
+/**
+ * 邮件资源类型
+ * @param ATTACHMENT 附件
+ * @param INLINE 内联
+ */
+export const MailboxMailResourceTypeEnum = {
+  //附件
+  ATTACHMENT: 1,
+  //内联
+  INLINE: 2
+}
+
+/**
+ * 邮件类型
+ * @param SEND 发送
+ * @param RECEIVE 接收
+ * @param DRAFT 草稿
+ */
+export const MailboxMailTypeEnum = {
+  //发送
+  SEND: 1,
+  //接收
+  RECEIVE: 2,
+  //草稿
+  DRAFT: 3
+}
+
+/**
+ * 邮件文件夹分类
+ * @param ACCOUNT 账号
+ * @param RECEIVE 收件
+ * @param DRAFT 草稿
+ * @param SEND 发件
+ * @param DELETED 已删除
+ * @param JUNK 垃圾
+ * @param LABEL 标签
+ * @param OTHER 其它
+ */
+export const MailboxFolderClassEnum = {
+  //账号
+  ACCOUNT: 1,
+  //收件
+  RECEIVE: 2,
+  //草稿
+  DRAFT: 3,
+  //发件
+  SEND: 4,
+  //已删除
+  DELETED: 5,
+  //垃圾
+  JUNK: 6,
+  //标签
+  LABEL: 7,
+  //其它
+  OTHER: 8
+}
+
+/**
+ * 邮件文件夹类型
+ * @param ACCOUNT 账号文件夹
+ * @param INTERNAL 内置文件夹
+ * @param EDIT 可编辑文件夹
+ * @param LABEL 标签文件夹
+ */
+export const MailboxFolderTypeEnum = {
+  //账号文件夹
+  ACCOUNT: 1,
+  //内置文件夹
+  INTERNAL: 2,
+  //可编辑文件夹
+  EDIT: 3,
+  //标签文件夹
+  LABEL: 4
+}
+
+/**
+ * 邮箱协议类型
+ * @param IMAP IMAP
+ * @param POP POP
+ */
+export const MailboxProtocolEnum = {
+  //IMAP
+  IMAP: 2,
+  //POP
+  POP: 3
+}
+
+// ========== SETTING 模块 ==========
+
+/**
+ * 业务模块
+ * @param CUSTOMER 客户
+ * @param CUSTOMER_CONTACT 客户联系人
+ * @param CUSTOMER_FOLLOW 客户跟进
+ */
+export const SettingBusinessModuleEnum = {
+  //客户
+  CUSTOMER: 1,
+  //客户联系人
+  CUSTOMER_CONTACT: 2,
+  //客户跟进
+  CUSTOMER_FOLLOW: 3
+}
+
+// ========== CUSTOMER 模块 ==========
+
+/**
+ * 客户跟进资源类型
+ * @param IMAGE 图片
+ * @param ATTACHMENT 附件
+ * @param POSITION_IMAGE 定位图片
+ */
+export const CustomerFollowResourceTypeEnum = {
+  //图片
+  IMAGE: 1,
+  //附件
+  ATTACHMENT: 2,
+  //定位图片
+  POSITION_IMAGE: 3
+}
+
+/**
+ * 放入公海原因
+ * @param NO_PROGRESS 开发长期无进展
+ * @param RESOURCE_INTEGRATION 内部资源整合
+ * @param CONTACT_INVALID 联系方式无效
+ * @param NO_POTENTIAL 潜力太小，达不到MOQ
+ * @param FACTORY_AGENT 该公司为工厂代理
+ * @param NO_CHINA 目前不从中国采购
+ * @param NO_INDUSTRY 非本行业内客户
+ * @param BANKRUPTCY 公司破产
+ * @param CHANGE_CAREERS 公司转行
+ * @param INFORMATION 资讯类公司
+ * @param INQUIRY_INVALID 询盘无效
+ * @param OTHER 其他
+ */
+export const CustomerPutInReasonEnum = {
+  //开发长期无进展
+  NO_PROGRESS: 1,
+  //内部资源整合
+  RESOURCE_INTEGRATION: 2,
+  //联系方式无效
+  CONTACT_INVALID: 3,
+  //潜力太小，达不到MOQ
+  NO_POTENTIAL: 4,
+  //该公司为工厂代理
+  FACTORY_AGENT: 5,
+  //目前不从中国采购
+  NO_CHINA: 6,
+  //非本行业内客户
+  NO_INDUSTRY: 7,
+  //公司破产
+  BANKRUPTCY: 8,
+  //公司转行
+  CHANGE_CAREERS: 9,
+  //资讯类公司
+  INFORMATION: 10,
+  //询盘无效
+  INQUIRY_INVALID: 11,
+  //其他
+  OTHER: 12
+}
+
+// ========== ORDER 模块 ==========
+
+/**
+ * 销售订单状态
+ * @param UNCHECK 待审核
+ * @param DONE 通过
+ * @param CANCEL 取消
+ */
+export const SalesOrderStatusEnum = {
+  //待审核
+  UNCHECK: 1,
+  //通过
+  DONE: 2,
+  //取消
+  CANCEL: 3
+}
+
+// ========== MARKET 模块 ==========
+
+/**
+ * 营销邮件无效类型
+ * @param HARD 硬退信
+ * @param SORT 硬退信
+ */
+export const MarketTaskMailInvalidTypeEnum = {
+  //硬退信
+  HARD: 1,
+  //硬退信
+  SORT: 2
+}
+
+/**
+ * 邮件营销任务状态
+ * @param DRAFT 草稿
+ * @param UNEXECUTED 待执行
+ * @param EXECUTING 执行中
+ * @param DONE 完成
+ * @param FAIL 发送失败
+ * @param CANCEL 已取消
+ */
+export const MarketTaskStatusEnum = {
+  //草稿
+  DRAFT: 6,
+  //待执行
+  UNEXECUTED: 1,
+  //执行中
+  EXECUTING: 2,
+  //完成
+  DONE: 3,
+  //发送失败
+  FAIL: 4,
+  //已取消
+  CANCEL: 5
+}
+
+/**
+ * 营销模板类型
+ * @param PERSON 个人
+ * @param PUBLIC 公共
+ */
+export const MarketTemplateTypeEnum = {
+  //个人
+  PERSON: 1,
+  //公共
+  PUBLIC: 2
 }

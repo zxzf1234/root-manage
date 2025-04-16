@@ -1,5 +1,7 @@
 package cn.iocoder.yudao.service.service.system.user;
 
+import cn.iocoder.yudao.service.vo.system.user.user.UserGetOwnerUserOutput;
+import cn.iocoder.yudao.service.vo.system.user.user.UserGetByDeptOutput;
 import cn.iocoder.yudao.service.model.system.user.SystemUser;
 import cn.iocoder.yudao.service.vo.system.user.profile.UserProfileUpdatePasswordReqVO;
 import cn.iocoder.yudao.service.vo.system.user.profile.UserProfileUpdateReqVO;
@@ -72,5 +74,13 @@ public interface UserService {
     List<SystemUser> getUserList(Collection<Long> ids);
 
     void validateUserList(Collection<Long> ids);
+
+    List<UserGetByDeptOutput> getByDept(Long deptId);
+
+    List<UserGetOwnerUserOutput> getOwnerUsers();
+
+    List<SystemUser> getOwnerUsers(Long userId);
+
+    List<Long> getOwnerUserIds(Long userId);
 
 }

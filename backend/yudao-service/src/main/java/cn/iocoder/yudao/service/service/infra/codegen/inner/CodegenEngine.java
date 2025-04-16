@@ -242,11 +242,15 @@ public class CodegenEngine {
         if(infraInterface.name().toLowerCase().contains("update")
                 && !infraInterface.inputSubclasses().isEmpty()){
             InfraInterfaceSubclass subclass = infraInterface.inputSubclasses().get(0);
-            InfraInterfaceVoClass voClass = infraInterfaceVoClassRepository.findByName(subclass.inheritClass()).get();
-            String inputSrcExtendClass = srcExtendClass(voClass.id());
-            InfraDatabaseTable subTable = infraDatabaseTableRepository.findByName(inputSrcExtendClass).get();
-            errorCodeDuplicate(bindingMap, subTable, "subDuplicateErrorCode", "subDuplicateErrorMessage");
-            errorCodeNotExist(bindingMap, subTable, "subNotExistErrorCode", "subNotExistErrorMessage");
+
+            InfraInterfaceVoClass voClass = infraInterfaceVoClassRepository.findByName(subclass.inheritClass()).orElse(null);
+            if(voClass != null){
+                String inputSrcExtendClass = srcExtendClass(voClass.id());
+                InfraDatabaseTable subTable = infraDatabaseTableRepository.findByName(inputSrcExtendClass).orElse(null);
+                errorCodeDuplicate(bindingMap, subTable, "subDuplicateErrorCode", "subDuplicateErrorMessage");
+                errorCodeNotExist(bindingMap, subTable, "subNotExistErrorCode", "subNotExistErrorMessage");
+            }
+
         }
         if(infraInterface.name().toLowerCase().contains("delete")
                 || infraInterface.name().toLowerCase().contains("update")){
@@ -399,7 +403,7 @@ public class CodegenEngine {
                 String interfaceInput = moduleNameHumpUp + upperFirst(interfaceNameHump) + "Input";
                 String inputSubClassName = bindingMap.get("inputSubClassName").toString();
                 String inputSubRepositoryName = toCamelCase(inputSubTable.name()) + "Repository";
-                String subNotExistErrorCode = bindingMap.get("subNotExistErrorCode").toString();
+                String subNotExistErrorCode = bindingMap.get("subNotExistErrorCode") == null? "": bindingMap.get("subNotExistErrorCode").toString();
                 String subDuplicateErrorCode = bindingMap.get("subDuplicateErrorCode") == null ? "" : bindingMap.get("subDuplicateErrorCode").toString();
                 String subRepositoryDuplicateFunctionName = bindingMap.get("subRepositoryDuplicateFunctionName").toString();
                 String subRepositoryDuplicateFunctionParams = bindingMap.get("subRepositoryDuplicateFunctionParams").toString();
@@ -723,8 +727,9 @@ public class CodegenEngine {
                     .append((" inputVO){\r\n        return sql().createQuery("))
                     .append(outputTableTable).append(")\r\n")
                     .append(where)
-                    .append("                        .orderBy(").append(outputTableTable).append(".id().desc())\r\n")
-                    .append("                        .select(").append(outputTableTable).append(").fetchPage(inputVO.getPageNo() - 1, inputVO.getPageSize());\r\n    }\r\n");
+                    .append("                .orderBy(").append(outputTableTable).append(".id().desc())\r\n")
+                    .append("                .select(").append(outputTableTable).append(")\r\n")
+                    .append("                .fetchPage(inputVO.getPageNo() - 1, inputVO.getPageSize());\r\n    }\r\n");
         }
         if(infraInterface.name().toLowerCase().contains("listquery")){
             function.append("    default List<").append(upperFirst(toCamelCase(outputTable.name()))).append("> ")

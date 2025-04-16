@@ -2,6 +2,7 @@ package cn.iocoder.yudao.service.repository.system.permission;
 
 import cn.iocoder.yudao.service.model.system.permission.SystemUserRole;
 import org.babyfish.jimmer.spring.repository.JRepository;
+import org.babyfish.jimmer.sql.ast.mutation.SaveMode;
 
 import java.util.Collection;
 import java.util.List;
@@ -9,11 +10,6 @@ import java.util.List;
 public interface SystemUserRoleRepository extends JRepository<SystemUserRole, Long> {
 
 
-    default void insertBatch(List<SystemUserRole> userRoleList){
-        sql()
-                .getEntities()
-                .saveEntities(userRoleList);
-    }
 
     void deleteByUserIdAndRoleIdIn(Long userId, Collection<Long> deleteMenuIds);
 

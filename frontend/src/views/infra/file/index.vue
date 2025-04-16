@@ -65,6 +65,30 @@
         width="180"
         :formatter="dateFormatter"
       />
+      <el-table-column label="文件内容" align="center" prop="content" width="110px">
+        <template #default="{ row }">
+          <el-image
+            v-if="row.type.includes('image')"
+            class="h-80px w-80px"
+            lazy
+            :src="row.url"
+            :preview-src-list="[row.url]"
+            preview-teleported
+            fit="cover"
+          />
+          <el-link
+            v-else-if="row.type.includes('pdf')"
+            type="primary"
+            :href="row.url"
+            :underline="false"
+            target="_blank"
+            >预览</el-link
+          >
+          <el-link v-else type="primary" download :href="row.url" :underline="false" target="_blank"
+            >下载</el-link
+          >
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center">
         <template #default="scope">
           <el-button
@@ -95,6 +119,7 @@ import { fileSizeFormatter } from '@/utils'
 import { dateFormatter } from '@/utils/formatTime'
 import * as FileApi from '@/api/infra/file'
 import FileForm from './FileForm.vue'
+
 const message = useMessage() // 消息弹窗
 const { t } = useI18n() // 国际化
 

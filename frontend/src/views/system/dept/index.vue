@@ -60,7 +60,7 @@
       />
     </template>
     <template #leader="{ row }">
-      {{ userList.find((user) => user.id === row.leaderUserId)?.nickname }}
+      {{ row?.leaders.map((leader) => leader?.leader.nickname).join(',') }}
     </template>
     <template #status="{ row }">
       <dict-tag :type="DICT_TYPE.COMMON_STATUS" :value="row.status" />

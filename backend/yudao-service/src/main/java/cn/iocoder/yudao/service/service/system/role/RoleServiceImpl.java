@@ -1,5 +1,13 @@
 package cn.iocoder.yudao.service.service.system.role;
 
+import cn.iocoder.yudao.service.model.infra.codegen.InfraDatabaseColumn;
+import cn.iocoder.yudao.service.vo.system.role.role.RoleGetColumnByRoleCodesOutput;
+import cn.iocoder.yudao.service.vo.system.role.role.RoleGetColumnByRoleCodesInput;
+import cn.iocoder.yudao.service.model.system.role.SystemRoleAssignColumn;
+import cn.iocoder.yudao.service.model.system.role.SystemRoleAssignColumnDraft;
+import cn.iocoder.yudao.service.repository.system.role.SystemRoleAssignColumnRepository;
+import cn.iocoder.yudao.service.vo.system.role.role.RoleSaveRoleColumnInput;
+import cn.iocoder.yudao.service.vo.system.role.role.RoleGetColumnByRoleIdOutput;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.collection.CollUtil;
 
@@ -41,6 +49,7 @@ import cn.iocoder.yudao.service.vo.system.role.role.*;
 import static cn.iocoder.yudao.service.framework.exception.util.ServiceExceptionUtil.exception;
 import static cn.iocoder.yudao.service.errorCode.system.role.RoleErrorCode.*;
 import static java.util.Collections.singleton;
+import java.util.stream.Collectors;
 
 /**
  * 角色管理 Service 实现类
@@ -54,6 +63,9 @@ public class RoleServiceImpl implements RoleService {
 
     @Resource
     private SystemRoleRepository systemRoleRepository;
+
+    @Resource
+    private SystemRoleAssignColumnRepository systemRoleAssignColumnRepository;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -251,6 +263,58 @@ public class RoleServiceImpl implements RoleService {
                 throw exception(ROLE_IS_DISABLE, role.name());
             }
         });
+    }
+
+    @Override
+    public List<RoleGetColumnByRoleIdOutput> getColumnByRoleId(Long id) {
+        return RoleConvert.INSTANCE.getColumnByRoleIdOutputConvert(systemRoleAssignColumnRepository.findByRoleId(id));
+    }
+
+    @Override
+    public Boolean saveRoleColumn(RoleSaveRoleColumnInput inputVO) {
+        systemRoleAssignColumnRepository.deleteByNotInColumnId(inputVO.getRoleId(), inputVO.getColumnIds());
+        for(UUID columnId : inputVO.getColumnIds()){
+            if(systemRoleAssignColumnRepository.findByRoleIdAndColumnId(inputVO.getRoleId(), columnId).isEmpty()){
+                systemRoleAssignColumnRepository.insert(SystemRoleAssignColumnDraft.$.produce(draft -> draft.setRoleId(inputVO.getRoleId()).setColumnId(columnId)));
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public List<RoleGetColumnByRoleCodesOutput> getColumnByRoleCodes(RoleGetColumnByRoleCodesInput inputVO) {
+        List<SystemRoleAssignColumn> roleAssignColumns = systemRoleAssignColumnRepository.findByRoleCodes(inputVO.getCodes());
+        if(roleAssignColumns.size() == 0){
+            return new ArrayList<>();
+        }else{
+            List<InfraDatabaseColumn> databaseColumns = new ArrayList<>();
+            // 按 roleId 分组
+            Map<Long, Set<UUID>> groupedByName = roleAssignColumns.stream()
+                    .collect(Collectors.groupingBy(
+                            SystemRoleAssignColumn::roleId,
+                            Collectors.mapping(SystemRoleAssignColumn::columnId, Collectors.toSet())
+                    ));
+
+            // 获取所有分组中的 name 集合
+            Collection<Set<UUID>> allNameSets = groupedByName.values();
+
+            // 找到所有分组的交集
+            Set<UUID> commonNames = allNameSets.stream()
+                    .reduce((set1, set2) -> { // 计算交集
+                        Set<UUID> intersection = new HashSet<>(set1);
+                        intersection.retainAll(set2);
+                        return intersection;
+                    })
+                    .orElse(Collections.emptySet());
+            for(SystemRoleAssignColumn roleAssignColumn : roleAssignColumns){
+                if(commonNames.contains(roleAssignColumn.columnId())){
+                    commonNames.remove(roleAssignColumn.columnId());
+                    databaseColumns.add(roleAssignColumn.column());
+                }
+            }
+            return RoleConvert.INSTANCE.getColumnByRoleCodesOutputConvert(databaseColumns);
+        }
+
     }
 
 }

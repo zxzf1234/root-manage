@@ -1,6 +1,6 @@
 <template>
   <ContentWrap>
-    <IFrame :src="src" />
+    <IFrame v-if="!loading" v-loading="loading" :src="src" />
   </ContentWrap>
 </template>
 <script setup lang="ts" name="InfraSwagger">

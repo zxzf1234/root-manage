@@ -1,7 +1,7 @@
 <!-- 字典管理页面 -->
 <template>
   <!-- 搜索工作栏 -->
-  <ContentWrap class="h-[60%]">
+  <ContentWrap class="h-[55%]">
     <el-form
       ref="queryFormRef"
       :inline="true"

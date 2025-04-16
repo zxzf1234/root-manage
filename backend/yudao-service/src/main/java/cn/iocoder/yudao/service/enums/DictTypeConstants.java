@@ -13,6 +13,7 @@ public interface DictTypeConstants {
     String COMMON_STATUS = "common_status"; // 系统状态
 
     // ========== SYSTEM 模块 ==========
+    String SYSTEM_ROLE_COLUMN_TYPE = "system_role_column_type"; // 角色指定字段类型
     String SYSTEM_MENU_TYPE = "system_menu_type"; // 菜单类型
     String SYSTEM_NOTIFY_TEMPLATE_TYPE = "system_notify_template_type"; // 站内信模版的类型
     String SYSTEM_NOTICE_TYPE = "system_notice_type"; // 通知类型

@@ -44,14 +44,32 @@ public class Oauth2TokenServiceImpl implements Oauth2TokenService {
     @Resource
     private Oauth2ClientService oauth2ClientService;
 
+    // 同时在线人数
+    final int onlineAccessTokenCount = 5;
+
     @Override
     @Transactional
     public SystemOauth2AccessToken createAccessToken(Long userId, Integer userType, String clientId, List<String> scopes) {
         SystemOauth2Client clientDO = oauth2ClientService.validOAuthClientFromCache(clientId);
+        checkOnlineAccessToken();
         // 创建刷新令牌
         SystemOauth2RefreshToken refreshTokenDO = createOAuth2RefreshToken(userId, userType, clientDO, scopes);
         // 创建访问令牌
         return createOAuth2AccessToken(refreshTokenDO, clientDO);
+    }
+
+    private void checkOnlineAccessToken(){
+       List<SystemOauth2AccessToken> unexpiredAccessTokens = systemOauth2AccessTokenRepository.findByIsExpired(false);
+       int unexpiredAccessTokenCount = unexpiredAccessTokens.size();
+
+        for(SystemOauth2AccessToken unexpiredAccessToken : unexpiredAccessTokens){
+            if(unexpiredAccessTokenCount < onlineAccessTokenCount)
+                break;
+            removeAccessToken(unexpiredAccessToken.accessToken());
+            unexpiredAccessTokenCount--;
+
+        }
+
     }
 
     @Override

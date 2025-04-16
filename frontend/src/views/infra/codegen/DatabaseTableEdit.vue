@@ -145,7 +145,7 @@
               <el-input
                 class="!w-140px"
                 v-model="scope.row.columnName"
-                @keyup="scope.row.columnName = scope.row.columnName.replace(/[^a-z_]/g, '')"
+                @keyup="scope.row.columnName = scope.row.columnName.replace(/[^a-z_0-9]/g, '')"
                 @blur="scope.row.columnName = scope.row.columnName.trim()"
                 :disabled="
                   [
@@ -202,6 +202,7 @@
                 <el-option value="INT" label="INT" />
                 <el-option value="TINYINT" label="TINYINT" />
                 <el-option value="VARCHAR(50)" label="VARCHAR(50)" />
+                <el-option value="VARCHAR(100)" label="VARCHAR(100)" />
                 <el-option value="VARCHAR(255)" label="VARCHAR(255)" />
                 <el-option value="VARCHAR(1024)" label="VARCHAR(1024)" />
                 <el-option value="DECIMAL(19,4)" label="DECIMAL(19,4)" />

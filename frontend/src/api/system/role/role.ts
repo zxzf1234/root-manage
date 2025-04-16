@@ -67,3 +67,24 @@ export const listAllSimple = () => {
 export const exported = (params) => {
   return request.download({ url: '/system/role/role/exported', params })
 }
+
+/**
+ * 根据角色ID获取字段权限
+ */
+export const getColumnByRoleId = (id) => {
+  return request.get({ url: '/system/role/role/get-column-by-role-id?id=' + id })
+}
+
+/**
+ * 保存角色字段权限
+ */
+export const saveRoleColumn = (data) => {
+  return request.post({ url: '/system/role/role/save-role-column', data })
+}
+
+/**
+ * 根据RoleCodes获取权限字段
+ */
+export const getColumnByRoleCodes = (params) => {
+  return request.get({ url: '/system/role/role/get-column-by-role-codes', params })
+}

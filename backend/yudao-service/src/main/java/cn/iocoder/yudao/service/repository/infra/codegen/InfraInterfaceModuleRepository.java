@@ -40,5 +40,13 @@ public interface InfraInterfaceModuleRepository extends JRepository<InfraInterfa
 
     int countByParentId(String parentId);
 
-    Optional<InfraInterfaceModule> findFirstByName(String name);
+    default Optional<InfraInterfaceModule> findFirstByName(String name){
+        List<InfraInterfaceModule> modules =
+            sql().createQuery(infraInterfaceModuleTable)
+                .where(infraInterfaceModuleTable.name().eq(name))
+                .orderBy(infraInterfaceModuleTable.createTime())
+                .select(infraInterfaceModuleTable)
+                .execute();
+        return Optional.of(modules.get(0));
+    };
 }

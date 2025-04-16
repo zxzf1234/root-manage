@@ -1,5 +1,7 @@
 package cn.iocoder.yudao.service.convert.system.user;
 
+import cn.iocoder.yudao.service.vo.system.user.user.UserGetOwnerUserOutput;
+import cn.iocoder.yudao.service.vo.system.user.user.UserGetByDeptOutput;
 import cn.iocoder.yudao.service.model.infra.social.SystemSocialUser;
 import cn.iocoder.yudao.service.model.system.dept.SystemDept;
 import cn.iocoder.yudao.service.model.system.dept.SystemPost;
@@ -37,7 +39,6 @@ public interface UserConvert {
     UserGetOutput getOutputConvert(SystemUser output);
 
     @Mapping(source = "dept.name", target = "deptName")
-    @Mapping(source = "dept.leaderUser.nickname", target = "deptLeaderNickname")
     UserExcelVO convertExcelUser(SystemUser bean);
 
     List<UserExcelVO> convertExcelListUser(List<SystemUser> bean);
@@ -59,5 +60,9 @@ public interface UserConvert {
 
     List<UserProfileResp.SocialUser> convertList03(List<SystemSocialUser> list);
 
+
+    List<UserGetByDeptOutput> getByDeptOutputConvert(List<SystemUser> output);
+
+    List<UserGetOwnerUserOutput> getOwnerUserOutputConvert(List<SystemUser> output);
 
 }

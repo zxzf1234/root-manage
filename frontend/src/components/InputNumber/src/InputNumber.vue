@@ -62,6 +62,7 @@ const handleBlur = () => {
     v-model="model"
     @blur="handleBlur"
     :valueOnClear="0"
+    style="width: auto"
   />
 </template>
 

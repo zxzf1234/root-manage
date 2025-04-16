@@ -1,14 +1,16 @@
 package cn.iocoder.yudao.service.vo.system.dept.baseVO;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.*;
-
-import jakarta.validation.constraints.*;
-
 import jakarta.validation.constraints.Email;
+import lombok.*;
+import java.util.*;
+import jakarta.validation.constraints.*;
+import org.hibernate.validator.constraints.*;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotBlank;
-
+import org.springframework.format.annotation.DateTimeFormat;
 import static cn.iocoder.yudao.service.util.date.DateUtils.FORMAT_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND;
+import java.time.LocalDateTime;
 
 /**
  * 部门表 Base VO，提供给添加、修改、详细的子 VO 使用
@@ -28,9 +30,6 @@ public class SystemDeptBase {
     @Schema(description = "显示顺序", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
     @NotNull(message = "显示顺序不能为空")
     private Integer sort;
-
-    @Schema(description = "负责人", example = "1")
-    private Long leaderUserId;
 
     @Schema(description = "联系电话", example = "15601691000")
     @Size(max = 11, message = "联系电话长度不能超过11个字符")

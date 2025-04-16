@@ -210,7 +210,6 @@ const open = async (type: string, id?: string) => {
     formLoading.value = true
     try {
       formData.value = await DictTypeApi.getDictType(id)
-      console.log(formData.value)
     } finally {
       formLoading.value = false
     }

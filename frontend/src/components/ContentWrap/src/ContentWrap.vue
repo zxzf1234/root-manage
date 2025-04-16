@@ -13,7 +13,7 @@ defineProps({
 </script>
 
 <template>
-  <ElCard :class="[prefixCls, 'mb-15px']" shadow="never">
+  <ElCard :class="[prefixCls, 'mb-15px']" shadow="never" body-style=" height:100%">
     <template v-if="title" #header>
       <div class="flex items-center">
         <span class="text-16px font-700">{{ title }}</span>
@@ -25,8 +25,10 @@ defineProps({
         </ElTooltip>
       </div>
     </template>
-    <div>
-      <slot></slot>
-    </div>
+
+    <slot></slot>
   </ElCard>
 </template>
+<style lang="scss" scoped>
+$prefix-cls: #{$namespace}-content-wrap;
+</style>

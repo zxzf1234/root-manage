@@ -24,8 +24,8 @@
       <el-form-item label="显示排序" prop="sort">
         <el-input-number v-model="formData.sort" :min="0" controls-position="right" />
       </el-form-item>
-      <el-form-item label="负责人" prop="leaderUserId">
-        <el-select v-model="formData.leaderUserId" clearable placeholder="请输入负责人">
+      <el-form-item label="负责人" prop="leaderUserIds">
+        <el-select v-model="formData.leaderUserIds" clearable placeholder="请选择负责人" multiple>
           <el-option
             v-for="item in userList"
             :key="item.id"
@@ -63,6 +63,7 @@ import { defaultProps, handleTree } from '@/utils/tree'
 import * as DeptApi from '@/api/system/dept/dept'
 import * as UserApi from '@/api/system/user/user'
 import { CommonStatusEnum } from '@/utils/constants'
+import { getKeyList } from '@pureadmin/utils'
 
 const { t } = useI18n() // 国际化
 const message = useMessage() // 消息弹窗
@@ -77,16 +78,16 @@ const formData = ref({
   parentId: undefined,
   name: undefined,
   sort: undefined,
-  leaderUserId: undefined,
+  leaderUserIds: undefined as any,
+  leaders: [] as any[],
   phone: undefined,
   email: undefined,
   status: CommonStatusEnum.ENABLE
 })
-const formRules = reactive({
+const formRules = reactive<any>({
   parentId: [{ required: true, message: '上级部门不能为空', trigger: 'blur' }],
   name: [{ required: true, message: '部门名称不能为空', trigger: 'blur' }],
   sort: [{ required: true, message: '显示排序不能为空', trigger: 'blur' }],
-  leaderUserId: [{ required: true, message: '负责人不能为空', trigger: 'blur' }],
   email: [{ type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }],
   phone: [
     { pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/, message: '请输入正确的手机号码', trigger: 'blur' }
@@ -108,6 +109,7 @@ const open = async (type: string, id?: number) => {
     formLoading.value = true
     try {
       formData.value = await DeptApi.get(id)
+      formData.value.leaderUserIds = getKeyList(formData.value.leaders, 'leaderId')
     } finally {
       formLoading.value = false
     }
@@ -153,7 +155,8 @@ const resetForm = () => {
     parentId: undefined,
     name: undefined,
     sort: undefined,
-    leaderUserId: undefined,
+    leaderUserIds: undefined,
+    leaders: [],
     phone: undefined,
     email: undefined,
     status: CommonStatusEnum.ENABLE

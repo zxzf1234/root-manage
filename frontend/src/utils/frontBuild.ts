@@ -468,7 +468,7 @@ const frontComponent = {
       const lastItemIndex = code['vue'].lastIndexOf('<el-form-item')
       if (
         lastItemIndex > -1 &&
-        code['vue'].substring(lastItemIndex, code['vue'].lenght).indexOf('button') > -1
+        code['vue'].substring(lastItemIndex, code['vue'].length).indexOf('button') > -1
       ) {
         code['vue'] = code['vue'].substring(
           0,

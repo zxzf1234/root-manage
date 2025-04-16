@@ -53,3 +53,10 @@ export const get = (id) => {
 export const deleted = (id) => {
   return request.delete({ url: '/system/dept/dept/deleted?id=' + id })
 }
+
+/**
+ * 判断是否是部门领导人
+ */
+export const isLeaderUser = (id) => {
+  return request.post({ url: '/system/dept/dept/is-leader-user?id=' + id })
+}

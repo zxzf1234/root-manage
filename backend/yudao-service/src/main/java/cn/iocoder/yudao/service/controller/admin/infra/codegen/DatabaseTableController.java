@@ -1,4 +1,6 @@
 package cn.iocoder.yudao.service.controller.admin.infra.codegen;
+import cn.iocoder.yudao.service.vo.infra.codegen.databaseTable.DatabaseTableGetColumnByNamesOutput;
+import cn.iocoder.yudao.service.vo.infra.codegen.databaseTable.DatabaseTableGetColumnByNamesInput;
 import cn.iocoder.yudao.service.vo.infra.codegen.database.*;
 import org.springframework.web.bind.annotation.*;
 import jakarta.annotation.Resource;
@@ -80,6 +82,12 @@ public class DatabaseTableController {
     public CommonResult<Boolean> deleteModule(@RequestParam("id") String id) {
         databaseTableService.deleted(id);
         return success(true);
+    }
+
+    @PostMapping("/get-column-by-names")
+    @Operation(summary = "根据名称获取字段信息")
+    public CommonResult<List<DatabaseTableGetColumnByNamesOutput>> getColumnByNames(@Valid @RequestBody DatabaseTableGetColumnByNamesInput inputVO) {
+        return success(databaseTableService.getColumnByNames(inputVO));
     }
 
 }

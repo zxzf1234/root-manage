@@ -93,11 +93,13 @@ export const getDictLabel = (dictType: string, value: any) => {
 
 export enum DICT_TYPE {
   // ========== COMMON 模块 ==========
+  COMMON_SOCIAL_MEDIA_TYPE = 'common_social_media_type', // 社交媒体类型
   USER_TYPE = 'user_type', // 用户类型
   COMMON_SEX = 'common_sex', // 用户性别
   COMMON_STATUS = 'common_status', // 系统状态
 
   // ========== SYSTEM 模块 ==========
+  SYSTEM_ROLE_COLUMN_TYPE = 'system_role_column_type', // 角色指定字段类型
   SYSTEM_MENU_TYPE = 'system_menu_type', // 菜单类型
   SYSTEM_NOTIFY_TEMPLATE_TYPE = 'system_notify_template_type', // 站内信模版的类型
   SYSTEM_NOTICE_TYPE = 'system_notice_type', // 通知类型
@@ -124,5 +126,28 @@ export enum DICT_TYPE {
   INFRA_REDIS_TIMEOUT_TYPE = 'infra_redis_timeout_type', // Redis 超时类型
   INFRA_CONFIG_TYPE = 'infra_config_type', // 参数类型
   INFRA_BOOLEAN_STRING = 'infra_boolean_string', // Boolean 是否类型
-  INFRA_FILE_STORAGE = 'infra_file_storage' // 文件存储器
+  INFRA_FILE_STORAGE = 'infra_file_storage', // 文件存储器
+
+  // ========== MAILBOX 模块 ==========
+  MAILBOX_MAIL_RESOURCE_TYPE = 'mailbox_mail_resource_type', // 邮件资源类型
+  MAILBOX_MAIL_TYPE = 'mailbox_mail_type', // 邮件类型
+  MAILBOX_FOLDER_CLASS = 'mailbox_folder_class', // 邮件文件夹分类
+  MAILBOX_FOLDER_TYPE = 'mailbox_folder_type', // 邮件文件夹类型
+  MAILBOX_MAIL_STATUS = 'mailbox_mail_status', // 邮件状态
+  MAILBOX_PROTOCOL = 'mailbox_protocol', // 邮箱协议类型
+
+  // ========== SETTING 模块 ==========
+  SETTING_BUSINESS_MODULE = 'setting_business_module', // 业务模块
+
+  // ========== CUSTOMER 模块 ==========
+  CUSTOMER_FOLLOW_RESOURCE_TYPE = 'customer_follow_resource_type', // 客户跟进资源类型
+  CUSTOMER_PUT_IN_REASON = 'customer_put_in_reason', // 放入公海原因
+
+  // ========== ORDER 模块 ==========
+  SALES_ORDER_STATUS = 'sales_order_status', // 销售订单状态
+
+  // ========== MARKET 模块 ==========
+  MARKET_TASK_MAIL_INVALID_TYPE = 'market_task_mail_invalid_type', // 营销邮件无效类型
+  MARKET_TASK_STATUS = 'market_task_status', // 邮件营销任务状态
+  MARKET_TEMPLATE_TYPE = 'market_template_type' // 营销模板类型
 }

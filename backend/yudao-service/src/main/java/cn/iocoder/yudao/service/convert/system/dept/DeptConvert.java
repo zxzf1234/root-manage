@@ -29,6 +29,8 @@ public interface DeptConvert {
 
     DeptGetOutput getOutputConvert(SystemDept output);
 
+    List<DeptListOutput> listOutputConvert(List<SystemDept> output);
+
 }
 
 

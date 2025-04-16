@@ -16,7 +16,7 @@ const emit = defineEmits(['back'])
 const offset = ref(85)
 const contentDetailWrap = ref()
 onMounted(() => {
-  offset.value = contentDetailWrap.value.getBoundingClientRect().top
+  offset.value = contentDetailWrap.value.getBoundingClientRect()?.top
 })
 </script>
 

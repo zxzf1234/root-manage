@@ -7,6 +7,7 @@ import org.babyfish.jimmer.Page;
 import org.babyfish.jimmer.spring.repository.JRepository;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface InfraFileRepository extends JRepository<InfraFile, Long> {
@@ -21,5 +22,13 @@ public interface InfraFileRepository extends JRepository<InfraFile, Long> {
                 .select(infraFileTable).fetchPage(reqVO.getPageNo() - 1, reqVO.getPageSize());
     }
 
+    default List<InfraFile> findByUrls(List<String> urls){
+        return sql().createQuery(infraFileTable)
+                .where(infraFileTable.url().in(urls))
+                .select(infraFileTable).execute();
+    }
+
     Optional<InfraFile> findFirstByUniqueCode(String uniqueCode);
+
+    Optional<InfraFile> findFirstByUrl(String url);
 }

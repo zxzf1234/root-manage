@@ -49,7 +49,11 @@ export const setServerUrl = (url, port) => {
     CACHE_KEY.SERVER_HTTP_URL,
     'http://' + url + ':' + port + '/' + import.meta.env.VITE_APP_NO + '-server/admin-api'
   )
-  wsCache.set(CACHE_KEY.SERVER_WS_URL, 'ws://' + url + ':' + port)
+  wsCache.set(CACHE_KEY.SERVER_WS_URL, 'ws://' + url + ':' + port + '/ws')
+}
+
+export const getServerHttpUrl = () => {
+  return wsCache.get(CACHE_KEY.SERVER_HTTP_URL)
 }
 
 /** 格式化token（jwt格式） */

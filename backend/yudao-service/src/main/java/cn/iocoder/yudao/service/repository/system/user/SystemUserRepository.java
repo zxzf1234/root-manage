@@ -25,7 +25,7 @@ public interface SystemUserRepository extends JRepository<SystemUser, Long>{
                 .where(systemUserTable.mobile().likeIf(reqVO.getMobile()))
                 .where( systemUserTable.status().eqIf(reqVO.getStatus()))
                 .whereIf(reqVO.getCreateTime() != null,  () -> systemUserTable.createTime().between(reqVO.getCreateTime()[0], reqVO.getCreateTime()[1]))
-                .where(systemUserTable.id().ge(0L))
+//                .where(systemUserTable.id().ge(0L))
                 .select(systemUserTable.fetch(SystemUserFetcher.$.allScalarFields().dept(SystemDeptFetcher.$.allScalarFields())))
                 .fetchPage(reqVO.getPageNo() - 1, reqVO.getPageSize());
     }
@@ -37,7 +37,7 @@ public interface SystemUserRepository extends JRepository<SystemUser, Long>{
                 .where(systemUserTable.mobile().likeIf(reqVO.getMobile()))
                 .where( systemUserTable.status().eqIf(reqVO.getStatus()))
                 .whereIf(reqVO.getCreateTime() != null,  () -> systemUserTable.createTime().between(reqVO.getCreateTime()[0], reqVO.getCreateTime()[1]))
-                .select(systemUserTable.fetch(SystemUserFetcher.$.allScalarFields().dept(SystemDeptFetcher.$.allScalarFields().leaderUser(SystemUserFetcher.$.nickname())))).execute();
+                .select(systemUserTable.fetch(SystemUserFetcher.$.allScalarFields().dept(SystemDeptFetcher.$.allScalarFields()))).execute();
     }
 
     default Optional<SystemUser> GetUser(long id){
@@ -72,6 +72,20 @@ public interface SystemUserRepository extends JRepository<SystemUser, Long>{
         return sql().createQuery(SystemUserPostTable.$).where(SystemUserPostTable.$.id().in(postIds)).select(SystemUserPostTable.$.user()).execute();
     }
 
+    default List<Long> findIdByDeptId(Long deptId){
+        return sql().createQuery(systemUserTable)
+                .where(systemUserTable.deptId().eq(deptId))
+                .select(systemUserTable.id())
+                .execute();
+    }
+
+    default List<Long> findIdByDeptIds(List<Long> deptIds){
+        return sql().createQuery(systemUserTable)
+                .where(systemUserTable.deptId().in(deptIds))
+                .select(systemUserTable.id())
+                .execute();
+    }
+
     Optional<SystemUser> findByUsername(String username);
 
     Optional<SystemUser> findByMobile(String mobile);
@@ -81,6 +95,8 @@ public interface SystemUserRepository extends JRepository<SystemUser, Long>{
     List<SystemUser> findByNickname(String nickname);
 
     List<SystemUser> findByDeptIdIn(Collection<Long> deptIds);
+
+    List<SystemUser> findByDeptId(Long deptId);
 
 
 }

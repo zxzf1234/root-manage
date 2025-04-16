@@ -15,6 +15,7 @@ import cn.iocoder.yudao.service.service.infra.data.MenuService;
 import cn.iocoder.yudao.service.service.system.role.RoleService;
 import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
+import org.babyfish.jimmer.sql.ast.mutation.SaveMode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,13 +58,13 @@ public class PermissionServiceImpl implements PermissionService {
             return Collections.emptyList();
         }
 
+        if (roleService.hasAnyRoot(roleIds)) {
+            return menuService.getMenuList(menuTypes, menusStatuses, null);
+        }
+
         // 判断角色是否包含超级管理员。如果是超级管理员，获取到全部
         if (roleService.hasAnySuperAdmin(roleIds)) {
             return menuService.getMenuList(menuTypes, menusStatuses, false);
-        }
-
-        if (roleService.hasAnyRoot(roleIds)) {
-            return menuService.getMenuList(menuTypes, menusStatuses, null);
         }
 
         // 获得角色拥有的菜单关联
@@ -150,9 +151,7 @@ public class PermissionServiceImpl implements PermissionService {
             List<SystemUserRole> userRoleList = CollectionUtils.convertList(createRoleIds, roleId -> SystemUserRoleDraft.$.produce(SystemUserRole->{
                 SystemUserRole.setUserId(userId).setRoleId(roleId);
             }));
-
-            systemUserRoleRepository.insertBatch(userRoleList);
-
+            systemUserRoleRepository.saveEntities(userRoleList, SaveMode.INSERT_ONLY);
 
         }
         if (!CollectionUtil.isEmpty(deleteMenuIds)) {

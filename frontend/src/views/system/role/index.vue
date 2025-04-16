@@ -98,6 +98,11 @@
           v-hasPermi="['system:permission:assign-role-menu']"
         />
         <context-menu-item
+          label="字段权限"
+          @click="openAssignColumnForm(row)"
+          v-hasPermi="['system:permission:assign-role-column']"
+        />
+        <context-menu-item
           label="删除"
           @click="handleDelete(row.id)"
           v-hasPermi="['system:role:delete']"
@@ -119,6 +124,7 @@
     <RoleAssignMenuForm ref="assignMenuFormRef" @success="getList" />
     <!-- 表单弹窗：数据权限 -->
     <RoleDataPermissionForm ref="dataPermissionFormRef" @success="getList" />
+    <RoleAssignColumn ref="assignColumnRef" @success="getList" />
   </div>
 </template>
 <script lang="ts" name="SystemRole" setup>
@@ -126,6 +132,7 @@ import { DICT_TYPE, getIntDictOptions, getDictObj } from '@/utils/dict'
 import RoleForm from './RoleForm.vue'
 import RoleAssignMenuForm from './RoleAssignMenuForm.vue'
 import RoleDataPermissionForm from './RoleDataPermissionForm.vue'
+import RoleAssignColumn from './RoleAssignColumn.vue'
 import download from '@/utils/download'
 import * as RoleApi from '@/api/system/role/role'
 import { formatDate } from '@/utils/formatTime'
@@ -142,6 +149,7 @@ const resetQuery = () => {
 }
 /** 添加/修改操作 */
 const formRef = ref()
+const assignColumnRef = ref()
 const openForm = (type: string, id?: number) => {
   formRef.value.open(type, id)
 }
@@ -186,6 +194,10 @@ const handleExport = async () => {
 const assignMenuFormRef = ref()
 const openAssignMenuForm = async (row: RoleApi.RoleVO) => {
   assignMenuFormRef.value.open(row)
+}
+
+const openAssignColumnForm = async (row) => {
+  assignColumnRef.value.open(row.id)
 }
 
 /** 删除按钮操作 */

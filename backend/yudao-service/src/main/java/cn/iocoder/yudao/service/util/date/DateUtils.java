@@ -129,6 +129,26 @@ public class DateUtils {
         return a.isAfter(b) ? a : b;
     }
 
+    public static Date min(Date a, Date b) {
+        if (a == null) {
+            return b;
+        }
+        if (b == null) {
+            return a;
+        }
+        return a.compareTo(b) > 0 ? b : a;
+    }
+
+    public static LocalDateTime min(LocalDateTime a, LocalDateTime b) {
+        if (a == null) {
+            return b;
+        }
+        if (b == null) {
+            return a;
+        }
+        return a.isBefore(b) ? a : b;
+    }
+
     /**
      * 计算当期时间相差的日期
      *

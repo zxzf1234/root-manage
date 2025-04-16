@@ -282,6 +282,7 @@ export default {
     add: '新增',
     del: '删除',
     delete: '删除',
+    rename: '重命名',
     edit: '编辑',
     update: '编辑',
     preview: '预览',

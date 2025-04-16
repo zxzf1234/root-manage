@@ -1,4 +1,8 @@
 package cn.iocoder.yudao.service.controller.admin.system.role;
+import cn.iocoder.yudao.service.vo.system.role.role.RoleGetColumnByRoleCodesOutput;
+import cn.iocoder.yudao.service.vo.system.role.role.RoleGetColumnByRoleCodesInput;
+import cn.iocoder.yudao.service.vo.system.role.role.RoleSaveRoleColumnInput;
+import cn.iocoder.yudao.service.vo.system.role.role.RoleGetColumnByRoleIdOutput;
 import cn.iocoder.yudao.service.vo.system.role.role.RoleListAllSimpleOutput;
 import cn.iocoder.yudao.service.vo.system.role.role.RolePageInput;
 import cn.iocoder.yudao.service.vo.system.role.role.RolePageOutput;
@@ -90,6 +94,25 @@ public class RoleController {
     @PreAuthorize("@ss.hasPermission('system:role:export')")
     public void exported(@Valid RoleExportedInput inputVO, HttpServletResponse response) throws IOException {
         roleService.exported(response, inputVO);
+    }
+
+    @GetMapping("/get-column-by-role-id")
+    @Operation(summary = "根据角色ID获取字段权限")
+    @Parameter(name = "id", description = "角色信息表主键ID", example = "")
+    public CommonResult<List<RoleGetColumnByRoleIdOutput>> getColumnByRoleId(@RequestParam("id") Long id) {
+        return success(roleService.getColumnByRoleId(id));
+    }
+
+    @PostMapping("/save-role-column")
+    @Operation(summary = "保存角色字段权限")
+    public CommonResult<Boolean> saveRoleColumn(@Valid @RequestBody RoleSaveRoleColumnInput inputVO) {
+        return success(roleService.saveRoleColumn(inputVO));
+    }
+
+    @GetMapping("/get-column-by-role-codes")
+    @Operation(summary = "根据RoleCodes获取权限字段")
+    public CommonResult<List<RoleGetColumnByRoleCodesOutput>> getColumnByRoleCodes(@Valid RoleGetColumnByRoleCodesInput inputVO) {
+        return success(roleService.getColumnByRoleCodes(inputVO));
     }
 
 }
