@@ -135,6 +135,8 @@ public class DataSourceConfig {
 
         // 获取主板 UUID
         String hardwareUUID = computerSystem.getHardwareUUID();
+        System.out.println("this is uniqueCode " + uniqueCode);
+        System.out.println("this is hardwareUUID " + hardwareUUID);
        if(!uniqueCode.equals(hardwareUUID))
            throw new Exception("服务器唯一码和后台记录的唯一码不一致");
     }
