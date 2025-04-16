@@ -72,7 +72,7 @@ public class DataSourceConfig {
 
     private Map<Object, Object> getDateSource() throws Exception {
         Map<Object, Object> DataSources = new HashMap<>();
-        if(!Objects.equals(springProfiles, "local")){
+        if(Objects.equals(springProfiles, "local")){
             DriverManagerDataSource defaultDataSource = new DriverManagerDataSource();
             defaultDataSource.setUrl(defaultDbUrl);
             defaultDataSource.setUsername(defaultDbUsername);
@@ -103,7 +103,6 @@ public class DataSourceConfig {
                         // 获取databaseName
                         String databaseName = item.getStr("databaseName");
                         JSONObject serverObject = item.getJSONObject("server");
-
 
                         // 从server对象中获取databasePassword
                         String databasePassword = serverObject != null ? serverObject.getStr("databasePassword") : "";
