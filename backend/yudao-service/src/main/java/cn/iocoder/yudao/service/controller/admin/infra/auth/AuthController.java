@@ -2,6 +2,8 @@ package cn.iocoder.yudao.service.controller.admin.infra.auth;
 
 import cn.hutool.core.util.StrUtil;
 import cn.iocoder.yudao.service.enums.common.CommonStatusEnum;
+import cn.iocoder.yudao.service.framework.account.service.AccountInfo;
+import cn.iocoder.yudao.service.framework.account.service.AccountService;
 import cn.iocoder.yudao.service.framework.web.web.core.pojo.CommonResult;
 import cn.iocoder.yudao.service.util.collection.SetUtils;
 import cn.iocoder.yudao.service.framework.operateLog.core.annotations.OperateLog;
@@ -53,6 +55,9 @@ public class AuthController {
     private PermissionService permissionService;
     @Resource
     private SecurityProperties securityProperties;
+    @Resource
+    private AccountService accountService;
+
 
     @PostMapping("/login")
     @PermitAll
@@ -113,6 +118,14 @@ public class AuthController {
                 singleton(CommonStatusEnum.ENABLE.getValue())); // 只要开启的
         // 转换成 Tree 结构返回
         return success(AuthConvert.INSTANCE.buildMenuTree(menuList));
+    }
+
+    @PostMapping("/refresh-account")
+    @PermitAll
+    @Operation(summary = "刷新账号")
+    @OperateLog(enable = false) // 避免 Post 请求被记录操作日志
+    public CommonResult<Boolean> refreshToken(@RequestBody @Valid AuthRefreshAccountInput input) {
+        return success(accountService.refreshAccountInfo(input));
     }
 
 }

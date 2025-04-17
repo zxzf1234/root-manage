@@ -6,6 +6,7 @@ import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import cn.iocoder.yudao.service.util.date.DateUtils;
+import cn.iocoder.yudao.service.vo.infra.auth.AuthRefreshAccountInput;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -75,6 +76,16 @@ public class AccountService {
 
     public List<AccountInfo> getAccountInfos(){
         return accountInfos;
+    }
+
+    public boolean refreshAccountInfo(AuthRefreshAccountInput input){
+        for(AccountInfo accountInfo : accountInfos){
+            if(accountInfo.getAccountNo().equals(input.getAccountNo())){
+                accountInfo.setExpiresTime(input.getExpiresTime());
+                accountInfo.setOnlineAccountCount(input.getOnlineAccountCount());
+            }
+        }
+        return true;
     }
 
     private void checkServerUniqueCode(String uniqueCode) throws Exception{
