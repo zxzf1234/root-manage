@@ -162,6 +162,7 @@ const loginLoading = ref(false)
 const verify = ref()
 const captchaType = ref('blockPuzzle') // blockPuzzle 滑块 clickWord 点击文字
 const isLocal = ref(import.meta.env.VITE_IS_LOCAL)
+const envMode = ref(import.meta.env.MODE)
 
 const getShow = computed(() => unref(getLoginState) === LoginStateEnum.LOGIN)
 
@@ -205,14 +206,20 @@ const handleClickLogin = async () => {
 }
 
 const getCustomerInfo = async () => {
-  if (isLocal.value == 'true') {
+  if (envMode.value == 'base') {
     // 更新server URL
     authUtil.setServerUrl(import.meta.env.VITE_SERVER_IP, import.meta.env.VITE_SERVER_PORT)
   } else {
-    const customerInfo = await axios.get(
+    let queryInfo = { pruductNo: import.meta.env.VITE_APP_NO, url: '', customerName: '' }
+    if (isLocal.value == 'true') {
+      queryInfo.url = window.location.href
+    } else {
+      queryInfo.customerName = loginData.loginForm.accountName
+    }
+    const customerInfo = await axios.post(
       import.meta.env.VITE_ACCOUNT_ROUTER_URL +
-        '/devops-server/admin-api/infra/devops/customer/get-by-name?customerName=' +
-        loginData.loginForm.accountName
+        '/devops-server/admin-api/infra/devops/customer/get-single-customer-info',
+      queryInfo
     )
     if (customerInfo.data.code != 0) {
       message.alertError(customerInfo.data.msg)

@@ -32,6 +32,11 @@ public class LoginUser {
      */
     private List<String> scopes;
 
+    /**
+     * 客户编号
+     */
+    private String accountNo;
+
     // ========== 上下文 ==========
     /**
      * 上下文字段，不进行持久化

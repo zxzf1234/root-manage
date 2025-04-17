@@ -196,8 +196,6 @@ const userData = ref()
 /** 查询列表 */
 const getList = async () => {
   loading.value = true
-  const fullUrl = window.location.href
-  console.log('Full URL:', fullUrl)
   try {
     userData.value = await UserApi.page(queryParams)
   } finally {

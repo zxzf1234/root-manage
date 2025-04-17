@@ -24,6 +24,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * Token 过滤器，验证 token 的有效性
@@ -43,6 +44,9 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     @Value("${xiyu.is-local}")
     private boolean isLocal;
 
+    @Value("${spring.profiles.active}")
+    private String springProfiles;
+
     @Autowired
     public TokenAuthenticationFilter(Oauth2TokenService oauth2TokenService, SecurityProperties securityProperties, GlobalExceptionHandler globalExceptionHandler) {
         this.oauth2TokenService = oauth2TokenService;
@@ -55,11 +59,13 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
         String token = SecurityFrameworkUtils.obtainAuthorization(request, securityProperties.getTokenHeader(), securityProperties.getTokenParameter());
-        // 非本地化设置数据库
-        if(!isLocal){
-            String accountNo = SecurityFrameworkUtils.getAccountNo(request);
+        String accountNo = WebFrameworkUtils.getAccountNo(request);
+        // 非本地化环境设置数据库
+        // todo 逻辑反转
+        if(Objects.equals(springProfiles, "local")){
             if (accountNo != null) {
                 DatabaseContextHolder.setDatabaseType(accountNo);
+                // todo 判断账号是否到期
             }
         }
 
@@ -67,7 +73,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             Integer userType = WebFrameworkUtils.getLoginUserType(request);
             try {
                 // 1.1 基于 token 构建登录用户
-                LoginUser loginUser = buildLoginUserByToken(token, userType);
+                LoginUser loginUser = buildLoginUserByToken(token, userType, accountNo);
                 // 1.2 模拟 Login 功能，方便日常开发调试
                 if (loginUser == null) {
                     loginUser = mockLoginUser(request, token, userType);
@@ -84,11 +90,13 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             }
         }
 
+
+
         // 继续过滤链
         chain.doFilter(request, response);
     }
 
-    private LoginUser buildLoginUserByToken(String token, Integer userType) {
+    private LoginUser buildLoginUserByToken(String token, Integer userType, String accountNo) {
         try {
             SystemOauth2AccessToken  accessToken = oauth2TokenService.checkAccessToken(token);
             if (accessToken == null) {
@@ -99,7 +107,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
                 throw new AccessDeniedException("错误的用户类型");
             }
             // 构建登录用户
-            return new LoginUser().setId(accessToken.userId()).setUserType(accessToken.userType());
+            return new LoginUser().setId(accessToken.userId()).setUserType(accessToken.userType()).setAccountNo(accountNo);
         } catch (ServiceException serviceException) {
             // 校验 Token 不通过时，考虑到一些接口是无需登录的，所以直接返回 null 即可
             return null;

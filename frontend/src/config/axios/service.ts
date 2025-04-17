@@ -61,10 +61,11 @@ service.interceptors.request.use(
       ;(config as Recordable).headers.Authorization = 'Bearer ' + getAccessToken() // 让每个请求携带自定义token
     }
     // 非本地化部署需要获取账号信息
-    if (import.meta.env.VITE_IS_LOCAL == 'false') {
+    if (import.meta.env.MODE == 'base') {
       const accountInfo = getAccountInfo()
       if (accountInfo) {
-        ;(config as Recordable).headers['Account-No'] = accountInfo.customerNo
+        // todo 调试临时修改
+        ;(config as Recordable).headers['Account-No'] = 'localroot'
         ;(config as Recordable).headers['Account-Version'] = accountInfo.version.version
       }
     }

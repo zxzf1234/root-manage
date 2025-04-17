@@ -25,22 +25,7 @@ public class SecurityFrameworkUtils {
 
     private SecurityFrameworkUtils() {}
 
-    /**
-     * 从请求中，获得卖家账号
-     *
-     * @param request 请求
-     * @return accountName 卖家账号
-     */
-    public static String getAccountNo(HttpServletRequest request) {
-        String accountNo = request.getHeader("Account-No");
 
-        if (!StringUtils.hasText(accountNo)) {
-            return null;
-        }else{
-            return accountNo;
-        }
-
-    }
 
     /**
      * 从请求中，获得认证 Token
@@ -97,6 +82,17 @@ public class SecurityFrameworkUtils {
     public static Long getLoginUserId() {
         LoginUser loginUser = getLoginUser();
         return loginUser != null ? loginUser.getId() : null;
+    }
+
+    /**
+     * 获取当前用户
+     *
+     * @return 当前用户
+     */
+    @Nullable
+    public static String getAccountNo() {
+        LoginUser loginUser = getLoginUser();
+        return loginUser != null ? loginUser.getAccountNo() : null;
     }
 
     /**

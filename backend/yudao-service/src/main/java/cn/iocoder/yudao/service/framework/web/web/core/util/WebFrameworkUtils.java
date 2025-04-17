@@ -3,6 +3,7 @@ package cn.iocoder.yudao.service.framework.web.web.core.util;
 import cn.iocoder.yudao.service.enums.common.UserTypeEnum;
 import cn.iocoder.yudao.service.framework.web.web.core.pojo.CommonResult;
 import cn.iocoder.yudao.service.framework.web.web.config.WebProperties;
+import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -43,6 +44,7 @@ public class WebFrameworkUtils {
         request.setAttribute(REQUEST_ATTRIBUTE_LOGIN_USER_TYPE, userType);
     }
 
+
     /**
      * 获得当前用户的编号，从请求中
      * 注意：该方法仅限于 framework 框架使用！！！
@@ -81,6 +83,23 @@ public class WebFrameworkUtils {
             return UserTypeEnum.MEMBER.getValue();
         }
         return null;
+    }
+
+    /**
+     * 从请求中，获得卖家账号
+     *
+     * @param request 请求
+     * @return accountName 卖家账号
+     */
+    public static String getAccountNo(HttpServletRequest request) {
+        String accountNo = request.getHeader("Account-No");
+
+        if (!StringUtils.hasText(accountNo)) {
+            return null;
+        }else{
+            return accountNo;
+        }
+
     }
 
     public static Integer getLoginUserType() {

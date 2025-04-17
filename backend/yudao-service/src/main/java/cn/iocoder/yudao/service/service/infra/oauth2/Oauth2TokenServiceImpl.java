@@ -3,8 +3,12 @@ package cn.iocoder.yudao.service.service.infra.oauth2;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.iocoder.yudao.service.framework.account.service.AccountInfo;
+import cn.iocoder.yudao.service.framework.account.service.AccountService;
 import cn.iocoder.yudao.service.framework.exception.enums.GlobalErrorCodeConstants;
+import cn.iocoder.yudao.service.framework.security.core.util.SecurityFrameworkUtils;
 import cn.iocoder.yudao.service.framework.web.web.core.pojo.PageResult;
+import cn.iocoder.yudao.service.framework.web.web.core.util.WebFrameworkUtils;
 import cn.iocoder.yudao.service.util.date.DateUtils;
 import cn.iocoder.yudao.service.vo.infra.oauth2.token.OAuth2AccessTokenPageReqVO;
 import cn.iocoder.yudao.service.vo.infra.oauth2.token.OAuth2AccessTokenRespVO;
@@ -13,6 +17,7 @@ import cn.iocoder.yudao.service.dal.redis.oauth2.OAuth2AccessTokenRedisDAO;
 import cn.iocoder.yudao.service.model.infra.oauth2.*;
 import cn.iocoder.yudao.service.repository.infra.oauth2.SystemOauth2AccessTokenRepository;
 import cn.iocoder.yudao.service.repository.infra.oauth2.SystemOauth2RefreshTokenRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import org.babyfish.jimmer.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,8 +49,11 @@ public class Oauth2TokenServiceImpl implements Oauth2TokenService {
     @Resource
     private Oauth2ClientService oauth2ClientService;
 
+    @Resource
+    private AccountService accountService;
+
     // 同时在线人数
-    final int onlineAccessTokenCount = 5;
+    int onlineAccessTokenCount = 5;
 
     @Override
     @Transactional
@@ -59,8 +67,22 @@ public class Oauth2TokenServiceImpl implements Oauth2TokenService {
     }
 
     private void checkOnlineAccessToken(){
-       List<SystemOauth2AccessToken> unexpiredAccessTokens = systemOauth2AccessTokenRepository.findByIsExpired(false);
-       int unexpiredAccessTokenCount = unexpiredAccessTokens.size();
+
+        HttpServletRequest request = WebFrameworkUtils.getRequest();
+        if(request != null){
+            String accountNo = WebFrameworkUtils.getAccountNo(request);
+            List<AccountInfo> accountInfos = accountService.getAccountInfos();
+
+            for(AccountInfo accountInfo : accountInfos){
+                if(accountInfo.getAccountNo().equals(accountNo)){
+                    onlineAccessTokenCount = accountInfo.getOnlineAccountCount();
+                    break;
+                }
+            }
+        }
+
+        List<SystemOauth2AccessToken> unexpiredAccessTokens = systemOauth2AccessTokenRepository.findByIsExpired(false);
+        int unexpiredAccessTokenCount = unexpiredAccessTokens.size();
 
         for(SystemOauth2AccessToken unexpiredAccessToken : unexpiredAccessTokens){
             if(unexpiredAccessTokenCount < onlineAccessTokenCount)
