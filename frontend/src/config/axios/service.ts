@@ -60,12 +60,11 @@ service.interceptors.request.use(
     if (getAccessToken() && !isToken) {
       ;(config as Recordable).headers.Authorization = 'Bearer ' + getAccessToken() // 让每个请求携带自定义token
     }
-    // 非本地化部署需要获取账号信息
-    if (import.meta.env.MODE == 'base') {
+    // 正式获取账号信息
+    if (!(import.meta.env.MODE == 'base')) {
       const accountInfo = getAccountInfo()
       if (accountInfo) {
-        // todo 调试临时修改
-        ;(config as Recordable).headers['Account-No'] = 'localroot'
+        ;(config as Recordable).headers['Account-No'] = accountInfo.customerNo
         ;(config as Recordable).headers['Account-Version'] = accountInfo.version.version
       }
     }

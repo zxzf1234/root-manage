@@ -52,9 +52,6 @@ public class Oauth2TokenServiceImpl implements Oauth2TokenService {
     @Resource
     private AccountService accountService;
 
-    // 同时在线人数
-    int onlineAccessTokenCount = 5;
-
     @Override
     @Transactional
     public SystemOauth2AccessToken createAccessToken(Long userId, Integer userType, String clientId, List<String> scopes) {
@@ -67,7 +64,8 @@ public class Oauth2TokenServiceImpl implements Oauth2TokenService {
     }
 
     private void checkOnlineAccessToken(){
-
+        // 同时在线人数
+        int onlineAccessTokenCount = 5;
         HttpServletRequest request = WebFrameworkUtils.getRequest();
         if(request != null){
             String accountNo = WebFrameworkUtils.getAccountNo(request);

@@ -23,6 +23,7 @@ public interface GlobalErrorCodeConstants {
     ErrorCode FORBIDDEN = new ErrorCode(403, "没有该操作权限");
     ErrorCode NOT_FOUND = new ErrorCode(404, "请求未找到");
     ErrorCode METHOD_NOT_ALLOWED = new ErrorCode(405, "请求方法不正确");
+    ErrorCode ACCOUNT_EXPIRES = new ErrorCode(406, "您的系统已超出使用期限，请更系服务提供商");
     ErrorCode LOCKED = new ErrorCode(423, "请求失败，请稍后重试"); // 并发请求，不允许
     ErrorCode TOO_MANY_REQUESTS = new ErrorCode(429, "请求过于频繁，请稍后重试");
 

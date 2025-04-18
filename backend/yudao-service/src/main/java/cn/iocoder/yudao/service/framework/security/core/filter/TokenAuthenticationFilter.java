@@ -2,8 +2,10 @@ package cn.iocoder.yudao.service.framework.security.core.filter;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.iocoder.yudao.service.framework.account.service.AccountService;
 import cn.iocoder.yudao.service.framework.db.dataSource.DatabaseContextHolder;
 import cn.iocoder.yudao.service.framework.exception.ServiceException;
+import cn.iocoder.yudao.service.framework.exception.enums.GlobalErrorCodeConstants;
 import cn.iocoder.yudao.service.framework.web.web.core.pojo.CommonResult;
 import cn.iocoder.yudao.service.util.servlet.ServletUtils;
 import cn.iocoder.yudao.service.framework.security.config.SecurityProperties;
@@ -13,6 +15,7 @@ import cn.iocoder.yudao.service.framework.web.web.core.handler.GlobalExceptionHa
 import cn.iocoder.yudao.service.framework.web.web.core.util.WebFrameworkUtils;
 import cn.iocoder.yudao.service.model.infra.oauth2.SystemOauth2AccessToken;
 import cn.iocoder.yudao.service.service.infra.oauth2.Oauth2TokenService;
+import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,6 +28,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Objects;
+
+import static cn.iocoder.yudao.service.errorCode.infra.ErrorCodeConstants.FILE_NOT_EXISTS;
+import static cn.iocoder.yudao.service.framework.exception.enums.GlobalErrorCodeConstants.ACCOUNT_EXPIRES;
+import static cn.iocoder.yudao.service.framework.exception.enums.GlobalErrorCodeConstants.UNAUTHORIZED;
+import static cn.iocoder.yudao.service.framework.exception.util.ServiceExceptionUtil.exception;
+import static cn.iocoder.yudao.service.framework.exception.util.ServiceExceptionUtil.exception0;
 
 /**
  * Token 过滤器，验证 token 的有效性
@@ -40,6 +49,9 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     private final GlobalExceptionHandler globalExceptionHandler;
 
     private final Oauth2TokenService oauth2TokenService;
+
+    @Resource
+    private AccountService accountService;
 
     @Value("${xiyu.is-local}")
     private boolean isLocal;
@@ -61,11 +73,13 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         String token = SecurityFrameworkUtils.obtainAuthorization(request, securityProperties.getTokenHeader(), securityProperties.getTokenParameter());
         String accountNo = WebFrameworkUtils.getAccountNo(request);
         // 非本地化环境设置数据库
-        // todo 逻辑反转
-        if(Objects.equals(springProfiles, "local")){
+        if(!Objects.equals(springProfiles, "local")){
             if (accountNo != null) {
                 DatabaseContextHolder.setDatabaseType(accountNo);
-                // todo 判断账号是否到期
+                if(accountService.isExpires(accountNo)){
+                    ServletUtils.writeJSON(response, CommonResult.error(ACCOUNT_EXPIRES));
+                    return;
+                }
             }
         }
 

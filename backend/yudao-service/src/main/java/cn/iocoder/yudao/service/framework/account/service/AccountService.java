@@ -29,8 +29,7 @@ public class AccountService {
 
     public AccountService(@Value("${xiyu.account-router_url}") String accountRouterUrl, @Value("${spring.application.number}") String applicationNo,
                           @Value("${spring.profiles.active}") String springProfiles) throws Exception {
-        // todo 逻辑反转
-        if(!Objects.equals(springProfiles, "local"))
+        if(Objects.equals(springProfiles, "local"))
             return;
         // 从server router获取当前服务器的数据库信息
         String json = "{\"projectNo\":\"" + applicationNo +"\"}";
@@ -86,6 +85,17 @@ public class AccountService {
             }
         }
         return true;
+    }
+
+    public boolean isExpires(String accountNo){
+        for(AccountInfo accountInfo : accountInfos){
+            if(accountInfo.getAccountNo().equals(accountNo)){
+               if(accountInfo.getExpiresTime() != null && accountInfo.getExpiresTime().isBefore(LocalDateTime.now()))
+                   return true;
+               break;
+            }
+        }
+        return false;
     }
 
     private void checkServerUniqueCode(String uniqueCode) throws Exception{

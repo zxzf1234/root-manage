@@ -59,8 +59,7 @@ public class DataSourceConfig {
 
     private Map<Object, Object> getDateSource() {
         Map<Object, Object> DataSources = new HashMap<>();
-        // todo 逻辑反转
-        if(!Objects.equals(springProfiles, "local")){
+        if(Objects.equals(springProfiles, "local")){
             DriverManagerDataSource defaultDataSource = new DriverManagerDataSource();
             defaultDataSource.setUrl(defaultDbUrl);
             defaultDataSource.setUsername(defaultDbUsername);
@@ -68,7 +67,6 @@ public class DataSourceConfig {
             defaultDataSource.setDriverClassName(defaultDbDriverClassName);
             DataSources.put("default", defaultDataSource);
         }else{
-
             List<AccountInfo> accountInfos = accountService.getAccountInfos();
             System.out.println(accountInfos);
             for(AccountInfo accountInfo : accountInfos){
