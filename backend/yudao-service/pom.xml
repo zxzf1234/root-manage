@@ -48,6 +48,8 @@
         <okio.version>3.0.0</okio.version>
         <okhttp3.version>4.10.0</okhttp3.version>
         <minio.version>8.5.2</minio.version>
+
+        <!-- 业务相关 -->
     </properties>
 
     <dependencyManagement>
@@ -376,6 +378,8 @@
                 <artifactId>oshi-core</artifactId>
                 <version>6.4.0</version>
             </dependency>
+
+            <!-- 业务相关 -->
         </dependencies>
     </dependencyManagement>
     <dependencies>
@@ -618,6 +622,8 @@
             <groupId>com.github.oshi</groupId>
             <artifactId>oshi-core</artifactId>
         </dependency>
+
+        <!-- 业务相关 -->
     </dependencies>
 
     <build>
