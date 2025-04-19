@@ -50,7 +50,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
     private final Oauth2TokenService oauth2TokenService;
 
-    @Resource
+    @Autowired
     private AccountService accountService;
 
     @Value("${xiyu.is-local}")
