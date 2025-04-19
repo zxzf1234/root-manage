@@ -53,9 +53,6 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private AccountService accountService;
 
-    @Value("${xiyu.is-local}")
-    private boolean isLocal;
-
     @Value("${spring.profiles.active}")
     private String springProfiles;
 
