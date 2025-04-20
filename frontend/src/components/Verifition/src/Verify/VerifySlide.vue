@@ -5,6 +5,7 @@
       v-if="type === '2'"
       :style="{ height: parseInt(setSize.imgHeight) + vSpace + 'px' }"
       class="verify-img-out"
+      v-loading="imageLoading"
     >
       <div :style="{ width: setSize.imgWidth, height: setSize.imgHeight }" class="verify-img-panel">
         <img
@@ -130,7 +131,7 @@ const props = defineProps({
     }
   }
 })
-
+const imageLoading = ref(true)
 const { t } = useI18n()
 const { mode, captchaType, type, blockSize, explain } = toRefs(props)
 const { proxy } = getCurrentInstance()
@@ -218,7 +219,9 @@ watch(type, () => {
 })
 const open = async () => {
   // 禁止拖拽
+  imageLoading.value = true
   await init()
+  imageLoading.value = false
   proxy.$el.onselectstart = function () {
     return false
   }
