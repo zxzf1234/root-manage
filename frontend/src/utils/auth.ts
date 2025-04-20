@@ -49,7 +49,14 @@ export const setServerUrl = (url, port) => {
     CACHE_KEY.SERVER_HTTP_URL,
     'http://' + url + ':' + port + '/' + import.meta.env.VITE_APP_NO + '-server/admin-api'
   )
-  wsCache.set(CACHE_KEY.SERVER_WS_URL, 'ws://' + url + ':' + port + '/ws')
+  if (import.meta.env.MODE == 'base') {
+    wsCache.set(CACHE_KEY.SERVER_WS_URL, 'ws://' + url + ':' + port + '/ws')
+  } else {
+    wsCache.set(
+      CACHE_KEY.SERVER_WS_URL,
+      'ws://' + url + ':' + port + '/' + import.meta.env.VITE_APP_NO + '-server/ws'
+    )
+  }
 }
 
 export const getServerHttpUrl = () => {
