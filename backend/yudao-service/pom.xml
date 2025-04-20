@@ -13,7 +13,6 @@
     <name>${project.artifactId}</name>
 
     <properties>
-        <revision>1.7.4-snapshot</revision>
         <!-- 统一依赖管理 -->
         <spring.boot.version>3.4.1</spring.boot.version>
         <!-- DB 相关 -->
