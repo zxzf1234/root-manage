@@ -210,7 +210,7 @@ const getCustomerInfo = async () => {
     // 更新server URL
     authUtil.setServerUrl(import.meta.env.VITE_SERVER_IP, import.meta.env.VITE_SERVER_PORT)
   } else {
-    let queryInfo = { productNo: import.meta.env.VITE_APP_NO, url: '', customerName: '' }
+    let queryInfo = { projectNo: import.meta.env.VITE_APP_NO, url: '', customerName: '' }
     if (isLocal.value == 'true') {
       queryInfo.url = window.location.href
     } else {
