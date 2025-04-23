@@ -102,13 +102,12 @@ public class JobServiceImpl implements JobService {
                     + "'" +  optionalQrtzJobDetails.get().jobGroup() + "',"
                     + (optionalQrtzJobDetails.get().description() == null ? optionalQrtzJobDetails.get().description() : ("'" + optionalQrtzJobDetails.get().description() + "'")) + ","
                     + "'" +  optionalQrtzJobDetails.get().jobClassName() + "',"
-                    + "'" +  optionalQrtzJobDetails.get().isDurable() + "',"
-                    + "'" +  optionalQrtzJobDetails.get().isNonconcurrent() + "',"
-                    + "'" +  optionalQrtzJobDetails.get().isUpdateData() + "',"
+                    + "'" +  (optionalQrtzJobDetails.get().isDurable() ? 1 : 0) + "',"
+                    + "'" +  (optionalQrtzJobDetails.get().isNonconcurrent() ? 1 : 0) + "',"
+                    + "'" +  (optionalQrtzJobDetails.get().isUpdateData() ? 1 : 0) + "',"
                     + "'" +  optionalQrtzJobDetails.get().requestsRecovery() + "',"
                     + "UNHEX('" +  bytesToHex(optionalQrtzJobDetails.get().jobData()) + "'));\r\n";
             UpgradeUtils.upgradeSql(sql, curGitUserVersion, curGitUserId);
-            codegenEngine.saveInsertSql(optionalQrtzJobDetails.get());
         }
 
         Optional<QrtzTriggers> optionalQrtzTriggers = qrtzTriggersRepository.findById(job.handlerName());
@@ -133,7 +132,6 @@ public class JobServiceImpl implements JobService {
                     + (optionalQrtzTriggers.get().misfireInstr() == null ? optionalQrtzTriggers.get().misfireInstr() : ("'" + optionalQrtzTriggers.get().misfireInstr() + "'")) + ","
                     + "UNHEX('" +  bytesToHex(optionalQrtzTriggers.get().jobData()) + "'));\r\n";
             UpgradeUtils.upgradeSql(sql, curGitUserVersion, curGitUserId);
-            codegenEngine.saveInsertSql(optionalQrtzTriggers.get());
         }
 
         Optional<QrtzCronTriggers> optionalQrtzCronTriggers = qrtzCronTriggersRepository.findByTriggerName(job.handlerName());
@@ -145,7 +143,6 @@ public class JobServiceImpl implements JobService {
                     + "'" +  optionalQrtzCronTriggers.get().cronExpression() + "',"
                     + "'" +  optionalQrtzCronTriggers.get().timeZoneId() + "');\r\n";
             UpgradeUtils.upgradeSql(sql, curGitUserVersion, curGitUserId);
-            codegenEngine.saveInsertSql(optionalQrtzCronTriggers.get());
 
         }
 
