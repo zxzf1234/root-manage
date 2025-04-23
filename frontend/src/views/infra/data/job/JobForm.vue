@@ -12,9 +12,10 @@
       </el-form-item>
       <el-form-item label="处理器的名字" prop="handlerName">
         <el-input
-          :readonly="formData.id !== undefined"
+          :disabled="formData.id !== undefined"
           v-model="formData.handlerName"
           placeholder="请输入处理器的名字"
+          @blur="handleHandlerName"
         />
       </el-form-item>
       <el-form-item label="处理器的参数" prop="handlerParam">
@@ -47,6 +48,7 @@
 </template>
 <script setup lang="ts" name="JobForm">
 import * as JobApi from '@/api/infra/data/job'
+import { upperFirst } from 'lodash-es'
 const { t } = useI18n() // 国际化
 const message = useMessage() // 消息弹窗
 
@@ -115,6 +117,10 @@ const submitForm = async () => {
   } finally {
     formLoading.value = false
   }
+}
+
+const handleHandlerName = () => {
+  formData.value.handlerName = upperFirst(formData.value.handlerName)
 }
 
 /** 重置表单 */
