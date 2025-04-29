@@ -23,7 +23,7 @@ interface ImportMetaEnv {
   readonly VITE_DEFAULT_PASSWORD: string
   readonly VITE_DEFAULT_ACCOUNT_NAME: string
   readonly VITE_ACCOUNT_ROUTER_URL: string
-  readonly VITE_IS_LOCAL: string
+  readonly VITE_SERVER_ENV: string
 }
 
 declare global {

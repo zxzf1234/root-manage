@@ -15,7 +15,11 @@
           <LoginFormTitle style="width: 100%" />
         </el-form-item>
       </el-col>
-      <el-col :span="24" style="padding-left: 10px; padding-right: 10px" v-if="isLocal == 'false'">
+      <el-col
+        :span="24"
+        style="padding-left: 10px; padding-right: 10px"
+        v-if="serverEnv == 'cloud'"
+      >
         <el-form-item prop="accountName">
           <el-input
             v-model="loginData.loginForm.accountName"
@@ -161,8 +165,7 @@ const redirect = ref<string>('')
 const loginLoading = ref(false)
 const verify = ref()
 const captchaType = ref('blockPuzzle') // blockPuzzle 滑块 clickWord 点击文字
-const isLocal = ref(import.meta.env.VITE_IS_LOCAL)
-const envMode = ref(import.meta.env.MODE)
+const serverEnv = ref(import.meta.env.VITE_SERVER_ENV)
 
 const getShow = computed(() => unref(getLoginState) === LoginStateEnum.LOGIN)
 
@@ -206,12 +209,12 @@ const handleClickLogin = async () => {
 }
 
 const getCustomerInfo = async () => {
-  if (envMode.value == 'base') {
+  if (serverEnv.value == 'debug') {
     // 更新server URL
     authUtil.setServerUrl(import.meta.env.VITE_SERVER_IP, import.meta.env.VITE_SERVER_PORT)
   } else {
     let queryInfo = { projectNo: import.meta.env.VITE_APP_NO, url: '', customerName: '' }
-    if (isLocal.value == 'true') {
+    if (serverEnv.value == 'local') {
       queryInfo.url = window.location.href
     } else {
       queryInfo.customerName = loginData.loginForm.accountName
