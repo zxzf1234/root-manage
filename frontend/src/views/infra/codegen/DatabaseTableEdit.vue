@@ -924,7 +924,7 @@ const handleDeleteColumn = async () => {
     message.alertError('内置字段不可删除')
     return
   }
-  if (formType.value === 'create') {
+  if (formType.value === 'create' || columnCurrentRow.value.operateType == 'new') {
     const index = formData.value.columns.indexOf(columnCurrentRow.value)
     formData.value.columns.splice(index, 1)
   } else {
