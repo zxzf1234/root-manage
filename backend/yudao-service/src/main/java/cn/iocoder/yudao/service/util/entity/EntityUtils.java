@@ -1,11 +1,14 @@
 package cn.iocoder.yudao.service.util.entity;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import kotlin.reflect.jvm.internal.impl.descriptors.Visibilities;
 import org.babyfish.jimmer.ImmutableObjects;
 import org.babyfish.jimmer.meta.ImmutableProp;
 import org.babyfish.jimmer.meta.ImmutableType;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 import static cn.hutool.core.text.CharSequenceUtil.toSymbolCase;
@@ -104,9 +107,19 @@ public class EntityUtils {
             return "NOW()";
         } else if(Objects.isNull(columnObject)){
             return "NULL";
+        } else if(columnObject.getClass().getName().contains("ArrayList")){
+            ObjectMapper mapper = new ObjectMapper();
+            String json="";
+            try {
+                json = mapper.writeValueAsString(columnObject);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+            return "'" + json + "'";
         }else if(columnObject.getClass().getName().contains("String")
                 || columnObject.getClass().getName().contains("LocalDateTime")
-                || columnObject.getClass().getName().contains("UUID")){
+                || columnObject.getClass().getName().contains("UUID")
+                ){
             return "'" + columnObject + "'";
         }else if(columnObject.getClass().getName().contains("Integer")
                 ||columnObject.getClass().getName().contains("Long")
