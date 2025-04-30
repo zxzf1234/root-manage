@@ -6,6 +6,7 @@ import cn.hutool.json.JSONUtil;
 import cn.iocoder.yudao.service.framework.account.service.AccountInfo;
 import cn.iocoder.yudao.service.framework.account.service.AccountService;
 import jakarta.annotation.Resource;
+import org.flywaydb.core.Flyway;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
@@ -68,7 +69,6 @@ public class DataSourceConfig {
             DataSources.put("default", defaultDataSource);
         }else{
             List<AccountInfo> accountInfos = accountService.getAccountInfos();
-            System.out.println(accountInfos);
             for(AccountInfo accountInfo : accountInfos){
                 DriverManagerDataSource dataSource = new DriverManagerDataSource();
                 dataSource.setUrl("jdbc:mysql://127.0.0.1:3306/" + accountInfo.getDatabaseName() + "?useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&nullCatalogMeansCurrent=true");
@@ -76,6 +76,13 @@ public class DataSourceConfig {
                 dataSource.setPassword(accountInfo.getDatabasePassword());
                 dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
                 DataSources.put(accountInfo.getAccountNo(), dataSource);
+
+                Flyway flyway = Flyway.configure()
+                        .dataSource(dataSource)
+                        .locations("classpath:db/migration")
+                        .baselineOnMigrate(true)
+                        .load();
+                flyway.migrate();
             }
 
         }
