@@ -49,6 +49,7 @@
               type="datetimerange"
               start-placeholder="开始日期"
               end-placeholder="结束日期"
+              :default-time="[new Date('1 00:00:00'), new Date('1 23:59:59')]"
             />
           </el-form-item>
           <el-form-item>

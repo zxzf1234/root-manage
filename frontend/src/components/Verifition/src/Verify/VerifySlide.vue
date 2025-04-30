@@ -168,13 +168,13 @@ let secretKey = ref(''), //后端返回的ase加密秘钥
 const barArea = computed(() => {
   return proxy.$el.querySelector('.verify-bar-area')
 })
-const init = () => {
+const init = async () => {
   if (explain.value === '') {
     text.value = t('captcha.slide')
   } else {
     text.value = explain.value
   }
-  getPictrue()
+  await getPictrue()
   nextTick(() => {
     let { imgHeight, imgWidth, barHeight, barWidth } = resetSize(proxy)
     setSize.imgHeight = imgHeight
