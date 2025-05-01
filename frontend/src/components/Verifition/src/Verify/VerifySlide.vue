@@ -3,10 +3,12 @@
   <div style="position: relative">
     <div
       v-if="type === '2'"
-      :style="{ height: parseInt(setSize.imgHeight) + vSpace + 'px' }"
+      :style="{
+        height: parseInt(setSize.imgHeight) + vSpace + 'px',
+        width: parseInt(setSize.imgWidth) + 'px'
+      }"
       class="verify-img-out"
       v-loading="imageLoading"
-      style="width: 400px; height: 200px"
     >
       <div :style="{ width: setSize.imgWidth, height: setSize.imgHeight }" class="verify-img-panel">
         <img
@@ -147,8 +149,8 @@ let secretKey = ref(''), //后端返回的ase加密秘钥
   text = ref(''),
   finishText = ref(''),
   setSize = reactive({
-    imgHeight: 400,
-    imgWidth: 200,
+    imgHeight: props.imgSize.height,
+    imgWidth: props.imgSize.width,
     barHeight: 0,
     barWidth: 0
   }),
