@@ -6,6 +6,7 @@
       :style="{ height: parseInt(setSize.imgHeight) + vSpace + 'px' }"
       class="verify-img-out"
       v-loading="imageLoading"
+      style="width: 400px; height: 200px"
     >
       <div :style="{ width: setSize.imgWidth, height: setSize.imgHeight }" class="verify-img-panel">
         <img
@@ -53,7 +54,7 @@
         >
           <i :class="['verify-icon iconfont', iconClass]" :style="{ color: iconColor }"></i>
           <div
-            v-if="type === '2'"
+            v-if="type === '2' && !imageLoading"
             :style="{
               width: Math.floor((parseInt(setSize.imgWidth) * 47) / 310) + 'px',
               height: setSize.imgHeight,
@@ -146,8 +147,8 @@ let secretKey = ref(''), //后端返回的ase加密秘钥
   text = ref(''),
   finishText = ref(''),
   setSize = reactive({
-    imgHeight: 0,
-    imgWidth: 0,
+    imgHeight: 400,
+    imgWidth: 200,
     barHeight: 0,
     barWidth: 0
   }),
