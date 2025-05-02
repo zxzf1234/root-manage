@@ -10,7 +10,7 @@ pipeline {
         stage('Checkout Code') {
             steps {
                 echo 'Cloning repository...'
-                git branch: 'dev', url: 'https://gitee.com/zxzfzx/root-manage.git'
+                git branch: 'dev', url: 'https://gitee.com/zxzfzx/root-manage.git',
                 credentialsId: '116'  // 添加凭证ID
             }
         }
