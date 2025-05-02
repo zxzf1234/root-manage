@@ -11,6 +11,7 @@ pipeline {
             steps {
                 echo 'Cloning repository...'
                 git branch: 'dev', url: 'https://gitee.com/zxzfzx/root-manage.git'
+                credentialsId: '116'  // 添加凭证ID
             }
         }
         stage('Get Version and Git Tag') {
