@@ -7,12 +7,12 @@ pipeline {
     }
     
     stages {
-        stage('Checkout Code') {
-            steps {
-                echo 'Cloning repository...'
-                git branch: 'dev', url: 'https://gitee.com/zxzfzx/root-manage.git'
-            }
-        }
+//        stage('Checkout Code') {
+//            steps {
+//                echo 'Cloning repository...'
+//                git branch: 'dev', url: 'https://gitee.com/zxzfzx/root-manage.git'
+//            }
+//        }
         stage('Get Version and Git Tag') {
             steps {
                 script {
