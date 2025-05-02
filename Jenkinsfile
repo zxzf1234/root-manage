@@ -6,12 +6,19 @@ pipeline {
         maven "mav"
     }
     
+    withCredentials([usernamePassword(credentialsId: '116', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
+        sh '''
+        git config --global user.name "${GIT_USERNAME}"
+        git config --global user.password "${GIT_PASSWORD}"
+        git push --set-upstream origin qa
+        '''
+    }
+    
     stages {
         stage('Checkout Code') {
             steps {
                 echo 'Cloning repository...'
-                git branch: 'dev', url: 'https://gitee.com/zxzfzx/root-manage.git',
-                credentialsId: '116'  // 添加凭证ID
+                git branch: 'dev', url: 'https://gitee.com/zxzfzx/root-manage.git'
             }
         }
         stage('Get Version and Git Tag') {
