@@ -32,7 +32,7 @@ pipeline {
                         bat """
                             git config user.name "zhaoxu"
                             git config user.email "1162291474@qq.com"
-                            git fetch --tags
+                            git fetch --tags https://${env.GIT_USER}:${env.GIT_PASS}@gitee.com/zxzfzx/root-manage.git
                         """
 
                         // 4. 检查标签是否存在
