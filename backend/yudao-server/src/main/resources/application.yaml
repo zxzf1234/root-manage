@@ -2,7 +2,7 @@
 xiyu:
   info:
     version: 1.0.0
-  account-router_url: http://39.101.174.235:48080
+  account-router_url: http://39.101.174.235:48080/devops-server/admin-api/infra/devops/customer/get-server-customer-info
   web:
     admin-ui:
       url: http://dashboard.yudao.iocoder.cn # Admin 管理后台 UI 的地址

@@ -3,9 +3,20 @@ server:
   servlet:
     context-path:
 
---- #################### 数据库相关配置 ####################
+--- #################### 希语相关配置 ####################
+
+# 希语配置项，设置当前项目所有自定义的配置
+xiyu:
+  xss:
+    enable: false
+    exclude-urls: # 如下两个 url，仅仅是为了演示，去掉配置也没关系
+      - ${spring.boot.admin.context-path}/** # 不处理 Spring Boot Admin 的请求
+      - ${management.endpoints.web.base-path}/** # 不处理 Actuator 的请求
+  demo: false # 开启演示模式
+
 
 spring:
+  #################### 数据库相关配置 ####################
   datasource:
     name: root_manage
     url: jdbc:mysql://127.0.0.1:3306/${spring.datasource.name}?useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&nullCatalogMeansCurrent=true # MySQL Connector/J 8.X 连接的示例
@@ -93,16 +104,3 @@ spring:
 logging:
   file:
     name: ${user.home}/logs/${spring.application.name}.log # 日志文件名，全路径
-
---- #################### 芋道相关配置 ####################
-
-# 芋道配置项，设置当前项目所有自定义的配置
-xiyu:
-  xss:
-    enable: false
-    exclude-urls: # 如下两个 url，仅仅是为了演示，去掉配置也没关系
-      - ${spring.boot.admin.context-path}/** # 不处理 Spring Boot Admin 的请求
-      - ${management.endpoints.web.base-path}/** # 不处理 Actuator 的请求
-  demo: false # 开启演示模式
-
-

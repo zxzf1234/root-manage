@@ -34,7 +34,7 @@ public class AccountService {
         // 从server router获取当前服务器的数据库信息
         String json = "{\"projectNo\":\"" + applicationNo +"\"}";
 
-        HttpResponse response = HttpRequest.post(accountRouterUrl+"/devops-server/admin-api/infra/devops/customer/get-server-customer-info")
+        HttpResponse response = HttpRequest.post(accountRouterUrl)
                 .body(json).header("Content-Type", "application/json").execute(); // 执行请求
 
         // 检查响应状态码
