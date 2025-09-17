@@ -4,7 +4,6 @@ cn.iocoder.yudao.service.framework.captcha.config.CaptchaConfiguration
 cn.iocoder.yudao.service.framework.redis.config.CacheAutoConfiguration
 cn.iocoder.yudao.service.framework.redis.config.RedisAutoConfiguration
 cn.iocoder.yudao.service.framework.monitor.config.MetricsAutoConfiguration
-cn.iocoder.yudao.service.framework.monitor.config.TracerAutoConfiguration
 cn.iocoder.yudao.service.framework.job.config.AsyncAutoConfiguration
 cn.iocoder.yudao.service.framework.job.config.QuartzAutoConfiguration
 cn.iocoder.yudao.service.framework.security.config.SecurityAutoConfiguration

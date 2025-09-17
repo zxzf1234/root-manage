@@ -7,7 +7,6 @@ import cn.hutool.core.util.StrUtil;
 import cn.iocoder.yudao.service.enums.common.UserTypeEnum;
 import cn.iocoder.yudao.service.framework.web.web.core.pojo.CommonResult;
 import cn.iocoder.yudao.service.util.json.JsonUtils;
-import cn.iocoder.yudao.service.util.monitor.TracerUtils;
 import cn.iocoder.yudao.service.util.servlet.ServletUtils;
 import cn.iocoder.yudao.service.framework.operateLog.core.enums.OperateTypeEnum;
 import cn.iocoder.yudao.service.framework.operateLog.core.service.OperateLog;
@@ -149,7 +148,6 @@ public class OperateLogAspect {
                       LocalDateTime startTime, Object result, Throwable exception) {
         OperateLog operateLogObj = new OperateLog();
         // 补全通用字段
-        operateLogObj.setTraceId(TracerUtils.getTraceId());
         operateLogObj.setStartTime(startTime);
         // 补充用户信息
         fillUserFields(operateLogObj);

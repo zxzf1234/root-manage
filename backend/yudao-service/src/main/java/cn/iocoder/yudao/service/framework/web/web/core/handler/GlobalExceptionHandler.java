@@ -7,7 +7,6 @@ import cn.iocoder.yudao.service.framework.web.apiLog.core.service.ApiErrorLogFra
 import cn.iocoder.yudao.service.framework.exception.ServiceException;
 import cn.iocoder.yudao.service.framework.web.web.core.pojo.CommonResult;
 import cn.iocoder.yudao.service.util.json.JsonUtils;
-import cn.iocoder.yudao.service.util.monitor.TracerUtils;
 import cn.iocoder.yudao.service.util.servlet.ServletUtils;
 import cn.iocoder.yudao.service.framework.web.web.core.util.WebFrameworkUtils;
 import lombok.AllArgsConstructor;
@@ -245,7 +244,6 @@ public class GlobalExceptionHandler {
         errorLog.setExceptionMethodName(stackTraceElement.getMethodName());
         errorLog.setExceptionLineNumber(stackTraceElement.getLineNumber());
         // 设置其它字段
-        errorLog.setTraceId(TracerUtils.getTraceId());
         errorLog.setApplicationName(applicationName);
         errorLog.setRequestUrl(request.getRequestURI());
         Map<String, Object> requestParams = MapUtil.<String, Object>builder()

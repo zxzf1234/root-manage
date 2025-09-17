@@ -3,7 +3,6 @@ package cn.iocoder.yudao.service.service.infra.auth;
 import cn.hutool.core.util.ObjectUtil;
 import cn.iocoder.yudao.service.enums.common.CommonStatusEnum;
 import cn.iocoder.yudao.service.enums.common.UserTypeEnum;
-import cn.iocoder.yudao.service.util.monitor.TracerUtils;
 import cn.iocoder.yudao.service.util.servlet.ServletUtils;
 import cn.iocoder.yudao.service.util.validation.ValidationUtils;
 import cn.iocoder.yudao.service.vo.infra.logger.loginlog.LoginLogCreateReqVO;
@@ -98,7 +97,6 @@ public class AdminAuthServiceImpl implements AdminAuthService {
         // 插入登录日志
         LoginLogCreateReqVO reqDTO = new LoginLogCreateReqVO();
         reqDTO.setLogType(logTypeEnum.getValue());
-        reqDTO.setTraceId(TracerUtils.getTraceId());
         reqDTO.setUserId(userId);
         reqDTO.setUserType(getUserType().getValue());
         reqDTO.setUsername(username);
@@ -161,7 +159,6 @@ public class AdminAuthServiceImpl implements AdminAuthService {
     private void createLogoutLog(Long userId, Integer userType, Integer logType) {
         LoginLogCreateReqVO reqDTO = new LoginLogCreateReqVO();
         reqDTO.setLogType(logType);
-        reqDTO.setTraceId(TracerUtils.getTraceId());
         reqDTO.setUserId(userId);
         reqDTO.setUserType(userType);
         if (ObjectUtil.equal(getUserType().getValue(), userType)) {

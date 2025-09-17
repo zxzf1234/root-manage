@@ -1,5 +1,6 @@
 package cn.iocoder.yudao.service.framework.web.web.config;
 
+import cn.iocoder.yudao.service.framework.operateLog.core.interceptor.ApiAccessLogInterceptor;
 import cn.iocoder.yudao.service.framework.web.apiLog.core.service.ApiErrorLogFrameworkService;
 import cn.iocoder.yudao.service.enums.common.WebFilterOrderEnum;
 import cn.iocoder.yudao.service.framework.web.web.core.filter.CacheRequestBodyFilter;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -131,6 +133,11 @@ public class WebAutoConfiguration implements WebMvcConfigurer {
         FilterRegistrationBean<T> bean = new FilterRegistrationBean<>(filter);
         bean.setOrder(order);
         return bean;
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new ApiAccessLogInterceptor());
     }
 
 }
