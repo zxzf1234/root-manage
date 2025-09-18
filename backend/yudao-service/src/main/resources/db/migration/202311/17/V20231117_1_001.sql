@@ -1,1 +1,0 @@
-INSERT IGNORE INTO `infra_file_config` (`id`, `name`, `storage`, `remark`, `master`, `config`, `creator_id`, `create_time`, `updater_id`, `update_time`, `deleted`) VALUES (19, '数据库', 1, '', b'1', '{\"@class\":\"cn.iocoder.yudao.framework.file.core.client.db.DBFileClientConfig\",\"domain\":\"http://127.0.0.1:48080"}', '1', '2022-03-15 23:56:24', '1', '2023-04-08 09:44:47', b'0');

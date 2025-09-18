@@ -1,0 +1,1 @@
+UPDATE infra_file_config SET config = REPLACE(config, 'com.xiyu.framework.file.core.client.db.DBFileClientConfig', 'com.xiyu.service.framework.file.core.client.db.DBFileClientConfig');

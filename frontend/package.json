@@ -149,10 +149,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://gitee.com/yudaocode/yudao-ui-admin-vue3"
+    "url": "git+https://gitee.com/zxzfzx/root-manage.git"
   },
   "bugs": {
-    "url": "https://gitee.com/yudaocode/yudao-ui-admin-vue3/issues"
+    "url": "https://gitee.com/zxzfzx/root-manage.git/issues"
   },
-  "homepage": "https://gitee.com/yudaocode/yudao-ui-admin-vue3"
+  "homepage": "https://gitee.com/zxzfzx/root-manage.git"
 }

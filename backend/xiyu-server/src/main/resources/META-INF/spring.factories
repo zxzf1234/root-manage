@@ -1,0 +1,18 @@
+#org.springframework.context.ApplicationContextInitializer=com.xiyu.server.classLoader.JarLoaderInitializer
+#org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+#    com.xiyu.service.framework.operateLog.config.OperateLogAutoConfiguration,\
+#    com.xiyu.service.framework.file.config.FileAutoConfiguration,\
+#    com.xiyu.service.framework.captcha.config.CaptchaConfiguration,\
+#    com.xiyu.service.framework.redis.config.CacheAutoConfiguration,\
+#    com.xiyu.service.framework.redis.config.RedisAutoConfiguration,\
+#    com.xiyu.service.framework.monitor.config.MetricsAutoConfiguration,\
+#    com.xiyu.service.framework.job.config.AsyncAutoConfiguration,\
+#    com.xiyu.service.framework.job.config.QuartzAutoConfiguration,\
+#    com.xiyu.service.framework.security.config.SecurityAutoConfiguration,\
+#    com.xiyu.service.framework.security.config.WebSecurityConfigurerAdapter,\
+#    com.xiyu.service.framework.web.apiLog.config.ApiLogAutoConfiguration,\
+#    com.xiyu.service.framework.web.jackson.config.JacksonAutoConfiguration,\
+#    com.xiyu.service.framework.web.swagger.config.SwaggerAutoConfiguration,\
+#    com.xiyu.service.framework.web.web.config.WebAutoConfiguration,\
+#    com.xiyu.service.framework.web.xss.config.XssAutoConfiguration,\
+#    com.xiyu.service.framework.websocket.config.WebSocketAutoConfiguration

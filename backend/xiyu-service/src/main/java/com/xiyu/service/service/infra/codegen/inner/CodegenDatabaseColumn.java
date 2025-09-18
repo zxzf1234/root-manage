@@ -1,0 +1,53 @@
+package com.xiyu.service.service.infra.codegen.inner;
+
+import com.xiyu.service.vo.infra.codegen.baseVO.InfraInterfaceValidationBase;
+import lombok.Data;
+
+import java.util.List;
+import java.util.UUID;
+
+@Data
+public class CodegenDatabaseColumn {
+    private String columnName;
+
+    private String dataType;
+
+    private String columnComment;
+
+    private Boolean nullable;
+
+    private String defaultValue;
+
+    private String javaType;
+
+    private String dictType;
+
+    private String example;
+
+    private String listOperationCondition;
+
+    private String relatedTable;
+
+    private Integer relatedTableType;
+
+    private String htmlType;
+
+    private Boolean required;
+
+    private String humpName;
+
+    private String humpRelatedTable;
+
+    private String firstModule;
+
+    private String secondModule;
+
+    private List<Validation> validations;
+
+    private String vueDataType;
+
+    @Data
+    public static class Validation extends InfraInterfaceValidationBase {
+        private UUID id;
+    }
+}
