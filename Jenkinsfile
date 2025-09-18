@@ -36,7 +36,7 @@ pipeline {
 
                     // 3. 拉取远程标签列表，防止冲突
                     bat """
-                        git fetch --tags ${env.PROJECT_NAME}
+                        git fetch --tags ${env.GIT_URL}
                     """
 
                     // 4. 检查标签是否存在
@@ -46,7 +46,7 @@ pipeline {
                         echo "⚠️ 标签 '${tagName}' 已存在，准备删除并重新创建..."
                         bat """
                             git tag -d ${tagName}
-                            git push ${env.PROJECT_NAME} :refs/tags/${tagName}
+                            git push ${env.GIT_URL} :refs/tags/${tagName}
                         """
                     }
 
@@ -55,7 +55,7 @@ pipeline {
                     bat """
                         
                         git tag -a ${tagName} -m "Auto-tagged ${tagName} from dev branch"
-                        git push ${env.PROJECT_NAME} ${tagName}
+                        git push ${env.GIT_URL} ${tagName}
                     """
                 }
                 
