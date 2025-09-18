@@ -230,6 +230,7 @@ public class GlobalExceptionHandler {
     private void initExceptionLog(ApiErrorLog errorLog, HttpServletRequest request, Throwable e) {
         // 处理用户信息
         errorLog.setUserId(WebFrameworkUtils.getLoginUserId(request));
+        errorLog.setTraceId("0");
         errorLog.setUserType(WebFrameworkUtils.getLoginUserType(request));
         // 设置异常字段
         errorLog.setExceptionName(e.getClass().getName());

@@ -9,7 +9,12 @@ import { useCache, CACHE_KEY } from '@/hooks/web/useCache'
 const { wsCache } = useCache()
 
 const loading = ref(true) // 是否加载中
-const src = ref(wsCache.get(CACHE_KEY.SERVER_BASE_URL) + '/swagger-ui/index.html')
+const src = ref(
+  wsCache.get(CACHE_KEY.SERVER_BASE_URL) +
+    '/' +
+    import.meta.env.VITE_APP_NO +
+    '-server/swagger-ui/index.html'
+)
 
 /** 初始化 */
 onMounted(async () => {

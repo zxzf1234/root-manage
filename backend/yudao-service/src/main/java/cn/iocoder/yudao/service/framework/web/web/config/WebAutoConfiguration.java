@@ -44,9 +44,6 @@ public class WebAutoConfiguration implements WebMvcConfigurer {
     @Value("${spring.application.name}")
     private String applicationName;
 
-    @Value("${spring.application.number}")
-    private String applicationNo;
-
     @Value("${spring.profiles.active}")
     private String profilesActive;
 
@@ -71,8 +68,7 @@ public class WebAutoConfiguration implements WebMvcConfigurer {
      */
     private void configurePathMatch(PathMatchConfigurer configurer, WebProperties.Api api) {
         AntPathMatcher antPathMatcher = new AntPathMatcher(".");
-        String prefix = (Objects.equals(profilesActive, "local") ? ("/" + applicationNo + "-server" ) : "" ) + api.getPrefix();
-        configurer.addPathPrefix(prefix, clazz -> clazz.isAnnotationPresent(RestController.class)
+        configurer.addPathPrefix(api.getPrefix(), clazz -> clazz.isAnnotationPresent(RestController.class)
                 && antPathMatcher.match(api.getController(), clazz.getPackage().getName())); // 仅仅匹配 controller 包
     }
 

@@ -120,7 +120,7 @@ public class SwaggerAutoConfiguration {
     public GroupedOpenApi buildGroupedOpenApi(String group, String path) {
         return GroupedOpenApi.builder()
                 .group(group)
-                .pathsToMatch("/" + applicationNo + "-server" + "/admin-api/" + path + "/**", "/" + applicationNo + "-server" + "/app-api/" + path + "/**")
+                .pathsToMatch(  "/admin-api/" + path + "/**", "/" +   "/app-api/" + path + "/**")
                 .addOperationCustomizer((operation, handlerMethod) -> operation
                     .addParametersItem(buildSecurityHeaderParameter()))
                 .build();

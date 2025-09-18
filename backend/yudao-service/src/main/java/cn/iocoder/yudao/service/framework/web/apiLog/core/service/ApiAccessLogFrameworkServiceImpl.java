@@ -10,8 +10,6 @@ import jakarta.annotation.Resource;
 /**
  * API 访问日志 Framework Service 实现类
  *
- * 基于 {@link apiAccessLogService} 服务，记录访问日志
- *
  * @author 芋道源码
  */
 public class ApiAccessLogFrameworkServiceImpl implements ApiAccessLogFrameworkService {

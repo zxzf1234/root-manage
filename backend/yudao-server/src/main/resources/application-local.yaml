@@ -1,6 +1,8 @@
 server:
   ip: 39.101.174.235
   port: 48080
+  servlet:
+    context-path: /${spring.application.number}-server
 
 --- #################### 数据库相关配置 ####################
 

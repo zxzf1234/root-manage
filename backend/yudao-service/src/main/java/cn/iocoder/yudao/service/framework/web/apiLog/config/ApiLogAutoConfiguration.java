@@ -33,7 +33,7 @@ public class ApiLogAutoConfiguration {
      * 创建 ApiAccessLogFilter Bean，记录 API 请求日志
      */
     @Bean
-    @ConditionalOnProperty(prefix = "yudao.access-log", value = "enable", matchIfMissing = true) // 允许使用 yudao.access-log.enable=false 禁用访问日志
+    @ConditionalOnProperty(prefix = "xiyu.access-log", value = "enable", matchIfMissing = true)
     public FilterRegistrationBean<ApiAccessLogFilter> apiAccessLogFilter(WebProperties webProperties,
                                                                          @Value("${spring.application.name}") String applicationName,
                                                                          ApiAccessLogFrameworkService apiAccessLogFrameworkService) {

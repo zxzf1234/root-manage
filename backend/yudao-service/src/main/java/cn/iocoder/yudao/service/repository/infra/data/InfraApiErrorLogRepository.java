@@ -21,6 +21,7 @@ public interface InfraApiErrorLogRepository extends JRepository<InfraApiErrorLog
                 .whereIf(reqVO.getExceptionTime() != null, ()-> infraApiErrorLogTable.exceptionTime().between(reqVO.getExceptionTime()[0], reqVO.getExceptionTime()[1]))
                 .where(infraApiErrorLogTable.userId().eqIf(reqVO.getUserId()))
                 .where(infraApiErrorLogTable.userType().eqIf(reqVO.getUserType()))
+                .orderBy(infraApiErrorLogTable.id().desc())
                 .select(infraApiErrorLogTable).fetchPage(reqVO.getPageNo() - 1, reqVO.getPageSize());
     }
 
@@ -32,6 +33,7 @@ public interface InfraApiErrorLogRepository extends JRepository<InfraApiErrorLog
                 .whereIf(reqVO.getExceptionTime() != null, ()-> infraApiErrorLogTable.exceptionTime().between(reqVO.getExceptionTime()[0], reqVO.getExceptionTime()[1]))
                 .where(infraApiErrorLogTable.userId().eqIf(reqVO.getUserId()))
                 .where(infraApiErrorLogTable.userType().eqIf(reqVO.getUserType()))
+                .orderBy(infraApiErrorLogTable.id().desc())
                 .select(infraApiErrorLogTable)
                 .execute();
     }
