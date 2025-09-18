@@ -49,7 +49,7 @@ pipeline {
                         echo "⚠️ 标签 '${tagName}' 已存在，准备删除并重新创建..."
                         bat """
                             git tag -d ${tagName}
-                            git push :refs/tags/${tagName}
+                            git push origin :refs/tags/${tagName}
                         """
                     }
 
@@ -58,7 +58,7 @@ pipeline {
                     bat """
                         
                         git tag -a ${tagName} -m "Auto-tagged ${tagName} from dev branch"
-                        git push ${tagName}
+                        git push origin ${tagName}
                     """
                 }
                 
