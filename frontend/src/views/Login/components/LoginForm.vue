@@ -209,7 +209,6 @@ const handleClickLogin = async () => {
 }
 
 const getCustomerInfo = async () => {
-  console.log('this is serverEnv ' + serverEnv.value)
   if (serverEnv.value == 'local') {
     // 更新server URL
     authUtil.setServerUrl(import.meta.env.VITE_SERVER_IP, import.meta.env.VITE_SERVER_PORT)

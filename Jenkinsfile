@@ -7,10 +7,11 @@ pipeline {
     }
     
     stages {
+        // 根据版本号新增git的Tag
         stage('Get Version and Git Tag') {
             steps {
                 script {
-                    withCredentials([usernamePassword(credentialsId: '13102114036', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
+                    withCredentials([usernamePassword(credentialsId: 'f9da2ca8-dc5f-48d7-a0d4-937d86c22d3c', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
                         // 1. 进入 frontend 目录读取版本号
                         dir('frontend') {
                             echo '🔍 Getting version from package.json...'
@@ -59,7 +60,7 @@ pipeline {
             }
         }
 
-
+        // 前端打包
         stage('Frontend Build dev') {
             steps {
                 dir('frontend') {
@@ -73,19 +74,7 @@ pipeline {
             }
         }
 
-         stage('Frontend Build front') {
-            steps {
-                dir('frontend') {
-                    echo 'Installing frontend dependencies...'
-                    bat 'npm install -g pnpm' // 确保 pnpm 可用
-                    bat 'pnpm install --no-frozen-lockfile'
-
-                    echo 'Building frontend...'
-                    bat 'npm run build:front'
-                }
-            }
-        }
-
+        // 后端打包
         stage('Backend Build') {
             steps {
                 dir('backend') {
@@ -98,7 +87,8 @@ pipeline {
                 }
             }
         }
-         
+
+        // 获取版本号 
         stage('Get Version Number') {
             steps {
                 dir('frontend') {
@@ -117,6 +107,7 @@ pipeline {
             }
         }
 
+        // 上传到服务器
         stage('Upload to Remote via SSH') {
             steps {
                 script {
