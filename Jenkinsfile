@@ -1,14 +1,7 @@
 pipeline {
     agent any
-
-    tools {
-        // Install the Maven version configured as "M3" and add it to the path.
-        maven "mav"
-    }
     
     environment {
-        // git的url 用于创建标签
-        GIT_URL = 'https://gitee.com/zxzfzx/root-manage.git'
         // 打包完成后上传到服务器的路径
         UPLOAD_PATH = '/work/version/root/'
         // git的url 用于创建标签
