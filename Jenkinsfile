@@ -33,7 +33,7 @@ pipeline {
                         bat """
                             git config user.name "zhaoxu"
                             git config user.email "1162291474@qq.com"
-                            git fetch --tags https://${env.GIT_USER}:${env.GIT_PASS}@gitee.com/zxzfzx/root-manage.git
+                            git fetch --tags https://gitee.com/zxzfzx/root-manage.git
                         """
 
                         // 4. 检查标签是否存在
@@ -43,7 +43,7 @@ pipeline {
                             echo "⚠️ 标签 '${tagName}' 已存在，准备删除并重新创建..."
                             bat """
                                 git tag -d ${tagName}
-                                git push https://${env.GIT_USER}:${env.GIT_PASS}@gitee.com/zxzfzx/root-manage.git :refs/tags/${tagName}
+                                git push https://gitee.com/zxzfzx/root-manage.git :refs/tags/${tagName}
                             """
                         }
 
@@ -53,7 +53,7 @@ pipeline {
                             git config user.name "zhaoxu"
                             git config user.email "1162291474@qq.com"
                             git tag -a ${tagName} -m "Auto-tagged ${tagName} from dev branch"
-                            git push https://${env.GIT_USER}:${env.GIT_PASS}@gitee.com/zxzfzx/root-manage.git ${tagName}
+                            git push https://gitee.com/zxzfzx/root-manage.git ${tagName}
                         """
                     }
                 
