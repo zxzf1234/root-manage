@@ -209,7 +209,7 @@ const handleClickLogin = async () => {
 }
 
 const getCustomerInfo = async () => {
-  if (serverEnv.value == 'debug') {
+  if (serverEnv.value == 'local') {
     // 更新server URL
     authUtil.setServerUrl(import.meta.env.VITE_SERVER_IP, import.meta.env.VITE_SERVER_PORT)
   } else {

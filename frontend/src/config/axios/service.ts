@@ -61,7 +61,7 @@ service.interceptors.request.use(
       ;(config as Recordable).headers.Authorization = 'Bearer ' + getAccessToken() // 让每个请求携带自定义token
     }
     // 正式获取账号信息
-    if (!(import.meta.env.VITE_SERVER_ENV == 'debug')) {
+    if (import.meta.env.VITE_SERVER_ENV == 'cloud') {
       const accountInfo = getAccountInfo()
       if (accountInfo) {
         ;(config as Recordable).headers['Account-No'] = accountInfo.customerNo

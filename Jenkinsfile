@@ -123,7 +123,7 @@ pipeline {
            
                     def remotePath = "/work/version/root/${env.PROJECT_VERSION}"
 
-                    echo "📤 Uploading frontend & backend to ${remotePath} on server xuni1..."
+                    echo "📤 Uploading frontend & backend to ${remotePath} on server aliyun..."
 
                     // 上传 frontend/dist-dev 目录，并重命名为 root-client
                     sshPublisher(
