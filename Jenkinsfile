@@ -11,7 +11,7 @@ pipeline {
         stage('Get Version and Git Tag') {
             steps {
                 script {
-                    withCredentials([usernamePassword(credentialsId: 'f9da2ca8-dc5f-48d7-a0d4-937d86c22d3c', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
+                    withCredentials([string(credentialsId: 'f9da2ca8-dc5f-48d7-a0d4-937d86c22d3c', variable: 'GIT_TOKEN')]) {
                         // 1. 进入 frontend 目录读取版本号
                         dir('frontend') {
                             echo '🔍 Getting version from package.json...'
