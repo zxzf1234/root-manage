@@ -7,8 +7,11 @@ pipeline {
     }
     
     environment {
+        // git的url 用于创建标签
         GIT_URL = 'https://gitee.com/zxzfzx/root-manage.git'
+        // 打包完成后上传到服务器的路径
         UPLOAD_PATH = '/work/version/root/'
+        // git的url 用于创建标签
         SSH_NAME = 'aliyun'
     }
 
@@ -36,7 +39,7 @@ pipeline {
 
                     // 3. 拉取远程标签列表，防止冲突
                     bat """
-                        git fetch --tags ${env.GIT_URL}
+                        git fetch --tags
                     """
 
                     // 4. 检查标签是否存在
@@ -46,7 +49,7 @@ pipeline {
                         echo "⚠️ 标签 '${tagName}' 已存在，准备删除并重新创建..."
                         bat """
                             git tag -d ${tagName}
-                            git push ${env.GIT_URL} :refs/tags/${tagName}
+                            git push :refs/tags/${tagName}
                         """
                     }
 
@@ -55,7 +58,7 @@ pipeline {
                     bat """
                         
                         git tag -a ${tagName} -m "Auto-tagged ${tagName} from dev branch"
-                        git push ${env.GIT_URL} ${tagName}
+                        git push ${tagName}
                     """
                 }
                 
