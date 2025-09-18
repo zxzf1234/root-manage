@@ -6,54 +6,58 @@ pipeline {
         maven "mav"
     }
     
+    environment {
+        GIT_URL = 'https://gitee.com/zxzfzx/root-manage.git'
+        UPLOAD_PATH = '/work/version/root/'
+        SSH_NAME = 'aliyun'
+    }
+
     stages {
         // 根据版本号新增git的Tag
         stage('Get Version and Git Tag') {
             steps {
                 script {
-                    
-                        // 1. 进入 frontend 目录读取版本号
-                        dir('frontend') {
-                            echo '🔍 Getting version from package.json...'
-                            def rawOutput = bat(script: 'npm pkg get version', returnStdout: true).trim()
-                            def matcher = rawOutput =~ /"(.+?)"/
-                            if (matcher.find()) {
-                                env.PROJECT_VERSION = matcher.group(1)
-                                echo "📌 Final version: ${env.PROJECT_VERSION}"
-                            } else {
-                                error "❌ Failed to extract version from output: ${rawOutput}"
-                            }
+                    // 1. 进入 frontend 目录读取版本号
+                    dir('frontend') {
+                        echo '🔍 Getting version from package.json...'
+                        def rawOutput = bat(script: 'npm pkg get version', returnStdout: true).trim()
+                        def matcher = rawOutput =~ /"(.+?)"/
+                        if (matcher.find()) {
+                            env.PROJECT_VERSION = matcher.group(1)
+                            echo "📌 Final version: ${env.PROJECT_VERSION}"
+                        } else {
+                            error "❌ Failed to extract version from output: ${rawOutput}"
                         }
+                    }
 
-                        // 2. 构造标签名
-                        def tagName = "v.root.${env.PROJECT_VERSION}"
-                        echo "🏷️ 准备创建 Git 标签：${tagName}"
+                    // 2. 构造标签名
+                    def tagName = "v.root.${env.PROJECT_VERSION}"
+                    echo "🏷️ 准备创建 Git 标签：${tagName}"
 
-                        // 3. 拉取远程标签列表，防止冲突
+                    // 3. 拉取远程标签列表，防止冲突
+                    bat """
+                        git fetch --tags ${env.PROJECT_NAME}
+                    """
+
+                    // 4. 检查标签是否存在
+                    def tagExists = bat(script: "git tag --list ${tagName}", returnStdout: true).trim()
+
+                    if (tagExists) {
+                        echo "⚠️ 标签 '${tagName}' 已存在，准备删除并重新创建..."
                         bat """
-                         
-                            git fetch --tags https://gitee.com/zxzfzx/root-manage.git
-                        """
-
-                        // 4. 检查标签是否存在
-                        def tagExists = bat(script: "git tag --list ${tagName}", returnStdout: true).trim()
-
-                        if (tagExists) {
-                            echo "⚠️ 标签 '${tagName}' 已存在，准备删除并重新创建..."
-                            bat """
-                                git tag -d ${tagName}
-                                git push https://gitee.com/zxzfzx/root-manage.git :refs/tags/${tagName}
-                            """
-                        }
-
-                        // 5. 创建新标签并推送
-                        echo "✅ 创建并推送标签：${tagName}"
-                        bat """
-                           
-                            git tag -a ${tagName} -m "Auto-tagged ${tagName} from dev branch"
-                            git push https://gitee.com/zxzfzx/root-manage.git ${tagName}
+                            git tag -d ${tagName}
+                            git push ${env.PROJECT_NAME} :refs/tags/${tagName}
                         """
                     }
+
+                    // 5. 创建新标签并推送
+                    echo "✅ 创建并推送标签：${tagName}"
+                    bat """
+                        
+                        git tag -a ${tagName} -m "Auto-tagged ${tagName} from dev branch"
+                        git push ${env.PROJECT_NAME} ${tagName}
+                    """
+                }
                 
             }
         }
@@ -110,15 +114,15 @@ pipeline {
             steps {
                 script {
            
-                    def remotePath = "/work/version/root/${env.PROJECT_VERSION}"
+                    def remotePath = "${env.UPLOAD_PATH}${env.PROJECT_VERSION}"
 
-                    echo "📤 Uploading frontend & backend to ${remotePath} on server aliyun..."
+                    echo "📤 Uploading frontend & backend to ${remotePath} on server ${env.SSH_NAME}..."
 
                     // 上传 frontend/dist-dev 目录，并重命名为 root-client
                     sshPublisher(
                         publishers: [
                             sshPublisherDesc(
-                                configName: 'aliyun',
+                                configName: "${env.SSH_NAME}",
                                 transfers: [
                                     // ✅ 创建远程目录（root-client）
                                     sshTransfer(
