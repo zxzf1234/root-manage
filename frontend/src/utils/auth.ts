@@ -49,7 +49,7 @@ export const setServerUrl = (url, port) => {
     CACHE_KEY.SERVER_HTTP_URL,
     'http://' + url + ':' + port + '/' + import.meta.env.VITE_APP_NO + '-server/admin-api'
   )
-  if (import.meta.env.VITE_SERVER_ENV == 'clound') {
+  if (import.meta.env.VITE_SERVER_ENV == 'cloud') {
     wsCache.set(CACHE_KEY.SERVER_WS_URL, 'ws://' + url + ':' + port + '/ws')
   } else {
     wsCache.set(

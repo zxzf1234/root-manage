@@ -209,16 +209,15 @@ const handleClickLogin = async () => {
 }
 
 const getCustomerInfo = async () => {
+  console.log('this is serverEnv ' + serverEnv.value)
   if (serverEnv.value == 'local') {
     // 更新server URL
     authUtil.setServerUrl(import.meta.env.VITE_SERVER_IP, import.meta.env.VITE_SERVER_PORT)
   } else {
     let queryInfo = { projectNo: import.meta.env.VITE_APP_NO, url: '', customerName: '' }
-    if (serverEnv.value == 'local') {
-      queryInfo.url = window.location.href
-    } else {
-      queryInfo.customerName = loginData.loginForm.accountName
-    }
+
+    queryInfo.customerName = loginData.loginForm.accountName
+
     const customerInfo = await axios.post(
       import.meta.env.VITE_ACCOUNT_ROUTER_URL +
         '/devops-server/admin-api/infra/devops/customer/get-single-customer-info',
