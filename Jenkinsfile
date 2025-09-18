@@ -31,8 +31,7 @@ pipeline {
 
                         // 3. 拉取远程标签列表，防止冲突
                         bat """
-                            git config user.name "zhaoxu"
-                            git config user.email "1162291474@qq.com"
+                         
                             git fetch --tags https://gitee.com/zxzfzx/root-manage.git
                         """
 
@@ -50,8 +49,7 @@ pipeline {
                         // 5. 创建新标签并推送
                         echo "✅ 创建并推送标签：${tagName}"
                         bat """
-                            git config user.name "zhaoxu"
-                            git config user.email "1162291474@qq.com"
+                           
                             git tag -a ${tagName} -m "Auto-tagged ${tagName} from dev branch"
                             git push https://gitee.com/zxzfzx/root-manage.git ${tagName}
                         """
