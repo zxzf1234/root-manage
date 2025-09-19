@@ -42,9 +42,6 @@ public class WebAutoConfiguration implements WebMvcConfigurer {
     @Value("${spring.application.name}")
     private String applicationName;
 
-    @Value("${spring.profiles.active}")
-    private String profilesActive;
-
     private final ConfigurableApplicationContext applicationContext;
 
     @Autowired

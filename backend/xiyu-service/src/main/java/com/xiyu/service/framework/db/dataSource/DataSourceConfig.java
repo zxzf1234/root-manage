@@ -30,8 +30,8 @@ public class DataSourceConfig {
     @Value("${spring.datasource.driver-class-name}")
     private String defaultDbDriverClassName;
 
-    @Value("${spring.profiles.active}")
-    private String springProfiles;
+    @Value("${xiyu.server-env}")
+    private String serverEnv;
 
     @Resource
     AccountService accountService;
@@ -52,7 +52,7 @@ public class DataSourceConfig {
 
     private Map<Object, Object> getDateSource() {
         Map<Object, Object> DataSources = new HashMap<>();
-        if(Objects.equals(springProfiles, "local")){
+        if(Objects.equals(serverEnv, "local")){
             DriverManagerDataSource defaultDataSource = new DriverManagerDataSource();
             defaultDataSource.setUrl(defaultDbUrl);
             defaultDataSource.setUsername(defaultDbUsername);

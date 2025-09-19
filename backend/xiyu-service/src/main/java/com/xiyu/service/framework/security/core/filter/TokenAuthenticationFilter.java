@@ -48,8 +48,8 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private AccountService accountService;
 
-    @Value("${spring.profiles.active}")
-    private String springProfiles;
+    @Value("${xiyu.server-env}")
+    private String serverEnv;
 
     @Autowired
     public TokenAuthenticationFilter(Oauth2TokenService oauth2TokenService, SecurityProperties securityProperties, GlobalExceptionHandler globalExceptionHandler) {
@@ -65,7 +65,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         String token = SecurityFrameworkUtils.obtainAuthorization(request, securityProperties.getTokenHeader(), securityProperties.getTokenParameter());
         String accountNo = WebFrameworkUtils.getAccountNo(request);
         // 非本地化环境设置数据库
-        if(!Objects.equals(springProfiles, "local")){
+        if(!Objects.equals(serverEnv, "local")){
             if (accountNo != null) {
                 DatabaseContextHolder.setDatabaseType(accountNo);
                 if(accountService.isExpires(accountNo)){

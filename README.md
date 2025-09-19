@@ -36,7 +36,19 @@
 | [Lombok](https://projectlombok.org/)                                                        | 消除冗长的 Java 代码 | 1.18.34        |
 | [JUnit](https://junit.org/junit5/)                                                          | Java 单元测试框架    | 5.8.2          |
 
-- **前端技术**：Vue 3 + Vben Admin + Naive UI
+- **前端技术**
+  | 框架 | 说明 | 版本 |
+  |----------------------------------------------------------------------|------------------|--------|
+  | [Vue](https://staging-cn.vuejs.org/) | Vue 框架 | 3.2.47 |
+  | [Vite](https://cn.vitejs.dev//) | 开发与构建工具 | 4.2.1 |
+  | [Element Plus](https://element-plus.org/zh-CN/) | Element Plus | 2.9.3 |
+  | [TypeScript](https://www.typescriptlang.org/docs/) | JavaScript 的超集 | 5.0.2 |
+  | [pinia](https://pinia.vuejs.org/) | Vue 存储库 替代 vuex5 | 2.0.34 |
+  | [vueuse](https://vueuse.org/) | 常用工具集 | 9.13.0 |
+  | [vue-i18n](https://kazupon.github.io/vue-i18n/zh/introduction.html/) | 国际化 | 9.2.2 |
+  | [vue-router](https://router.vuejs.org/) | Vue 路由 | 4.1.6 |
+  | [iconify](https://icon-sets.iconify.design/) | 在线图标库 | 3.1.0 |
+  | [tinymce](https://www.wangeditor.com/) | 富文本编辑器 | 6.8.5 |
 
 ## 🌟 内置功能
 

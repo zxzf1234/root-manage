@@ -113,6 +113,7 @@ xiyu:
   error-code: # 错误码相关配置项
     enable: false
   demo: false # 关闭演示模式
+  server-env: local
 
 
   cache:

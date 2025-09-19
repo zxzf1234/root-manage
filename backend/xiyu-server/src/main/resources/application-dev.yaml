@@ -13,6 +13,7 @@ xiyu:
       - ${spring.boot.admin.context-path}/** # 不处理 Spring Boot Admin 的请求
       - ${management.endpoints.web.base-path}/** # 不处理 Actuator 的请求
   demo: false # 开启演示模式
+  server-env: local
 
 
 spring:

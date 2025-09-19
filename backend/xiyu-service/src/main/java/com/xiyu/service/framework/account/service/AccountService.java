@@ -21,8 +21,8 @@ public class AccountService {
     List<AccountInfo> accountInfos = new ArrayList<>();
 
     public AccountService(@Value("${xiyu.account-router_url}") String accountRouterUrl, @Value("${spring.application.number}") String applicationNo,
-                          @Value("${spring.profiles.active}") String springProfiles) throws Exception {
-        if(Objects.equals(springProfiles, "local"))
+                          @Value("${xiyu.server-env}") String serverEnv) throws Exception {
+        if(Objects.equals(serverEnv, "local"))
             return;
         // 从server router获取当前服务器的数据库信息
         String json = "{\"projectNo\":\"" + applicationNo +"\"}";
