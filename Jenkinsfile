@@ -137,10 +137,10 @@ pipeline {
 
                                     // ✅ 上传 WAR 包并重命名
                                     sshTransfer(
-                                        sourceFiles: 'backend/yudao-server/target/*.war',
-                                        removePrefix: 'backend/yudao-server/target/',
+                                        sourceFiles: 'backend/xiyu-server/target/*.war',
+                                        removePrefix: 'backend/xiyu-server/target/',
                                         remoteDirectory: "${remotePath}",
-                                        execCommand: "cd ${remotePath} && rm -f root-server.war && mv yudao-server.war root-server.war",
+                                        execCommand: "cd ${remotePath} && rm -f root-server.war && mv xiyu-server.war root-server.war",
                                         execTimeout: 120000
                                     )
                                 ],
