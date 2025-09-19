@@ -135,15 +135,6 @@ pipeline {
                                         execTimeout: 120000
                                     ),
 
-                                    // ✅ 传 frontend 的 dist-front 目录，重命名为 root-client
-                                    sshTransfer(
-                                        sourceFiles: 'frontend/dist-front/',
-                                        removePrefix: 'frontend/dist-front',
-                                        remoteDirectory: "${remotePath}/front/root-tmp-client/",
-                                        execCommand: "cd ${remotePath}/front && rm -rf root-client && mv root-tmp-client root-client",
-                                        execTimeout: 120000
-                                    ),
-
                                     // ✅ 上传 WAR 包并重命名
                                     sshTransfer(
                                         sourceFiles: 'backend/yudao-server/target/*.war',
