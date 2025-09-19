@@ -22,7 +22,6 @@ public class AccountService {
 
     public AccountService(@Value("${xiyu.account-router_url}") String accountRouterUrl, @Value("${spring.application.number}") String applicationNo,
                           @Value("${xiyu.server-env}") String serverEnv) throws Exception {
-        System.out.println("this is AccountService " + serverEnv);
         if(Objects.equals(serverEnv, "local"))
             return;
         // 从server router获取当前服务器的数据库信息

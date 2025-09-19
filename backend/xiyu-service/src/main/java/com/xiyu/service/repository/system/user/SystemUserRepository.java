@@ -24,7 +24,7 @@ public interface SystemUserRepository extends JRepository<SystemUser, Long>{
                 .where(systemUserTable.mobile().likeIf(reqVO.getMobile()))
                 .where( systemUserTable.status().eqIf(reqVO.getStatus()))
                 .whereIf(reqVO.getCreateTime() != null,  () -> systemUserTable.createTime().between(reqVO.getCreateTime()[0], reqVO.getCreateTime()[1]))
-//                .where(systemUserTable.id().ge(0L))
+                .where(systemUserTable.id().ge(0L))
                 .select(systemUserTable.fetch(SystemUserFetcher.$.allScalarFields().dept(SystemDeptFetcher.$.allScalarFields())))
                 .fetchPage(reqVO.getPageNo() - 1, reqVO.getPageSize());
     }
