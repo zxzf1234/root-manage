@@ -150,7 +150,7 @@ public class CodegenEngine {
 
     public void initGlobalBindingMap() {
         // 全局配置
-        globalBindingMap.put("basePackage", "com.yudao");
+        globalBindingMap.put("basePackage", "com.xiyu");
         // 全局 Java Bean
         globalBindingMap.put("CommonResultClassName", CommonResult.class.getName());
         globalBindingMap.put("PageResultClassName", PageResult.class.getName());

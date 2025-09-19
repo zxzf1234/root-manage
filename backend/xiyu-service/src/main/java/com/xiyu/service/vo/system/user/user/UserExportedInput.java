@@ -13,7 +13,7 @@ public class UserExportedInput  {
     @Schema(description = "手机号码", example = "15601691300")
     private String mobile;
 
-    @Schema(description = "用户账号", example = "yudao")
+    @Schema(description = "用户账号", example = "xiyu")
     private String username;
 
     @Schema(description = "帐号状态（0正常 1停用）", example = "0")

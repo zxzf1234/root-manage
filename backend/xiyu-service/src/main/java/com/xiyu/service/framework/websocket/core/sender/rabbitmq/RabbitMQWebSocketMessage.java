@@ -1,4 +1,4 @@
-//package com.yudao.service.framework.websocket.core.sender.rabbitmq;
+//package com.xiyu.service.framework.websocket.core.sender.rabbitmq;
 //
 //import lombok.Data;
 //

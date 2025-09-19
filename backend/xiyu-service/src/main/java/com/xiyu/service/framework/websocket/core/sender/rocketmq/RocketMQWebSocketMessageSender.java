@@ -1,8 +1,8 @@
-//package com.yudao.service.framework.websocket.core.sender.rocketmq;
+//package com.xiyu.service.framework.websocket.core.sender.rocketmq;
 //
-//import com.yudao.framework.websocket.core.sender.AbstractWebSocketMessageSender;
-//import com.yudao.framework.websocket.core.sender.WebSocketMessageSender;
-//import com.yudao.framework.websocket.core.session.WebSocketSessionManager;
+//import com.xiyu.framework.websocket.core.sender.AbstractWebSocketMessageSender;
+//import com.xiyu.framework.websocket.core.sender.WebSocketMessageSender;
+//import com.xiyu.framework.websocket.core.session.WebSocketSessionManager;
 //import lombok.extern.slf4j.Slf4j;
 //import org.apache.rocketmq.spring.core.RocketMQTemplate;
 //

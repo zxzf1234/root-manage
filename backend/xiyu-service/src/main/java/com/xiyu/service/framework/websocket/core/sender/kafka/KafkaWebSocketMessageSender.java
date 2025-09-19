@@ -1,8 +1,8 @@
-//package com.yudao.service.framework.websocket.core.sender.kafka;
+//package com.xiyu.service.framework.websocket.core.sender.kafka;
 //
-//import com.yudao.framework.websocket.core.sender.AbstractWebSocketMessageSender;
-//import com.yudao.framework.websocket.core.sender.WebSocketMessageSender;
-//import com.yudao.framework.websocket.core.session.WebSocketSessionManager;
+//import com.xiyu.framework.websocket.core.sender.AbstractWebSocketMessageSender;
+//import com.xiyu.framework.websocket.core.sender.WebSocketMessageSender;
+//import com.xiyu.framework.websocket.core.session.WebSocketSessionManager;
 //import lombok.extern.slf4j.Slf4j;
 //import org.springframework.kafka.core.KafkaTemplate;
 //

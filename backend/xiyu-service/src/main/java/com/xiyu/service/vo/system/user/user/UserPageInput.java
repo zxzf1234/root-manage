@@ -15,7 +15,7 @@ public class UserPageInput extends PageParam {
     @DateTimeFormat(pattern = FORMAT_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND)
     private LocalDateTime[] createTime;
 
-    @Schema(description = "用户账号", example = "yudao")
+    @Schema(description = "用户账号", example = "xiyu")
     private String username;
 
     @Schema(description = "部门ID", example = "1")

@@ -1,20 +1,12 @@
-import com.xiyu.server.YudaoServerApplication;
-import com.xiyu.service.model.infra.data.InfraDictType;
+import com.xiyu.server.ServerApplication;
 import com.xiyu.service.repository.infra.data.InfraDictTypeRepository;
 import com.xiyu.service.service.infra.codegen.inner.CodegenEngine;
-import com.xiyu.service.service.infra.data.DictTypeService;
-import com.xiyu.service.service.infra.data.DictTypeServiceImpl;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
-
-import java.util.List;
-import java.util.Optional;
 
 //@Import(DictTypeServiceImpl.class)
-@SpringBootTest(classes = YudaoServerApplication.class)
+@SpringBootTest(classes = ServerApplication.class)
 @Slf4j
 public class DictDataServiceTest {
     @Resource

@@ -1,4 +1,4 @@
-//package com.yudao.service.framework.websocket.core.sender.rocketmq;
+//package com.xiyu.service.framework.websocket.core.sender.rocketmq;
 //
 //import lombok.Data;
 //

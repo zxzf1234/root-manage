@@ -57,7 +57,7 @@ public class OperateLogBaseVO {
     @NotEmpty(message = "浏览器 UserAgent 不能为空")
     private String userAgent;
 
-    @Schema(description = "Java 方法名", required = true, example = "com.yudao.adminserver.UserController.save(...)")
+    @Schema(description = "Java 方法名", required = true, example = "com.xiyu.adminserver.UserController.save(...)")
     @NotEmpty(message = "Java 方法名不能为空")
     private String javaMethod;
 

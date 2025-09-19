@@ -1,4 +1,4 @@
-//package com.yudao.service.framework.websocket.core.sender.rabbitmq;
+//package com.xiyu.service.framework.websocket.core.sender.rabbitmq;
 //
 //import lombok.RequiredArgsConstructor;
 //import org.springframework.amqp.core.ExchangeTypes;
@@ -13,12 +13,12 @@
 //        bindings = @QueueBinding(
 //                value = @Queue(
 //                        // 在 Queue 的名字上，使用 UUID 生成其后缀。这样，启动的 Consumer 的 Queue 不同，以达到广播消费的目的
-//                        name = "${yudao.websocket.sender-rabbitmq.queue}" + "-" + "#{T(java.util.UUID).randomUUID()}",
+//                        name = "${xiyu.websocket.sender-rabbitmq.queue}" + "-" + "#{T(java.util.UUID).randomUUID()}",
 //                        // Consumer 关闭时，该队列就可以被自动删除了
 //                        autoDelete = "true"
 //                ),
 //                exchange = @Exchange(
-//                        name = "${yudao.websocket.sender-rabbitmq.exchange}",
+//                        name = "${xiyu.websocket.sender-rabbitmq.exchange}",
 //                        type = ExchangeTypes.TOPIC,
 //                        declare = "false"
 //                )

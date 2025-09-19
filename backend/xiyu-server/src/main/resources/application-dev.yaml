@@ -43,7 +43,7 @@ jimmer:
 #  show-sql: true
 #  inline-sql-variables: true
   executor-context-prefixes:
-    - com.yudao.service.controller
+    - com.xiyu.service.controller
   dialect: org.babyfish.jimmer.sql.dialect.MySqlDialect
   is-foreign-key-enabled-by-default: false
 

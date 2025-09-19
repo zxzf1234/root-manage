@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Data
 public class SystemUserBase {
 
-    @Schema(description = "用户账号", requiredMode = Schema.RequiredMode.REQUIRED, example = "yudao")
+    @Schema(description = "用户账号", requiredMode = Schema.RequiredMode.REQUIRED, example = "xiyu")
     private String username;
 
     @Schema(description = "密码", example = "2132")
@@ -33,7 +33,7 @@ public class SystemUserBase {
     @Schema(description = "岗位编号数组", example = "[1]")
     private List<Long> postIds;
 
-    @Schema(description = "用户邮箱", example = "yudao@iocoder.cn")
+    @Schema(description = "用户邮箱", example = "xiyu@iocoder.cn")
     private String email;
 
     @Schema(description = "手机号码", example = "15601691300")

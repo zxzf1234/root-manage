@@ -1,4 +1,4 @@
-//package com.yudao.service.framework.websocket.core.sender.kafka;
+//package com.xiyu.service.framework.websocket.core.sender.kafka;
 //
 //import lombok.Data;
 //

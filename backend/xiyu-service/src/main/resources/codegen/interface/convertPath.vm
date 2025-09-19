@@ -1,1 +1,1 @@
-${javaPath}/yudao-service/src/main/java/${basePackage.replaceAll("\.", "/")}/service/convert/${modulePath}/${moduleNameHumpUp}Convert.java
+${javaPath}/xiyu-service/src/main/java/${basePackage.replaceAll("\.", "/")}/service/convert/${modulePath}/${moduleNameHumpUp}Convert.java

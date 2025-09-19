@@ -1,1 +1,1 @@
-${javaPath}/yudao-service/src/main/java/${basePackage.replaceAll("\.", "/")}/service/errorCode/${modulePath}/${nameHumpUp}ErrorCode.java
+${javaPath}/xiyu-service/src/main/java/${basePackage.replaceAll("\.", "/")}/service/errorCode/${modulePath}/${nameHumpUp}ErrorCode.java

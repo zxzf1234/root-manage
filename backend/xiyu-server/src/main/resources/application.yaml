@@ -5,7 +5,7 @@ xiyu:
   account-router_url: http://39.101.174.235:48080/devops-server/admin-api/infra/devops/customer/get-server-customer-info
   web:
     admin-ui:
-      url: http://dashboard.yudao.iocoder.cn # Admin 管理后台 UI 的地址
+      url: http://dashboard.xiyu.iocoder.cn # Admin 管理后台 UI 的地址
   websocket:
     enable: true # websocket的开关
     path: /ws # 路径

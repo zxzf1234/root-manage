@@ -1,9 +1,9 @@
-//package com.yudao.service.framework.websocket.core.sender.redis;
+//package com.xiyu.service.framework.websocket.core.sender.redis;
 //
-//import com.yudao.framework.mq.redis.core.RedisMQTemplate;
-//import com.yudao.framework.websocket.core.sender.AbstractWebSocketMessageSender;
-//import com.yudao.framework.websocket.core.sender.WebSocketMessageSender;
-//import com.yudao.framework.websocket.core.session.WebSocketSessionManager;
+//import com.xiyu.framework.mq.redis.core.RedisMQTemplate;
+//import com.xiyu.framework.websocket.core.sender.AbstractWebSocketMessageSender;
+//import com.xiyu.framework.websocket.core.sender.WebSocketMessageSender;
+//import com.xiyu.framework.websocket.core.session.WebSocketSessionManager;
 //import lombok.extern.slf4j.Slf4j;
 //
 ///**

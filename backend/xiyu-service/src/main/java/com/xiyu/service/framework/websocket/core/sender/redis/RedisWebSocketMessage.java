@@ -1,6 +1,6 @@
-//package com.yudao.service.framework.websocket.core.sender.redis;
+//package com.xiyu.service.framework.websocket.core.sender.redis;
 //
-//import com.yudao.framework.mq.redis.core.pubsub.AbstractRedisChannelMessage;
+//import com.xiyu.framework.mq.redis.core.pubsub.AbstractRedisChannelMessage;
 //import lombok.Data;
 //
 ///**

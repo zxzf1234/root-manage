@@ -125,7 +125,7 @@ public class WebSecurityConfigurerAdapter {
                         .requestMatchers(HttpMethod.POST, permitAllUrls.get(HttpMethod.POST).toArray(new String[0])).permitAll()
                         .requestMatchers(HttpMethod.PUT, permitAllUrls.get(HttpMethod.PUT).toArray(new String[0])).permitAll()
                         .requestMatchers(HttpMethod.DELETE, permitAllUrls.get(HttpMethod.DELETE).toArray(new String[0])).permitAll()
-                        // 1.3 基于 yudao.security.permit-all-urls 无需认证
+                        // 1.3 基于 xiyu.security.permit-all-urls 无需认证
                         .requestMatchers(securityProperties.getPermitAllUrls().toArray(new String[0])).permitAll()
                         // 1.4 设置 App API 无需认证
                         .requestMatchers(buildAppApi("/**")).permitAll()

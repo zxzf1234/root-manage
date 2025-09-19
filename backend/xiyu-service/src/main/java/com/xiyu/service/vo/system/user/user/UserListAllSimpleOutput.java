@@ -7,7 +7,7 @@ import lombok.*;
 @Data
 public class UserListAllSimpleOutput  {
 
-    @Schema(description = "用户昵称", example = "yudao")
+    @Schema(description = "用户昵称", example = "xiyu")
     private String nickname;
 
     @Schema(description = "主键ID")

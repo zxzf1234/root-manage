@@ -17,7 +17,7 @@ import static com.xiyu.service.util.date.DateUtils.FORMAT_YEAR_MONTH_DAY_HOUR_MI
 @ToString(callSuper = true)
 public class FilePageReqVO extends PageParam {
 
-    @Schema(description = "文件路径,模糊匹配", example = "yudao")
+    @Schema(description = "文件路径,模糊匹配", example = "xiyu")
     private String path;
 
     @Schema(description = "文件类型,模糊匹配", example = "application/octet-stream")
