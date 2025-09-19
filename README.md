@@ -11,6 +11,7 @@
    - 前端支持管理页面、编辑页面的模板快速生成
 2. 菜单管理、字典管理、定时任务等功能支持自动生成 sql 升级文件，无需手动维护
 3. 前端参考 pure-admin 前端框架，重写优化了 Table、InputNumber 等组件
+4. 基于 ruoyi-pro 修改
 
 ## 🛠️ 技术架构
 
@@ -49,6 +50,11 @@
   | [vue-router](https://router.vuejs.org/) | Vue 路由 | 4.1.6 |
   | [iconify](https://icon-sets.iconify.design/) | 在线图标库 | 3.1.0 |
   | [tinymce](https://www.wangeditor.com/) | 富文本编辑器 | 6.8.5 |
+
+## 🔥 项目启动和打包部署
+
+[点我进入项目启动教程](./README.devops.md)
+[点我进入打包部署教程](./README.pack.md)
 
 ## 🌟 内置功能
 

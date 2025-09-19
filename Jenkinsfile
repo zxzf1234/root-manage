@@ -4,7 +4,7 @@ pipeline {
     environment {
         // 打包完成后上传到服务器的路径
         UPLOAD_PATH = '/work/version/root/'
-        // git的url 用于创建标签
+        // jenkins中配置的要上传的服务器名称
         SSH_NAME = 'aliyun'
     }
 
