@@ -2,6 +2,10 @@ pipeline {
     agent any
     
     environment {
+        // 项目编号
+        PROJECT_NO = 'root'
+        // 前端打包环境
+        FRONT_ENV = 'dev'
         // 打包完成后上传到服务器的路径
         UPLOAD_PATH = '/work/version/root/'
         // jenkins中配置的要上传的服务器名称
@@ -27,7 +31,7 @@ pipeline {
                     }
 
                     // 2. 构造标签名
-                    def tagName = "v.root.${env.PROJECT_VERSION}"
+                    def tagName = "v.${PROJECT_NO}.${env.PROJECT_VERSION}"
                     echo "🏷️ 准备创建 Git 标签：${tagName}"
 
                     // 3. 拉取远程标签列表，防止冲突
@@ -59,7 +63,7 @@ pipeline {
         }
 
         // 前端打包
-        stage('Frontend Build dev') {
+        stage('Frontend Build') {
             steps {
                 dir('frontend') {
                     echo 'Installing frontend dependencies...'
@@ -67,7 +71,7 @@ pipeline {
                     bat 'pnpm install --no-frozen-lockfile'
 
                     echo 'Building frontend...'
-                    bat 'npm run build:dev'
+                    bat "npm run build:${FRONT_ENV}"
                 }
             }
         }
@@ -114,24 +118,24 @@ pipeline {
 
                     echo "📤 Uploading frontend & backend to ${remotePath} on server ${env.SSH_NAME}..."
 
-                    // 上传 frontend/dist-dev 目录，并重命名为 root-client
+                    // 上传 frontend/dist 目录，并重命名
                     sshPublisher(
                         publishers: [
                             sshPublisherDesc(
                                 configName: "${env.SSH_NAME}",
                                 transfers: [
-                                    // ✅ 创建远程目录（root-client）
+                                    // ✅ 创建远程目录
                                     sshTransfer(
                                         sourceFiles: '',
-                                        execCommand: "mkdir -p ${remotePath} && mkdir -p ${remotePath}/front && mkdir -p ${remotePath}/dev",
+                                        execCommand: "mkdir -p ${remotePath} && mkdir -p ${remotePath}/front && mkdir -p ${remotePath}/${FRONT_ENV}",
                                         execTimeout: 120000
                                     ),
-                                    // ✅ 传 frontend 的 dist-dev 目录，重命名为 root-client
+                                    // ✅ 传 frontend 的 dist 目录，重命名
                                     sshTransfer(
-                                        sourceFiles: 'frontend/dist-dev/',
-                                        removePrefix: 'frontend/dist-dev',
-                                        remoteDirectory: "${remotePath}/dev/root-tmp-client/",
-                                        execCommand: "cd ${remotePath}/dev && rm -rf root-client && mv root-tmp-client root-client",
+                                        sourceFiles: "frontend/dist-${FRONT_ENV}/",
+                                        removePrefix: "frontend/dist-${FRONT_ENV}",
+                                        remoteDirectory: "${remotePath}/${FRONT_ENV}/${PROJECT_NO}-tmp-client/",
+                                        execCommand: "cd ${remotePath}/${FRONT_ENV} && rm -rf ${PROJECT_NO}-client && mv ${PROJECT_NO}-tmp-client ${PROJECT_NO}-client",
                                         execTimeout: 120000
                                     ),
 
@@ -140,7 +144,7 @@ pipeline {
                                         sourceFiles: 'backend/xiyu-server/target/*.war',
                                         removePrefix: 'backend/xiyu-server/target/',
                                         remoteDirectory: "${remotePath}",
-                                        execCommand: "cd ${remotePath} && rm -f root-server.war && mv xiyu-server.war root-server.war",
+                                        execCommand: "cd ${remotePath} && rm -f ${PROJECT_NO}-server.war && mv xiyu-server.war ${PROJECT_NO}-server.war",
                                         execTimeout: 120000
                                     )
                                 ],

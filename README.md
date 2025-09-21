@@ -1,7 +1,7 @@
 <p align="center">
 	<img alt="logo" src="frontend/src/assets/imgs/favicon.ico" />
 </p>
-<h1 align="center" style="margin: 30px 0 30px; font-weight: bold;">XiYu v0.0.1</h1>
+<h1 align="center" style="margin: 30px 0 30px; font-weight: bold;">希语后台管理系统</h1>
 <h4 align="center">基于SpringBoot开发的后台管理系统脚手架</h4>
 
 ## ✨ 核心亮点
@@ -105,6 +105,13 @@
 	
 </table>
 
-## 交流群
+## 🐳 项目扩展
+
+- 房屋管理系统 https://gitee.com/zxzfzx/room-manage.git
+- 运维管理系统 https://gitee.com/zxzfzx/devpos-manage.git
+- 养老院管理系统 https://gitee.com/zxzfzx/retirement-manage.git
+- 外贸 CRM https://gitee.com/zxzfzx/crm_manage.git
+
+## 🤝 交流群
 
 QQ 群： [![加入QQ群](https://img.shields.io/badge/1063807447-blue.svg)](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=WqsGDxpGkqOPeWGOf3I32f_rXxdhqYNr&authKey=kvdF5df7PO9bzWxmixKhZN6ShsECBiuGUmmzTZBWVr2MVOfJ8%2F4oD0Gws0rbgYfz&noverify=0&group_code=140284548)

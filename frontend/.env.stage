@@ -12,7 +12,7 @@ VITE_DROP_CONSOLE=true
 # 是否sourcemap
 VITE_SOURCEMAP=false
 
-# 打包路径
+# 后端请求路径
 VITE_BASE_PATH=/
 
 # 输出路径
