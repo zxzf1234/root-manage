@@ -40,9 +40,9 @@ pipeline {
                     """
 
                     // 4. 检查标签是否存在
-                    def tagExists = bat(script: "git tag --list ${tagName}", returnStdout: true).trim()
+                    def tagExists = bat(script: "git rev-parse -q --verify refs/tags/${tagName}", returnStatus: true)
 
-                    if (tagExists) {
+                    if (tagExists == 0) {
                         echo "⚠️ 标签 '${tagName}' 已存在，准备删除并重新创建..."
                         bat """
                             git tag -d ${tagName}
