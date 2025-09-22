@@ -54,7 +54,7 @@ pipeline {
                     echo "✅ 创建并推送标签：${tagName}"
                     bat """
                         
-                        git tag -a ${tagName} -m "Auto-tagged ${tagName} from dev branch"
+                        git tag ${tagName}
                         git push origin ${tagName}
                     """
                 }

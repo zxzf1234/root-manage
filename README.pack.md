@@ -68,9 +68,14 @@ nginx -s reload
 #### 后端部署
 
 - 修改 tomcat 配置
+
   - 打开 conf/server.xml,将端口修改为 48080（注意 打开服务器的外网 48080 端口）
+
     <img src="frontend/src/assets/imgs/tomcatServer.png"/>
+
   - 打开 conf/context.xml,增加 Paramter
+
     <img src="frontend/src/assets/imgs/tomcatContext.png"/>
+
 - 将 xiyu-server.war 放到 webapps 文件夹下，重命名为 root-server
 - 执行 bin/startup.sh，启动 tomcat
