@@ -16,6 +16,7 @@ import com.xiyu.service.service.system.role.RoleService;
 import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
 import org.babyfish.jimmer.sql.ast.mutation.SaveMode;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,6 +47,7 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Resource
     private RoleService roleService;
+
     @Resource
     private MenuService menuService;
 
@@ -58,13 +60,9 @@ public class PermissionServiceImpl implements PermissionService {
             return Collections.emptyList();
         }
 
-        if (roleService.hasAnyRoot(roleIds)) {
-            return menuService.getMenuList(menuTypes, menusStatuses, null);
-        }
-
         // 判断角色是否包含超级管理员。如果是超级管理员，获取到全部
         if (roleService.hasAnySuperAdmin(roleIds)) {
-            return menuService.getMenuList(menuTypes, menusStatuses, false);
+            return menuService.getMenuList(menuTypes, menusStatuses);
         }
 
         // 获得角色拥有的菜单关联
@@ -94,9 +92,6 @@ public class PermissionServiceImpl implements PermissionService {
         // 如果是管理员的情况下，获取全部菜单编号
         if (roleService.hasAnySuperAdmin(Collections.singletonList(roleId))) {
             return convertList(systemMenuRepository.findAllExcludeBack(), SystemMenu::id);
-        }
-        if (roleService.hasAnyRoot(Collections.singletonList(roleId))) {
-            return convertList(systemMenuRepository.findAll(), SystemMenu::id);
         }
 
         // 如果是非管理员的情况下，获得拥有的菜单编号
@@ -202,10 +197,6 @@ public class PermissionServiceImpl implements PermissionService {
             return true;
         }
 
-        if (roleService.hasAnyRoot(roleIds)) {
-            return true;
-        }
-
         // 遍历权限，判断是否有一个满足
         return Arrays.stream(permissions).anyMatch(permission -> {
             List<SystemMenu> menuList = menuService.getMenuListByPermissionFromCache(permission);
@@ -236,9 +227,6 @@ public class PermissionServiceImpl implements PermissionService {
             return true;
         }
 
-        if (roleService.hasAnyRoot(roleIds)) {
-            return true;
-        }
         Set<String> userRoles = convertSet(roleService.getRoleListFrom(roleIds),
                 SystemRole::code);
         return CollUtil.containsAny(userRoles, Sets.newHashSet(roles));

@@ -63,12 +63,9 @@ export const CommonStatusEnum = {
 
 /**
  * 角色标识
- * @param ROOT root
  * @param SUPER_ADMIN 超级管理员
  */
 export const SystemRoleCodeEnum = {
-  //root
-  ROOT: 'root',
   //超级管理员
   SUPER_ADMIN: 'super_admin'
 }

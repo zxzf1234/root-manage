@@ -211,15 +211,6 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public boolean hasAnyRoot(Collection<Long> ids) {
-        Collection<SystemRole> roleList = getRoleListFrom(ids);
-        if (CollectionUtil.isEmpty(roleList)) {
-            return false;
-        }
-        return roleList.stream().anyMatch(role -> ObjectUtils.equalsAny(role.code(), SystemRoleCodeEnum.ROOT.getValue()));
-    }
-
-    @Override
     public List<SystemRole> getRoleListFrom(Collection<Long> ids) {
         if (CollectionUtil.isEmpty(ids)) {
             return Collections.emptyList();

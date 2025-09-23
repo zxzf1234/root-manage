@@ -14,6 +14,7 @@ import com.xiyu.service.convert.infra.data.MenuConvert;
 import com.google.common.annotations.VisibleForTesting;
 import lombok.extern.slf4j.Slf4j;
 import org.babyfish.jimmer.sql.ast.mutation.DeleteMode;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,6 +50,9 @@ public class MenuServiceImpl implements MenuService {
 
     @Resource
     private CodegenEngine codegenEngine;
+
+    @Value("${spring.profiles.active}")
+    private String profile;
 
     @Override
     public UUID createMenu(MenuCreateReqVO reqVO) {
@@ -106,16 +110,16 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public List<SystemMenu> getMenuList(MenuListReqVO reqVO) {
-        return systemMenuRepository.selectList(reqVO, getLoginUserId());
+        return systemMenuRepository.selectList(reqVO, getLoginUserId(), profile.equals("local"));
     }
 
     @Override
-    public List<SystemMenu> getMenuList(Collection<Integer> menuTypes, Collection<Integer> menusStatuses, Boolean showBack) {
+    public List<SystemMenu> getMenuList(Collection<Integer> menuTypes, Collection<Integer> menusStatuses) {
         // 任一一个参数为空，则返回空
         if (CollectionUtils.isAnyEmpty(menuTypes, menusStatuses)) {
             return Collections.emptyList();
         }
-        return systemMenuRepository.findByTypeInAndStatusIn(menuTypes, menusStatuses, showBack);
+        return systemMenuRepository.findByTypeInAndStatusIn(menuTypes, menusStatuses, profile.equals("local"));
     }
 
     @Override

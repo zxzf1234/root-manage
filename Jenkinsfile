@@ -85,7 +85,7 @@ pipeline {
                     // sh "mvn -Dmaven.test.failure.ignore=true clean package"
 
                     // To run Maven on a Windows agent, use
-                    bat "mvn clean package -T 1C -Dmaven.test.skip=true -Dmaven.compile.fork-true"
+                    bat "mvn clean package -T 1C -Dmaven.test.skip=true -Dmaven.compile.fork=true"
                 }
             }
         }
@@ -139,12 +139,12 @@ pipeline {
                                         execTimeout: 120000
                                     ),
 
-                                    // ✅ 上传 WAR 包并重命名
+                                    // ✅ 上传 Jar 包并重命名
                                     sshTransfer(
-                                        sourceFiles: 'backend/xiyu-server/target/*.war',
+                                        sourceFiles: 'backend/xiyu-server/target/*.jar',
                                         removePrefix: 'backend/xiyu-server/target/',
                                         remoteDirectory: "${remotePath}",
-                                        execCommand: "cd ${remotePath} && rm -f ${PROJECT_NO}-server.war && mv xiyu-server.war ${PROJECT_NO}-server.war",
+                                        execCommand: "cd ${remotePath} && rm -f ${PROJECT_NO}-server.jar && mv xiyu-server.jar ${PROJECT_NO}-server.jar",
                                         execTimeout: 120000
                                     )
                                 ],

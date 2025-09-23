@@ -12,12 +12,12 @@ import java.util.UUID;
 
 public interface SystemMenuRepository extends JRepository<SystemMenu, UUID> {
     SystemMenuTable systemMenuTable = SystemMenuTable.$;
-    default List<SystemMenu> selectList(MenuListReqVO reqVO, Long userId){
+    default List<SystemMenu> selectList(MenuListReqVO reqVO, Long userId, Boolean showBack){
         return sql()
                 .createQuery(systemMenuTable)
                 .where(systemMenuTable.status().eqIf(reqVO.getStatus()))
                 .where(systemMenuTable.name().eqIf(reqVO.getName()))
-                .whereIf(userId != -1, systemMenuTable.backShow().eq(false))
+                .whereIf(!showBack, systemMenuTable.backShow().eq(false))
                 .select(systemMenuTable)
                 .execute();
     };
@@ -32,7 +32,7 @@ public interface SystemMenuRepository extends JRepository<SystemMenu, UUID> {
         return sql().createQuery(systemMenuTable)
                 .where(systemMenuTable.type().in(types))
                 .where(systemMenuTable.status().in(statuses))
-                .where(systemMenuTable.backShow().eqIf(showBack))
+                .whereIf(!showBack, systemMenuTable.backShow().eq(false))
                 .select(systemMenuTable)
                 .execute();
     };

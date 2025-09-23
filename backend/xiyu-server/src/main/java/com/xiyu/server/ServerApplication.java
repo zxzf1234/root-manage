@@ -8,7 +8,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import java.util.concurrent.TimeUnit;
 
 @SpringBootApplication(scanBasePackages = {"com.xiyu.server","com.xiyu.service"})
-public class ServerApplication extends SpringBootServletInitializer {
+public class ServerApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(ServerApplication.class, args);
