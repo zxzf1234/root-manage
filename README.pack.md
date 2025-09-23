@@ -12,7 +12,7 @@
 mvn clean package -T 1C -Dmaven.test.skip=true -Dmaven.compile.fork-true
 ```
 
-- 打包完毕会在 backend\xiyu-server\target 文件夹下生成 xiyu-server.war
+- 打包完毕会在 backend\xiyu-server\target 文件夹下生成 xiyu-server.jar
 
 #### 前端打包
 
@@ -67,15 +67,8 @@ nginx -s reload
 
 #### 后端部署
 
-- 修改 tomcat 配置
-
-  - 打开 conf/server.xml,将端口修改为 48080（注意 打开服务器的外网 48080 端口）
-
-    <img src="frontend/src/assets/imgs/tomcatServer.png"/>
-
-  - 打开 conf/context.xml,增加 Paramter
-
-    <img src="frontend/src/assets/imgs/tomcatContext.png"/>
-
-- 将 xiyu-server.war 放到 webapps 文件夹下，重命名为 root-server
-- 执行 bin/startup.sh，启动 tomcat
+- 上传 xiyu-server.jar和deploy.sh文件,将xiyu-server.jar重命名为root-server.jar
+- 执行命令
+```
+sh deploy.sh
+```
