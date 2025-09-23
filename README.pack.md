@@ -48,7 +48,6 @@ npm run build:dev
 
 - 安装 mysql、redis、jdk，版本和编译环境的版本保持一致
 - 安装 nginx
-- 安装 tomcat
 
 #### 前端部署
 
@@ -59,7 +58,7 @@ npm run build:dev
 chown nginx:nginx root-client/
 ```
 
-- 配置 nginx，打开 nginx.conf,修改后执行命令重新加载 nginx 配置
+- 配置 nginx，打开 nginx.conf,参考[nginx.conf](./nginx.conf)修改， 修改后执行命令重新加载 nginx 配置
 
 ```
 nginx -s reload
