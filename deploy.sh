@@ -23,7 +23,7 @@ JAVA_OPS="-Xms64m -Xmx512m -Xss256k -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDump
 
 # 停止：优雅关闭之前已经启动的服务
 function stop() {
-    echo "[stop] 开始停止 $BASE_PATH/$SERVER_NAME"
+    echo "[stop]  开始停止 $BASE_PATH/$SERVER_NAME"
     PID=$(ps -ef | grep $BASE_PATH/$SERVER_NAME | grep -v "grep" | awk '{print $2}')
     # 如果 Java 服务启动中，则进行关闭
     if [ -n "$PID" ]; then
