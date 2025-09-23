@@ -1,7 +1,7 @@
 server:
   port: 48080
   servlet:
-    context-path:
+    context-path: /${spring.application.number}-server
 
 --- #################### 希语相关配置 ####################
 
