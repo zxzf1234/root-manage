@@ -22,7 +22,7 @@ spring:
     name: root_manage
     url: jdbc:mysql://127.0.0.1:3306/${spring.datasource.name}?useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&nullCatalogMeansCurrent=true # MySQL Connector/J 8.X 连接的示例
     username: root
-    password: KQ+i7Oy_e9sS
+    password: 3WLiVUBEwTbvAfsh
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       minimum-idle: 5
