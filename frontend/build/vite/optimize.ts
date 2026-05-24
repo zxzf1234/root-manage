@@ -2,7 +2,6 @@ const include = [
   'qs',
   'url',
   'vue',
-  'sass',
   'mitt',
   'axios',
   'pinia',
