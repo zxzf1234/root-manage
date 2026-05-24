@@ -8,6 +8,7 @@ import Sortable from 'sortablejs'
 import DragIcon from './svg/drag.svg?component'
 import { cloneDeep, isBoolean, isFunction, getKeyList, debounce } from '@pureadmin/utils'
 import { useTableStoreWithOut } from '@/store/modules/table'
+import { useContextMenu } from './useContextMenu'
 
 export default defineComponent({
   name: 'Table',
@@ -201,7 +202,12 @@ export default defineComponent({
       checkedColumns.value = getKeyList(cloneDeep(unref(columns)), 'label')
       saveColumns()
     }
+
     const tableRef = ref<Element | null>(null)
+    const { menuOption, menuSlot, showMouseMenu, disableContextMenu } = useContextMenu(
+      emit,
+      tableRef
+    )
     const getTableRef = () => {
       if (tableRef == null) return null
       else return tableRef.value?.getTableRef()
@@ -318,25 +324,6 @@ export default defineComponent({
         window.removeEventListener('resize', debounceSetAdaptive)
       }
     })
-    const menuOption = ref({
-      show: false,
-      option: { zIndex: 3000, minWidth: 130, x: 500, y: 200, theme: 'default' }
-    })
-    let menuSlot = slots?.['menu']?.({ row: {} })
-    function showMouseMenu(row, column, event) {
-      if (menuSlot == undefined || menuSlot?.length <= 0) return
-      event.preventDefault()
-      const { x, y } = event
-      menuOption.value.show = true
-      menuOption.value.option.x = x
-      menuOption.value.option.y = y
-      menuSlot = slots?.['menu']?.({ row: row })
-      tableRef.value?.getTableRef().setCurrentRow(row)
-      emit('row-contextmenu', row, column, event)
-    }
-    function disableContextMenu(event) {
-      event.preventDefault()
-    }
 
     return () => (
       <>
@@ -355,7 +342,7 @@ export default defineComponent({
           {slots}
         </PureTable>
         <ContextMenu v-model:show={menuOption.value.show} options={menuOption.value.option}>
-          <div onContextmenu={disableContextMenu}>{menuSlot}</div>
+          <div onContextmenu={disableContextMenu}>{menuSlot.value}</div>
         </ContextMenu>
       </>
     )
