@@ -1,205 +1,269 @@
 import Sortable from 'sortablejs'
-import { cloneDeep, isBoolean, isFunction } from '@pureadmin/utils'
+import { h, resolveComponent } from 'vue'
+import { Icon } from '@/components/Icon'
+import { cloneDeep, isBoolean, isFunction, getKeyList } from '@pureadmin/utils'
 import { useTableStoreWithOut } from '@/store/modules/table'
-import { createSettingHeader } from './render/settingHeader'
+import DragIcon from './svg/drag.svg?component'
 import type { TableProps } from './props'
 
 export function useColumns(props: TableProps) {
+  const { columns, saveKey } = toRefs(props)
+  const lastColumnLabel = ref('')
   const tableStore = useTableStoreWithOut()
 
-  const sortableInstance = ref<Sortable | null>(null)
-
-  const dynamicColumns = ref<any[]>([])
-
-  const getColumnKey = (column: any) => column.label
-
-  const isColumnHidden = (column: any) => {
-    return isBoolean(column?.hide) ? column.hide : isFunction(column?.hide) && column.hide()
-  }
-
-  const getSavedColumns = () => {
-    if (!props.saveKey) {
-      return cloneDeep(props.columns)
-    }
-
-    const cacheColumns = tableStore?.[props.saveKey]?.column
-
-    if (!cacheColumns) {
-      return cloneDeep(props.columns)
-    }
-
-    const originColumns = cloneDeep(props.columns)
-
-    const originMap = new Map(originColumns.map((item) => [getColumnKey(item), item]))
-
-    const result: any[] = []
-
-    cacheColumns.forEach((cacheItem) => {
-      const key = getColumnKey(cacheItem)
-
-      if (originMap.has(key)) {
-        const column = originMap.get(key) as any
-
-        column.hide = cacheItem.hide
-
-        result.push(column)
-
-        originMap.delete(key)
+  const getDynamicColumns = () => {
+    if (unref(saveKey) && tableStore?.[unref(saveKey)]?.['column']) {
+      const saveColumn = tableStore[unref(saveKey)]['column']
+      const currentColumns = []
+      const saveLabel = getKeyList(saveColumn, 'label')
+      const originLabel = getKeyList(unref(columns), 'label')
+      const originColumns = cloneDeep(unref(columns))
+      let y = 0
+      for (let i = 0; i < saveLabel.length; i++) {
+        if (originLabel.indexOf(saveLabel[i]) >= 0) {
+          currentColumns[y] = originColumns[originLabel.indexOf(saveLabel[i])]
+          currentColumns[y].hide = saveColumn[i].hide
+          y++
+        }
       }
-    })
-
-    originMap.forEach((item) => {
-      result.push(item)
-    })
-
-    return result
+      for (let i = 0; i < originLabel.length; i++) {
+        if (saveLabel.indexOf(originLabel[i]) == -1) {
+          currentColumns[y] = originColumns[i]
+          y++
+        }
+      }
+      return currentColumns
+    } else return cloneDeep(unref(columns))
   }
 
-  dynamicColumns.value = getSavedColumns()
-
+  const dynamicColumns = ref(getDynamicColumns())
   watch(
-    () => props.columns,
-    () => {
-      dynamicColumns.value = getSavedColumns()
+    () => unref(columns),
+    (newColumn) => {
+      if (unref(saveKey) && tableStore?.[unref(saveKey)]?.['column']) {
+        const saveColumn = tableStore[unref(saveKey)]['column']
+        const currentColumns = []
+        const saveLabel = getKeyList(saveColumn, 'label')
+        const originLabel = getKeyList(newColumn, 'label')
+        const originColumns = cloneDeep(newColumn)
+        let y = 0
+        for (let i = 0; i < saveLabel.length; i++) {
+          if (originLabel.indexOf(saveLabel[i]) >= 0) {
+            currentColumns[y] = originColumns[originLabel.indexOf(saveLabel[i])]
+            currentColumns[y].hide = saveColumn[i].hide
+            y++
+          }
+        }
+        for (let i = 0; i < originLabel.length; i++) {
+          if (saveLabel.indexOf(originLabel[i]) == -1) {
+            currentColumns[y] = originColumns[i]
+            y++
+          }
+        }
+        dynamicColumns.value = currentColumns
+      } else dynamicColumns.value = cloneDeep(unref(columns))
     },
-    {
-      deep: true
-    }
+    { deep: true }
+  )
+  let checkColumnList = getKeyList(cloneDeep(unref(dynamicColumns)), 'label')
+  const filterColumns = cloneDeep(unref(dynamicColumns)).filter((column) =>
+    isBoolean(column?.hide) ? !column.hide : !(isFunction(column?.hide) && column?.hide())
   )
 
-  const checkedColumns = computed(() => {
-    return dynamicColumns.value
-      .filter((item) => !isColumnHidden(item))
-      .map((item) => getColumnKey(item))
-  })
+  const checkedColumns = ref(getKeyList(cloneDeep(filterColumns), 'label'))
+
+  const rowDrop = (event: { preventDefault: () => void }) => {
+    event.preventDefault()
+    nextTick(() => {
+      const wrapper = document.querySelector(
+        ".el-checkbox-group[savekey='" + unref(saveKey) + "']>div"
+      )
+      Sortable.create(wrapper, {
+        animation: 300,
+        handle: '.drag-btn',
+        onEnd: ({ newIndex, oldIndex, item }) => {
+          const targetThElem = item
+          const wrapperElem = targetThElem.parentNode as HTMLElement
+          const oldColumn = dynamicColumns.value[oldIndex]
+          const newColumn = dynamicColumns.value[newIndex]
+          if (oldColumn?.fixed || newColumn?.fixed) {
+            // Fixed columns cannot be dragged.
+            const oldThElem = wrapperElem.children[oldIndex] as HTMLElement
+            if (newIndex > oldIndex) {
+              wrapperElem.insertBefore(targetThElem, oldThElem)
+            } else {
+              wrapperElem.insertBefore(
+                targetThElem,
+                oldThElem ? oldThElem.nextElementSibling : oldThElem
+              )
+            }
+            return
+          }
+          const currentRow = dynamicColumns.value.splice(oldIndex, 1)[0]
+          dynamicColumns.value.splice(newIndex, 0, currentRow)
+          moveSettingButton()
+        }
+      })
+    })
+  }
+
+  function handleCheckColumnListChange(val: boolean, label: string) {
+    dynamicColumns.value.filter((item) => item.label === label)[0].hide = !val
+    // moveSettingButton()
+  }
+
+  const isFixedColumn = (label: string) => {
+    return dynamicColumns.value.filter((item) => item.label === label)[0].fixed ? true : false
+  }
+
+  const moveSettingButton = () => {
+    if (!unref(saveKey)) {
+      return
+    }
+    let currentSettingColumnIndex = 0
+    let lastColumnIndex = 0
+    for (let i = 0; i < unref(dynamicColumns).length; i++) {
+      if (!unref(dynamicColumns)[i].hide) lastColumnIndex = i
+      if (unref(dynamicColumns)[i].headerRenderer) currentSettingColumnIndex = i
+    }
+    if (currentSettingColumnIndex != lastColumnIndex) {
+      lastColumnLabel.value = unref(dynamicColumns)[lastColumnIndex].label
+      unref(dynamicColumns)[lastColumnIndex].headerRenderer = settingHeader
+
+      unref(dynamicColumns)[currentSettingColumnIndex].headerRenderer = null
+    }
+    saveColumns()
+  }
 
   const saveColumns = () => {
-    if (!props.saveKey) {
-      return
+    if (tableStore[unref(saveKey)]) {
+      const tableCache = tableStore[unref(saveKey)]
+      tableCache['column'] = unref(dynamicColumns)
+      tableStore.setTableCache(unref(saveKey), tableCache)
+    } else {
+      tableStore.setTableCache(unref(saveKey), { column: unref(dynamicColumns) })
     }
-
-    const cache = tableStore[props.saveKey] || {}
-
-    cache.column = cloneDeep(dynamicColumns.value)
-
-    tableStore.setTableCache(props.saveKey, cache)
   }
 
-  const handleCheckColumnListChange = (value: boolean, key: string) => {
-    const target = dynamicColumns.value.find((item) => getColumnKey(item) === key)
-
-    if (!target) {
-      return
-    }
-
-    target.hide = !value
-
-    saveColumns()
-  }
-
-  const isFixedColumn = (key: string) => {
-    const column = dynamicColumns.value.find((item) => getColumnKey(item) === key)
-
-    return !!column?.fixed
-  }
-
-  const resetColumns = () => {
-    dynamicColumns.value = cloneDeep(props.columns)
-
-    saveColumns()
-  }
-
-  const columnsCom = computed(() => {
-    const columns = cloneDeep(dynamicColumns.value)
-
-    if (!props.saveKey) {
-      return columns
-    }
-
-    const visibleColumns = columns.filter((item) => !isColumnHidden(item))
-
-    const lastColumn = visibleColumns[visibleColumns.length - 1]
-
-    if (!lastColumn) {
-      return columns
-    }
-
-    lastColumn.headerRenderer = createSettingHeader({
-      props,
-      label: lastColumn.label,
-      checkedColumns,
-      dynamicColumns,
-      resetColumns,
-      handleCheckColumnListChange,
-      isFixedColumn,
-      initColumnSortable,
-      saveColumns,
-      getColumnKey
-    })
-
-    return columns
+  const topClass = computed(() => {
+    return [
+      'flex',
+      'justify-between',
+      'pt-[3px]',
+      'px-[11px]',
+      'border-b-[1px]',
+      'border-solid',
+      'border-[#dcdfe6]',
+      'dark:border-[#303030]'
+    ]
   })
 
-  const initColumnSortable = async () => {
-    await nextTick()
+  async function onColumnsReset() {
+    dynamicColumns.value = cloneDeep(unref(columns))
+    checkColumnList = []
+    checkColumnList = await getKeyList(cloneDeep(unref(columns)), 'label')
+    checkedColumns.value = getKeyList(cloneDeep(unref(columns)), 'label')
+    saveColumns()
+  }
 
-    if (sortableInstance.value) {
-      return
-    }
+  const SettingReference = {
+    reference: () =>
+      h(
+        resolveComponent('ElButton') as any,
+        { class: 'float-right', link: true, type: 'primary' },
+        () => h(Icon, { icon: 'ep:setting' })
+      )
+  }
 
-    const wrapper = document.querySelector(
-      `.el-checkbox-group[savekey='${props.saveKey}'] > div`
-    ) as HTMLElement
+  const settingHeader = () => {
+    return h('div', null, [
+      unref(lastColumnLabel),
+      h(
+        resolveComponent('ElPopover') as any,
+        {
+          placement: 'bottom-start',
+          width: '160',
+          trigger: 'click'
+        },
+        {
+          ...SettingReference,
+          default: () => [
+            h('div', { class: [topClass.value] }, [
+              h(
+                resolveComponent('ElButton') as any,
+                { class: ['m-auto'], type: 'primary', link: true, onClick: () => onColumnsReset() },
+                () => '重置'
+              )
+            ]),
 
-    if (!wrapper) {
-      return
-    }
+            h('div', { class: 'pt-[6px] pl-[11px]' }, [
+              h(
+                resolveComponent('ElCheckboxGroup') as any,
+                {
+                  saveKey: unref(saveKey),
+                  modelValue: checkedColumns.value,
+                  'onUpdate:modelValue': (value: any) => {
+                    checkedColumns.value = value
+                  },
+                  min: 1
+                },
+                () =>
+                  h(
+                    resolveComponent('ElSpace') as any,
+                    { direction: 'vertical', alignment: 'flex-start', size: 0 },
+                    () =>
+                      checkColumnList.map((item) => {
+                        return h('div', { class: 'flex items-center' }, [
+                          h(DragIcon, {
+                            class: [
+                              'drag-btn w-[16px] mr-2',
+                              isFixedColumn(item) ? '!cursor-no-drop' : '!cursor-grab'
+                            ],
+                            onMouseenter: (event: { preventDefault: () => void }) => rowDrop(event)
+                          }),
 
-    sortableInstance.value = Sortable.create(wrapper, {
-      animation: 300,
-      handle: '.drag-btn',
-
-      onEnd({ oldIndex, newIndex, item }) {
-        if (oldIndex == null || newIndex == null) {
-          return
+                          h(
+                            resolveComponent('ElCheckbox') as any,
+                            {
+                              key: item,
+                              value: item,
+                              onChange: (value: boolean) => handleCheckColumnListChange(value, item)
+                            },
+                            () =>
+                              h(
+                                'span',
+                                {
+                                  title: item,
+                                  class:
+                                    'inline-block w-[120px] truncate hover:text-text_color_primary'
+                                },
+                                item
+                              )
+                          )
+                        ])
+                      })
+                  )
+              )
+            ])
+          ]
         }
+      )
+    ])
+  }
 
-        const oldColumn = dynamicColumns.value[oldIndex]
-        const newColumn = dynamicColumns.value[newIndex]
-
-        if (oldColumn?.fixed || newColumn?.fixed) {
-          const wrapper = item.parentNode as HTMLElement
-          const oldElement = wrapper.children[oldIndex] as HTMLElement
-
-          if (newIndex > oldIndex) {
-            wrapper.insertBefore(item, oldElement)
-          } else {
-            wrapper.insertBefore(item, oldElement ? oldElement.nextElementSibling : oldElement)
-          }
-
-          return
-        }
-
-        const current = dynamicColumns.value.splice(oldIndex, 1)[0]
-
-        dynamicColumns.value.splice(newIndex, 0, current)
-
-        saveColumns()
+  const columnsCom = () => {
+    if (unref(saveKey)) {
+      let lastColumnIndex = 0
+      for (let i = 0; i < unref(dynamicColumns).length; i++) {
+        if (!unref(dynamicColumns)[i].hide) lastColumnIndex = i
       }
-    })
+      lastColumnLabel.value = unref(dynamicColumns)[lastColumnIndex].label
+      unref(dynamicColumns)[lastColumnIndex].headerRenderer = settingHeader
+    }
+    return unref(dynamicColumns)
   }
-
-  onBeforeUnmount(() => {
-    sortableInstance.value?.destroy()
-  })
 
   return {
-    dynamicColumns,
-    checkedColumns,
-    columnsCom,
-    resetColumns,
-    initColumnSortable,
-    handleCheckColumnListChange,
-    isFixedColumn
+    columnsCom
   }
 }
