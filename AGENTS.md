@@ -31,6 +31,13 @@
 - Quartz
 - Lombok、MapStruct
 
+### 后端文件格式
+
+- 后端主体文件保持 CRLF：`.java`、`.xml`、`.yaml`、`.yml`、`.http`、`.sql`。
+- shell 脚本保持 LF：`.sh`。
+- 部分既有 SQL 文件没有末尾换行。编辑这类文件时只改必要内容，不要顺手做全量格式化。
+- 使用补丁工具编辑后端主体文件后，要确认没有混合换行；如果出现格式校验问题，按原文件风格统一回 CRLF。
+
 ### 模块结构
 
 - `backend/pom.xml`：父 POM，版本属性 `revision=0.0.7`。
@@ -171,6 +178,7 @@ pnpm build:pro
   - 单引号
   - 行宽 100
   - 不使用尾随逗号
+  - 当前 Windows 开发环境下，部分既有文件会按 CRLF 校验。编辑已有文件时要保留原文件换行风格；如果 Vite/ESLint 报 `Insert ␍`，先将目标文件统一回 CRLF，再重新验证。
 - ESLint：
   - Vue 3 recommended
   - TypeScript recommended
