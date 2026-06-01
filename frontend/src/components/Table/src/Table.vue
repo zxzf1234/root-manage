@@ -10,13 +10,14 @@ import { cloneDeep, isBoolean, isFunction, getKeyList } from '@pureadmin/utils'
 import { useTableStoreWithOut } from '@/store/modules/table'
 import { useContextMenu } from './useContextMenu'
 import { useAdaptive } from './useAdaptive'
+import { usePagination } from './usePagination'
 
 export default defineComponent({
   name: 'Table',
   props,
   emits: ['page-change', 'row-contextmenu'],
   setup(props, { slots, attrs, emit, expose }) {
-    const { columns, pagination, saveKey, pageParam, pageData, data } = toRefs(props)
+    const { columns, saveKey, pageData, data } = toRefs(props)
     const lastColumnLabel = ref('')
     const tableStore = useTableStoreWithOut()
     const getDynamicColumns = () => {
@@ -73,15 +74,6 @@ export default defineComponent({
       { deep: true }
     )
     let checkColumnList = getKeyList(cloneDeep(unref(dynamicColumns)), 'label')
-    let paginationCom = computed(() => {
-      if (!unref(pageParam) || Object.keys(unref(pageParam)).length == 0) return undefined
-      if (unref(saveKey) && tableStore?.[unref(saveKey)]?.['pageSize']) {
-        unref(pagination).pageSize = tableStore[unref(saveKey)]['pageSize']
-        unref(pageParam).pageSize = tableStore[unref(saveKey)]['pageSize']
-      }
-      if (unref(pageData)) unref(pagination).total = Number(unref(pageData).total)
-      return pagination
-    })
     let dataCom = () => {
       if (Object.keys(unref(pageData)).length > 0) return unref(pageData).list
       else return unref(data)
@@ -200,6 +192,7 @@ export default defineComponent({
       tableRef
     )
     const { adaptiveConfigCom } = useAdaptive(props)
+    const { paginationCom, handleSizeChange, handlePageCurrentChange } = usePagination(props, emit)
     const getTableRef = () => {
       if (tableRef == null) return null
       else return tableRef.value?.getTableRef()
@@ -272,23 +265,6 @@ export default defineComponent({
         unref(dynamicColumns)[lastColumnIndex].headerRenderer = settingHeader
       }
       return unref(dynamicColumns)
-    }
-
-    const handleSizeChange = (val) => {
-      unref(pageParam).pageSize = val
-      if (unref(saveKey)) {
-        if (!tableStore[unref(saveKey)]) tableStore.setTableCache(unref(saveKey), { pageSize: val })
-        else {
-          let tableCache = tableStore[unref(saveKey)]
-          tableCache['pageSize'] = val
-          tableStore.setTableCache(unref(saveKey), tableCache)
-        }
-      }
-      emit('page-change', val)
-    }
-    const handlePageCurrentChange = (val) => {
-      unref(pageParam).pageNo = val
-      emit('page-change', val)
     }
 
     return () => (
