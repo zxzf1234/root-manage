@@ -6,26 +6,17 @@ import { Icon } from '@/components/Icon'
 import props from './props'
 import Sortable from 'sortablejs'
 import DragIcon from './svg/drag.svg?component'
-import { cloneDeep, isBoolean, isFunction, getKeyList, debounce } from '@pureadmin/utils'
+import { cloneDeep, isBoolean, isFunction, getKeyList } from '@pureadmin/utils'
 import { useTableStoreWithOut } from '@/store/modules/table'
 import { useContextMenu } from './useContextMenu'
+import { useAdaptive } from './useAdaptive'
 
 export default defineComponent({
   name: 'Table',
   props,
   emits: ['page-change', 'row-contextmenu'],
   setup(props, { slots, attrs, emit, expose }) {
-    const {
-      columns,
-      pagination,
-      saveKey,
-      pageParam,
-      pageData,
-      data,
-      adaptive,
-      adaptiveConfig,
-      heightPer
-    } = toRefs(props)
+    const { columns, pagination, saveKey, pageParam, pageData, data } = toRefs(props)
     const lastColumnLabel = ref('')
     const tableStore = useTableStoreWithOut()
     const getDynamicColumns = () => {
@@ -208,6 +199,7 @@ export default defineComponent({
       emit,
       tableRef
     )
+    const { adaptiveConfigCom } = useAdaptive(props)
     const getTableRef = () => {
       if (tableRef == null) return null
       else return tableRef.value?.getTableRef()
@@ -298,32 +290,6 @@ export default defineComponent({
       unref(pageParam).pageNo = val
       emit('page-change', val)
     }
-    onMounted(() => {
-      nextTick(() => {
-        if (unref(adaptive)) {
-          unref(adaptiveConfig).offsetBottom =
-            window.innerHeight - (window.innerHeight * Number(unref(heightPer))) / 100
-        }
-      })
-      if (unref(adaptive)) {
-        window.addEventListener('resize', debounceSetAdaptive)
-      }
-    })
-    const setAdaptiveOffsetBottom = async () => {
-      await nextTick()
-      unref(adaptiveConfig).offsetBottom =
-        window.innerHeight - (window.innerHeight * Number(unref(heightPer))) / 100
-    }
-
-    const debounceSetAdaptive = debounce(
-      setAdaptiveOffsetBottom,
-      unref(adaptiveConfig).timeout ?? 60
-    )
-    onBeforeUnmount(() => {
-      if (unref(adaptive)) {
-        window.removeEventListener('resize', debounceSetAdaptive)
-      }
-    })
 
     return () => (
       <>
@@ -334,7 +300,7 @@ export default defineComponent({
           columns={columnsCom()}
           data={dataCom()}
           pagination={unref(paginationCom)}
-          {...adaptiveConfig}
+          adaptiveConfig={adaptiveConfigCom}
           onPage-size-change={(val) => handleSizeChange(val)}
           onPage-current-change={(val) => handlePageCurrentChange(val)}
           onRow-contextmenu={showMouseMenu}
