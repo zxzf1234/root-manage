@@ -9,10 +9,10 @@ export function createSettingHeader(ctx: any) {
 
     return (
       <div>
-        设置
+        {ctx.label}
         <el-popover
           placement="bottom-start"
-          width="180"
+          width="160"
           trigger="click"
           onShow={ctx.initColumnSortable}
           v-slots={{
@@ -30,7 +30,11 @@ export function createSettingHeader(ctx: any) {
           </div>
 
           <div class="pt-[6px] pl-[11px]">
-            <el-checkbox-group savekey={ctx.props.saveKey} modelValue={ctx.checkedColumns.value}>
+            <el-checkbox-group
+              savekey={ctx.props.saveKey}
+              modelValue={ctx.checkedColumns.value}
+              min={1}
+            >
               <el-space direction="vertical" alignment="flex-start" size={0}>
                 {columnKeys.map((key) => {
                   const fixed = ctx.isFixedColumn(key)

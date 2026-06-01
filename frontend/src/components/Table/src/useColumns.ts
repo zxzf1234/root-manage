@@ -1,5 +1,5 @@
 import Sortable from 'sortablejs'
-import { cloneDeep } from '@pureadmin/utils'
+import { cloneDeep, isBoolean, isFunction } from '@pureadmin/utils'
 import { useTableStoreWithOut } from '@/store/modules/table'
 import { createSettingHeader } from './render/settingHeader'
 import type { TableProps } from './props'
@@ -11,8 +11,10 @@ export function useColumns(props: TableProps) {
 
   const dynamicColumns = ref<any[]>([])
 
-  const getColumnKey = (column: any) => {
-    return column.prop || column.label
+  const getColumnKey = (column: any) => column.label
+
+  const isColumnHidden = (column: any) => {
+    return isBoolean(column?.hide) ? column.hide : isFunction(column?.hide) && column.hide()
   }
 
   const getSavedColumns = () => {
@@ -66,7 +68,9 @@ export function useColumns(props: TableProps) {
   )
 
   const checkedColumns = computed(() => {
-    return dynamicColumns.value.filter((item) => !item.hide).map((item) => getColumnKey(item))
+    return dynamicColumns.value
+      .filter((item) => !isColumnHidden(item))
+      .map((item) => getColumnKey(item))
   })
 
   const saveColumns = () => {
@@ -112,7 +116,7 @@ export function useColumns(props: TableProps) {
       return columns
     }
 
-    const visibleColumns = columns.filter((item) => !item.hide)
+    const visibleColumns = columns.filter((item) => !isColumnHidden(item))
 
     const lastColumn = visibleColumns[visibleColumns.length - 1]
 
@@ -122,6 +126,7 @@ export function useColumns(props: TableProps) {
 
     lastColumn.headerRenderer = createSettingHeader({
       props,
+      label: lastColumn.label,
       checkedColumns,
       dynamicColumns,
       resetColumns,
@@ -154,7 +159,7 @@ export function useColumns(props: TableProps) {
       animation: 300,
       handle: '.drag-btn',
 
-      onEnd({ oldIndex, newIndex }) {
+      onEnd({ oldIndex, newIndex, item }) {
         if (oldIndex == null || newIndex == null) {
           return
         }
@@ -163,6 +168,15 @@ export function useColumns(props: TableProps) {
         const newColumn = dynamicColumns.value[newIndex]
 
         if (oldColumn?.fixed || newColumn?.fixed) {
+          const wrapper = item.parentNode as HTMLElement
+          const oldElement = wrapper.children[oldIndex] as HTMLElement
+
+          if (newIndex > oldIndex) {
+            wrapper.insertBefore(item, oldElement)
+          } else {
+            wrapper.insertBefore(item, oldElement ? oldElement.nextElementSibling : oldElement)
+          }
+
           return
         }
 
