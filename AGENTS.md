@@ -209,6 +209,8 @@ pnpm build:pro
 ## 给后续 Agent 的工作建议
 
 - 搜索优先使用 `rg` / `rg --files`。
+- 修改代码前先确认 PowerShell 使用 UTF-8，避免中文显示或保存被错误编码误导。建议执行：
+  `chcp 65001; [Console]::InputEncoding = [System.Text.Encoding]::UTF8; [Console]::OutputEncoding = [System.Text.Encoding]::UTF8; $OutputEncoding = [System.Text.Encoding]::UTF8`。
 - 编辑前先读附近文件，这个仓库的生成代码和本地约定比较强。
 - 修改范围尽量贴近用户请求。
 - 前端改动涉及 TypeScript 或 Vue 逻辑时，至少运行 `pnpm ts:check`；较大改动再运行 lint/build。

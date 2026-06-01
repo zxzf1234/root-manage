@@ -32,7 +32,7 @@ export default defineComponent({
       else return tableRef.value?.getTableRef()
     }
     expose({
-      /** 鑾峰彇琛ㄦ牸瀹炰緥 */
+      /** 获取表格实例 */
       getTableRef
     })
 
