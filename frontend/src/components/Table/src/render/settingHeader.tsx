@@ -7,20 +7,32 @@ export function createSettingHeader(ctx: any) {
       return ctx.getColumnKey(item)
     })
 
+    const settingButton = () => (
+      <button
+        type="button"
+        title="列设置"
+        class={[
+          'absolute bottom-0 right-[8px] top-0 my-auto flex  items-center justify-center',
+          'rounded-[4px] bg-transparent p-0 text-[#eaf4ff]',
+          'transition-colors hover:bg-white/10 hover:text-white'
+        ]}
+      >
+        <Icon icon="ep:setting" class="text-[18px]" />
+      </button>
+    )
+
     return (
-      <div>
-        {ctx.label}
+      <div class="relative flex w-full items-center justify-center">
+        <span class="min-w-0 truncate" title={ctx.label}>
+          {ctx.label}
+        </span>
         <el-popover
           placement="bottom-start"
           width="160"
           trigger="click"
           onShow={ctx.initColumnSortable}
           v-slots={{
-            reference: () => (
-              <el-button class="float-right" link type="primary">
-                <Icon icon="ep:setting" />
-              </el-button>
-            )
+            reference: settingButton
           }}
         >
           <div class="flex justify-between pt-[3px] px-[11px] border-b-[1px] border-solid border-[#dcdfe6] dark:border-[#303030]">
