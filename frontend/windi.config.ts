@@ -7,7 +7,7 @@ function range(size, startAt = 1) {
 
 export default defineConfig({
   extract: {
-    include: ['src/**/*.{vue,html,jsx,tsx}'],
+    include: ['src/**/*.{vue,html,jsx,tsx,ts}'],
     exclude: ['node_modules', '.git']
   },
   darkMode: 'class',

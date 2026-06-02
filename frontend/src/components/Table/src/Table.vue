@@ -14,7 +14,7 @@ export default defineComponent({
   emits: ['page-change', 'row-contextmenu'],
   setup(props, { slots, attrs, emit, expose }) {
     const { pageData, data } = toRefs(props)
-    const { columnsCom } = useColumns(props)
+    const { columnsCom, renderColumnSetting } = useColumns(props)
     let dataCom = () => {
       if (Object.keys(unref(pageData)).length > 0) return unref(pageData).list
       else return unref(data)
@@ -38,20 +38,23 @@ export default defineComponent({
 
     return () => (
       <>
-        <PureTable
-          ref={tableRef}
-          {...props}
-          {...attrs}
-          columns={columnsCom()}
-          data={dataCom()}
-          pagination={unref(paginationCom)}
-          adaptiveConfig={adaptiveConfigCom}
-          onPage-size-change={(val) => handleSizeChange(val)}
-          onPage-current-change={(val) => handlePageCurrentChange(val)}
-          onRow-contextmenu={showMouseMenu}
-        >
-          {slots}
-        </PureTable>
+        <div class="relative">
+          <PureTable
+            ref={tableRef}
+            {...props}
+            {...attrs}
+            columns={columnsCom()}
+            data={dataCom()}
+            pagination={unref(paginationCom)}
+            adaptiveConfig={adaptiveConfigCom}
+            onPage-size-change={(val) => handleSizeChange(val)}
+            onPage-current-change={(val) => handlePageCurrentChange(val)}
+            onRow-contextmenu={showMouseMenu}
+          >
+            {slots}
+          </PureTable>
+          {renderColumnSetting()}
+        </div>
         <ContextMenu v-model:show={menuOption.value.show} options={menuOption.value.option}>
           <div onContextmenu={disableContextMenu}>{menuSlot.value}</div>
         </ContextMenu>

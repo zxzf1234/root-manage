@@ -14,7 +14,6 @@ export function useColumns(props: TableProps) {
   const dynamicColumns = ref<TableColumn[]>([])
   const checkedColumns = ref<string[]>([])
   const checkColumnList = ref<string[]>([])
-  const lastColumnLabel = ref('')
   const sortableInstance = ref<Sortable | null>(null)
 
   const ElButton = resolveComponent('ElButton') as any
@@ -81,10 +80,10 @@ export function useColumns(props: TableProps) {
     if (tableStore[unref(saveKey)]) {
       const tableCache = tableStore[unref(saveKey)]
 
-      tableCache['column'] = unref(dynamicColumns)
+      tableCache['column'] = cloneDeep(unref(dynamicColumns))
       tableStore.setTableCache(unref(saveKey), tableCache)
     } else {
-      tableStore.setTableCache(unref(saveKey), { column: unref(dynamicColumns) })
+      tableStore.setTableCache(unref(saveKey), { column: cloneDeep(unref(dynamicColumns)) })
     }
   }
 
@@ -123,28 +122,6 @@ export function useColumns(props: TableProps) {
     return column?.fixed ? true : false
   }
 
-  const moveSettingButton = () => {
-    if (!unref(saveKey)) {
-      return
-    }
-
-    let currentSettingColumnIndex = 0
-    let lastColumnIndex = 0
-
-    unref(dynamicColumns).forEach((column, index) => {
-      if (!column.hide) lastColumnIndex = index
-      if (column.headerRenderer) currentSettingColumnIndex = index
-    })
-
-    if (currentSettingColumnIndex != lastColumnIndex) {
-      lastColumnLabel.value = unref(dynamicColumns)[lastColumnIndex].label
-      unref(dynamicColumns)[lastColumnIndex].headerRenderer = settingHeader
-      unref(dynamicColumns)[currentSettingColumnIndex].headerRenderer = null
-    }
-
-    saveColumns()
-  }
-
   const createColumnSortable = (wrapper: HTMLElement) => {
     sortableInstance.value?.destroy()
     sortableInstance.value = Sortable.create(wrapper, {
@@ -173,7 +150,7 @@ export function useColumns(props: TableProps) {
         const currentRow = dynamicColumns.value.splice(oldIndex, 1)[0]
 
         dynamicColumns.value.splice(newIndex, 0, currentRow)
-        moveSettingButton()
+        saveColumns()
       }
     })
   }
@@ -196,11 +173,12 @@ export function useColumns(props: TableProps) {
       h(
         ElButton,
         {
-          class: 'float-right ml-1 flex-shrink-0 !text-white hover:!text-white hover:!opacity-80',
+          class:
+            'flex h-[34px] w-[34px] items-center justify-center rounded-[4px] p-0 !text-[#eaf4ff] hover:!bg-white/10 hover:!text-white',
           link: true,
           type: 'primary',
           style: {
-            '--el-button-text-color': '#fff',
+            '--el-button-text-color': '#eaf4ff',
             '--el-button-hover-text-color': '#fff'
           }
         },
@@ -237,13 +215,16 @@ export function useColumns(props: TableProps) {
     ])
   }
 
-  const settingHeader = () => {
-    return h('div', { class: 'flex w-full items-center' }, [
-      h('span', { class: 'min-w-0 flex-1 truncate' }, unref(lastColumnLabel)),
+  const renderColumnSetting = () => {
+    if (!unref(saveKey)) {
+      return null
+    }
+
+    return h('div', { class: 'absolute right-0 top-[15px] z-[9] h-[34px]' }, [
       h(
         ElPopover,
         {
-          placement: 'bottom-start',
+          placement: 'bottom-end',
           width: '160',
           trigger: 'click'
         },
@@ -292,17 +273,6 @@ export function useColumns(props: TableProps) {
   }
 
   const columnsCom = () => {
-    if (unref(saveKey)) {
-      let lastColumnIndex = 0
-
-      unref(dynamicColumns).forEach((column, index) => {
-        if (!column.hide) lastColumnIndex = index
-      })
-
-      lastColumnLabel.value = unref(dynamicColumns)[lastColumnIndex].label
-      unref(dynamicColumns)[lastColumnIndex].headerRenderer = settingHeader
-    }
-
     return unref(dynamicColumns)
   }
 
@@ -319,6 +289,7 @@ export function useColumns(props: TableProps) {
   })
 
   return {
-    columnsCom
+    columnsCom,
+    renderColumnSetting
   }
 }
