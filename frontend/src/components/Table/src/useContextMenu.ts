@@ -1,6 +1,6 @@
 import { ref, useSlots } from 'vue'
 
-export function useContextMenu(emit, tableRef) {
+export function useContextMenu(emit, tableRef: any) {
   const slots = useSlots()
 
   const menuOption = ref({

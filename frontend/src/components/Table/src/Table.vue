@@ -1,7 +1,7 @@
-<!-- eslint-disable no-unused-vars -->
 <script lang="tsx">
 import { PureTable } from '@pureadmin/table'
 import { ContextMenu } from '@imengyu/vue3-context-menu'
+import type { VNodeRef } from 'vue'
 import props from './props'
 import { useContextMenu } from './useContextMenu'
 import { useAdaptive } from './useAdaptive'
@@ -20,7 +20,10 @@ export default defineComponent({
       else return unref(data)
     }
 
-    const tableRef = ref<Element | null>(null)
+    const tableRef = ref<any>(null)
+    const setTableRef: VNodeRef = (ref) => {
+      tableRef.value = ref as any
+    }
     const { menuOption, menuSlot, showMouseMenu, disableContextMenu } = useContextMenu(
       emit,
       tableRef
@@ -40,7 +43,7 @@ export default defineComponent({
       <>
         <div class="relative">
           <PureTable
-            ref={tableRef}
+            ref={setTableRef as never}
             {...props}
             {...attrs}
             columns={columnsCom()}
