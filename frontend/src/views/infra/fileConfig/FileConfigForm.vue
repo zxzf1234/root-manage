@@ -115,7 +115,7 @@ const formData = ref({
   storage: '',
   remark: '',
   config: {}
-})
+} as any)
 const formRules = reactive({
   name: [{ required: true, message: '配置名不能为空', trigger: 'blur' }],
   storage: [{ required: true, message: '存储器不能为空', trigger: 'change' }],

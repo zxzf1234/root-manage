@@ -15,7 +15,7 @@ const dictStore = useDictStoreWithOut()
 export interface DictDataType {
   dictType: string
   label: string
-  value: string | number
+  value: string | number | boolean
   colorType: ElementPlusInfoType | ''
   cssClass: string
 }

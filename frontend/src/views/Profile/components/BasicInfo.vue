@@ -23,7 +23,6 @@
 import type { FormRules } from 'element-plus'
 import { ElMessage } from 'element-plus'
 
-import type { FormExpose } from '@/components/Form'
 import {
   getUserProfile,
   updateUserProfile,
@@ -58,7 +57,7 @@ const formData = ref({
   email: '',
   sex: undefined
 })
-const formRef = ref<FormExpose>() // 表单 Ref
+const formRef = ref<>() // 表单 Ref
 const submit = () => {
   const elForm = unref(formRef)?.getElFormRef()
   if (!elForm) return

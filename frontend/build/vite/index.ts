@@ -49,7 +49,6 @@ export function createVitePlugins() {
         {
           '@/hooks/web/useI18n': ['useI18n'],
           '@/hooks/web/useMessage': ['useMessage'],
-          '@/hooks/web/useTable': ['useTable'],
           '@/hooks/web/useCrudSchemas': ['useCrudSchemas'],
           '@/utils/formRules': ['required'],
           '@/utils/dict': ['DICT_TYPE']

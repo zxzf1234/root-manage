@@ -59,7 +59,7 @@ const queryParams = reactive({
   redirectUri: '',
   state: '',
   scopes: [] // 优先从 query 参数获取；如果未传递，从后端获取
-})
+}) as any
 const ssoVisible = computed(() => unref(getLoginState) === LoginStateEnum.SSO) // 是否展示 SSO 登录的表单
 const formData = reactive({
   scopes: [] // 已选中的 scope 数组

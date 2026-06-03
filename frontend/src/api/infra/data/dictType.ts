@@ -2,6 +2,7 @@ import request from '@/config/axios'
 
 export type DictDataVO = {
   id: string | undefined
+  dictType: string
   sort: number | undefined
   label: string
   value: string

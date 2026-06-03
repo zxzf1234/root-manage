@@ -36,7 +36,7 @@ const formData = ref({
   roleIds: []
 })
 const formRef = ref() // 表单 Ref
-const roleList = ref([]) // 角色的列表
+const roleList = ref([] as any) // 角色的列表
 
 /** 打开弹窗 */
 const open = async (row: UserApi.UserVO) => {
